@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "hercules/*": ["./src/*"],
-      "hercules": ["./src/index.ts"]
+      "@usehercules/sdk/*": ["./src/*"],
+      "@usehercules/sdk": ["./src/index.ts"]
     },
     "noEmit": true,
 

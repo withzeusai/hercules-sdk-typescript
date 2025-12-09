@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^hercules$': '<rootDir>/src/index.ts',
-    '^hercules/(.*)$': '<rootDir>/src/$1',
+    '^@usehercules/sdk$': '<rootDir>/src/index.ts',
+    '^@usehercules/sdk/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',
