@@ -43,6 +43,17 @@ export class Customers extends APIResource {
   }
 
   /**
+   * Open Customer Portal
+   */
+  createBillingPortal(
+    id: string,
+    body: CustomerCreateBillingPortalParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CustomerCreateBillingPortalResponse> {
+    return this._client.post(path`/subscriptions/v1/customers/${id}/billing_portal`, { body, ...options });
+  }
+
+  /**
    * Get Customer
    */
   get(id: string, options?: RequestOptions): APIPromise<Customer> {
@@ -63,6 +74,13 @@ export interface Customer {
 
 export type CustomerListResponse = Array<Customer>;
 
+/**
+ * Billing portal session URL
+ */
+export interface CustomerCreateBillingPortalResponse {
+  url: string;
+}
+
 export interface CustomerCreateParams {
   email?: string;
 
@@ -75,11 +93,17 @@ export interface CustomerUpdateParams {
   name?: string;
 }
 
+export interface CustomerCreateBillingPortalParams {
+  return_url?: string;
+}
+
 export declare namespace Customers {
   export {
     type Customer as Customer,
     type CustomerListResponse as CustomerListResponse,
+    type CustomerCreateBillingPortalResponse as CustomerCreateBillingPortalResponse,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
+    type CustomerCreateBillingPortalParams as CustomerCreateBillingPortalParams,
   };
 }
