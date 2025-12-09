@@ -16,7 +16,7 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { SubscriptionRetrieveCustomerResponse, Subscriptions } from './resources/subscriptions';
+import { Subscriptions } from './resources/subscriptions/subscriptions';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -127,7 +127,7 @@ export class Hercules {
    * API Client for interfacing with the Hercules API.
    *
    * @param {string | null | undefined} [opts.apiKey=process.env['HERCULES_API_KEY'] ?? null]
-   * @param {string} [opts.baseURL=process.env['HERCULES_BASE_URL'] ?? https://api.example.com] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['HERCULES_BASE_URL'] ?? https://api.hercules.app] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -143,7 +143,7 @@ export class Hercules {
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.example.com`,
+      baseURL: baseURL || `https://api.hercules.app`,
     };
 
     this.baseURL = options.baseURL!;
@@ -189,7 +189,7 @@ export class Hercules {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.example.com';
+    return this.baseURL !== 'https://api.hercules.app';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -728,8 +728,5 @@ Hercules.Subscriptions = Subscriptions;
 export declare namespace Hercules {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Subscriptions as Subscriptions,
-    type SubscriptionRetrieveCustomerResponse as SubscriptionRetrieveCustomerResponse,
-  };
+  export { Subscriptions as Subscriptions };
 }

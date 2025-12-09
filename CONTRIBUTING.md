@@ -42,25 +42,25 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ npm install git+ssh://git@github.com:withzeusai/hercules-typescript.git
+$ npm install git+ssh://git@github.com:withzeusai/hercules-sdk-typescript.git
 ```
 
 Alternatively, to link a local copy of the repo:
 
 ```sh
 # Clone
-$ git clone https://www.github.com/withzeusai/hercules-typescript
-$ cd hercules-typescript
+$ git clone https://www.github.com/withzeusai/hercules-sdk-typescript
+$ cd hercules-sdk-typescript
 
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link hercules
+$ yarn link @usehercules/sdk
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global hercules
+$ pnpm link -—global @usehercules/sdk
 ```
 
 ## Running tests

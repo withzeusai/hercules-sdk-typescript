@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'hercules/core/api-promise';
+import { APIPromise } from '@usehercules/sdk/core/api-promise';
 
 import util from 'node:util';
-import Hercules from 'hercules';
-import { APIUserAbortError } from 'hercules';
+import Hercules from '@usehercules/sdk';
+import { APIUserAbortError } from '@usehercules/sdk';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -306,13 +306,13 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['HERCULES_BASE_URL'] = ''; // empty
       const client = new Hercules({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.example.com');
+      expect(client.baseURL).toEqual('https://api.hercules.app');
     });
 
     test('blank env variable', () => {
       process.env['HERCULES_BASE_URL'] = '  '; // blank
       const client = new Hercules({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.example.com');
+      expect(client.baseURL).toEqual('https://api.hercules.app');
     });
 
     test('in request options', () => {
