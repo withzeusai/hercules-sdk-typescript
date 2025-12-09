@@ -3,10 +3,19 @@
 export {
   Customers,
   type Customer,
-  type CustomerListResponse,
-  type CustomerCreateBillingPortalResponse,
+  type CustomerBillingPortalResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
-  type CustomerCreateBillingPortalParams,
+  type CustomerListParams,
+  type CustomerBillingPortalParams,
+  type CustomersCursorIDPage,
 } from './customers';
+export {
+  Plans,
+  type Plan,
+  type PlanCreateParams,
+  type PlanUpdateParams,
+  type PlanListParams,
+  type PlansCursorIDPage,
+} from './plans';
 export { Subscriptions } from './subscriptions';

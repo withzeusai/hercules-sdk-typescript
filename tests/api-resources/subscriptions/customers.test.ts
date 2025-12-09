@@ -68,6 +68,17 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.subscriptions.customers.list(
+        { ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
+  });
+
+  // Prism tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.subscriptions.customers.delete('id');
     const rawResponse = await responsePromise.asResponse();
@@ -80,8 +91,8 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('createBillingPortal', async () => {
-    const responsePromise = client.subscriptions.customers.createBillingPortal('id');
+  test.skip('billingPortal', async () => {
+    const responsePromise = client.subscriptions.customers.billingPortal('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -92,10 +103,10 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('createBillingPortal: request options and params are passed correctly', async () => {
+  test.skip('billingPortal: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.subscriptions.customers.createBillingPortal(
+      client.subscriptions.customers.billingPortal(
         'id',
         { return_url: 'https://example.com' },
         { path: '/_stainless_unknown_path' },
