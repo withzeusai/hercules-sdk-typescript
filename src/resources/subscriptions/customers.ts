@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
+import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -28,8 +29,14 @@ export class Customers extends APIResource {
   /**
    * List Customers
    */
-  list(options?: RequestOptions): APIPromise<CustomerListResponse> {
-    return this._client.get('/subscriptions/v1/customers', options);
+  list(
+    query: CustomerListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<CustomersCursorIDPage, Customer> {
+    return this._client.getAPIList('/subscriptions/v1/customers', CursorIDPage<Customer>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -45,11 +52,11 @@ export class Customers extends APIResource {
   /**
    * Open Customer Portal
    */
-  createBillingPortal(
+  billingPortal(
     id: string,
-    body: CustomerCreateBillingPortalParams | null | undefined = {},
+    body: CustomerBillingPortalParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomerCreateBillingPortalResponse> {
+  ): APIPromise<CustomerBillingPortalResponse> {
     return this._client.post(path`/subscriptions/v1/customers/${id}/billing_portal`, { body, ...options });
   }
 
@@ -61,23 +68,30 @@ export class Customers extends APIResource {
   }
 }
 
+export type CustomersCursorIDPage = CursorIDPage<Customer>;
+
 /**
  * A subscription customer
  */
 export interface Customer {
+  /**
+   * An id for a data item
+   */
   id: string;
+
+  created: string;
 
   email?: string | null;
 
   name?: string | null;
-}
 
-export type CustomerListResponse = Array<Customer>;
+  stripe_id?: string | null;
+}
 
 /**
  * Billing portal session URL
  */
-export interface CustomerCreateBillingPortalResponse {
+export interface CustomerBillingPortalResponse {
   url: string;
 }
 
@@ -93,17 +107,20 @@ export interface CustomerUpdateParams {
   name?: string;
 }
 
-export interface CustomerCreateBillingPortalParams {
+export interface CustomerListParams extends CursorIDPageParams {}
+
+export interface CustomerBillingPortalParams {
   return_url?: string;
 }
 
 export declare namespace Customers {
   export {
     type Customer as Customer,
-    type CustomerListResponse as CustomerListResponse,
-    type CustomerCreateBillingPortalResponse as CustomerCreateBillingPortalResponse,
+    type CustomerBillingPortalResponse as CustomerBillingPortalResponse,
+    type CustomersCursorIDPage as CustomersCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
-    type CustomerCreateBillingPortalParams as CustomerCreateBillingPortalParams,
+    type CustomerListParams as CustomerListParams,
+    type CustomerBillingPortalParams as CustomerBillingPortalParams,
   };
 }

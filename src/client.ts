@@ -13,6 +13,8 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -162,6 +164,7 @@ export class Hercules {
     this.#encoder = Opts.FallbackEncoder;
 
     this._options = options;
+    this.idempotencyHeader = 'Idempotency-Key';
 
     this.apiKey = apiKey;
   }
@@ -488,6 +491,25 @@ export class Hercules {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: RequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: FinalRequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Hercules, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -727,6 +749,9 @@ Hercules.Subscriptions = Subscriptions;
 
 export declare namespace Hercules {
   export type RequestOptions = Opts.RequestOptions;
+
+  export import CursorIDPage = Pagination.CursorIDPage;
+  export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
   export { Subscriptions as Subscriptions };
 }

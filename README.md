@@ -128,6 +128,40 @@ On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
 
+## Auto-pagination
+
+List methods in the Hercules API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllCustomers(params) {
+  const allCustomers = [];
+  // Automatically fetches more pages as needed.
+  for await (const customer of client.subscriptions.customers.list({
+    limit: 100,
+    starting_after: 'id_123',
+  })) {
+    allCustomers.push(customer);
+  }
+  return allCustomers;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.subscriptions.customers.list({ limit: 100, starting_after: 'id_123' });
+for (const customer of page.data) {
+  console.log(customer);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
+
 ## Advanced Usage
 
 ### Accessing raw Response data (e.g., headers)
