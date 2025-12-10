@@ -23,7 +23,15 @@ export const tool: Tool = {
     type: 'object',
     properties: {
       archived: {
-        type: 'boolean',
+        anyOf: [
+          {
+            type: 'boolean',
+          },
+          {
+            type: 'string',
+            enum: ['true', 'false'],
+          },
+        ],
         description: 'Filter by archived status',
       },
       ending_before: {

@@ -94,7 +94,7 @@ export interface EntitlementListParams extends CursorIDPageParams {
   /**
    * Filter by archived status
    */
-  archived?: boolean;
+  archived?: boolean | 'true' | 'false';
 
   /**
    * Filter by lookup key
