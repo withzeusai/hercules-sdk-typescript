@@ -206,7 +206,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "@usehercules/mcp/server";
 
 // import a specific tool
-import cancelSubscriptions from "@usehercules/mcp/tools/subscriptions/cancel-subscriptions";
+import cancelBetaSubscriptions from "@usehercules/mcp/tools/beta/subscriptions/cancel-beta-subscriptions";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -231,54 +231,54 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [cancelSubscriptions, myCustomEndpoint] });
+init({ server: myServer, endpoints: [cancelBetaSubscriptions, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
 
-### Resource `subscriptions`:
+### Resource `beta.subscriptions`:
 
-- `cancel_subscriptions` (`write`): Cancel Subscription
-- `check_subscriptions` (`write`): Check Entitlement
-- `checkout_subscriptions` (`write`): Create Checkout Session
+- `cancel_beta_subscriptions` (`write`): Cancel Subscription
+- `check_beta_subscriptions` (`write`): Check Entitlement
+- `checkout_beta_subscriptions` (`write`): Create Checkout Session
 
-### Resource `subscriptions.customers`:
+### Resource `beta.subscriptions.customers`:
 
-- `create_subscriptions_customers` (`write`): Create Customer
-- `update_subscriptions_customers` (`write`): Update Customer
-- `list_subscriptions_customers` (`read`): List Customers
-- `delete_subscriptions_customers` (`write`): Delete Customer
-- `billing_portal_subscriptions_customers` (`write`): Open Customer Portal
-- `get_subscriptions_customers` (`read`): Get Customer
+- `create_subscriptions_beta_customers` (`write`): Create Customer
+- `update_subscriptions_beta_customers` (`write`): Update Customer
+- `list_subscriptions_beta_customers` (`read`): List Customers
+- `delete_subscriptions_beta_customers` (`write`): Delete Customer
+- `billing_portal_subscriptions_beta_customers` (`write`): Open Customer Portal
+- `get_subscriptions_beta_customers` (`read`): Get Customer
 
-### Resource `subscriptions.plans`:
+### Resource `beta.subscriptions.plans`:
 
-- `create_subscriptions_plans` (`write`): Create Plan
-- `update_subscriptions_plans` (`write`): Update Plan
-- `list_subscriptions_plans` (`read`): List Plans
-- `archive_subscriptions_plans` (`write`): Archive Plan
-- `get_subscriptions_plans` (`read`): Get Plan
+- `create_subscriptions_beta_plans` (`write`): Create Plan
+- `update_subscriptions_beta_plans` (`write`): Update Plan
+- `list_subscriptions_beta_plans` (`read`): List Plans
+- `archive_subscriptions_beta_plans` (`write`): Archive Plan
+- `get_subscriptions_beta_plans` (`read`): Get Plan
 
-### Resource `subscriptions.plans.entitlements`:
+### Resource `beta.subscriptions.plans.entitlements`:
 
-- `list_plans_subscriptions_entitlements` (`read`): List Plan Entitlements
-- `attach_plans_subscriptions_entitlements` (`write`): Attach Entitlement to Plan
-- `remove_plans_subscriptions_entitlements` (`write`): Remove Entitlement from Plan
+- `list_plans_subscriptions_beta_entitlements` (`read`): List Plan Entitlements
+- `attach_plans_subscriptions_beta_entitlements` (`write`): Attach Entitlement to Plan
+- `remove_plans_subscriptions_beta_entitlements` (`write`): Remove Entitlement from Plan
 
-### Resource `subscriptions.entitlements`:
+### Resource `beta.subscriptions.entitlements`:
 
-- `create_subscriptions_entitlements` (`write`): Create Entitlement
-- `update_subscriptions_entitlements` (`write`): Update Entitlement
-- `list_subscriptions_entitlements` (`read`): List Entitlements
-- `get_subscriptions_entitlements` (`read`): Get Entitlement
+- `create_subscriptions_beta_entitlements` (`write`): Create Entitlement
+- `update_subscriptions_beta_entitlements` (`write`): Update Entitlement
+- `list_subscriptions_beta_entitlements` (`read`): List Entitlements
+- `get_subscriptions_beta_entitlements` (`read`): Get Entitlement
 
-### Resource `subscriptions.coupons`:
+### Resource `beta.subscriptions.coupons`:
 
-- `create_subscriptions_coupons` (`write`): Create Coupon
-- `update_subscriptions_coupons` (`write`): Update Coupon
-- `list_subscriptions_coupons` (`read`): List Coupons
-- `delete_subscriptions_coupons` (`write`): Delete Coupon
-- `get_subscriptions_coupons` (`read`): Get Coupon
-- `validate_subscriptions_coupons` (`write`): Validate Promo Code
+- `create_subscriptions_beta_coupons` (`write`): Create Coupon
+- `update_subscriptions_beta_coupons` (`write`): Update Coupon
+- `list_subscriptions_beta_coupons` (`read`): List Coupons
+- `delete_subscriptions_beta_coupons` (`write`): Delete Coupon
+- `get_subscriptions_beta_coupons` (`read`): Get Coupon
+- `validate_subscriptions_beta_coupons` (`write`): Validate Promo Code
