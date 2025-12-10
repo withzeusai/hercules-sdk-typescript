@@ -23,15 +23,7 @@ export const tool: Tool = {
     type: 'object',
     properties: {
       active: {
-        anyOf: [
-          {
-            type: 'boolean',
-          },
-          {
-            type: 'string',
-            enum: ['true', 'false'],
-          },
-        ],
+        type: 'boolean',
       },
       ending_before: {
         type: 'string',
