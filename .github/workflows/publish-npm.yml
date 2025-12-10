@@ -24,9 +24,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Set up pnpm
@@ -44,6 +44,9 @@ jobs:
             PATHS_RELEASED='[\".\", \"packages/mcp-server\"]'
           fi
           pnpm tsn scripts/publish-packages.ts "{ \"paths_released\": \"$PATHS_RELEASED\" }"
+        env:
+          NPM_CONFIG_PROVENANCE: 'true'
+          NODE_AUTH_TOKEN: ''
 
       - name: Upload MCP Server DXT GitHub release asset
         run: |
