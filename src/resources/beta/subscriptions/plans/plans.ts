@@ -134,7 +134,7 @@ export interface PlanUpdateParams {
 }
 
 export interface PlanListParams extends CursorIDPageParams {
-  active?: boolean | 'true' | 'false';
+  active?: boolean;
 }
 
 Plans.Entitlements = Entitlements;
