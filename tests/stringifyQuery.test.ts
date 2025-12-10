@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Hercules } from 'hercules';
+import { Hercules } from '@usehercules/sdk';
 
 const { stringifyQuery } = Hercules.prototype as any;
 

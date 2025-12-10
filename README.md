@@ -1,6 +1,6 @@
 # Hercules TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/hercules.svg?label=npm%20(stable)>)](https://npmjs.org/package/hercules) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/hercules)
+[![NPM version](<https://img.shields.io/npm/v/@usehercules/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@usehercules/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@usehercules/sdk)
 
 This library provides convenient access to the Hercules REST API from server-side TypeScript or JavaScript.
 
@@ -11,11 +11,11 @@ It is generated with [Stainless](https://www.stainless.com/).
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:stainless-sdks/hercules-typescript.git
+npm install git+ssh://git@github.com:withzeusai/hercules-sdk-typescript.git
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install hercules`
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @usehercules/sdk`
 
 ## Usage
 
@@ -23,15 +23,18 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.subscriptions.retrieveCustomer('REPLACE_ME');
+const customer = await client.beta.subscriptions.customers.create({
+  email: 'john.doe@example.com',
+  name: 'John Doe',
+});
 
-console.log(response.id);
+console.log(customer.id);
 ```
 
 ### Request & Response types
@@ -40,13 +43,13 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const response: Hercules.SubscriptionRetrieveCustomerResponse = await client.subscriptions.retrieveCustomer(
+const customer: Hercules.Beta.Subscriptions.Customer = await client.beta.subscriptions.customers.get(
   'REPLACE_ME',
 );
 ```
@@ -61,7 +64,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.subscriptions.retrieveCustomer('REPLACE_ME').catch(async (err) => {
+const customer = await client.beta.subscriptions.customers.get('REPLACE_ME').catch(async (err) => {
   if (err instanceof Hercules.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -101,7 +104,7 @@ const client = new Hercules({
 });
 
 // Or, configure per-request:
-await client.subscriptions.retrieveCustomer('REPLACE_ME', {
+await client.beta.subscriptions.customers.get('REPLACE_ME', {
   maxRetries: 5,
 });
 ```
@@ -118,7 +121,7 @@ const client = new Hercules({
 });
 
 // Override per-request:
-await client.subscriptions.retrieveCustomer('REPLACE_ME', {
+await client.beta.subscriptions.customers.get('REPLACE_ME', {
   timeout: 5 * 1000,
 });
 ```
@@ -126,6 +129,40 @@ await client.subscriptions.retrieveCustomer('REPLACE_ME', {
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
+
+## Auto-pagination
+
+List methods in the Hercules API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllCustomers(params) {
+  const allCustomers = [];
+  // Automatically fetches more pages as needed.
+  for await (const customer of client.beta.subscriptions.customers.list({
+    limit: 100,
+    starting_after: 'id_123',
+  })) {
+    allCustomers.push(customer);
+  }
+  return allCustomers;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.beta.subscriptions.customers.list({ limit: 100, starting_after: 'id_123' });
+for (const customer of page.data) {
+  console.log(customer);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
 
 ## Advanced Usage
 
@@ -141,15 +178,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Hercules();
 
-const response = await client.subscriptions.retrieveCustomer('REPLACE_ME').asResponse();
+const response = await client.beta.subscriptions.customers.get('REPLACE_ME').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.subscriptions
-  .retrieveCustomer('REPLACE_ME')
+const { data: customer, response: raw } = await client.beta.subscriptions.customers
+  .get('REPLACE_ME')
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.id);
+console.log(customer.id);
 ```
 
 ### Logging
@@ -166,7 +203,7 @@ The log level can be configured in two ways:
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   logLevel: 'debug', // Show all log messages
@@ -194,7 +231,7 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 import pino from 'pino';
 
 const logger = pino();
@@ -229,7 +266,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.subscriptions.retrieveCustomer({
+client.beta.subscriptions.customers.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -263,7 +300,7 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 import fetch from 'my-fetch';
 
 const client = new Hercules({ fetch });
@@ -274,7 +311,7 @@ const client = new Hercules({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   fetchOptions: {
@@ -291,7 +328,7 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
@@ -305,7 +342,7 @@ const client = new Hercules({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import Hercules from 'hercules';
+import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   fetchOptions: {
@@ -317,7 +354,7 @@ const client = new Hercules({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import Hercules from 'npm:hercules';
+import Hercules from 'npm:@usehercules/sdk';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new Hercules({
@@ -339,7 +376,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/hercules-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/withzeusai/hercules-sdk-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
