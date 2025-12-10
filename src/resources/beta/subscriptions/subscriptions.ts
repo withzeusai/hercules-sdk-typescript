@@ -7,8 +7,6 @@ import {
   CouponCreateParams,
   CouponListParams,
   CouponUpdateParams,
-  CouponValidateParams,
-  CouponValidateResponse,
   Coupons,
   CouponsCursorIDPage,
 } from './coupons';
@@ -235,11 +233,9 @@ export declare namespace Subscriptions {
   export {
     Coupons as Coupons,
     type Coupon as Coupon,
-    type CouponValidateResponse as CouponValidateResponse,
     type CouponsCursorIDPage as CouponsCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
     type CouponListParams as CouponListParams,
-    type CouponValidateParams as CouponValidateParams,
   };
 }

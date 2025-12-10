@@ -132,7 +132,6 @@ const fuse = new Fuse(
     'client.beta.subscriptions.coupons.get',
     'client.beta.subscriptions.coupons.list',
     'client.beta.subscriptions.coupons.update',
-    'client.beta.subscriptions.coupons.validate',
   ],
   { threshold: 1, shouldSort: true },
 );
