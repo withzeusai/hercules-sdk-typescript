@@ -106,6 +106,9 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
+    'client.subscriptions.cancel',
+    'client.subscriptions.check',
+    'client.subscriptions.checkout',
     'client.subscriptions.customers.billingPortal',
     'client.subscriptions.customers.create',
     'client.subscriptions.customers.delete',
@@ -117,6 +120,19 @@ const fuse = new Fuse(
     'client.subscriptions.plans.get',
     'client.subscriptions.plans.list',
     'client.subscriptions.plans.update',
+    'client.subscriptions.plans.entitlements.attach',
+    'client.subscriptions.plans.entitlements.list',
+    'client.subscriptions.plans.entitlements.remove',
+    'client.subscriptions.entitlements.create',
+    'client.subscriptions.entitlements.get',
+    'client.subscriptions.entitlements.list',
+    'client.subscriptions.entitlements.update',
+    'client.subscriptions.coupons.create',
+    'client.subscriptions.coupons.delete',
+    'client.subscriptions.coupons.get',
+    'client.subscriptions.coupons.list',
+    'client.subscriptions.coupons.update',
+    'client.subscriptions.coupons.validate',
   ],
   { threshold: 1, shouldSort: true },
 );

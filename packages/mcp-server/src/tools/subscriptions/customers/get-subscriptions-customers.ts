@@ -11,18 +11,18 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: [],
   httpMethod: 'get',
-  httpPath: '/subscriptions/v1/customers/{id}',
-  operationId: 'getSubscriptionsV1Customers:id',
+  httpPath: '/subscriptions/v1/customers/{customer_id}',
+  operationId: 'getSubscriptionsV1Customers:customer_id',
 };
 
 export const tool: Tool = {
   name: 'get_subscriptions_customers',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nGet Customer\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer',\n  $defs: {\n    customer: {\n      type: 'object',\n      description: 'A subscription customer',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        created: {\n          type: 'string',\n          format: 'date-time'\n        },\n        email: {\n          type: 'string'\n        },\n        name: {\n          type: 'string'\n        },\n        stripe_id: {\n          type: 'string'\n        }\n      },\n      required: [        'id',\n        'created'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nGet Customer\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer',\n  $defs: {\n    customer: {\n      type: 'object',\n      description: 'A subscription customer',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        created: {\n          type: 'string',\n          format: 'date-time'\n        },\n        address: {\n          $ref: '#/$defs/customer_address'\n        },\n        email: {\n          type: 'string'\n        },\n        name: {\n          type: 'string'\n        },\n        phone: {\n          type: 'string'\n        },\n        stripe_id: {\n          type: 'string'\n        }\n      },\n      required: [        'id',\n        'created'\n      ]\n    },\n    customer_address: {\n      type: 'object',\n      description: 'Customer billing address',\n      properties: {\n        city: {\n          type: 'string'\n        },\n        country: {\n          type: 'string'\n        },\n        line1: {\n          type: 'string'\n        },\n        line2: {\n          type: 'string'\n        },\n        postal_code: {\n          type: 'string'\n        },\n        state: {\n          type: 'string'\n        }\n      }\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
-      id: {
+      customer_id: {
         type: 'string',
       },
       jq_filter: {
@@ -32,7 +32,7 @@ export const tool: Tool = {
           'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
       },
     },
-    required: ['id'],
+    required: ['customer_id'],
   },
   annotations: {
     readOnlyHint: true,
@@ -40,9 +40,11 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: Hercules, args: Record<string, unknown> | undefined) => {
-  const { id, jq_filter, ...body } = args as any;
+  const { customer_id, jq_filter, ...body } = args as any;
   try {
-    return asTextContentResult(await maybeFilter(jq_filter, await client.subscriptions.customers.get(id)));
+    return asTextContentResult(
+      await maybeFilter(jq_filter, await client.subscriptions.customers.get(customer_id)),
+    );
   } catch (error) {
     if (error instanceof Hercules.APIError || isJqError(error)) {
       return asErrorResult(error.message);

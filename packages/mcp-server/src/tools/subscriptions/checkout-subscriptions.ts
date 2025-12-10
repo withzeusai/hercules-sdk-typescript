@@ -7,26 +7,36 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import Hercules from '@usehercules/sdk';
 
 export const metadata: Metadata = {
-  resource: 'subscriptions.customers',
+  resource: 'subscriptions',
   operation: 'write',
   tags: [],
   httpMethod: 'post',
-  httpPath: '/subscriptions/v1/customers/{customer_id}/billing_portal',
-  operationId: 'postSubscriptionsV1Customers:customer_idBilling_portal',
+  httpPath: '/subscriptions/v1/checkout',
+  operationId: 'postSubscriptionsV1Checkout',
 };
 
 export const tool: Tool = {
-  name: 'billing_portal_subscriptions_customers',
+  name: 'checkout_subscriptions',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nOpen Customer Portal\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer_billing_portal_response',\n  $defs: {\n    customer_billing_portal_response: {\n      type: 'object',\n      description: 'Billing portal session URL',\n      properties: {\n        url: {\n          type: 'string'\n        }\n      },\n      required: [        'url'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreate Checkout Session\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_checkout_response',\n  $defs: {\n    subscription_checkout_response: {\n      type: 'object',\n      description: 'Checkout session response',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'The checkout session ID'\n        },\n        url: {\n          type: 'string',\n          description: 'The checkout URL to redirect the customer to'\n        }\n      },\n      required: [        'id',\n        'url'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       customer_id: {
         type: 'string',
+        description: 'The customer ID',
       },
-      return_url: {
+      plan_id: {
         type: 'string',
+        description: 'The plan ID to subscribe to',
+      },
+      cancel_url: {
+        type: 'string',
+        description: 'URL to redirect on cancel',
+      },
+      success_url: {
+        type: 'string',
+        description: 'URL to redirect on success',
       },
       jq_filter: {
         type: 'string',
@@ -35,17 +45,15 @@ export const tool: Tool = {
           'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
       },
     },
-    required: ['customer_id'],
+    required: ['customer_id', 'plan_id'],
   },
   annotations: {},
 };
 
 export const handler = async (client: Hercules, args: Record<string, unknown> | undefined) => {
-  const { customer_id, jq_filter, ...body } = args as any;
+  const { jq_filter, ...body } = args as any;
   try {
-    return asTextContentResult(
-      await maybeFilter(jq_filter, await client.subscriptions.customers.billingPortal(customer_id, body)),
-    );
+    return asTextContentResult(await maybeFilter(jq_filter, await client.subscriptions.checkout(body)));
   } catch (error) {
     if (error instanceof Hercules.APIError || isJqError(error)) {
       return asErrorResult(error.message);

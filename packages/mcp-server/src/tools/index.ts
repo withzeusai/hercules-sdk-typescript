@@ -4,6 +4,9 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
+import cancel_subscriptions from './subscriptions/cancel-subscriptions';
+import check_subscriptions from './subscriptions/check-subscriptions';
+import checkout_subscriptions from './subscriptions/checkout-subscriptions';
 import create_subscriptions_customers from './subscriptions/customers/create-subscriptions-customers';
 import update_subscriptions_customers from './subscriptions/customers/update-subscriptions-customers';
 import list_subscriptions_customers from './subscriptions/customers/list-subscriptions-customers';
@@ -15,6 +18,19 @@ import update_subscriptions_plans from './subscriptions/plans/update-subscriptio
 import list_subscriptions_plans from './subscriptions/plans/list-subscriptions-plans';
 import archive_subscriptions_plans from './subscriptions/plans/archive-subscriptions-plans';
 import get_subscriptions_plans from './subscriptions/plans/get-subscriptions-plans';
+import list_plans_subscriptions_entitlements from './subscriptions/plans/entitlements/list-plans-subscriptions-entitlements';
+import attach_plans_subscriptions_entitlements from './subscriptions/plans/entitlements/attach-plans-subscriptions-entitlements';
+import remove_plans_subscriptions_entitlements from './subscriptions/plans/entitlements/remove-plans-subscriptions-entitlements';
+import create_subscriptions_entitlements from './subscriptions/entitlements/create-subscriptions-entitlements';
+import update_subscriptions_entitlements from './subscriptions/entitlements/update-subscriptions-entitlements';
+import list_subscriptions_entitlements from './subscriptions/entitlements/list-subscriptions-entitlements';
+import get_subscriptions_entitlements from './subscriptions/entitlements/get-subscriptions-entitlements';
+import create_subscriptions_coupons from './subscriptions/coupons/create-subscriptions-coupons';
+import update_subscriptions_coupons from './subscriptions/coupons/update-subscriptions-coupons';
+import list_subscriptions_coupons from './subscriptions/coupons/list-subscriptions-coupons';
+import delete_subscriptions_coupons from './subscriptions/coupons/delete-subscriptions-coupons';
+import get_subscriptions_coupons from './subscriptions/coupons/get-subscriptions-coupons';
+import validate_subscriptions_coupons from './subscriptions/coupons/validate-subscriptions-coupons';
 
 export const endpoints: Endpoint[] = [];
 
@@ -22,6 +38,9 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
+addEndpoint(cancel_subscriptions);
+addEndpoint(check_subscriptions);
+addEndpoint(checkout_subscriptions);
 addEndpoint(create_subscriptions_customers);
 addEndpoint(update_subscriptions_customers);
 addEndpoint(list_subscriptions_customers);
@@ -33,6 +52,19 @@ addEndpoint(update_subscriptions_plans);
 addEndpoint(list_subscriptions_plans);
 addEndpoint(archive_subscriptions_plans);
 addEndpoint(get_subscriptions_plans);
+addEndpoint(list_plans_subscriptions_entitlements);
+addEndpoint(attach_plans_subscriptions_entitlements);
+addEndpoint(remove_plans_subscriptions_entitlements);
+addEndpoint(create_subscriptions_entitlements);
+addEndpoint(update_subscriptions_entitlements);
+addEndpoint(list_subscriptions_entitlements);
+addEndpoint(get_subscriptions_entitlements);
+addEndpoint(create_subscriptions_coupons);
+addEndpoint(update_subscriptions_coupons);
+addEndpoint(list_subscriptions_coupons);
+addEndpoint(delete_subscriptions_coupons);
+addEndpoint(get_subscriptions_coupons);
+addEndpoint(validate_subscriptions_coupons);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

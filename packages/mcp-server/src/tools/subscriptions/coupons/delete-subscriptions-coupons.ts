@@ -6,25 +6,25 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import Hercules from '@usehercules/sdk';
 
 export const metadata: Metadata = {
-  resource: 'subscriptions.customers',
+  resource: 'subscriptions.coupons',
   operation: 'write',
   tags: [],
   httpMethod: 'delete',
-  httpPath: '/subscriptions/v1/customers/{customer_id}',
-  operationId: 'deleteSubscriptionsV1Customers:customer_id',
+  httpPath: '/subscriptions/v1/coupons/{coupon_id}',
+  operationId: 'deleteSubscriptionsV1Coupons:coupon_id',
 };
 
 export const tool: Tool = {
-  name: 'delete_subscriptions_customers',
-  description: 'Delete Customer',
+  name: 'delete_subscriptions_coupons',
+  description: 'Delete Coupon',
   inputSchema: {
     type: 'object',
     properties: {
-      customer_id: {
+      coupon_id: {
         type: 'string',
       },
     },
-    required: ['customer_id'],
+    required: ['coupon_id'],
   },
   annotations: {
     idempotentHint: true,
@@ -32,8 +32,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: Hercules, args: Record<string, unknown> | undefined) => {
-  const { customer_id, ...body } = args as any;
-  const response = await client.subscriptions.customers.delete(customer_id).asResponse();
+  const { coupon_id, ...body } = args as any;
+  const response = await client.subscriptions.coupons.delete(coupon_id).asResponse();
   return asTextContentResult(await response.text());
 };
 

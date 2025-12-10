@@ -20,6 +20,7 @@ cd hercules-sdk-typescript
 ```sh
 # set env vars as needed
 export HERCULES_API_KEY="My API Key"
+export HERCULES_API_VERSION="My API Version"
 node ./packages/mcp-server/dist/index.js
 ```
 
@@ -43,10 +44,11 @@ For clients with a configuration JSON, it might look something like this:
       "args": [
         "/path/to/local/hercules-sdk-typescript/packages/mcp-server",
         "--client=claude",
-        "--tools=all"
+        "--tools=dynamic"
       ],
       "env": {
-        "HERCULES_API_KEY": "My API Key"
+        "HERCULES_API_KEY": "My API Key",
+        "HERCULES_API_VERSION": "My API Version"
       }
     }
   }
@@ -204,7 +206,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "@usehercules/mcp/server";
 
 // import a specific tool
-import createSubscriptionsCustomers from "@usehercules/mcp/tools/subscriptions/customers/create-subscriptions-customers";
+import cancelSubscriptions from "@usehercules/mcp/tools/subscriptions/cancel-subscriptions";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -229,12 +231,18 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [createSubscriptionsCustomers, myCustomEndpoint] });
+init({ server: myServer, endpoints: [cancelSubscriptions, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
+
+### Resource `subscriptions`:
+
+- `cancel_subscriptions` (`write`): Cancel Subscription
+- `check_subscriptions` (`write`): Check Entitlement
+- `checkout_subscriptions` (`write`): Create Checkout Session
 
 ### Resource `subscriptions.customers`:
 
@@ -252,3 +260,25 @@ The following tools are available in this MCP server.
 - `list_subscriptions_plans` (`read`): List Plans
 - `archive_subscriptions_plans` (`write`): Archive Plan
 - `get_subscriptions_plans` (`read`): Get Plan
+
+### Resource `subscriptions.plans.entitlements`:
+
+- `list_plans_subscriptions_entitlements` (`read`): List Plan Entitlements
+- `attach_plans_subscriptions_entitlements` (`write`): Attach Entitlement to Plan
+- `remove_plans_subscriptions_entitlements` (`write`): Remove Entitlement from Plan
+
+### Resource `subscriptions.entitlements`:
+
+- `create_subscriptions_entitlements` (`write`): Create Entitlement
+- `update_subscriptions_entitlements` (`write`): Update Entitlement
+- `list_subscriptions_entitlements` (`read`): List Entitlements
+- `get_subscriptions_entitlements` (`read`): Get Entitlement
+
+### Resource `subscriptions.coupons`:
+
+- `create_subscriptions_coupons` (`write`): Create Coupon
+- `update_subscriptions_coupons` (`write`): Update Coupon
+- `list_subscriptions_coupons` (`read`): List Coupons
+- `delete_subscriptions_coupons` (`write`): Delete Coupon
+- `get_subscriptions_coupons` (`read`): Get Coupon
+- `validate_subscriptions_coupons` (`write`): Validate Promo Code
