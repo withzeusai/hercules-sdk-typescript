@@ -17,17 +17,15 @@ jobs:
     name: publish
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: write
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '20'
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -45,8 +43,7 @@ jobs:
           fi
           pnpm tsn scripts/publish-packages.ts "{ \"paths_released\": \"$PATHS_RELEASED\" }"
         env:
-          NPM_CONFIG_PROVENANCE: 'true'
-          NODE_AUTH_TOKEN: ''
+          NPM_TOKEN: ${{ secrets.HERCULES_NPM_TOKEN || secrets.NPM_TOKEN }}
 
       - name: Upload MCP Server DXT GitHub release asset
         run: |
