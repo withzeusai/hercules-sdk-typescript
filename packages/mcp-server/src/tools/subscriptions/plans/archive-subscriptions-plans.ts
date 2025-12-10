@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: [],
   httpMethod: 'delete',
-  httpPath: '/subscriptions/v1/plans/{id}',
-  operationId: 'deleteSubscriptionsV1Plans:id',
+  httpPath: '/subscriptions/v1/plans/{plan_id}',
+  operationId: 'deleteSubscriptionsV1Plans:plan_id',
 };
 
 export const tool: Tool = {
@@ -22,7 +22,7 @@ export const tool: Tool = {
   inputSchema: {
     type: 'object',
     properties: {
-      id: {
+      plan_id: {
         type: 'string',
       },
       jq_filter: {
@@ -32,7 +32,7 @@ export const tool: Tool = {
           'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
       },
     },
-    required: ['id'],
+    required: ['plan_id'],
   },
   annotations: {
     idempotentHint: true,
@@ -40,9 +40,11 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: Hercules, args: Record<string, unknown> | undefined) => {
-  const { id, jq_filter, ...body } = args as any;
+  const { plan_id, jq_filter, ...body } = args as any;
   try {
-    return asTextContentResult(await maybeFilter(jq_filter, await client.subscriptions.plans.archive(id)));
+    return asTextContentResult(
+      await maybeFilter(jq_filter, await client.subscriptions.plans.archive(plan_id)),
+    );
   } catch (error) {
     if (error instanceof Hercules.APIError || isJqError(error)) {
       return asErrorResult(error.message);

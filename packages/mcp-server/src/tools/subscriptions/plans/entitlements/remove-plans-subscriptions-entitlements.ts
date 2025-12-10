@@ -6,25 +6,28 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import Hercules from '@usehercules/sdk';
 
 export const metadata: Metadata = {
-  resource: 'subscriptions.customers',
+  resource: 'subscriptions.plans.entitlements',
   operation: 'write',
   tags: [],
   httpMethod: 'delete',
-  httpPath: '/subscriptions/v1/customers/{customer_id}',
-  operationId: 'deleteSubscriptionsV1Customers:customer_id',
+  httpPath: '/subscriptions/v1/plans/{plan_id}/entitlements/{feature_id}',
+  operationId: 'deleteSubscriptionsV1Plans:plan_idEntitlements:feature_id',
 };
 
 export const tool: Tool = {
-  name: 'delete_subscriptions_customers',
-  description: 'Delete Customer',
+  name: 'remove_plans_subscriptions_entitlements',
+  description: 'Remove Entitlement from Plan',
   inputSchema: {
     type: 'object',
     properties: {
-      customer_id: {
+      plan_id: {
+        type: 'string',
+      },
+      feature_id: {
         type: 'string',
       },
     },
-    required: ['customer_id'],
+    required: ['plan_id', 'feature_id'],
   },
   annotations: {
     idempotentHint: true,
@@ -32,8 +35,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: Hercules, args: Record<string, unknown> | undefined) => {
-  const { customer_id, ...body } = args as any;
-  const response = await client.subscriptions.customers.delete(customer_id).asResponse();
+  const { feature_id, ...body } = args as any;
+  const response = await client.subscriptions.plans.entitlements.remove(feature_id, body).asResponse();
   return asTextContentResult(await response.text());
 };
 

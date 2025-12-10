@@ -18,7 +18,8 @@
       "command": "node",
       "args": ["${__dirname}/index.js"],
       "env": {
-        "HERCULES_API_KEY": "${user_config.HERCULES_API_KEY}"
+        "HERCULES_API_KEY": "${user_config.HERCULES_API_KEY}",
+        "HERCULES_API_VERSION": "${user_config.HERCULES_API_VERSION}"
       }
     }
   },
@@ -27,6 +28,12 @@
       "title": "api_key",
       "description": "",
       "required": false,
+      "type": "string"
+    },
+    "HERCULES_API_VERSION": {
+      "title": "api_version",
+      "description": "",
+      "required": true,
       "type": "string"
     }
   },

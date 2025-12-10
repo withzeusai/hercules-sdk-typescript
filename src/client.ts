@@ -18,7 +18,15 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Subscriptions } from './resources/subscriptions/subscriptions';
+import {
+  SubscriptionCancelParams,
+  SubscriptionCancelResponse,
+  SubscriptionCheckParams,
+  SubscriptionCheckResponse,
+  SubscriptionCheckoutParams,
+  SubscriptionCheckoutResponse,
+  Subscriptions,
+} from './resources/subscriptions/subscriptions';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -37,6 +45,8 @@ export interface ClientOptions {
    * Defaults to process.env['HERCULES_API_KEY'].
    */
   apiKey?: string | null | undefined;
+
+  apiVersion?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -112,6 +122,7 @@ export interface ClientOptions {
  */
 export class Hercules {
   apiKey: string | null;
+  apiVersion: string;
 
   baseURL: string;
   maxRetries: number;
@@ -129,6 +140,7 @@ export class Hercules {
    * API Client for interfacing with the Hercules API.
    *
    * @param {string | null | undefined} [opts.apiKey=process.env['HERCULES_API_KEY'] ?? null]
+   * @param {string | undefined} [opts.apiVersion=2025-12-09]
    * @param {string} [opts.baseURL=process.env['HERCULES_BASE_URL'] ?? https://api.hercules.app] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -140,10 +152,12 @@ export class Hercules {
   constructor({
     baseURL = readEnv('HERCULES_BASE_URL'),
     apiKey = readEnv('HERCULES_API_KEY') ?? null,
+    apiVersion = '2025-12-09',
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
       apiKey,
+      apiVersion,
       ...opts,
       baseURL: baseURL || `https://api.hercules.app`,
     };
@@ -167,6 +181,7 @@ export class Hercules {
     this.idempotencyHeader = 'Idempotency-Key';
 
     this.apiKey = apiKey;
+    this.apiVersion = apiVersion;
   }
 
   /**
@@ -183,6 +198,7 @@ export class Hercules {
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
+      apiVersion: this.apiVersion,
       ...options,
     });
     return client;
@@ -674,6 +690,7 @@ export class Hercules {
         'X-Stainless-Retry-Count': String(retryCount),
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
+        'Hercules-Version': this.apiVersion,
       },
       await this.authHeaders(options),
       this._options.defaultHeaders,
@@ -753,5 +770,13 @@ export declare namespace Hercules {
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
-  export { Subscriptions as Subscriptions };
+  export {
+    Subscriptions as Subscriptions,
+    type SubscriptionCancelResponse as SubscriptionCancelResponse,
+    type SubscriptionCheckResponse as SubscriptionCheckResponse,
+    type SubscriptionCheckoutResponse as SubscriptionCheckoutResponse,
+    type SubscriptionCancelParams as SubscriptionCancelParams,
+    type SubscriptionCheckParams as SubscriptionCheckParams,
+    type SubscriptionCheckoutParams as SubscriptionCheckoutParams,
+  };
 }

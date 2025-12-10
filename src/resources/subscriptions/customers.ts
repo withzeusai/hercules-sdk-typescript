@@ -19,11 +19,11 @@ export class Customers extends APIResource {
    * Update Customer
    */
   update(
-    id: string,
+    customerID: string,
     body: CustomerUpdateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<Customer> {
-    return this._client.patch(path`/subscriptions/v1/customers/${id}`, { body, ...options });
+    return this._client.patch(path`/subscriptions/v1/customers/${customerID}`, { body, ...options });
   }
 
   /**
@@ -42,8 +42,8 @@ export class Customers extends APIResource {
   /**
    * Delete Customer
    */
-  delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/subscriptions/v1/customers/${id}`, {
+  delete(customerID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/subscriptions/v1/customers/${customerID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -53,18 +53,21 @@ export class Customers extends APIResource {
    * Open Customer Portal
    */
   billingPortal(
-    id: string,
+    customerID: string,
     body: CustomerBillingPortalParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<CustomerBillingPortalResponse> {
-    return this._client.post(path`/subscriptions/v1/customers/${id}/billing_portal`, { body, ...options });
+    return this._client.post(path`/subscriptions/v1/customers/${customerID}/billing_portal`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Get Customer
    */
-  get(id: string, options?: RequestOptions): APIPromise<Customer> {
-    return this._client.get(path`/subscriptions/v1/customers/${id}`, options);
+  get(customerID: string, options?: RequestOptions): APIPromise<Customer> {
+    return this._client.get(path`/subscriptions/v1/customers/${customerID}`, options);
   }
 }
 
@@ -81,11 +84,35 @@ export interface Customer {
 
   created: string;
 
+  /**
+   * Customer billing address
+   */
+  address?: CustomerAddress | null;
+
   email?: string | null;
 
   name?: string | null;
 
+  phone?: string | null;
+
   stripe_id?: string | null;
+}
+
+/**
+ * Customer billing address
+ */
+export interface CustomerAddress {
+  city?: string | null;
+
+  country?: string | null;
+
+  line1?: string | null;
+
+  line2?: string | null;
+
+  postal_code?: string | null;
+
+  state?: string | null;
 }
 
 /**
@@ -96,15 +123,29 @@ export interface CustomerBillingPortalResponse {
 }
 
 export interface CustomerCreateParams {
+  /**
+   * Customer billing address
+   */
+  address?: CustomerAddress;
+
   email?: string;
 
   name?: string;
+
+  phone?: string;
 }
 
 export interface CustomerUpdateParams {
+  /**
+   * Customer billing address
+   */
+  address?: CustomerAddress;
+
   email?: string;
 
   name?: string;
+
+  phone?: string;
 }
 
 export interface CustomerListParams extends CursorIDPageParams {}
@@ -116,6 +157,7 @@ export interface CustomerBillingPortalParams {
 export declare namespace Customers {
   export {
     type Customer as Customer,
+    type CustomerAddress as CustomerAddress,
     type CustomerBillingPortalResponse as CustomerBillingPortalResponse,
     type CustomersCursorIDPage as CustomersCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
