@@ -1,6 +1,6 @@
 # Hercules TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/@usehercules/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@usehercules/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@usehercules/sdk)
+[![NPM version](<https://img.shields.io/npm/v/@usehercules/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@usehercules/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@usehercules/sdk) [![JSR Version](https://jsr.io/badges/@usehercules/sdk)](https://jsr.io/@usehercules/sdk)
 
 This library provides convenient access to the Hercules REST API from server-side TypeScript or JavaScript.
 
@@ -11,11 +11,23 @@ It is generated with [Stainless](https://www.stainless.com/).
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:withzeusai/hercules-sdk-typescript.git
+npm install @usehercules/sdk
 ```
 
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @usehercules/sdk`
+### Installation from JSR
+
+```sh
+deno add jsr:@usehercules/sdk
+npx jsr add @usehercules/sdk
+```
+
+These commands will make the module importable from the `@usehercules/sdk` scope:
+
+You can also [import directly from JSR](https://jsr.io/docs/using-packages#importing-with-jsr-specifiers) without an install step if you're using the Deno JavaScript runtime:
+
+```ts
+import Hercules from 'jsr:@usehercules/sdk';
+```
 
 ## Usage
 
@@ -354,7 +366,7 @@ const client = new Hercules({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import Hercules from 'npm:@usehercules/sdk';
+import Hercules from 'jsr:@usehercules/sdk';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new Hercules({
