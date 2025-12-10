@@ -75,7 +75,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/beta/subscriptions/coupons.ts">Coupon</a></code>
-- <code><a href="./src/resources/beta/subscriptions/coupons.ts">CouponValidateResponse</a></code>
 
 Methods:
 
@@ -84,4 +83,3 @@ Methods:
 - <code title="get /v1/subscriptions/coupons">client.beta.subscriptions.coupons.<a href="./src/resources/beta/subscriptions/coupons.ts">list</a>({ ...params }) -> CouponsCursorIDPage</code>
 - <code title="delete /v1/subscriptions/coupons/{coupon_id}">client.beta.subscriptions.coupons.<a href="./src/resources/beta/subscriptions/coupons.ts">delete</a>(couponID) -> void</code>
 - <code title="get /v1/subscriptions/coupons/{coupon_id}">client.beta.subscriptions.coupons.<a href="./src/resources/beta/subscriptions/coupons.ts">get</a>(couponID) -> Coupon</code>
-- <code title="post /v1/subscriptions/coupons/validate">client.beta.subscriptions.coupons.<a href="./src/resources/beta/subscriptions/coupons.ts">validate</a>({ ...params }) -> CouponValidateResponse</code>
