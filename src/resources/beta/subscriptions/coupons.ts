@@ -52,13 +52,6 @@ export class Coupons extends APIResource {
   get(couponID: string, options?: RequestOptions): APIPromise<Coupon> {
     return this._client.get(path`/v1/subscriptions/coupons/${couponID}`, options);
   }
-
-  /**
-   * Validate Promo Code
-   */
-  validate(body: CouponValidateParams, options?: RequestOptions): APIPromise<CouponValidateResponse> {
-    return this._client.post('/v1/subscriptions/coupons/validate', { body, ...options });
-  }
 }
 
 export type CouponsCursorIDPage = CursorIDPage<Coupon>;
@@ -121,26 +114,6 @@ export interface Coupon {
   redeem_by?: string | null;
 }
 
-/**
- * Validate promo code response
- */
-export interface CouponValidateResponse {
-  /**
-   * Whether the promo code is valid
-   */
-  valid: boolean;
-
-  /**
-   * A coupon/promo code for discounts
-   */
-  coupon?: Coupon | null;
-
-  /**
-   * Error message if invalid
-   */
-  error?: string | null;
-}
-
 export interface CouponCreateParams {
   /**
    * The promo code customers will enter
@@ -201,21 +174,12 @@ export interface CouponListParams extends CursorIDPageParams {
   active?: boolean;
 }
 
-export interface CouponValidateParams {
-  /**
-   * The promo code to validate
-   */
-  code: string;
-}
-
 export declare namespace Coupons {
   export {
     type Coupon as Coupon,
-    type CouponValidateResponse as CouponValidateResponse,
     type CouponsCursorIDPage as CouponsCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
     type CouponListParams as CouponListParams,
-    type CouponValidateParams as CouponValidateParams,
   };
 }

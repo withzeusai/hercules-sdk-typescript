@@ -105,21 +105,4 @@ describe('resource coupons', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
-
-  // Prism tests are disabled
-  test.skip('validate: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.coupons.validate({ code: 'code' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('validate: required and optional params', async () => {
-    const response = await client.beta.subscriptions.coupons.validate({ code: 'code' });
-  });
 });

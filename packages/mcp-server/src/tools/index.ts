@@ -30,7 +30,6 @@ import update_subscriptions_beta_coupons from './beta/subscriptions/coupons/upda
 import list_subscriptions_beta_coupons from './beta/subscriptions/coupons/list-subscriptions-beta-coupons';
 import delete_subscriptions_beta_coupons from './beta/subscriptions/coupons/delete-subscriptions-beta-coupons';
 import get_subscriptions_beta_coupons from './beta/subscriptions/coupons/get-subscriptions-beta-coupons';
-import validate_subscriptions_beta_coupons from './beta/subscriptions/coupons/validate-subscriptions-beta-coupons';
 
 export const endpoints: Endpoint[] = [];
 
@@ -64,7 +63,6 @@ addEndpoint(update_subscriptions_beta_coupons);
 addEndpoint(list_subscriptions_beta_coupons);
 addEndpoint(delete_subscriptions_beta_coupons);
 addEndpoint(get_subscriptions_beta_coupons);
-addEndpoint(validate_subscriptions_beta_coupons);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

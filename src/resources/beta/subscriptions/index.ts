@@ -3,11 +3,9 @@
 export {
   Coupons,
   type Coupon,
-  type CouponValidateResponse,
   type CouponCreateParams,
   type CouponUpdateParams,
   type CouponListParams,
-  type CouponValidateParams,
   type CouponsCursorIDPage,
 } from './coupons';
 export {

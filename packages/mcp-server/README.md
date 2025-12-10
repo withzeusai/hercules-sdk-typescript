@@ -285,4 +285,3 @@ The following tools are available in this MCP server.
 - `list_subscriptions_beta_coupons` (`read`): List Coupons
 - `delete_subscriptions_beta_coupons` (`write`): Delete Coupon
 - `get_subscriptions_beta_coupons` (`read`): Get Coupon
-- `validate_subscriptions_beta_coupons` (`write`): Validate Promo Code
