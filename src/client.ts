@@ -18,15 +18,7 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import {
-  SubscriptionCancelParams,
-  SubscriptionCancelResponse,
-  SubscriptionCheckParams,
-  SubscriptionCheckResponse,
-  SubscriptionCheckoutParams,
-  SubscriptionCheckoutResponse,
-  Subscriptions,
-} from './resources/subscriptions/subscriptions';
+import { Beta } from './resources/beta/beta';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -759,10 +751,10 @@ export class Hercules {
 
   static toFile = Uploads.toFile;
 
-  subscriptions: API.Subscriptions = new API.Subscriptions(this);
+  beta: API.Beta = new API.Beta(this);
 }
 
-Hercules.Subscriptions = Subscriptions;
+Hercules.Beta = Beta;
 
 export declare namespace Hercules {
   export type RequestOptions = Opts.RequestOptions;
@@ -770,13 +762,5 @@ export declare namespace Hercules {
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
-  export {
-    Subscriptions as Subscriptions,
-    type SubscriptionCancelResponse as SubscriptionCancelResponse,
-    type SubscriptionCheckResponse as SubscriptionCheckResponse,
-    type SubscriptionCheckoutResponse as SubscriptionCheckoutResponse,
-    type SubscriptionCancelParams as SubscriptionCancelParams,
-    type SubscriptionCheckParams as SubscriptionCheckParams,
-    type SubscriptionCheckoutParams as SubscriptionCheckoutParams,
-  };
+  export { Beta as Beta };
 }
