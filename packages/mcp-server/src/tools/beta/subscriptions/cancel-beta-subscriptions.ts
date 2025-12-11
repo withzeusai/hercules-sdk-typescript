@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'cancel_beta_subscriptions',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCancels a customer's subscription. By default, the subscription remains active until the end of the current billing period. Set cancel_at_period_end to false to cancel immediately.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_cancel_response',\n  $defs: {\n    subscription_cancel_response: {\n      type: 'object',\n      description: 'Cancel subscription response',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'The subscription ID'\n        },\n        cancel_at_period_end: {\n          type: 'boolean',\n          description: 'Whether the subscription will cancel at period end'\n        },\n        status: {\n          type: 'string',\n          description: 'The subscription status'\n        },\n        canceled_at: {\n          type: 'string',\n          description: 'When the subscription was canceled',\n          format: 'date-time'\n        }\n      },\n      required: [        'id',\n        'cancel_at_period_end',\n        'status'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCancels a customer's subscription. By default, the subscription remains active until the end of the current billing period. Set cancellation_timing to 'immediate' to cancel immediately.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_cancel_response',\n  $defs: {\n    subscription_cancel_response: {\n      type: 'object',\n      description: 'Cancel subscription response',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'The subscription ID'\n        },\n        cancellation_timing: {\n          type: 'string',\n          description: 'When the cancellation takes effect',\n          enum: [            'immediate',\n            'at_billing_period_end'\n          ]\n        },\n        status: {\n          type: 'string',\n          description: 'The subscription status'\n        },\n        canceled_at: {\n          type: 'string',\n          description: 'When the subscription was canceled',\n          format: 'date-time'\n        }\n      },\n      required: [        'id',\n        'cancellation_timing',\n        'status'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
@@ -30,9 +30,11 @@ export const tool: Tool = {
         type: 'string',
         description: 'The subscription ID to cancel',
       },
-      cancel_at_period_end: {
-        type: 'boolean',
-        description: 'Whether to cancel at period end or immediately',
+      cancellation_timing: {
+        type: 'string',
+        description:
+          "When to cancel the subscription. Defaults to 'at_billing_period_end' to allow customers to use remaining time.",
+        enum: ['immediate', 'at_billing_period_end'],
       },
       jq_filter: {
         type: 'string',

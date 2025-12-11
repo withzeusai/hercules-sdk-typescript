@@ -244,7 +244,7 @@ The following tools are available in this MCP server.
 
 ### Resource `beta.subscriptions`:
 
-- `cancel_beta_subscriptions` (`write`): Cancels a customer's subscription. By default, the subscription remains active until the end of the current billing period. Set cancel_at_period_end to false to cancel immediately.
+- `cancel_beta_subscriptions` (`write`): Cancels a customer's subscription. By default, the subscription remains active until the end of the current billing period. Set cancellation_timing to 'immediate' to cancel immediately.
 - `check_beta_subscriptions` (`write`): Verifies if a customer has access to a specific feature. Use this to gate features in your app based on the customer's active subscription and the entitlements attached to their plan. Hercules recommends calling this before allowing access to premium features.
 - `checkout_beta_subscriptions` (`write`): Creates a checkout session for a customer to subscribe to a plan. Returns a URL to redirect the customer to for payment. After successful payment, the customer is subscribed to the plan and gains access to its entitlements.
 
@@ -274,8 +274,8 @@ The following tools are available in this MCP server.
 ### Resource `beta.subscriptions.entitlements`:
 
 - `create_subscriptions_beta_entitlements` (`write`): Creates a new feature entitlement. Entitlements represent features or capabilities in your app that can be gated by subscription. After creating an entitlement, attach it to one or more plans to grant access to customers on those plans.
-- `update_subscriptions_beta_entitlements` (`write`): Updates an existing entitlement. Use this to modify the name or deactivate the entitlement. The lookup_key cannot be changed after creation.
-- `list_subscriptions_beta_entitlements` (`read`): Retrieves a paginated list of all entitlements. Entitlements represent features or capabilities in your app that can be gated by subscription. Use the lookup_key filter to find a specific entitlement by its key.
+- `update_subscriptions_beta_entitlements` (`write`): Updates an existing entitlement. Use this to modify the name or deactivate the entitlement. The key cannot be changed after creation.
+- `list_subscriptions_beta_entitlements` (`read`): Retrieves a paginated list of all entitlements. Entitlements represent features or capabilities in your app that can be gated by subscription. Use the key filter to find a specific entitlement by its key.
 - `get_subscriptions_beta_entitlements` (`read`): Retrieves an entitlement by ID. Returns the entitlement object including its lookup key and active status.
 
 ### Resource `beta.subscriptions.coupons`:
