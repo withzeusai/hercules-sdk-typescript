@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'update_subscriptions_beta_entitlements',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates an entitlement by their ID\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/entitlement',\n  $defs: {\n    entitlement: {\n      type: 'object',\n      description: 'An entitlement that can be attached to products',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        active: {\n          type: 'boolean'\n        },\n        livemode: {\n          type: 'boolean'\n        },\n        lookup_key: {\n          type: 'string'\n        },\n        name: {\n          type: 'string'\n        }\n      },\n      required: [        'id',\n        'active',\n        'livemode',\n        'lookup_key',\n        'name'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates an existing entitlement. Use this to modify the name or deactivate the entitlement. The lookup_key cannot be changed after creation.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/entitlement',\n  $defs: {\n    entitlement: {\n      type: 'object',\n      description: 'The entitlement attached to the plan',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Unique identifier for the entitlement'\n        },\n        active: {\n          type: 'boolean',\n          description: 'Whether the entitlement is active and can be attached to plans'\n        },\n        livemode: {\n          type: 'boolean',\n          description: 'Whether this is a live mode entitlement (vs test mode)'\n        },\n        lookup_key: {\n          type: 'string',\n          description: 'Unique key to identify the entitlement when checking access in your app'\n        },\n        name: {\n          type: 'string',\n          description: 'Display name for the entitlement (e.g., API Access, Premium Support)'\n        }\n      },\n      required: [        'id',\n        'active',\n        'livemode',\n        'lookup_key',\n        'name'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
@@ -27,11 +27,11 @@ export const tool: Tool = {
       },
       active: {
         type: 'boolean',
-        description: 'Whether the entitlement is active',
+        description: 'Whether the entitlement is active. Deactivating removes it from access checks.',
       },
       name: {
         type: 'string',
-        description: 'The name of the entitlement',
+        description: 'Display name for the entitlement',
       },
       jq_filter: {
         type: 'string',

@@ -244,44 +244,44 @@ The following tools are available in this MCP server.
 
 ### Resource `beta.subscriptions`:
 
-- `cancel_beta_subscriptions` (`write`): Cancels a subscription by their ID
-- `check_beta_subscriptions` (`write`): Checks an entitlement by their ID
-- `checkout_beta_subscriptions` (`write`): Creates a new checkout session
+- `cancel_beta_subscriptions` (`write`): Cancels a customer's subscription. By default, the subscription remains active until the end of the current billing period. Set cancel_at_period_end to false to cancel immediately.
+- `check_beta_subscriptions` (`write`): Verifies if a customer has access to a specific feature. Use this to gate features in your app based on the customer's active subscription and the entitlements attached to their plan. Hercules recommends calling this before allowing access to premium features.
+- `checkout_beta_subscriptions` (`write`): Creates a checkout session for a customer to subscribe to a plan. Returns a URL to redirect the customer to for payment. After successful payment, the customer is subscribed to the plan and gains access to its entitlements.
 
 ### Resource `beta.subscriptions.customers`:
 
-- `create_subscriptions_beta_customers` (`write`): Creates a new customer
-- `update_subscriptions_beta_customers` (`write`): Updates a customer by their ID
-- `list_subscriptions_beta_customers` (`read`): Lists all customers
-- `delete_subscriptions_beta_customers` (`write`): Deletes a customer by their ID
-- `billing_portal_subscriptions_beta_customers` (`write`): Opens a customer portal for a customer by their ID
-- `get_subscriptions_beta_customers` (`read`): Gets a customer by their ID
+- `create_subscriptions_beta_customers` (`write`): Creates a new billable customer. A customer represents the entity in your app that will be charged—typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
+- `update_subscriptions_beta_customers` (`write`): Updates an existing customer. Use this to modify contact information or billing address. Only provided fields are updated; omitted fields remain unchanged.
+- `list_subscriptions_beta_customers` (`read`): Retrieves a paginated list of all customers. Customers are the billable entities in your app—typically users, organizations, or projects.
+- `delete_subscriptions_beta_customers` (`write`): Permanently deletes a customer. This also cancels any active subscriptions. This action cannot be undone.
+- `billing_portal_subscriptions_beta_customers` (`write`): Generates a URL to a hosted billing portal where the customer can view invoices, update payment methods, and manage billing details. Redirect the customer to the returned URL.
+- `get_subscriptions_beta_customers` (`read`): Retrieves a customer by ID. Returns the customer object including contact information and billing address.
 
 ### Resource `beta.subscriptions.plans`:
 
-- `create_subscriptions_beta_plans` (`write`): Creates a new plan
-- `update_subscriptions_beta_plans` (`write`): Updates a plan by their ID
-- `list_subscriptions_beta_plans` (`read`): Lists all plans
-- `archive_subscriptions_beta_plans` (`write`): Archives a plan by their ID
-- `get_subscriptions_beta_plans` (`read`): Gets a plan by their ID
+- `create_subscriptions_beta_plans` (`write`): Creates a new subscription plan with a recurring price. Common examples include Free, Pro, Business, or Teams tiers. After creating a plan, attach entitlements to define which features customers on this plan can access.
+- `update_subscriptions_beta_plans` (`write`): Updates an existing plan. Use this to modify the plan name, description, or active status. Pricing cannot be changed after creation—create a new plan instead.
+- `list_subscriptions_beta_plans` (`read`): Retrieves a paginated list of subscription plans. Plans define the pricing and billing intervals for subscriptions. Each plan can have entitlements attached that grant features to subscribed customers.
+- `archive_subscriptions_beta_plans` (`write`): Archives a plan, preventing new subscriptions. Existing subscriptions remain active. Use this instead of deletion to preserve subscription history.
+- `get_subscriptions_beta_plans` (`read`): Retrieves a plan by ID. Returns the plan object including pricing details and status.
 
 ### Resource `beta.subscriptions.plans.entitlements`:
 
-- `list_plans_subscriptions_beta_entitlements` (`read`): Lists all entitlements attached to a plan
-- `attach_plans_subscriptions_beta_entitlements` (`write`): Attaches an entitlement to a plan
-- `remove_plans_subscriptions_beta_entitlements` (`write`): Removes an entitlement from a plan
+- `list_plans_subscriptions_beta_entitlements` (`read`): Retrieves all entitlements attached to a plan. These entitlements define the features that customers subscribed to this plan can access.
+- `attach_plans_subscriptions_beta_entitlements` (`write`): Attaches an entitlement to a plan. All customers subscribed to this plan will gain access to the attached feature. Hercules recommends attaching entitlements when creating or updating plans to keep feature access in sync.
+- `remove_plans_subscriptions_beta_entitlements` (`write`): Removes an entitlement from a plan. Customers subscribed to this plan will lose access to the feature. Existing subscriptions are affected immediately.
 
 ### Resource `beta.subscriptions.entitlements`:
 
-- `create_subscriptions_beta_entitlements` (`write`): Creates a new entitlement
-- `update_subscriptions_beta_entitlements` (`write`): Updates an entitlement by their ID
-- `list_subscriptions_beta_entitlements` (`read`): Lists all entitlements
-- `get_subscriptions_beta_entitlements` (`read`): Gets an entitlement by their ID
+- `create_subscriptions_beta_entitlements` (`write`): Creates a new feature entitlement. Entitlements represent features or capabilities in your app that can be gated by subscription. After creating an entitlement, attach it to one or more plans to grant access to customers on those plans.
+- `update_subscriptions_beta_entitlements` (`write`): Updates an existing entitlement. Use this to modify the name or deactivate the entitlement. The lookup_key cannot be changed after creation.
+- `list_subscriptions_beta_entitlements` (`read`): Retrieves a paginated list of all entitlements. Entitlements represent features or capabilities in your app that can be gated by subscription. Use the lookup_key filter to find a specific entitlement by its key.
+- `get_subscriptions_beta_entitlements` (`read`): Retrieves an entitlement by ID. Returns the entitlement object including its lookup key and active status.
 
 ### Resource `beta.subscriptions.coupons`:
 
-- `create_subscriptions_beta_coupons` (`write`): Creates a new coupon
-- `update_subscriptions_beta_coupons` (`write`): Updates a coupon by their ID
-- `list_subscriptions_beta_coupons` (`read`): Lists all coupons
-- `delete_subscriptions_beta_coupons` (`write`): Deletes a coupon by their ID
-- `get_subscriptions_beta_coupons` (`read`): Gets a coupon by their ID
+- `create_subscriptions_beta_coupons` (`write`): Creates a discount coupon with a promo code. Coupons can offer percentage or fixed-amount discounts and can be limited by redemption count or expiration date. Customers can apply coupons during checkout.
+- `update_subscriptions_beta_coupons` (`write`): Updates an existing coupon. Use this to modify the display name or deactivate the coupon. Discount amounts and codes cannot be changed after creation.
+- `list_subscriptions_beta_coupons` (`read`): Retrieves a paginated list of all coupons. Coupons provide discounts that customers can apply during checkout using a promo code.
+- `delete_subscriptions_beta_coupons` (`write`): Permanently deletes a coupon. The promo code can no longer be used. Existing discounts applied to active subscriptions are not affected.
+- `get_subscriptions_beta_coupons` (`read`): Retrieves a coupon by ID. Returns the coupon object including discount details and redemption statistics.

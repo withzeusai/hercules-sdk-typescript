@@ -10,7 +10,8 @@ import { path } from '../../../../internal/utils/path';
 
 export class Entitlements extends APIResource {
   /**
-   * Lists all entitlements attached to a plan
+   * Retrieves all entitlements attached to a plan. These entitlements define the
+   * features that customers subscribed to this plan can access.
    */
   list(
     planID: string,
@@ -25,7 +26,9 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Attaches an entitlement to a plan
+   * Attaches an entitlement to a plan. All customers subscribed to this plan will
+   * gain access to the attached feature. Hercules recommends attaching entitlements
+   * when creating or updating plans to keep feature access in sync.
    */
   attach(
     planID: string,
@@ -36,7 +39,8 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Removes an entitlement from a plan
+   * Removes an entitlement from a plan. Customers subscribed to this plan will lose
+   * access to the feature. Existing subscriptions are affected immediately.
    */
   remove(featureID: string, params: EntitlementRemoveParams, options?: RequestOptions): APIPromise<void> {
     const { plan_id } = params;
@@ -50,16 +54,17 @@ export class Entitlements extends APIResource {
 export type PlanEntitlementsCursorIDPage = CursorIDPage<PlanEntitlement>;
 
 /**
- * An entitlement attached to a plan
+ * An entitlement attached to a plan. All customers subscribed to the plan gain
+ * access to this entitlement.
  */
 export interface PlanEntitlement {
   /**
-   * An id for a data item
+   * Unique identifier for the entitlement
    */
   id: string;
 
   /**
-   * An entitlement that can be attached to products
+   * The entitlement attached to the plan
    */
   entitlement: EntitlementsAPI.Entitlement;
 }
@@ -68,7 +73,7 @@ export interface EntitlementListParams extends CursorIDPageParams {}
 
 export interface EntitlementAttachParams {
   /**
-   * The ID of the entitlement to attach
+   * The ID of the entitlement to attach to the plan
    */
   entitlement: string;
 }
