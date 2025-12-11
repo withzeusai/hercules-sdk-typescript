@@ -50,21 +50,28 @@ export class Subscriptions extends APIResource {
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
 
   /**
-   * Cancels a subscription by their ID
+   * Cancels a customer's subscription. By default, the subscription remains active
+   * until the end of the current billing period. Set cancel_at_period_end to false
+   * to cancel immediately.
    */
   cancel(body: SubscriptionCancelParams, options?: RequestOptions): APIPromise<SubscriptionCancelResponse> {
     return this._client.post('/v1/subscriptions/cancel', { body, ...options });
   }
 
   /**
-   * Checks an entitlement by their ID
+   * Verifies if a customer has access to a specific feature. Use this to gate
+   * features in your app based on the customer's active subscription and the
+   * entitlements attached to their plan. Hercules recommends calling this before
+   * allowing access to premium features.
    */
   check(body: SubscriptionCheckParams, options?: RequestOptions): APIPromise<SubscriptionCheckResponse> {
     return this._client.post('/v1/subscriptions/check', { body, ...options });
   }
 
   /**
-   * Creates a new checkout session
+   * Creates a checkout session for a customer to subscribe to a plan. Returns a URL
+   * to redirect the customer to for payment. After successful payment, the customer
+   * is subscribed to the plan and gains access to its entitlements.
    */
   checkout(
     body: SubscriptionCheckoutParams,

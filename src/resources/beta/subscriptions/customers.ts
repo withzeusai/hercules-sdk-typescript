@@ -9,14 +9,18 @@ import { path } from '../../../internal/utils/path';
 
 export class Customers extends APIResource {
   /**
-   * Creates a new customer
+   * Creates a new billable customer. A customer represents the entity in your app
+   * that will be charged—typically a user, organization, or project. Hercules
+   * recommends creating a customer immediately after creating the corresponding
+   * entity in your app.
    */
   create(body: CustomerCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<Customer> {
     return this._client.post('/v1/subscriptions/customers', { body, ...options });
   }
 
   /**
-   * Updates a customer by their ID
+   * Updates an existing customer. Use this to modify contact information or billing
+   * address. Only provided fields are updated; omitted fields remain unchanged.
    */
   update(
     customerID: string,
@@ -27,7 +31,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Lists all customers
+   * Retrieves a paginated list of all customers. Customers are the billable entities
+   * in your app—typically users, organizations, or projects.
    */
   list(
     query: CustomerListParams | null | undefined = {},
@@ -40,7 +45,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Deletes a customer by their ID
+   * Permanently deletes a customer. This also cancels any active subscriptions. This
+   * action cannot be undone.
    */
   delete(customerID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/subscriptions/customers/${customerID}`, {
@@ -50,7 +56,9 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Opens a customer portal for a customer by their ID
+   * Generates a URL to a hosted billing portal where the customer can view invoices,
+   * update payment methods, and manage billing details. Redirect the customer to the
+   * returned URL.
    */
   billingPortal(
     customerID: string,
@@ -64,7 +72,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Gets a customer by their ID
+   * Retrieves a customer by ID. Returns the customer object including contact
+   * information and billing address.
    */
   get(customerID: string, options?: RequestOptions): APIPromise<Customer> {
     return this._client.get(path`/v1/subscriptions/customers/${customerID}`, options);
@@ -74,83 +83,141 @@ export class Customers extends APIResource {
 export type CustomersCursorIDPage = CursorIDPage<Customer>;
 
 /**
- * A subscription customer
+ * A billable customer. Represents the entity in your app that will be
+ * charged—typically a user, organization, or project.
  */
 export interface Customer {
   /**
-   * An id for a data item
+   * Unique identifier for the entitlement
    */
   id: string;
 
+  /**
+   * Timestamp when the customer was created
+   */
   created: string;
 
   /**
-   * Customer billing address
+   * The customer's billing address
    */
   address?: CustomerAddress | null;
 
+  /**
+   * The customer's email address for receipts and notifications
+   */
   email?: string | null;
 
+  /**
+   * The customer's full name
+   */
   name?: string | null;
 
+  /**
+   * The customer's phone number
+   */
   phone?: string | null;
 
+  /**
+   * Internal payment provider reference
+   */
   stripe_id?: string | null;
 }
 
 /**
- * Customer billing address
+ * The customer's billing address
  */
 export interface CustomerAddress {
+  /**
+   * City name
+   */
   city?: string | null;
 
+  /**
+   * Two-letter ISO country code
+   */
   country?: string | null;
 
+  /**
+   * Street address line 1
+   */
   line1?: string | null;
 
+  /**
+   * Street address line 2 (apartment, suite, etc.)
+   */
   line2?: string | null;
 
+  /**
+   * Postal or ZIP code
+   */
   postal_code?: string | null;
 
+  /**
+   * State, province, or region
+   */
   state?: string | null;
 }
 
 /**
- * Billing portal session URL
+ * Response containing the billing portal URL
  */
 export interface CustomerBillingPortalResponse {
+  /**
+   * URL to redirect the customer to for the billing portal
+   */
   url: string;
 }
 
 export interface CustomerCreateParams {
   /**
-   * Customer billing address
+   * The customer's billing address
    */
   address?: CustomerAddress;
 
+  /**
+   * The customer's email address for receipts and notifications
+   */
   email?: string;
 
+  /**
+   * The customer's full name
+   */
   name?: string;
 
+  /**
+   * The customer's phone number
+   */
   phone?: string;
 }
 
 export interface CustomerUpdateParams {
   /**
-   * Customer billing address
+   * The customer's billing address
    */
   address?: CustomerAddress;
 
+  /**
+   * The customer's email address for receipts and notifications
+   */
   email?: string;
 
+  /**
+   * The customer's full name
+   */
   name?: string;
 
+  /**
+   * The customer's phone number
+   */
   phone?: string;
 }
 
 export interface CustomerListParams extends CursorIDPageParams {}
 
 export interface CustomerBillingPortalParams {
+  /**
+   * URL to redirect the customer to after they exit the billing portal
+   */
   return_url?: string;
 }
 

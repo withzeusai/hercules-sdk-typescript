@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'update_subscriptions_beta_customers',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates a customer by their ID\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer',\n  $defs: {\n    customer: {\n      type: 'object',\n      description: 'A subscription customer',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        created: {\n          type: 'string',\n          format: 'date-time'\n        },\n        address: {\n          $ref: '#/$defs/customer_address'\n        },\n        email: {\n          type: 'string'\n        },\n        name: {\n          type: 'string'\n        },\n        phone: {\n          type: 'string'\n        },\n        stripe_id: {\n          type: 'string'\n        }\n      },\n      required: [        'id',\n        'created'\n      ]\n    },\n    customer_address: {\n      type: 'object',\n      description: 'Customer billing address',\n      properties: {\n        city: {\n          type: 'string'\n        },\n        country: {\n          type: 'string'\n        },\n        line1: {\n          type: 'string'\n        },\n        line2: {\n          type: 'string'\n        },\n        postal_code: {\n          type: 'string'\n        },\n        state: {\n          type: 'string'\n        }\n      }\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates an existing customer. Use this to modify contact information or billing address. Only provided fields are updated; omitted fields remain unchanged.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer',\n  $defs: {\n    customer: {\n      type: 'object',\n      description: 'A billable customer. Represents the entity in your app that will be charged—typically a user, organization, or project.',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Unique identifier for the entitlement'\n        },\n        created: {\n          type: 'string',\n          description: 'Timestamp when the customer was created',\n          format: 'date-time'\n        },\n        address: {\n          $ref: '#/$defs/customer_address'\n        },\n        email: {\n          type: 'string',\n          description: 'The customer\\'s email address for receipts and notifications'\n        },\n        name: {\n          type: 'string',\n          description: 'The customer\\'s full name'\n        },\n        phone: {\n          type: 'string',\n          description: 'The customer\\'s phone number'\n        },\n        stripe_id: {\n          type: 'string',\n          description: 'Internal payment provider reference'\n        }\n      },\n      required: [        'id',\n        'created'\n      ]\n    },\n    customer_address: {\n      type: 'object',\n      description: 'The customer\\'s billing address',\n      properties: {\n        city: {\n          type: 'string',\n          description: 'City name'\n        },\n        country: {\n          type: 'string',\n          description: 'Two-letter ISO country code'\n        },\n        line1: {\n          type: 'string',\n          description: 'Street address line 1'\n        },\n        line2: {\n          type: 'string',\n          description: 'Street address line 2 (apartment, suite, etc.)'\n        },\n        postal_code: {\n          type: 'string',\n          description: 'Postal or ZIP code'\n        },\n        state: {\n          type: 'string',\n          description: 'State, province, or region'\n        }\n      }\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
@@ -30,12 +30,15 @@ export const tool: Tool = {
       },
       email: {
         type: 'string',
+        description: "The customer's email address for receipts and notifications",
       },
       name: {
         type: 'string',
+        description: "The customer's full name",
       },
       phone: {
         type: 'string',
+        description: "The customer's phone number",
       },
       jq_filter: {
         type: 'string',
@@ -48,25 +51,31 @@ export const tool: Tool = {
     $defs: {
       customer_address: {
         type: 'object',
-        description: 'Customer billing address',
+        description: "The customer's billing address",
         properties: {
           city: {
             type: 'string',
+            description: 'City name',
           },
           country: {
             type: 'string',
+            description: 'Two-letter ISO country code',
           },
           line1: {
             type: 'string',
+            description: 'Street address line 1',
           },
           line2: {
             type: 'string',
+            description: 'Street address line 2 (apartment, suite, etc.)',
           },
           postal_code: {
             type: 'string',
+            description: 'Postal or ZIP code',
           },
           state: {
             type: 'string',
+            description: 'State, province, or region',
           },
         },
       },

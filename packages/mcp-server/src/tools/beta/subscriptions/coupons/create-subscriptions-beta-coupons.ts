@@ -18,45 +18,48 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'create_subscriptions_beta_coupons',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreates a new coupon\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/coupon',\n  $defs: {\n    coupon: {\n      type: 'object',\n      description: 'A coupon/promo code for discounts',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        active: {\n          type: 'boolean'\n        },\n        code: {\n          type: 'string',\n          description: 'The promo code'\n        },\n        created: {\n          type: 'string',\n          format: 'date-time'\n        },\n        duration: {\n          type: 'string',\n          enum: [            'once',\n            'repeating',\n            'forever'\n          ]\n        },\n        times_redeemed: {\n          type: 'integer',\n          description: 'Number of times this coupon has been redeemed'\n        },\n        amount_off: {\n          type: 'integer',\n          description: 'Fixed amount discount in cents'\n        },\n        currency: {\n          type: 'string',\n          description: 'Currency for amount_off'\n        },\n        duration_in_months: {\n          type: 'integer',\n          description: 'Number of months for repeating duration'\n        },\n        max_redemptions: {\n          type: 'integer',\n          description: 'Maximum number of times this coupon can be redeemed'\n        },\n        name: {\n          type: 'string'\n        },\n        percent_off: {\n          type: 'number',\n          description: 'Percentage discount (1-100)'\n        },\n        redeem_by: {\n          type: 'string',\n          description: 'Date after which the coupon can no longer be redeemed',\n          format: 'date-time'\n        }\n      },\n      required: [        'id',\n        'active',\n        'code',\n        'created',\n        'duration',\n        'times_redeemed'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreates a discount coupon with a promo code. Coupons can offer percentage or fixed-amount discounts and can be limited by redemption count or expiration date. Customers can apply coupons during checkout.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/coupon',\n  $defs: {\n    coupon: {\n      type: 'object',\n      description: 'A discount coupon that customers can apply during checkout using a promo code',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Unique identifier for the entitlement'\n        },\n        active: {\n          type: 'boolean',\n          description: 'Whether the coupon is currently active and can be redeemed'\n        },\n        code: {\n          type: 'string',\n          description: 'The promo code customers enter to apply the discount'\n        },\n        created: {\n          type: 'string',\n          description: 'Timestamp when the coupon was created',\n          format: 'date-time'\n        },\n        duration: {\n          type: 'string',\n          description: 'How long the discount applies: once (first payment only), repeating (for duration_in_months), or forever',\n          enum: [            'once',\n            'repeating',\n            'forever'\n          ]\n        },\n        times_redeemed: {\n          type: 'integer',\n          description: 'Number of times this coupon has been successfully redeemed'\n        },\n        amount_off: {\n          type: 'integer',\n          description: 'Fixed discount amount in the smallest currency unit (e.g., cents). Mutually exclusive with percent_off.'\n        },\n        currency: {\n          type: 'string',\n          description: 'Three-letter ISO currency code for amount_off discounts'\n        },\n        duration_in_months: {\n          type: 'integer',\n          description: 'Number of months the discount applies when duration is \\'repeating\\''\n        },\n        max_redemptions: {\n          type: 'integer',\n          description: 'Maximum number of times this coupon can be redeemed across all customers'\n        },\n        name: {\n          type: 'string',\n          description: 'Display name for the coupon (shown to customers)'\n        },\n        percent_off: {\n          type: 'number',\n          description: 'Percentage discount (1-100). Mutually exclusive with amount_off.'\n        },\n        redeem_by: {\n          type: 'string',\n          description: 'Expiration date after which the coupon can no longer be redeemed',\n          format: 'date-time'\n        }\n      },\n      required: [        'id',\n        'active',\n        'code',\n        'created',\n        'duration',\n        'times_redeemed'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       code: {
         type: 'string',
-        description: 'The promo code customers will enter',
+        description: 'The promo code customers will enter to apply the discount',
       },
       amount_off: {
         type: 'integer',
-        description: 'Fixed amount discount in cents',
+        description:
+          'Fixed discount in the smallest currency unit (e.g., cents). Mutually exclusive with percent_off.',
       },
       currency: {
         type: 'string',
-        description: 'Currency for amount_off',
+        description: 'Three-letter ISO currency code for amount_off discounts',
       },
       duration: {
         type: 'string',
+        description:
+          'How long the discount applies: once (first payment only), repeating (for duration_in_months), or forever',
         enum: ['once', 'repeating', 'forever'],
       },
       duration_in_months: {
         type: 'integer',
-        description: 'Number of months for repeating duration',
+        description: "Number of months the discount applies when duration is 'repeating'",
       },
       max_redemptions: {
         type: 'integer',
-        description: 'Maximum number of redemptions',
+        description: 'Maximum number of times this coupon can be redeemed',
       },
       name: {
         type: 'string',
-        description: 'Display name for the coupon',
+        description: 'Display name for the coupon (shown to customers)',
       },
       percent_off: {
         type: 'number',
-        description: 'Percentage discount (1-100)',
+        description: 'Percentage discount (1-100). Mutually exclusive with amount_off.',
       },
       redeem_by: {
         type: 'string',
-        description: 'Expiration date for the coupon',
+        description: 'Expiration date after which the coupon can no longer be redeemed',
         format: 'date-time',
       },
       jq_filter: {
