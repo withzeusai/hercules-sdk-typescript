@@ -9,14 +9,14 @@ import { path } from '../../../internal/utils/path';
 
 export class Coupons extends APIResource {
   /**
-   * Create Coupon
+   * Creates a new coupon
    */
   create(body: CouponCreateParams, options?: RequestOptions): APIPromise<Coupon> {
     return this._client.post('/v1/subscriptions/coupons', { body, ...options });
   }
 
   /**
-   * Update Coupon
+   * Updates a coupon by their ID
    */
   update(
     couponID: string,
@@ -27,7 +27,7 @@ export class Coupons extends APIResource {
   }
 
   /**
-   * List Coupons
+   * Lists all coupons
    */
   list(
     query: CouponListParams | null | undefined = {},
@@ -37,7 +37,7 @@ export class Coupons extends APIResource {
   }
 
   /**
-   * Delete Coupon
+   * Deletes a coupon by their ID
    */
   delete(couponID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/subscriptions/coupons/${couponID}`, {
@@ -47,7 +47,7 @@ export class Coupons extends APIResource {
   }
 
   /**
-   * Get Coupon
+   * Gets a coupon by their ID
    */
   get(couponID: string, options?: RequestOptions): APIPromise<Coupon> {
     return this._client.get(path`/v1/subscriptions/coupons/${couponID}`, options);

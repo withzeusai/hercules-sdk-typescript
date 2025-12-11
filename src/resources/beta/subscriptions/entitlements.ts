@@ -8,14 +8,14 @@ import { path } from '../../../internal/utils/path';
 
 export class Entitlements extends APIResource {
   /**
-   * Create Entitlement
+   * Creates a new entitlement
    */
   create(body: EntitlementCreateParams, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.post('/v1/subscriptions/entitlements', { body, ...options });
   }
 
   /**
-   * Update Entitlement
+   * Updates an entitlement by their ID
    */
   update(
     entitlementID: string,
@@ -26,7 +26,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * List Entitlements
+   * Lists all entitlements
    */
   list(
     query: EntitlementListParams | null | undefined = {},
@@ -39,7 +39,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Get Entitlement
+   * Gets an entitlement by their ID
    */
   get(entitlementID: string, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.get(path`/v1/subscriptions/entitlements/${entitlementID}`, options);

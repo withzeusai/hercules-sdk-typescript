@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'billing_portal_subscriptions_beta_customers',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nOpen Customer Portal\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer_billing_portal_response',\n  $defs: {\n    customer_billing_portal_response: {\n      type: 'object',\n      description: 'Billing portal session URL',\n      properties: {\n        url: {\n          type: 'string'\n        }\n      },\n      required: [        'url'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nOpens a customer portal for a customer by their ID\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/customer_billing_portal_response',\n  $defs: {\n    customer_billing_portal_response: {\n      type: 'object',\n      description: 'Billing portal session URL',\n      properties: {\n        url: {\n          type: 'string'\n        }\n      },\n      required: [        'url'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {

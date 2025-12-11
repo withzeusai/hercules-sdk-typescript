@@ -50,21 +50,21 @@ export class Subscriptions extends APIResource {
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
 
   /**
-   * Cancel Subscription
+   * Cancels a subscription by their ID
    */
   cancel(body: SubscriptionCancelParams, options?: RequestOptions): APIPromise<SubscriptionCancelResponse> {
     return this._client.post('/v1/subscriptions/cancel', { body, ...options });
   }
 
   /**
-   * Check Entitlement
+   * Checks an entitlement by their ID
    */
   check(body: SubscriptionCheckParams, options?: RequestOptions): APIPromise<SubscriptionCheckResponse> {
     return this._client.post('/v1/subscriptions/check', { body, ...options });
   }
 
   /**
-   * Create Checkout Session
+   * Creates a new checkout session
    */
   checkout(
     body: SubscriptionCheckoutParams,

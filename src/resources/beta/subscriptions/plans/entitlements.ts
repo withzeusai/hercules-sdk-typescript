@@ -10,7 +10,7 @@ import { path } from '../../../../internal/utils/path';
 
 export class Entitlements extends APIResource {
   /**
-   * List Plan Entitlements
+   * Lists all entitlements attached to a plan
    */
   list(
     planID: string,
@@ -25,7 +25,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Attach Entitlement to Plan
+   * Attaches an entitlement to a plan
    */
   attach(
     planID: string,
@@ -36,7 +36,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Remove Entitlement from Plan
+   * Removes an entitlement from a plan
    */
   remove(featureID: string, params: EntitlementRemoveParams, options?: RequestOptions): APIPromise<void> {
     const { plan_id } = params;

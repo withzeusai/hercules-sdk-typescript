@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'remove_plans_subscriptions_beta_entitlements',
-  description: 'Remove Entitlement from Plan',
+  description: 'Removes an entitlement from a plan',
   inputSchema: {
     type: 'object',
     properties: {
