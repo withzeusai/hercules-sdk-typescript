@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'update_subscriptions_beta_plans',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates an existing plan. Use this to modify the plan name, description, or active status. Pricing cannot be changed after creation—create a new plan instead.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/plan',\n  $defs: {\n    plan: {\n      type: 'object',\n      description: 'A subscription plan that customers can subscribe to. Plans define pricing and billing intervals. Attach entitlements to a plan to grant features to all subscribed customers.',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Unique identifier for the entitlement'\n        },\n        active: {\n          type: 'boolean',\n          description: 'Whether the plan is available for new subscriptions'\n        },\n        created: {\n          type: 'string',\n          description: 'Timestamp when the plan was created',\n          format: 'date-time'\n        },\n        name: {\n          type: 'string',\n          description: 'Display name for the plan (e.g., Pro, Business, Teams)'\n        },\n        stripe_product_id: {\n          type: 'string',\n          description: 'Internal payment provider reference'\n        },\n        default_price: {\n          type: 'object',\n          description: 'The recurring price configuration for a plan',\n          properties: {\n            id: {\n              type: 'string',\n              description: 'Unique identifier for the entitlement'\n            },\n            currency: {\n              type: 'string',\n              description: 'Three-letter ISO currency code (e.g., usd, eur)'\n            },\n            interval: {\n              type: 'string',\n              description: 'Billing frequency: day, week, month, or year',\n              enum: [                'day',\n                'week',\n                'month',\n                'year'\n              ]\n            },\n            interval_count: {\n              type: 'integer',\n              description: 'Number of intervals between billings (e.g., 2 for biweekly)'\n            },\n            unit_amount: {\n              type: 'integer',\n              description: 'Price amount in the smallest currency unit (e.g., cents)'\n            }\n          },\n          required: [            'id',\n            'currency',\n            'interval',\n            'interval_count',\n            'unit_amount'\n          ]\n        },\n        description: {\n          type: 'string',\n          description: 'Detailed description of what the plan includes'\n        }\n      },\n      required: [        'id',\n        'active',\n        'created',\n        'name',\n        'stripe_product_id'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates an existing plan. Use this to modify the plan name, description, or active status. Pricing cannot be changed after creation—create a new plan instead.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/plan',\n  $defs: {\n    plan: {\n      type: 'object',\n      description: 'A subscription plan that customers can subscribe to. Plans define pricing and billing intervals. Attach entitlements to a plan to grant features to all subscribed customers.',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Unique identifier for the entitlement'\n        },\n        active: {\n          type: 'boolean',\n          description: 'Whether the plan is available for new subscriptions'\n        },\n        created: {\n          type: 'string',\n          description: 'Timestamp when the plan was created',\n          format: 'date-time'\n        },\n        name: {\n          type: 'string',\n          description: 'Display name for the plan (e.g., Pro, Business, Teams)'\n        },\n        stripe_product_id: {\n          type: 'string',\n          description: 'Internal payment provider reference'\n        },\n        billing_cycle_anchor: {\n          type: 'string',\n          description: 'When to anchor the billing cycle. \\'now\\' resets the billing period to start today, \\'unchanged\\' keeps the existing billing date.',\n          enum: [            'now',\n            'unchanged'\n          ]\n        },\n        default_price: {\n          type: 'object',\n          description: 'The recurring price configuration for a plan',\n          properties: {\n            id: {\n              type: 'string',\n              description: 'Unique identifier for the entitlement'\n            },\n            currency: {\n              type: 'string',\n              description: 'Three-letter ISO currency code (e.g., usd, eur)'\n            },\n            interval: {\n              type: 'string',\n              description: 'Billing frequency: day, week, month, or year',\n              enum: [                'day',\n                'week',\n                'month',\n                'year'\n              ]\n            },\n            interval_count: {\n              type: 'integer',\n              description: 'Number of intervals between billings (e.g., 2 for biweekly)'\n            },\n            unit_amount: {\n              type: 'integer',\n              description: 'Price amount in the smallest currency unit (e.g., cents)'\n            }\n          },\n          required: [            'id',\n            'currency',\n            'interval',\n            'interval_count',\n            'unit_amount'\n          ]\n        },\n        default_proration_behavior: {\n          type: 'string',\n          description: 'How to handle proration when changing plans. \\'create_prorations\\' adds credit/debit line items, \\'none\\' ignores unused time, \\'always_invoice\\' immediately invoices prorations.',\n          enum: [            'create_prorations',\n            'none',\n            'always_invoice'\n          ]\n        },\n        description: {\n          type: 'string',\n          description: 'Detailed description of what the plan includes'\n        },\n        downgrade_timing: {\n          type: 'string',\n          description: 'When the plan change takes effect. \\'immediate\\' applies changes now, \\'at_billing_period_end\\' schedules the change for the end of the current billing period.',\n          enum: [            'immediate',\n            'at_billing_period_end'\n          ]\n        },\n        upgrade_timing: {\n          type: 'string',\n          description: 'When the plan change takes effect. \\'immediate\\' applies changes now, \\'at_billing_period_end\\' schedules the change for the end of the current billing period.',\n          enum: [            'immediate',\n            'at_billing_period_end'\n          ]\n        }\n      },\n      required: [        'id',\n        'active',\n        'created',\n        'name',\n        'stripe_product_id'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
@@ -29,13 +29,33 @@ export const tool: Tool = {
         type: 'boolean',
         description: 'Whether the plan is available for new subscriptions',
       },
+      billing_cycle_anchor: {
+        type: 'string',
+        description: 'How billing cycle is handled when switching to this plan',
+        enum: ['now', 'unchanged'],
+      },
+      default_proration_behavior: {
+        type: 'string',
+        description: 'Default proration behavior when customers switch to this plan',
+        enum: ['create_prorations', 'none', 'always_invoice'],
+      },
       description: {
         type: 'string',
         description: 'Detailed description of what the plan includes',
       },
+      downgrade_timing: {
+        type: 'string',
+        description: 'When downgrades to this plan take effect',
+        enum: ['immediate', 'at_billing_period_end'],
+      },
       name: {
         type: 'string',
         description: 'Display name for the plan',
+      },
+      upgrade_timing: {
+        type: 'string',
+        description: 'When upgrades to this plan take effect',
+        enum: ['immediate', 'at_billing_period_end'],
       },
       jq_filter: {
         type: 'string',

@@ -19,7 +19,7 @@ export class Entitlements extends APIResource {
 
   /**
    * Updates an existing entitlement. Use this to modify the name or deactivate the
-   * entitlement. The lookup_key cannot be changed after creation.
+   * entitlement. The key cannot be changed after creation.
    */
   update(
     entitlementID: string,
@@ -31,8 +31,8 @@ export class Entitlements extends APIResource {
 
   /**
    * Retrieves a paginated list of all entitlements. Entitlements represent features
-   * or capabilities in your app that can be gated by subscription. Use the
-   * lookup_key filter to find a specific entitlement by its key.
+   * or capabilities in your app that can be gated by subscription. Use the key
+   * filter to find a specific entitlement by its key.
    */
   list(
     query: EntitlementListParams | null | undefined = {},
@@ -70,14 +70,14 @@ export interface Entitlement {
   active: boolean;
 
   /**
+   * Unique key to identify the entitlement when checking access in your app
+   */
+  key: string;
+
+  /**
    * Whether this is a live mode entitlement (vs test mode)
    */
   livemode: boolean;
-
-  /**
-   * Unique key to identify the entitlement when checking access in your app
-   */
-  lookup_key: string;
 
   /**
    * Display name for the entitlement (e.g., API Access, Premium Support)
@@ -90,7 +90,7 @@ export interface EntitlementCreateParams {
    * Unique key to identify the entitlement when checking access. Use a descriptive,
    * stable key (e.g., api_access, premium_support).
    */
-  lookup_key: string;
+  key: string;
 
   /**
    * Display name for the entitlement (e.g., API Access, Premium Support)
@@ -117,9 +117,9 @@ export interface EntitlementListParams extends CursorIDPageParams {
   archived?: 'true' | 'false';
 
   /**
-   * Filter by exact lookup key match
+   * Filter by exact key match
    */
-  lookup_key?: string;
+  key?: string;
 }
 
 export declare namespace Entitlements {

@@ -11,10 +11,7 @@ const client = new Hercules({
 describe('resource entitlements', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.entitlements.create({
-      lookup_key: 'lookup_key',
-      name: 'name',
-    });
+    const responsePromise = client.beta.subscriptions.entitlements.create({ key: 'key', name: 'name' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,10 +23,7 @@ describe('resource entitlements', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.subscriptions.entitlements.create({
-      lookup_key: 'lookup_key',
-      name: 'name',
-    });
+    const response = await client.beta.subscriptions.entitlements.create({ key: 'key', name: 'name' });
   });
 
   // Prism tests are disabled
@@ -76,8 +70,8 @@ describe('resource entitlements', () => {
         {
           archived: 'true',
           ending_before: 'ending_before',
+          key: 'key',
           limit: 1,
-          lookup_key: 'lookup_key',
           starting_after: 'starting_after',
         },
         { path: '/_stainless_unknown_path' },
