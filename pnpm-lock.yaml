@@ -4518,7 +4518,7 @@ snapshots:
 
   galactus@1.0.0:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       flora-colossus: 2.0.0
       fs-extra: 10.1.0
     transitivePeerDependencies:
