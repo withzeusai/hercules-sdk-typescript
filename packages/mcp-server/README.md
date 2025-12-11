@@ -244,44 +244,44 @@ The following tools are available in this MCP server.
 
 ### Resource `beta.subscriptions`:
 
-- `cancel_beta_subscriptions` (`write`): Cancel Subscription
-- `check_beta_subscriptions` (`write`): Check Entitlement
-- `checkout_beta_subscriptions` (`write`): Create Checkout Session
+- `cancel_beta_subscriptions` (`write`): Cancels a subscription by their ID
+- `check_beta_subscriptions` (`write`): Checks an entitlement by their ID
+- `checkout_beta_subscriptions` (`write`): Creates a new checkout session
 
 ### Resource `beta.subscriptions.customers`:
 
-- `create_subscriptions_beta_customers` (`write`): Create Customer
-- `update_subscriptions_beta_customers` (`write`): Update Customer
-- `list_subscriptions_beta_customers` (`read`): List Customers
-- `delete_subscriptions_beta_customers` (`write`): Delete Customer
-- `billing_portal_subscriptions_beta_customers` (`write`): Open Customer Portal
-- `get_subscriptions_beta_customers` (`read`): Get Customer
+- `create_subscriptions_beta_customers` (`write`): Creates a new customer
+- `update_subscriptions_beta_customers` (`write`): Updates a customer by their ID
+- `list_subscriptions_beta_customers` (`read`): Lists all customers
+- `delete_subscriptions_beta_customers` (`write`): Deletes a customer by their ID
+- `billing_portal_subscriptions_beta_customers` (`write`): Opens a customer portal for a customer by their ID
+- `get_subscriptions_beta_customers` (`read`): Gets a customer by their ID
 
 ### Resource `beta.subscriptions.plans`:
 
-- `create_subscriptions_beta_plans` (`write`): Create Plan
-- `update_subscriptions_beta_plans` (`write`): Update Plan
-- `list_subscriptions_beta_plans` (`read`): List Plans
-- `archive_subscriptions_beta_plans` (`write`): Archive Plan
-- `get_subscriptions_beta_plans` (`read`): Get Plan
+- `create_subscriptions_beta_plans` (`write`): Creates a new plan
+- `update_subscriptions_beta_plans` (`write`): Updates a plan by their ID
+- `list_subscriptions_beta_plans` (`read`): Lists all plans
+- `archive_subscriptions_beta_plans` (`write`): Archives a plan by their ID
+- `get_subscriptions_beta_plans` (`read`): Gets a plan by their ID
 
 ### Resource `beta.subscriptions.plans.entitlements`:
 
-- `list_plans_subscriptions_beta_entitlements` (`read`): List Plan Entitlements
-- `attach_plans_subscriptions_beta_entitlements` (`write`): Attach Entitlement to Plan
-- `remove_plans_subscriptions_beta_entitlements` (`write`): Remove Entitlement from Plan
+- `list_plans_subscriptions_beta_entitlements` (`read`): Lists all entitlements attached to a plan
+- `attach_plans_subscriptions_beta_entitlements` (`write`): Attaches an entitlement to a plan
+- `remove_plans_subscriptions_beta_entitlements` (`write`): Removes an entitlement from a plan
 
 ### Resource `beta.subscriptions.entitlements`:
 
-- `create_subscriptions_beta_entitlements` (`write`): Create Entitlement
-- `update_subscriptions_beta_entitlements` (`write`): Update Entitlement
-- `list_subscriptions_beta_entitlements` (`read`): List Entitlements
-- `get_subscriptions_beta_entitlements` (`read`): Get Entitlement
+- `create_subscriptions_beta_entitlements` (`write`): Creates a new entitlement
+- `update_subscriptions_beta_entitlements` (`write`): Updates an entitlement by their ID
+- `list_subscriptions_beta_entitlements` (`read`): Lists all entitlements
+- `get_subscriptions_beta_entitlements` (`read`): Gets an entitlement by their ID
 
 ### Resource `beta.subscriptions.coupons`:
 
-- `create_subscriptions_beta_coupons` (`write`): Create Coupon
-- `update_subscriptions_beta_coupons` (`write`): Update Coupon
-- `list_subscriptions_beta_coupons` (`read`): List Coupons
-- `delete_subscriptions_beta_coupons` (`write`): Delete Coupon
-- `get_subscriptions_beta_coupons` (`read`): Get Coupon
+- `create_subscriptions_beta_coupons` (`write`): Creates a new coupon
+- `update_subscriptions_beta_coupons` (`write`): Updates a coupon by their ID
+- `list_subscriptions_beta_coupons` (`read`): Lists all coupons
+- `delete_subscriptions_beta_coupons` (`write`): Deletes a coupon by their ID
+- `get_subscriptions_beta_coupons` (`read`): Gets a coupon by their ID

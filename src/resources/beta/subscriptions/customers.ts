@@ -9,14 +9,14 @@ import { path } from '../../../internal/utils/path';
 
 export class Customers extends APIResource {
   /**
-   * Create Customer
+   * Creates a new customer
    */
   create(body: CustomerCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<Customer> {
     return this._client.post('/v1/subscriptions/customers', { body, ...options });
   }
 
   /**
-   * Update Customer
+   * Updates a customer by their ID
    */
   update(
     customerID: string,
@@ -27,7 +27,7 @@ export class Customers extends APIResource {
   }
 
   /**
-   * List Customers
+   * Lists all customers
    */
   list(
     query: CustomerListParams | null | undefined = {},
@@ -40,7 +40,7 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Delete Customer
+   * Deletes a customer by their ID
    */
   delete(customerID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/subscriptions/customers/${customerID}`, {
@@ -50,7 +50,7 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Open Customer Portal
+   * Opens a customer portal for a customer by their ID
    */
   billingPortal(
     customerID: string,
@@ -64,7 +64,7 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Get Customer
+   * Gets a customer by their ID
    */
   get(customerID: string, options?: RequestOptions): APIPromise<Customer> {
     return this._client.get(path`/v1/subscriptions/customers/${customerID}`, options);

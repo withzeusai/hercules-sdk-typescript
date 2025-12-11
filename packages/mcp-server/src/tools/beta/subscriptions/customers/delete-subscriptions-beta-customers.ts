@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'delete_subscriptions_beta_customers',
-  description: 'Delete Customer',
+  description: 'Deletes a customer by their ID',
   inputSchema: {
     type: 'object',
     properties: {

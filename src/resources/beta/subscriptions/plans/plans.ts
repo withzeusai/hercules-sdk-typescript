@@ -19,14 +19,14 @@ export class Plans extends APIResource {
   entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
 
   /**
-   * Create Plan
+   * Creates a new plan
    */
   create(body: PlanCreateParams, options?: RequestOptions): APIPromise<Plan> {
     return this._client.post('/v1/subscriptions/plans', { body, ...options });
   }
 
   /**
-   * Update Plan
+   * Updates a plan by their ID
    */
   update(
     planID: string,
@@ -37,7 +37,7 @@ export class Plans extends APIResource {
   }
 
   /**
-   * List Plans
+   * Lists all plans
    */
   list(
     query: PlanListParams | null | undefined = {},
@@ -47,14 +47,14 @@ export class Plans extends APIResource {
   }
 
   /**
-   * Archive Plan
+   * Archives a plan by their ID
    */
   archive(planID: string, options?: RequestOptions): APIPromise<Plan> {
     return this._client.delete(path`/v1/subscriptions/plans/${planID}`, options);
   }
 
   /**
-   * Get Plan
+   * Gets a plan by their ID
    */
   get(planID: string, options?: RequestOptions): APIPromise<Plan> {
     return this._client.get(path`/v1/subscriptions/plans/${planID}`, options);
