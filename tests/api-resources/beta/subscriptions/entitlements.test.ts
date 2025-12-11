@@ -74,7 +74,7 @@ describe('resource entitlements', () => {
     await expect(
       client.beta.subscriptions.entitlements.list(
         {
-          archived: true,
+          archived: 'true',
           ending_before: 'ending_before',
           limit: 1,
           lookup_key: 'lookup_key',

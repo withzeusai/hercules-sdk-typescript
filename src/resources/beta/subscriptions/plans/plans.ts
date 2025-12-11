@@ -198,7 +198,7 @@ export interface PlanListParams extends CursorIDPageParams {
   /**
    * Filter by active status
    */
-  active?: boolean;
+  active?: 'true' | 'false';
 }
 
 Plans.Entitlements = Entitlements;

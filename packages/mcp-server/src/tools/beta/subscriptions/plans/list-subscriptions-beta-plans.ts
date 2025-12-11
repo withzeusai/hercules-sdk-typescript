@@ -23,8 +23,9 @@ export const tool: Tool = {
     type: 'object',
     properties: {
       active: {
-        type: 'boolean',
+        type: 'string',
         description: 'Filter by active status',
+        enum: ['true', 'false'],
       },
       ending_before: {
         type: 'string',
