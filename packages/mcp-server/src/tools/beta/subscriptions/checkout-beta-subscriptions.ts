@@ -18,25 +18,25 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'checkout_beta_subscriptions',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreates a new checkout session\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_checkout_response',\n  $defs: {\n    subscription_checkout_response: {\n      type: 'object',\n      description: 'Checkout session response',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'The checkout session ID'\n        },\n        url: {\n          type: 'string',\n          description: 'The checkout URL to redirect the customer to'\n        }\n      },\n      required: [        'id',\n        'url'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreate a Stripe checkout session for a customer to subscribe to a plan. Returns a URL to redirect the customer to complete payment.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_checkout_response',\n  $defs: {\n    subscription_checkout_response: {\n      type: 'object',\n      description: 'Response containing checkout session details and redirect URL',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Stripe checkout session ID'\n        },\n        url: {\n          type: 'string',\n          description: 'Checkout URL to redirect the customer to complete payment on Stripe'\n        }\n      },\n      required: [        'id',\n        'url'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       customer_id: {
         type: 'string',
-        description: 'The customer ID',
+        description: 'Customer ID to create subscription for',
       },
       plan_id: {
         type: 'string',
-        description: 'The plan ID to subscribe to',
+        description: 'Plan ID to subscribe the customer to',
       },
       cancel_url: {
         type: 'string',
-        description: 'URL to redirect on cancel',
+        description: 'URL to redirect customer if they cancel checkout',
       },
       success_url: {
         type: 'string',
-        description: 'URL to redirect on success',
+        description: 'URL to redirect customer after successful payment',
       },
       jq_filter: {
         type: 'string',

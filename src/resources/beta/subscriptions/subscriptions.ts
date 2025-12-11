@@ -50,21 +50,25 @@ export class Subscriptions extends APIResource {
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
 
   /**
-   * Cancels a subscription by their ID
+   * Cancel a customer's subscription. By default, cancellation occurs at the end of
+   * the billing period. Set cancel_at_period_end to false for immediate
+   * cancellation.
    */
   cancel(body: SubscriptionCancelParams, options?: RequestOptions): APIPromise<SubscriptionCancelResponse> {
     return this._client.post('/v1/subscriptions/cancel', { body, ...options });
   }
 
   /**
-   * Checks an entitlement by their ID
+   * Verify if a customer has access to a specific feature based on their
+   * subscription plan. Use this to control feature access in your app.
    */
   check(body: SubscriptionCheckParams, options?: RequestOptions): APIPromise<SubscriptionCheckResponse> {
     return this._client.post('/v1/subscriptions/check', { body, ...options });
   }
 
   /**
-   * Creates a new checkout session
+   * Create a Stripe checkout session for a customer to subscribe to a plan. Returns
+   * a URL to redirect the customer to complete payment.
    */
   checkout(
     body: SubscriptionCheckoutParams,
@@ -75,112 +79,113 @@ export class Subscriptions extends APIResource {
 }
 
 /**
- * Cancel subscription response
+ * Response containing subscription cancellation details and timing
  */
 export interface SubscriptionCancelResponse {
   /**
-   * The subscription ID
+   * Subscription ID
    */
   id: string;
 
   /**
-   * Whether the subscription will cancel at period end
+   * If true, subscription remains active until period end. If false, canceled
+   * immediately
    */
   cancel_at_period_end: boolean;
 
   /**
-   * The subscription status
+   * Current subscription status (e.g., active, canceled, past_due)
    */
   status: string;
 
   /**
-   * When the subscription was canceled
+   * Timestamp when subscription was canceled
    */
   canceled_at?: string | null;
 }
 
 /**
- * Check entitlement response
+ * Response indicating whether customer has access to the requested feature
  */
 export interface SubscriptionCheckResponse {
   /**
-   * Whether the customer has the entitlement
+   * Whether the customer has access to the feature through their subscription
    */
   has_entitlement: boolean;
 
   /**
-   * The entitlement lookup key that was checked
+   * Entitlement lookup key that was checked
    */
   lookup_key: string;
 
   /**
-   * The active entitlement ID if present
+   * Entitlement ID if customer has access, null otherwise
    */
   entitlement_id?: string | null;
 }
 
 /**
- * Checkout session response
+ * Response containing checkout session details and redirect URL
  */
 export interface SubscriptionCheckoutResponse {
   /**
-   * The checkout session ID
+   * Stripe checkout session ID
    */
   id: string;
 
   /**
-   * The checkout URL to redirect the customer to
+   * Checkout URL to redirect the customer to complete payment on Stripe
    */
   url: string;
 }
 
 export interface SubscriptionCancelParams {
   /**
-   * The customer ID
+   * Customer ID owning the subscription
    */
   customer_id: string;
 
   /**
-   * The subscription ID to cancel
+   * Subscription ID to cancel
    */
   subscription_id: string;
 
   /**
-   * Whether to cancel at period end or immediately
+   * If true, cancel at end of billing period. If false, cancel immediately
    */
   cancel_at_period_end?: boolean;
 }
 
 export interface SubscriptionCheckParams {
   /**
-   * The customer ID
+   * Customer ID to check access for
    */
   customer_id: string;
 
   /**
-   * The entitlement feature lookup key to check
+   * Entitlement lookup key to verify (e.g., advanced_analytics, custom_branding)
    */
   entitlement_lookup_key: string;
 }
 
 export interface SubscriptionCheckoutParams {
   /**
-   * The customer ID
+   * Customer ID to create subscription for
    */
   customer_id: string;
 
   /**
-   * The plan ID to subscribe to
+   * Plan ID to subscribe the customer to
    */
   plan_id: string;
 
   /**
-   * URL to redirect on cancel
+   * URL to redirect customer if they cancel checkout
    */
   cancel_url?: string;
 
   /**
-   * URL to redirect on success
+   * URL to redirect customer after successful payment
    */
   success_url?: string;
 }
