@@ -9,16 +9,14 @@ import { path } from '../../../internal/utils/path';
 
 export class Coupons extends APIResource {
   /**
-   * Create a new discount coupon for subscriptions. Coupons can offer percentage or
-   * fixed-amount discounts.
+   * Creates a new coupon
    */
   create(body: CouponCreateParams, options?: RequestOptions): APIPromise<Coupon> {
     return this._client.post('/v1/subscriptions/coupons', { body, ...options });
   }
 
   /**
-   * Update coupon metadata. Discount amount and type cannot be changed after
-   * creation.
+   * Updates a coupon by their ID
    */
   update(
     couponID: string,
@@ -29,8 +27,7 @@ export class Coupons extends APIResource {
   }
 
   /**
-   * Retrieve all discount coupons. Coupons can be applied to subscriptions to
-   * provide discounts to customers.
+   * Lists all coupons
    */
   list(
     query: CouponListParams | null | undefined = {},
@@ -40,8 +37,7 @@ export class Coupons extends APIResource {
   }
 
   /**
-   * Delete a coupon to prevent future use. Existing subscriptions using this coupon
-   * remain unaffected.
+   * Deletes a coupon by their ID
    */
   delete(couponID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/subscriptions/coupons/${couponID}`, {
@@ -51,8 +47,7 @@ export class Coupons extends APIResource {
   }
 
   /**
-   * Retrieve a specific coupon by ID, including discount details and validity
-   * status.
+   * Gets a coupon by their ID
    */
   get(couponID: string, options?: RequestOptions): APIPromise<Coupon> {
     return this._client.get(path`/v1/subscriptions/coupons/${couponID}`, options);
@@ -62,8 +57,7 @@ export class Coupons extends APIResource {
 export type CouponsCursorIDPage = CursorIDPage<Coupon>;
 
 /**
- * Discount coupon for subscription payments. Offers percentage or fixed-amount
- * discounts
+ * A coupon/promo code for discounts
  */
 export interface Coupon {
   /**
@@ -71,88 +65,71 @@ export interface Coupon {
    */
   id: string;
 
-  /**
-   * Whether the coupon can be redeemed
-   */
   active: boolean;
 
   /**
-   * Promo code customers enter at checkout
+   * The promo code
    */
   code: string;
 
-  /**
-   * Coupon creation timestamp
-   */
   created: string;
 
-  /**
-   * How long the discount applies (once, repeating, or forever)
-   */
   duration: 'once' | 'repeating' | 'forever';
 
   /**
-   * Current number of times redeemed
+   * Number of times this coupon has been redeemed
    */
   times_redeemed: number;
 
   /**
-   * Fixed discount in cents (e.g., 1000 = $10.00). Mutually exclusive with
-   * percent_off
+   * Fixed amount discount in cents
    */
   amount_off?: number | null;
 
   /**
-   * Three-letter ISO currency code for amount_off
+   * Currency for amount_off
    */
   currency?: string | null;
 
   /**
-   * Number of months discount applies (for repeating duration)
+   * Number of months for repeating duration
    */
   duration_in_months?: number | null;
 
   /**
-   * Maximum total redemptions allowed. Null for unlimited
+   * Maximum number of times this coupon can be redeemed
    */
   max_redemptions?: number | null;
 
-  /**
-   * Coupon display name
-   */
   name?: string | null;
 
   /**
-   * Percentage discount (1-100). Mutually exclusive with amount_off
+   * Percentage discount (1-100)
    */
   percent_off?: number | null;
 
   /**
-   * Expiration timestamp. Null for no expiration
+   * Date after which the coupon can no longer be redeemed
    */
   redeem_by?: string | null;
 }
 
 export interface CouponCreateParams {
   /**
-   * Promo code customers enter (e.g., SUMMER2024, SAVE20)
+   * The promo code customers will enter
    */
   code: string;
 
   /**
-   * Fixed discount in cents (e.g., 1000 = $10.00). Must specify either percent_off
-   * or amount_off
+   * Fixed amount discount in cents
    */
   amount_off?: number;
 
   /**
-   * Three-letter ISO currency code (required for amount_off)
+   * Currency for amount_off
    */
   currency?: string;
 
-  /**
-   * Discount duration: once (single use), repeating (multiple months), or forever
-   */
   duration?: 'once' | 'repeating' | 'forever';
 
   /**
@@ -161,42 +138,39 @@ export interface CouponCreateParams {
   duration_in_months?: number;
 
   /**
-   * Maximum total redemptions. Omit for unlimited
+   * Maximum number of redemptions
    */
   max_redemptions?: number;
 
   /**
-   * Coupon display name
+   * Display name for the coupon
    */
   name?: string;
 
   /**
-   * Percentage discount (1-100). Must specify either percent_off or amount_off
+   * Percentage discount (1-100)
    */
   percent_off?: number;
 
   /**
-   * Expiration timestamp. Omit for no expiration
+   * Expiration date for the coupon
    */
   redeem_by?: string;
 }
 
 export interface CouponUpdateParams {
   /**
-   * Whether the coupon can be redeemed
+   * Whether the coupon is active
    */
   active?: boolean;
 
   /**
-   * Coupon display name
+   * Display name for the coupon
    */
   name?: string;
 }
 
 export interface CouponListParams extends CursorIDPageParams {
-  /**
-   * Filter by active status
-   */
   active?: boolean;
 }
 

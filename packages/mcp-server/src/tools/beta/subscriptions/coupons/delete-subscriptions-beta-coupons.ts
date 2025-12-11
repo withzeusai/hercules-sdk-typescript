@@ -16,8 +16,7 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'delete_subscriptions_beta_coupons',
-  description:
-    'Delete a coupon to prevent future use. Existing subscriptions using this coupon remain unaffected.',
+  description: 'Deletes a coupon by their ID',
   inputSchema: {
     type: 'object',
     properties: {

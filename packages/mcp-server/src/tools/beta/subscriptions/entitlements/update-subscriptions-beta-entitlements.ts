@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'update_subscriptions_beta_entitlements',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdate entitlement name or active status. Deactivating an entitlement revokes access for all customers.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/entitlement',\n  $defs: {\n    entitlement: {\n      type: 'object',\n      description: 'The feature entitlement granted to plan subscribers',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        active: {\n          type: 'boolean',\n          description: 'Whether the entitlement grants access to customers'\n        },\n        livemode: {\n          type: 'boolean',\n          description: 'Whether in production mode'\n        },\n        lookup_key: {\n          type: 'string',\n          description: 'Unique key for checking feature access in your app'\n        },\n        name: {\n          type: 'string',\n          description: 'Entitlement display name'\n        }\n      },\n      required: [        'id',\n        'active',\n        'livemode',\n        'lookup_key',\n        'name'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nUpdates an entitlement by their ID\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/entitlement',\n  $defs: {\n    entitlement: {\n      type: 'object',\n      description: 'An entitlement that can be attached to products',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        active: {\n          type: 'boolean'\n        },\n        livemode: {\n          type: 'boolean'\n        },\n        lookup_key: {\n          type: 'string'\n        },\n        name: {\n          type: 'string'\n        }\n      },\n      required: [        'id',\n        'active',\n        'livemode',\n        'lookup_key',\n        'name'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
@@ -27,11 +27,11 @@ export const tool: Tool = {
       },
       active: {
         type: 'boolean',
-        description: 'Whether the entitlement is active. Deactivating revokes access for all customers',
+        description: 'Whether the entitlement is active',
       },
       name: {
         type: 'string',
-        description: 'Entitlement display name',
+        description: 'The name of the entitlement',
       },
       jq_filter: {
         type: 'string',

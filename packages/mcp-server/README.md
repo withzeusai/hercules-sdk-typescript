@@ -244,44 +244,44 @@ The following tools are available in this MCP server.
 
 ### Resource `beta.subscriptions`:
 
-- `cancel_beta_subscriptions` (`write`): Cancel a customer's subscription. By default, cancellation occurs at the end of the billing period. Set cancel_at_period_end to false for immediate cancellation.
-- `check_beta_subscriptions` (`write`): Verify if a customer has access to a specific feature based on their subscription plan. Use this to control feature access in your app.
-- `checkout_beta_subscriptions` (`write`): Create a Stripe checkout session for a customer to subscribe to a plan. Returns a URL to redirect the customer to complete payment.
+- `cancel_beta_subscriptions` (`write`): Cancels a subscription by their ID
+- `check_beta_subscriptions` (`write`): Checks an entitlement by their ID
+- `checkout_beta_subscriptions` (`write`): Creates a new checkout session
 
 ### Resource `beta.subscriptions.customers`:
 
-- `create_subscriptions_beta_customers` (`write`): Create a new billable customer. Customers are the billable entities that can subscribe to plans. Create this immediately after creating the corresponding user, organization, or project in your app.
-- `update_subscriptions_beta_customers` (`write`): Update customer billing information such as name, email, phone, and address.
-- `list_subscriptions_beta_customers` (`read`): Retrieve all billable customers. Customers represent the end users, organizations, or projects that can subscribe to plans in your app.
-- `delete_subscriptions_beta_customers` (`write`): Permanently delete a customer and all associated billing data. This action cannot be undone.
-- `billing_portal_subscriptions_beta_customers` (`write`): Generate a secure link to the Stripe-hosted billing portal where customers can manage their invoices, receipts, billing information, and payment methods.
-- `get_subscriptions_beta_customers` (`read`): Retrieve a specific customer by ID, including their billing information and Stripe details.
+- `create_subscriptions_beta_customers` (`write`): Creates a new customer
+- `update_subscriptions_beta_customers` (`write`): Updates a customer by their ID
+- `list_subscriptions_beta_customers` (`read`): Lists all customers
+- `delete_subscriptions_beta_customers` (`write`): Deletes a customer by their ID
+- `billing_portal_subscriptions_beta_customers` (`write`): Opens a customer portal for a customer by their ID
+- `get_subscriptions_beta_customers` (`read`): Gets a customer by their ID
 
 ### Resource `beta.subscriptions.plans`:
 
-- `create_subscriptions_beta_plans` (`write`): Create a new subscription plan with recurring pricing. Plans can have entitlements attached to control which features customers can access.
-- `update_subscriptions_beta_plans` (`write`): Update plan details such as name, description, or active status. Pricing cannot be changed after creation.
-- `list_subscriptions_beta_plans` (`read`): Retrieve all subscription plans. Plans define recurring payment tiers (e.g., Free, Pro, Business) and their associated entitlements.
-- `archive_subscriptions_beta_plans` (`write`): Archive a plan to prevent new subscriptions. Existing subscriptions remain active.
-- `get_subscriptions_beta_plans` (`read`): Retrieve a specific subscription plan by ID, including pricing details and status.
+- `create_subscriptions_beta_plans` (`write`): Creates a new plan
+- `update_subscriptions_beta_plans` (`write`): Updates a plan by their ID
+- `list_subscriptions_beta_plans` (`read`): Lists all plans
+- `archive_subscriptions_beta_plans` (`write`): Archives a plan by their ID
+- `get_subscriptions_beta_plans` (`read`): Gets a plan by their ID
 
 ### Resource `beta.subscriptions.plans.entitlements`:
 
-- `list_plans_subscriptions_beta_entitlements` (`read`): Retrieve all entitlements attached to a plan. Customers subscribed to this plan can access these features.
-- `attach_plans_subscriptions_beta_entitlements` (`write`): Grant a feature entitlement to all customers subscribed to this plan.
-- `remove_plans_subscriptions_beta_entitlements` (`write`): Remove a feature entitlement from a plan. Customers subscribed to this plan will lose access to the feature.
+- `list_plans_subscriptions_beta_entitlements` (`read`): Lists all entitlements attached to a plan
+- `attach_plans_subscriptions_beta_entitlements` (`write`): Attaches an entitlement to a plan
+- `remove_plans_subscriptions_beta_entitlements` (`write`): Removes an entitlement from a plan
 
 ### Resource `beta.subscriptions.entitlements`:
 
-- `create_subscriptions_beta_entitlements` (`write`): Create a new feature entitlement. Use the lookup key to check customer access in your app. Attach entitlements to plans to grant features to subscribers.
-- `update_subscriptions_beta_entitlements` (`write`): Update entitlement name or active status. Deactivating an entitlement revokes access for all customers.
-- `list_subscriptions_beta_entitlements` (`read`): Retrieve all feature entitlements. Entitlements represent specific capabilities or features in your app that can be granted to customers through plan subscriptions.
-- `get_subscriptions_beta_entitlements` (`read`): Retrieve a specific feature entitlement by ID, including its lookup key and active status.
+- `create_subscriptions_beta_entitlements` (`write`): Creates a new entitlement
+- `update_subscriptions_beta_entitlements` (`write`): Updates an entitlement by their ID
+- `list_subscriptions_beta_entitlements` (`read`): Lists all entitlements
+- `get_subscriptions_beta_entitlements` (`read`): Gets an entitlement by their ID
 
 ### Resource `beta.subscriptions.coupons`:
 
-- `create_subscriptions_beta_coupons` (`write`): Create a new discount coupon for subscriptions. Coupons can offer percentage or fixed-amount discounts.
-- `update_subscriptions_beta_coupons` (`write`): Update coupon metadata. Discount amount and type cannot be changed after creation.
-- `list_subscriptions_beta_coupons` (`read`): Retrieve all discount coupons. Coupons can be applied to subscriptions to provide discounts to customers.
-- `delete_subscriptions_beta_coupons` (`write`): Delete a coupon to prevent future use. Existing subscriptions using this coupon remain unaffected.
-- `get_subscriptions_beta_coupons` (`read`): Retrieve a specific coupon by ID, including discount details and validity status.
+- `create_subscriptions_beta_coupons` (`write`): Creates a new coupon
+- `update_subscriptions_beta_coupons` (`write`): Updates a coupon by their ID
+- `list_subscriptions_beta_coupons` (`read`): Lists all coupons
+- `delete_subscriptions_beta_coupons` (`write`): Deletes a coupon by their ID
+- `get_subscriptions_beta_coupons` (`read`): Gets a coupon by their ID
