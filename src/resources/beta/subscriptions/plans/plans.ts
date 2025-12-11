@@ -19,16 +19,14 @@ export class Plans extends APIResource {
   entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
 
   /**
-   * Create a new subscription plan with recurring pricing. Plans can have
-   * entitlements attached to control which features customers can access.
+   * Creates a new plan
    */
   create(body: PlanCreateParams, options?: RequestOptions): APIPromise<Plan> {
     return this._client.post('/v1/subscriptions/plans', { body, ...options });
   }
 
   /**
-   * Update plan details such as name, description, or active status. Pricing cannot
-   * be changed after creation.
+   * Updates a plan by their ID
    */
   update(
     planID: string,
@@ -39,8 +37,7 @@ export class Plans extends APIResource {
   }
 
   /**
-   * Retrieve all subscription plans. Plans define recurring payment tiers (e.g.,
-   * Free, Pro, Business) and their associated entitlements.
+   * Lists all plans
    */
   list(
     query: PlanListParams | null | undefined = {},
@@ -50,16 +47,14 @@ export class Plans extends APIResource {
   }
 
   /**
-   * Archive a plan to prevent new subscriptions. Existing subscriptions remain
-   * active.
+   * Archives a plan by their ID
    */
   archive(planID: string, options?: RequestOptions): APIPromise<Plan> {
     return this._client.delete(path`/v1/subscriptions/plans/${planID}`, options);
   }
 
   /**
-   * Retrieve a specific subscription plan by ID, including pricing details and
-   * status.
+   * Gets a plan by their ID
    */
   get(planID: string, options?: RequestOptions): APIPromise<Plan> {
     return this._client.get(path`/v1/subscriptions/plans/${planID}`, options);
@@ -69,7 +64,7 @@ export class Plans extends APIResource {
 export type PlansCursorIDPage = CursorIDPage<Plan>;
 
 /**
- * Subscription plan defining recurring payment tiers and associated entitlements
+ * A subscription plan
  */
 export interface Plan {
   /**
@@ -77,40 +72,25 @@ export interface Plan {
    */
   id: string;
 
-  /**
-   * Whether the plan accepts new subscriptions
-   */
   active: boolean;
 
-  /**
-   * Plan creation timestamp
-   */
   created: string;
 
-  /**
-   * Plan display name (e.g., Free, Pro, Business)
-   */
   name: string;
 
-  /**
-   * Associated Stripe product ID
-   */
   stripe_product_id: string;
 
   /**
-   * Recurring price configuration for a subscription plan
+   * A recurring price for a plan
    */
   default_price?: Plan.DefaultPrice | null;
 
-  /**
-   * Plan description
-   */
   description?: string | null;
 }
 
 export namespace Plan {
   /**
-   * Recurring price configuration for a subscription plan
+   * A recurring price for a plan
    */
   export interface DefaultPrice {
     /**
@@ -118,81 +98,42 @@ export namespace Plan {
      */
     id: string;
 
-    /**
-     * Three-letter ISO currency code (e.g., usd)
-     */
     currency: string;
 
-    /**
-     * Billing frequency
-     */
     interval: 'day' | 'week' | 'month' | 'year';
 
-    /**
-     * Number of intervals between billings (e.g., 3 for quarterly)
-     */
     interval_count: number;
 
-    /**
-     * Price amount in cents (e.g., 1000 = $10.00)
-     */
     unit_amount: number | null;
   }
 }
 
 export interface PlanCreateParams {
-  /**
-   * Plan display name (e.g., Free, Pro, Business)
-   */
   name: string;
 
   /**
-   * Price amount in cents (e.g., 1000 = $10.00)
+   * Amount in cents
    */
   unit_amount: number;
 
-  /**
-   * Three-letter ISO currency code
-   */
   currency?: string;
 
-  /**
-   * Plan description
-   */
   description?: string;
 
-  /**
-   * Billing frequency (day, week, month, or year)
-   */
   interval?: 'day' | 'week' | 'month' | 'year';
 
-  /**
-   * Number of intervals between billings
-   */
   interval_count?: number;
 }
 
 export interface PlanUpdateParams {
-  /**
-   * Whether the plan accepts new subscriptions
-   */
   active?: boolean;
 
-  /**
-   * Plan description
-   */
   description?: string;
 
-  /**
-   * Plan display name
-   */
   name?: string;
 }
 
 export interface PlanListParams extends CursorIDPageParams {
-  /**
-   * Filter by active status
-   */
   active?: boolean;
 }
 

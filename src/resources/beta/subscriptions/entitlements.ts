@@ -8,16 +8,14 @@ import { path } from '../../../internal/utils/path';
 
 export class Entitlements extends APIResource {
   /**
-   * Create a new feature entitlement. Use the lookup key to check customer access in
-   * your app. Attach entitlements to plans to grant features to subscribers.
+   * Creates a new entitlement
    */
   create(body: EntitlementCreateParams, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.post('/v1/subscriptions/entitlements', { body, ...options });
   }
 
   /**
-   * Update entitlement name or active status. Deactivating an entitlement revokes
-   * access for all customers.
+   * Updates an entitlement by their ID
    */
   update(
     entitlementID: string,
@@ -28,9 +26,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Retrieve all feature entitlements. Entitlements represent specific capabilities
-   * or features in your app that can be granted to customers through plan
-   * subscriptions.
+   * Lists all entitlements
    */
   list(
     query: EntitlementListParams | null | undefined = {},
@@ -43,8 +39,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Retrieve a specific feature entitlement by ID, including its lookup key and
-   * active status.
+   * Gets an entitlement by their ID
    */
   get(entitlementID: string, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.get(path`/v1/subscriptions/entitlements/${entitlementID}`, options);
@@ -54,7 +49,7 @@ export class Entitlements extends APIResource {
 export type EntitlementsCursorIDPage = CursorIDPage<Entitlement>;
 
 /**
- * The feature entitlement granted to plan subscribers
+ * An entitlement that can be attached to products
  */
 export interface Entitlement {
   /**
@@ -62,48 +57,35 @@ export interface Entitlement {
    */
   id: string;
 
-  /**
-   * Whether the entitlement grants access to customers
-   */
   active: boolean;
 
-  /**
-   * Whether in production mode
-   */
   livemode: boolean;
 
-  /**
-   * Unique key for checking feature access in your app
-   */
   lookup_key: string;
 
-  /**
-   * Entitlement display name
-   */
   name: string;
 }
 
 export interface EntitlementCreateParams {
   /**
-   * Unique key for checking feature access (e.g., advanced_analytics,
-   * custom_branding)
+   * A unique key to identify the entitlement in your system
    */
   lookup_key: string;
 
   /**
-   * Entitlement display name
+   * The name of the entitlement
    */
   name: string;
 }
 
 export interface EntitlementUpdateParams {
   /**
-   * Whether the entitlement is active. Deactivating revokes access for all customers
+   * Whether the entitlement is active
    */
   active?: boolean;
 
   /**
-   * Entitlement display name
+   * The name of the entitlement
    */
   name?: string;
 }
