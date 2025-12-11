@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'delete_subscriptions_beta_customers',
-  description: 'Deletes a customer by their ID',
+  description: 'Permanently delete a customer and all associated billing data. This action cannot be undone.',
   inputSchema: {
     type: 'object',
     properties: {

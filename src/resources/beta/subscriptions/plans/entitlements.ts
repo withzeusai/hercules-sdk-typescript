@@ -10,7 +10,8 @@ import { path } from '../../../../internal/utils/path';
 
 export class Entitlements extends APIResource {
   /**
-   * Lists all entitlements attached to a plan
+   * Retrieve all entitlements attached to a plan. Customers subscribed to this plan
+   * can access these features.
    */
   list(
     planID: string,
@@ -25,7 +26,7 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Attaches an entitlement to a plan
+   * Grant a feature entitlement to all customers subscribed to this plan.
    */
   attach(
     planID: string,
@@ -36,7 +37,8 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Removes an entitlement from a plan
+   * Remove a feature entitlement from a plan. Customers subscribed to this plan will
+   * lose access to the feature.
    */
   remove(featureID: string, params: EntitlementRemoveParams, options?: RequestOptions): APIPromise<void> {
     const { plan_id } = params;
@@ -50,7 +52,8 @@ export class Entitlements extends APIResource {
 export type PlanEntitlementsCursorIDPage = CursorIDPage<PlanEntitlement>;
 
 /**
- * An entitlement attached to a plan
+ * Feature entitlement attached to a plan, granting access to all customers
+ * subscribed to the plan
  */
 export interface PlanEntitlement {
   /**
@@ -59,7 +62,7 @@ export interface PlanEntitlement {
   id: string;
 
   /**
-   * An entitlement that can be attached to products
+   * The feature entitlement granted to plan subscribers
    */
   entitlement: EntitlementsAPI.Entitlement;
 }
@@ -68,7 +71,7 @@ export interface EntitlementListParams extends CursorIDPageParams {}
 
 export interface EntitlementAttachParams {
   /**
-   * The ID of the entitlement to attach
+   * Entitlement ID to grant to plan subscribers
    */
   entitlement: string;
 }

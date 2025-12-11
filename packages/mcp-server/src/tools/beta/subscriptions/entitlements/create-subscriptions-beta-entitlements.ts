@@ -18,17 +18,17 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'create_subscriptions_beta_entitlements',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreates a new entitlement\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/entitlement',\n  $defs: {\n    entitlement: {\n      type: 'object',\n      description: 'An entitlement that can be attached to products',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        active: {\n          type: 'boolean'\n        },\n        livemode: {\n          type: 'boolean'\n        },\n        lookup_key: {\n          type: 'string'\n        },\n        name: {\n          type: 'string'\n        }\n      },\n      required: [        'id',\n        'active',\n        'livemode',\n        'lookup_key',\n        'name'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nCreate a new feature entitlement. Use the lookup key to check customer access in your app. Attach entitlements to plans to grant features to subscribers.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/entitlement',\n  $defs: {\n    entitlement: {\n      type: 'object',\n      description: 'The feature entitlement granted to plan subscribers',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'An id for a data item'\n        },\n        active: {\n          type: 'boolean',\n          description: 'Whether the entitlement grants access to customers'\n        },\n        livemode: {\n          type: 'boolean',\n          description: 'Whether in production mode'\n        },\n        lookup_key: {\n          type: 'string',\n          description: 'Unique key for checking feature access in your app'\n        },\n        name: {\n          type: 'string',\n          description: 'Entitlement display name'\n        }\n      },\n      required: [        'id',\n        'active',\n        'livemode',\n        'lookup_key',\n        'name'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       lookup_key: {
         type: 'string',
-        description: 'A unique key to identify the entitlement in your system',
+        description: 'Unique key for checking feature access (e.g., advanced_analytics, custom_branding)',
       },
       name: {
         type: 'string',
-        description: 'The name of the entitlement',
+        description: 'Entitlement display name',
       },
       jq_filter: {
         type: 'string',

@@ -18,17 +18,17 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'check_beta_subscriptions',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nChecks an entitlement by their ID\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_check_response',\n  $defs: {\n    subscription_check_response: {\n      type: 'object',\n      description: 'Check entitlement response',\n      properties: {\n        has_entitlement: {\n          type: 'boolean',\n          description: 'Whether the customer has the entitlement'\n        },\n        lookup_key: {\n          type: 'string',\n          description: 'The entitlement lookup key that was checked'\n        },\n        entitlement_id: {\n          type: 'string',\n          description: 'The active entitlement ID if present'\n        }\n      },\n      required: [        'has_entitlement',\n        'lookup_key'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nVerify if a customer has access to a specific feature based on their subscription plan. Use this to control feature access in your app.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/subscription_check_response',\n  $defs: {\n    subscription_check_response: {\n      type: 'object',\n      description: 'Response indicating whether customer has access to the requested feature',\n      properties: {\n        has_entitlement: {\n          type: 'boolean',\n          description: 'Whether the customer has access to the feature through their subscription'\n        },\n        lookup_key: {\n          type: 'string',\n          description: 'Entitlement lookup key that was checked'\n        },\n        entitlement_id: {\n          type: 'string',\n          description: 'Entitlement ID if customer has access, null otherwise'\n        }\n      },\n      required: [        'has_entitlement',\n        'lookup_key'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       customer_id: {
         type: 'string',
-        description: 'The customer ID',
+        description: 'Customer ID to check access for',
       },
       entitlement_lookup_key: {
         type: 'string',
-        description: 'The entitlement feature lookup key to check',
+        description: 'Entitlement lookup key to verify (e.g., advanced_analytics, custom_branding)',
       },
       jq_filter: {
         type: 'string',

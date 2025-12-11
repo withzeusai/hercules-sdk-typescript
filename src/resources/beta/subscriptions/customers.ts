@@ -9,14 +9,16 @@ import { path } from '../../../internal/utils/path';
 
 export class Customers extends APIResource {
   /**
-   * Creates a new customer
+   * Create a new billable customer. Customers are the billable entities that can
+   * subscribe to plans. Create this immediately after creating the corresponding
+   * user, organization, or project in your app.
    */
   create(body: CustomerCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<Customer> {
     return this._client.post('/v1/subscriptions/customers', { body, ...options });
   }
 
   /**
-   * Updates a customer by their ID
+   * Update customer billing information such as name, email, phone, and address.
    */
   update(
     customerID: string,
@@ -27,7 +29,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Lists all customers
+   * Retrieve all billable customers. Customers represent the end users,
+   * organizations, or projects that can subscribe to plans in your app.
    */
   list(
     query: CustomerListParams | null | undefined = {},
@@ -40,7 +43,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Deletes a customer by their ID
+   * Permanently delete a customer and all associated billing data. This action
+   * cannot be undone.
    */
   delete(customerID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/subscriptions/customers/${customerID}`, {
@@ -50,7 +54,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Opens a customer portal for a customer by their ID
+   * Generate a secure link to the Stripe-hosted billing portal where customers can
+   * manage their invoices, receipts, billing information, and payment methods.
    */
   billingPortal(
     customerID: string,
@@ -64,7 +69,8 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Gets a customer by their ID
+   * Retrieve a specific customer by ID, including their billing information and
+   * Stripe details.
    */
   get(customerID: string, options?: RequestOptions): APIPromise<Customer> {
     return this._client.get(path`/v1/subscriptions/customers/${customerID}`, options);
@@ -74,7 +80,8 @@ export class Customers extends APIResource {
 export type CustomersCursorIDPage = CursorIDPage<Customer>;
 
 /**
- * A subscription customer
+ * Billable customer entity representing end users, organizations, or projects that
+ * can subscribe to plans
  */
 export interface Customer {
   /**
@@ -82,6 +89,9 @@ export interface Customer {
    */
   id: string;
 
+  /**
+   * Customer creation timestamp
+   */
   created: string;
 
   /**
@@ -89,12 +99,24 @@ export interface Customer {
    */
   address?: CustomerAddress | null;
 
+  /**
+   * Customer email address
+   */
   email?: string | null;
 
+  /**
+   * Customer full name
+   */
   name?: string | null;
 
+  /**
+   * Customer phone number
+   */
   phone?: string | null;
 
+  /**
+   * Associated Stripe customer ID
+   */
   stripe_id?: string | null;
 }
 
@@ -102,23 +124,44 @@ export interface Customer {
  * Customer billing address
  */
 export interface CustomerAddress {
+  /**
+   * City name
+   */
   city?: string | null;
 
+  /**
+   * Two-letter country code (e.g., US, CA)
+   */
   country?: string | null;
 
+  /**
+   * Primary address line
+   */
   line1?: string | null;
 
+  /**
+   * Secondary address line
+   */
   line2?: string | null;
 
+  /**
+   * ZIP or postal code
+   */
   postal_code?: string | null;
 
+  /**
+   * State or province
+   */
   state?: string | null;
 }
 
 /**
- * Billing portal session URL
+ * Response containing billing portal session URL
  */
 export interface CustomerBillingPortalResponse {
+  /**
+   * Secure URL to redirect customers to the Stripe billing portal
+   */
   url: string;
 }
 
@@ -128,10 +171,19 @@ export interface CustomerCreateParams {
    */
   address?: CustomerAddress;
 
+  /**
+   * Customer email address
+   */
   email?: string;
 
+  /**
+   * Customer full name
+   */
   name?: string;
 
+  /**
+   * Customer phone number
+   */
   phone?: string;
 }
 
@@ -141,16 +193,28 @@ export interface CustomerUpdateParams {
    */
   address?: CustomerAddress;
 
+  /**
+   * Customer email address
+   */
   email?: string;
 
+  /**
+   * Customer full name
+   */
   name?: string;
 
+  /**
+   * Customer phone number
+   */
   phone?: string;
 }
 
 export interface CustomerListParams extends CursorIDPageParams {}
 
 export interface CustomerBillingPortalParams {
+  /**
+   * URL to redirect customers after they exit the portal
+   */
   return_url?: string;
 }
 
