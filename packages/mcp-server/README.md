@@ -10,7 +10,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export HERCULES_API_KEY="My API Key"
-export HERCULES_API_VERSION="My API Version"
+export HERCULES_API_VERSION="2025-12-09"
 npx -y @usehercules/mcp@latest
 ```
 
@@ -29,7 +29,7 @@ For clients with a configuration JSON, it might look something like this:
       "args": ["-y", "@usehercules/mcp", "--client=claude", "--tools=dynamic"],
       "env": {
         "HERCULES_API_KEY": "My API Key",
-        "HERCULES_API_VERSION": "My API Version"
+        "HERCULES_API_VERSION": "2025-12-09"
       }
     }
   }
