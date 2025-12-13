@@ -8,14 +8,18 @@ import { path } from '../../../internal/utils/path';
 
 export class Entitlements extends APIResource {
   /**
-   * Create Entitlement
+   * Creates a new feature entitlement. Entitlements represent features or
+   * capabilities in your app that can be gated by subscription. After creating an
+   * entitlement, attach it to one or more plans to grant access to customers on
+   * those plans.
    */
   create(body: EntitlementCreateParams, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.post('/v1/subscriptions/entitlements', { body, ...options });
   }
 
   /**
-   * Update Entitlement
+   * Updates an existing entitlement. Use this to modify the name or deactivate the
+   * entitlement. The key cannot be changed after creation.
    */
   update(
     entitlementID: string,
@@ -26,7 +30,9 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * List Entitlements
+   * Retrieves a paginated list of all entitlements. Entitlements represent features
+   * or capabilities in your app that can be gated by subscription. Use the key
+   * filter to find a specific entitlement by its key.
    */
   list(
     query: EntitlementListParams | null | undefined = {},
@@ -39,7 +45,8 @@ export class Entitlements extends APIResource {
   }
 
   /**
-   * Get Entitlement
+   * Retrieves an entitlement by ID. Returns the entitlement object including its
+   * lookup key and active status.
    */
   get(entitlementID: string, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.get(path`/v1/subscriptions/entitlements/${entitlementID}`, options);
@@ -49,43 +56,56 @@ export class Entitlements extends APIResource {
 export type EntitlementsCursorIDPage = CursorIDPage<Entitlement>;
 
 /**
- * An entitlement that can be attached to products
+ * The entitlement attached to the plan
  */
 export interface Entitlement {
   /**
-   * An id for a data item
+   * Unique identifier for the entitlement
    */
   id: string;
 
+  /**
+   * Whether the entitlement is active and can be attached to plans
+   */
   active: boolean;
 
+  /**
+   * Unique key to identify the entitlement when checking access in your app
+   */
+  key: string;
+
+  /**
+   * Whether this is a live mode entitlement (vs test mode)
+   */
   livemode: boolean;
 
-  lookup_key: string;
-
+  /**
+   * Display name for the entitlement (e.g., API Access, Premium Support)
+   */
   name: string;
 }
 
 export interface EntitlementCreateParams {
   /**
-   * A unique key to identify the entitlement in your system
+   * Unique key to identify the entitlement when checking access. Use a descriptive,
+   * stable key (e.g., api_access, premium_support).
    */
-  lookup_key: string;
+  key: string;
 
   /**
-   * The name of the entitlement
+   * Display name for the entitlement (e.g., API Access, Premium Support)
    */
   name: string;
 }
 
 export interface EntitlementUpdateParams {
   /**
-   * Whether the entitlement is active
+   * Whether the entitlement is active. Deactivating removes it from access checks.
    */
   active?: boolean;
 
   /**
-   * The name of the entitlement
+   * Display name for the entitlement
    */
   name?: string;
 }
@@ -94,12 +114,12 @@ export interface EntitlementListParams extends CursorIDPageParams {
   /**
    * Filter by archived status
    */
-  archived?: boolean;
+  archived?: 'true' | 'false';
 
   /**
-   * Filter by lookup key
+   * Filter by exact key match
    */
-  lookup_key?: string;
+  key?: string;
 }
 
 export declare namespace Entitlements {

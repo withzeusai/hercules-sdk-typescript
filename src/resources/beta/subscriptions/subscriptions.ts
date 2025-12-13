@@ -50,21 +50,28 @@ export class Subscriptions extends APIResource {
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
 
   /**
-   * Cancel Subscription
+   * Cancels a customer's subscription. By default, the subscription remains active
+   * until the end of the current billing period. Set cancellation_timing to
+   * 'immediate' to cancel immediately.
    */
   cancel(body: SubscriptionCancelParams, options?: RequestOptions): APIPromise<SubscriptionCancelResponse> {
     return this._client.post('/v1/subscriptions/cancel', { body, ...options });
   }
 
   /**
-   * Check Entitlement
+   * Verifies if a customer has access to a specific feature. Use this to gate
+   * features in your app based on the customer's active subscription and the
+   * entitlements attached to their plan. Hercules recommends calling this before
+   * allowing access to premium features.
    */
   check(body: SubscriptionCheckParams, options?: RequestOptions): APIPromise<SubscriptionCheckResponse> {
     return this._client.post('/v1/subscriptions/check', { body, ...options });
   }
 
   /**
-   * Create Checkout Session
+   * Creates a checkout session for a customer to subscribe to a plan. Returns a URL
+   * to redirect the customer to for payment. After successful payment, the customer
+   * is subscribed to the plan and gains access to its entitlements.
    */
   checkout(
     body: SubscriptionCheckoutParams,
@@ -84,9 +91,9 @@ export interface SubscriptionCancelResponse {
   id: string;
 
   /**
-   * Whether the subscription will cancel at period end
+   * When the cancellation takes effect
    */
-  cancel_at_period_end: boolean;
+  cancellation_timing: 'immediate' | 'at_billing_period_end';
 
   /**
    * The subscription status
@@ -109,9 +116,9 @@ export interface SubscriptionCheckResponse {
   has_entitlement: boolean;
 
   /**
-   * The entitlement lookup key that was checked
+   * The entitlement key that was checked
    */
-  lookup_key: string;
+  key: string;
 
   /**
    * The active entitlement ID if present
@@ -146,9 +153,10 @@ export interface SubscriptionCancelParams {
   subscription_id: string;
 
   /**
-   * Whether to cancel at period end or immediately
+   * When to cancel the subscription. Defaults to 'at_billing_period_end' to allow
+   * customers to use remaining time.
    */
-  cancel_at_period_end?: boolean;
+  cancellation_timing?: 'immediate' | 'at_billing_period_end';
 }
 
 export interface SubscriptionCheckParams {
@@ -158,9 +166,9 @@ export interface SubscriptionCheckParams {
   customer_id: string;
 
   /**
-   * The entitlement feature lookup key to check
+   * The entitlement key to check for access
    */
-  entitlement_lookup_key: string;
+  entitlement_key: string;
 }
 
 export interface SubscriptionCheckoutParams {
