@@ -34,7 +34,7 @@ export const newMcpServer = () =>
   new McpServer(
     {
       name: 'usehercules_sdk_api',
-      version: '1.2.0',
+      version: '1.3.0',
     },
     { capabilities: { tools: {}, logging: {} } },
   );
