@@ -116,11 +116,6 @@ export interface Customer {
    * The customer's phone number
    */
   phone?: string | null;
-
-  /**
-   * Internal payment provider reference
-   */
-  stripe_id?: string | null;
 }
 
 /**

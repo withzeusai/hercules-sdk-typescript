@@ -98,46 +98,14 @@ export interface Plan {
   name: string;
 
   /**
-   * Internal payment provider reference
-   */
-  stripe_product_id: string;
-
-  /**
-   * When to anchor the billing cycle. 'now' resets the billing period to start
-   * today, 'unchanged' keeps the existing billing date.
-   */
-  billing_cycle_anchor?: 'now' | 'unchanged' | null;
-
-  /**
    * The recurring price configuration for a plan
    */
   default_price?: Plan.DefaultPrice | null;
 
   /**
-   * How to handle proration when changing plans. 'create_prorations' adds
-   * credit/debit line items, 'none' ignores unused time, 'always_invoice'
-   * immediately invoices prorations.
-   */
-  default_proration_behavior?: 'create_prorations' | 'none' | 'always_invoice' | null;
-
-  /**
    * Detailed description of what the plan includes
    */
   description?: string | null;
-
-  /**
-   * When the plan change takes effect. 'immediate' applies changes now,
-   * 'at_billing_period_end' schedules the change for the end of the current billing
-   * period.
-   */
-  downgrade_timing?: 'immediate' | 'at_billing_period_end' | null;
-
-  /**
-   * When the plan change takes effect. 'immediate' applies changes now,
-   * 'at_billing_period_end' schedules the change for the end of the current billing
-   * period.
-   */
-  upgrade_timing?: 'immediate' | 'at_billing_period_end' | null;
 }
 
 export namespace Plan {
@@ -184,31 +152,14 @@ export interface PlanCreateParams {
   unit_amount: number;
 
   /**
-   * How billing cycle is handled when switching to this plan. Defaults to 'now' for
-   * upgrades.
-   */
-  billing_cycle_anchor?: 'now' | 'unchanged';
-
-  /**
    * Three-letter ISO currency code
    */
   currency?: string;
 
   /**
-   * Default proration behavior when customers switch to this plan. Defaults to
-   * 'create_prorations'.
-   */
-  default_proration_behavior?: 'create_prorations' | 'none' | 'always_invoice';
-
-  /**
    * Detailed description of what the plan includes
    */
   description?: string;
-
-  /**
-   * When downgrades to this plan take effect. Defaults to 'at_billing_period_end'.
-   */
-  downgrade_timing?: 'immediate' | 'at_billing_period_end';
 
   /**
    * Billing frequency: day, week, month, or year
@@ -219,11 +170,6 @@ export interface PlanCreateParams {
    * Number of intervals between billings
    */
   interval_count?: number;
-
-  /**
-   * When upgrades to this plan take effect. Defaults to 'immediate'.
-   */
-  upgrade_timing?: 'immediate' | 'at_billing_period_end';
 }
 
 export interface PlanUpdateParams {
@@ -233,34 +179,14 @@ export interface PlanUpdateParams {
   active?: boolean;
 
   /**
-   * How billing cycle is handled when switching to this plan
-   */
-  billing_cycle_anchor?: 'now' | 'unchanged';
-
-  /**
-   * Default proration behavior when customers switch to this plan
-   */
-  default_proration_behavior?: 'create_prorations' | 'none' | 'always_invoice';
-
-  /**
    * Detailed description of what the plan includes
    */
   description?: string;
 
   /**
-   * When downgrades to this plan take effect
-   */
-  downgrade_timing?: 'immediate' | 'at_billing_period_end';
-
-  /**
    * Display name for the plan
    */
   name?: string;
-
-  /**
-   * When upgrades to this plan take effect
-   */
-  upgrade_timing?: 'immediate' | 'at_billing_period_end';
 }
 
 export interface PlanListParams extends CursorIDPageParams {

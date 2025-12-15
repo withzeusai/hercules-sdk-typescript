@@ -29,14 +29,10 @@ describe('resource plans', () => {
     const response = await client.beta.subscriptions.plans.create({
       name: 'name',
       unit_amount: -9007199254740991,
-      billing_cycle_anchor: 'now',
       currency: 'currency',
-      default_proration_behavior: 'create_prorations',
       description: 'description',
-      downgrade_timing: 'immediate',
       interval: 'day',
       interval_count: -9007199254740991,
-      upgrade_timing: 'immediate',
     });
   });
 
@@ -58,15 +54,7 @@ describe('resource plans', () => {
     await expect(
       client.beta.subscriptions.plans.update(
         'plan_id',
-        {
-          active: true,
-          billing_cycle_anchor: 'now',
-          default_proration_behavior: 'create_prorations',
-          description: 'description',
-          downgrade_timing: 'immediate',
-          name: 'name',
-          upgrade_timing: 'immediate',
-        },
+        { active: true, description: 'description', name: 'name' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);
