@@ -4,6 +4,7 @@ import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   apiKey: 'My API Key',
+  apiVersion: '2025-12-09',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 

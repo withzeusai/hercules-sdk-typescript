@@ -4,6 +4,7 @@ import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
   apiKey: 'My API Key',
+  apiVersion: '2025-12-09',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
@@ -28,7 +29,7 @@ describe('resource subscriptions', () => {
     const response = await client.beta.subscriptions.cancel({
       customer_id: 'customer_id',
       subscription_id: 'subscription_id',
-      cancel_at_period_end: true,
+      cancellation_timing: 'immediate',
     });
   });
 
@@ -36,7 +37,7 @@ describe('resource subscriptions', () => {
   test.skip('check: only required params', async () => {
     const responsePromise = client.beta.subscriptions.check({
       customer_id: 'customer_id',
-      entitlement_lookup_key: 'entitlement_lookup_key',
+      entitlement_key: 'entitlement_key',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -51,7 +52,7 @@ describe('resource subscriptions', () => {
   test.skip('check: required and optional params', async () => {
     const response = await client.beta.subscriptions.check({
       customer_id: 'customer_id',
-      entitlement_lookup_key: 'entitlement_lookup_key',
+      entitlement_key: 'entitlement_key',
     });
   });
 
