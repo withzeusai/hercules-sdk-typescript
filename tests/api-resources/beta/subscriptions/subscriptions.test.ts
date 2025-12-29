@@ -77,6 +77,7 @@ describe('resource subscriptions', () => {
       customer_id: 'customer_id',
       plan_id: 'plan_id',
       cancel_url: 'https://example.com',
+      promotion_code: 'promotion_code',
       success_url: 'https://example.com',
     });
   });
