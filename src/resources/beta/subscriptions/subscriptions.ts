@@ -188,6 +188,11 @@ export interface SubscriptionCheckoutParams {
   cancel_url?: string;
 
   /**
+   * Promotion code to apply
+   */
+  promotion_code?: string;
+
+  /**
    * URL to redirect on success
    */
   success_url?: string;
