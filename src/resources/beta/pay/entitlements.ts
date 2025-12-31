@@ -13,7 +13,7 @@ export class Entitlements extends APIResource {
    * entitlement, attach it to one or more plans to grant access to customers on
    * those plans.
    */
-  create(body: EntitlementCreateParams, options?: RequestOptions): APIPromise<EntitlementCreateResponse> {
+  create(body: EntitlementCreateParams, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.post('/v1/pay/entitlements', { body, ...options });
   }
 
@@ -25,7 +25,7 @@ export class Entitlements extends APIResource {
     entitlementID: string,
     body: EntitlementUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<EntitlementUpdateResponse> {
+  ): APIPromise<Entitlement> {
     return this._client.patch(path`/v1/pay/entitlements/${entitlementID}`, { body, ...options });
   }
 
@@ -37,118 +37,25 @@ export class Entitlements extends APIResource {
   list(
     query: EntitlementListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<EntitlementListResponsesCursorIDPage, EntitlementListResponse> {
-    return this._client.getAPIList('/v1/pay/entitlements', CursorIDPage<EntitlementListResponse>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<EntitlementsCursorIDPage, Entitlement> {
+    return this._client.getAPIList('/v1/pay/entitlements', CursorIDPage<Entitlement>, { query, ...options });
   }
 
   /**
    * Retrieves an entitlement by ID. Returns the entitlement object including its
    * lookup key and active status.
    */
-  get(entitlementID: string, options?: RequestOptions): APIPromise<EntitlementGetResponse> {
+  get(entitlementID: string, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.get(path`/v1/pay/entitlements/${entitlementID}`, options);
   }
 }
 
-export type EntitlementListResponsesCursorIDPage = CursorIDPage<EntitlementListResponse>;
+export type EntitlementsCursorIDPage = CursorIDPage<Entitlement>;
 
 /**
  * The entitlement attached to the product
  */
-export interface EntitlementCreateResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the entitlement is active and can be attached to products
-   */
-  active: boolean;
-
-  /**
-   * Unique key to identify the entitlement when checking access in your app
-   */
-  key: string;
-
-  /**
-   * Whether this is a live mode entitlement (vs test mode)
-   */
-  livemode: boolean;
-
-  /**
-   * Display name for the entitlement (e.g., API Access, Premium Support)
-   */
-  name: string;
-}
-
-/**
- * The entitlement attached to the product
- */
-export interface EntitlementUpdateResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the entitlement is active and can be attached to products
-   */
-  active: boolean;
-
-  /**
-   * Unique key to identify the entitlement when checking access in your app
-   */
-  key: string;
-
-  /**
-   * Whether this is a live mode entitlement (vs test mode)
-   */
-  livemode: boolean;
-
-  /**
-   * Display name for the entitlement (e.g., API Access, Premium Support)
-   */
-  name: string;
-}
-
-/**
- * The entitlement attached to the product
- */
-export interface EntitlementListResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the entitlement is active and can be attached to products
-   */
-  active: boolean;
-
-  /**
-   * Unique key to identify the entitlement when checking access in your app
-   */
-  key: string;
-
-  /**
-   * Whether this is a live mode entitlement (vs test mode)
-   */
-  livemode: boolean;
-
-  /**
-   * Display name for the entitlement (e.g., API Access, Premium Support)
-   */
-  name: string;
-}
-
-/**
- * The entitlement attached to the product
- */
-export interface EntitlementGetResponse {
+export interface Entitlement {
   /**
    * Unique identifier for the entitlement
    */
@@ -219,11 +126,8 @@ export interface EntitlementListParams extends CursorIDPageParams {
 
 export declare namespace Entitlements {
   export {
-    type EntitlementCreateResponse as EntitlementCreateResponse,
-    type EntitlementUpdateResponse as EntitlementUpdateResponse,
-    type EntitlementListResponse as EntitlementListResponse,
-    type EntitlementGetResponse as EntitlementGetResponse,
-    type EntitlementListResponsesCursorIDPage as EntitlementListResponsesCursorIDPage,
+    type Entitlement as Entitlement,
+    type EntitlementsCursorIDPage as EntitlementsCursorIDPage,
     type EntitlementCreateParams as EntitlementCreateParams,
     type EntitlementUpdateParams as EntitlementUpdateParams,
     type EntitlementListParams as EntitlementListParams,

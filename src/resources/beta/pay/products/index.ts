@@ -2,22 +2,17 @@
 
 export {
   Entitlements,
-  type EntitlementListResponse,
-  type EntitlementAttachResponse,
+  type ProductEntitlement,
   type EntitlementListParams,
   type EntitlementAttachParams,
   type EntitlementRemoveParams,
-  type EntitlementListResponsesCursorIDPage,
+  type ProductEntitlementsCursorIDPage,
 } from './entitlements';
 export {
   Products,
-  type ProductCreateResponse,
-  type ProductUpdateResponse,
-  type ProductListResponse,
-  type ProductArchiveResponse,
-  type ProductGetResponse,
+  type Product,
   type ProductCreateParams,
   type ProductUpdateParams,
   type ProductListParams,
-  type ProductListResponsesCursorIDPage,
+  type ProductsCursorIDPage,
 } from './products';

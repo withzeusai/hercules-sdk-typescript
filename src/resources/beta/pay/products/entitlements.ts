@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
+import * as EntitlementsAPI from '../entitlements';
 import { APIPromise } from '../../../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../../core/pagination';
 import { buildHeaders } from '../../../../internal/headers';
@@ -16,10 +17,10 @@ export class Entitlements extends APIResource {
     productID: string,
     query: EntitlementListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<EntitlementListResponsesCursorIDPage, EntitlementListResponse> {
+  ): PagePromise<ProductEntitlementsCursorIDPage, ProductEntitlement> {
     return this._client.getAPIList(
       path`/v1/pay/products/${productID}/entitlements`,
-      CursorIDPage<EntitlementListResponse>,
+      CursorIDPage<ProductEntitlement>,
       { query, ...options },
     );
   }
@@ -33,7 +34,7 @@ export class Entitlements extends APIResource {
     productID: string,
     body: EntitlementAttachParams,
     options?: RequestOptions,
-  ): APIPromise<EntitlementAttachResponse> {
+  ): APIPromise<ProductEntitlement> {
     return this._client.post(path`/v1/pay/products/${productID}/entitlements`, { body, ...options });
   }
 
@@ -50,13 +51,13 @@ export class Entitlements extends APIResource {
   }
 }
 
-export type EntitlementListResponsesCursorIDPage = CursorIDPage<EntitlementListResponse>;
+export type ProductEntitlementsCursorIDPage = CursorIDPage<ProductEntitlement>;
 
 /**
  * An entitlement attached to a product. All customers subscribed to the product
  * gain access to this entitlement.
  */
-export interface EntitlementListResponse {
+export interface ProductEntitlement {
   /**
    * Unique identifier for the entitlement
    */
@@ -65,87 +66,7 @@ export interface EntitlementListResponse {
   /**
    * The entitlement attached to the product
    */
-  entitlement: EntitlementListResponse.Entitlement;
-}
-
-export namespace EntitlementListResponse {
-  /**
-   * The entitlement attached to the product
-   */
-  export interface Entitlement {
-    /**
-     * Unique identifier for the entitlement
-     */
-    id: string;
-
-    /**
-     * Whether the entitlement is active and can be attached to products
-     */
-    active: boolean;
-
-    /**
-     * Unique key to identify the entitlement when checking access in your app
-     */
-    key: string;
-
-    /**
-     * Whether this is a live mode entitlement (vs test mode)
-     */
-    livemode: boolean;
-
-    /**
-     * Display name for the entitlement (e.g., API Access, Premium Support)
-     */
-    name: string;
-  }
-}
-
-/**
- * An entitlement attached to a product. All customers subscribed to the product
- * gain access to this entitlement.
- */
-export interface EntitlementAttachResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * The entitlement attached to the product
-   */
-  entitlement: EntitlementAttachResponse.Entitlement;
-}
-
-export namespace EntitlementAttachResponse {
-  /**
-   * The entitlement attached to the product
-   */
-  export interface Entitlement {
-    /**
-     * Unique identifier for the entitlement
-     */
-    id: string;
-
-    /**
-     * Whether the entitlement is active and can be attached to products
-     */
-    active: boolean;
-
-    /**
-     * Unique key to identify the entitlement when checking access in your app
-     */
-    key: string;
-
-    /**
-     * Whether this is a live mode entitlement (vs test mode)
-     */
-    livemode: boolean;
-
-    /**
-     * Display name for the entitlement (e.g., API Access, Premium Support)
-     */
-    name: string;
-  }
+  entitlement: EntitlementsAPI.Entitlement;
 }
 
 export interface EntitlementListParams extends CursorIDPageParams {}
@@ -163,9 +84,8 @@ export interface EntitlementRemoveParams {
 
 export declare namespace Entitlements {
   export {
-    type EntitlementListResponse as EntitlementListResponse,
-    type EntitlementAttachResponse as EntitlementAttachResponse,
-    type EntitlementListResponsesCursorIDPage as EntitlementListResponsesCursorIDPage,
+    type ProductEntitlement as ProductEntitlement,
+    type ProductEntitlementsCursorIDPage as ProductEntitlementsCursorIDPage,
     type EntitlementListParams as EntitlementListParams,
     type EntitlementAttachParams as EntitlementAttachParams,
     type EntitlementRemoveParams as EntitlementRemoveParams,

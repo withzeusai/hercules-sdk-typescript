@@ -2,38 +2,30 @@
 
 export {
   Coupons,
-  type CouponCreateResponse,
-  type CouponUpdateResponse,
-  type CouponListResponse,
-  type CouponGetResponse,
+  type Coupon,
   type CouponCreateParams,
   type CouponUpdateParams,
   type CouponListParams,
-  type CouponListResponsesCursorIDPage,
+  type CouponsCursorIDPage,
 } from './coupons';
 export {
   Customers,
-  type CustomerCreateResponse,
-  type CustomerUpdateResponse,
-  type CustomerListResponse,
+  type Customer,
+  type CustomerAddress,
   type CustomerBillingPortalResponse,
-  type CustomerGetResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
   type CustomerBillingPortalParams,
-  type CustomerListResponsesCursorIDPage,
+  type CustomersCursorIDPage,
 } from './customers';
 export {
   Entitlements,
-  type EntitlementCreateResponse,
-  type EntitlementUpdateResponse,
-  type EntitlementListResponse,
-  type EntitlementGetResponse,
+  type Entitlement,
   type EntitlementCreateParams,
   type EntitlementUpdateParams,
   type EntitlementListParams,
-  type EntitlementListResponsesCursorIDPage,
+  type EntitlementsCursorIDPage,
 } from './entitlements';
 export {
   Pay,
@@ -46,13 +38,9 @@ export {
 } from './pay';
 export {
   Products,
-  type ProductCreateResponse,
-  type ProductUpdateResponse,
-  type ProductListResponse,
-  type ProductArchiveResponse,
-  type ProductGetResponse,
+  type Product,
   type ProductCreateParams,
   type ProductUpdateParams,
   type ProductListParams,
-  type ProductListResponsesCursorIDPage,
+  type ProductsCursorIDPage,
 } from './products/index';
