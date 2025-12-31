@@ -32,13 +32,15 @@ import {
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
+export type ApiVersion = '2025-12-09';
+
 export interface ClientOptions {
   /**
    * Defaults to process.env['HERCULES_API_KEY'].
    */
   apiKey?: string | null | undefined;
 
-  apiVersion?: string | undefined;
+  apiVersion: ApiVersion;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -114,7 +116,7 @@ export interface ClientOptions {
  */
 export class Hercules {
   apiKey: string | null;
-  apiVersion: string;
+  apiVersion: ApiVersion;
 
   baseURL: string;
   maxRetries: number;
@@ -144,9 +146,9 @@ export class Hercules {
   constructor({
     baseURL = readEnv('HERCULES_BASE_URL'),
     apiKey = readEnv('HERCULES_API_KEY') ?? null,
-    apiVersion = '2025-12-09',
+    apiVersion,
     ...opts
-  }: ClientOptions = {}) {
+  }: ClientOptions & { apiVersion: ApiVersion }) {
     const options: ClientOptions = {
       apiKey,
       apiVersion,

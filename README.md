@@ -38,13 +38,11 @@ The full API of this library can be found in [api.md](api.md).
 import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
+  apiVersion: '2025-12-09',
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer = await client.beta.subscriptions.customers.create({
-  email: 'john.doe@example.com',
-  name: 'John Doe',
-});
+const customer = await client.beta.pay.customers.create({ email: 'john.doe@example.com', name: 'John Doe' });
 
 console.log(customer.id);
 ```
@@ -58,12 +56,11 @@ This library includes TypeScript definitions for all request params and response
 import Hercules from '@usehercules/sdk';
 
 const client = new Hercules({
+  apiVersion: '2025-12-09',
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer: Hercules.Beta.Subscriptions.Customer = await client.beta.subscriptions.customers.get(
-  'REPLACE_ME',
-);
+const customer: Hercules.Beta.Pay.Customer = await client.beta.pay.customers.get('REPLACE_ME');
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -76,7 +73,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const customer = await client.beta.subscriptions.customers.get('REPLACE_ME').catch(async (err) => {
+const customer = await client.beta.pay.customers.get('REPLACE_ME').catch(async (err) => {
   if (err instanceof Hercules.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -112,11 +109,12 @@ You can use the `maxRetries` option to configure or disable this:
 ```js
 // Configure the default for all requests:
 const client = new Hercules({
+  apiVersion: '2025-12-09',
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.beta.subscriptions.customers.get('REPLACE_ME', {
+await client.beta.pay.customers.get('REPLACE_ME', {
   maxRetries: 5,
 });
 ```
@@ -129,11 +127,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 ```ts
 // Configure the default for all requests:
 const client = new Hercules({
+  apiVersion: '2025-12-09',
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.beta.subscriptions.customers.get('REPLACE_ME', {
+await client.beta.pay.customers.get('REPLACE_ME', {
   timeout: 5 * 1000,
 });
 ```
@@ -151,10 +150,7 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllCustomers(params) {
   const allCustomers = [];
   // Automatically fetches more pages as needed.
-  for await (const customer of client.beta.subscriptions.customers.list({
-    limit: 100,
-    starting_after: 'id_123',
-  })) {
+  for await (const customer of client.beta.pay.customers.list({ limit: 100, starting_after: 'id_123' })) {
     allCustomers.push(customer);
   }
   return allCustomers;
@@ -164,7 +160,7 @@ async function fetchAllCustomers(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.beta.subscriptions.customers.list({ limit: 100, starting_after: 'id_123' });
+let page = await client.beta.pay.customers.list({ limit: 100, starting_after: 'id_123' });
 for (const customer of page.data) {
   console.log(customer);
 }
@@ -190,13 +186,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Hercules();
 
-const response = await client.beta.subscriptions.customers.get('REPLACE_ME').asResponse();
+const response = await client.beta.pay.customers.get('REPLACE_ME').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: customer, response: raw } = await client.beta.subscriptions.customers
-  .get('REPLACE_ME')
-  .withResponse();
+const { data: customer, response: raw } = await client.beta.pay.customers.get('REPLACE_ME').withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(customer.id);
 ```
@@ -278,7 +272,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.beta.subscriptions.customers.create({
+client.beta.pay.customers.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
