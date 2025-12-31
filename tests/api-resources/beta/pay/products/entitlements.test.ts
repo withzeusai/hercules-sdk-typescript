@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource entitlements', () => {
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.subscriptions.plans.entitlements.list('plan_id');
+    const responsePromise = client.beta.pay.products.entitlements.list('product_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -25,8 +25,8 @@ describe('resource entitlements', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.subscriptions.plans.entitlements.list(
-        'plan_id',
+      client.beta.pay.products.entitlements.list(
+        'product_id',
         { ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
         { path: '/_stainless_unknown_path' },
       ),
@@ -35,7 +35,7 @@ describe('resource entitlements', () => {
 
   // Prism tests are disabled
   test.skip('attach: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.plans.entitlements.attach('plan_id', {
+    const responsePromise = client.beta.pay.products.entitlements.attach('product_id', {
       entitlement: 'entitlement',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -49,15 +49,15 @@ describe('resource entitlements', () => {
 
   // Prism tests are disabled
   test.skip('attach: required and optional params', async () => {
-    const response = await client.beta.subscriptions.plans.entitlements.attach('plan_id', {
+    const response = await client.beta.pay.products.entitlements.attach('product_id', {
       entitlement: 'entitlement',
     });
   });
 
   // Prism tests are disabled
   test.skip('remove: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.plans.entitlements.remove('feature_id', {
-      plan_id: 'plan_id',
+    const responsePromise = client.beta.pay.products.entitlements.remove('feature_id', {
+      product_id: 'product_id',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -70,8 +70,8 @@ describe('resource entitlements', () => {
 
   // Prism tests are disabled
   test.skip('remove: required and optional params', async () => {
-    const response = await client.beta.subscriptions.plans.entitlements.remove('feature_id', {
-      plan_id: 'plan_id',
+    const response = await client.beta.pay.products.entitlements.remove('feature_id', {
+      product_id: 'product_id',
     });
   });
 });

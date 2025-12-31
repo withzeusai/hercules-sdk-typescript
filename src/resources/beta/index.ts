@@ -2,11 +2,11 @@
 
 export { Beta } from './beta';
 export {
-  Subscriptions,
-  type SubscriptionCancelResponse,
-  type SubscriptionCheckResponse,
-  type SubscriptionCheckoutResponse,
-  type SubscriptionCancelParams,
-  type SubscriptionCheckParams,
-  type SubscriptionCheckoutParams,
-} from './subscriptions/index';
+  Pay,
+  type PayCancelResponse,
+  type PayCheckResponse,
+  type PayCheckoutResponse,
+  type PayCancelParams,
+  type PayCheckParams,
+  type PayCheckoutParams,
+} from './pay/index';
