@@ -60,7 +60,7 @@ const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer: Hercules.Beta.Pay.CustomerGetResponse = await client.beta.pay.customers.get('REPLACE_ME');
+const customer: Hercules.Beta.Pay.Customer = await client.beta.pay.customers.get('REPLACE_ME');
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -147,16 +147,13 @@ List methods in the Hercules API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllCustomerListResponses(params) {
-  const allCustomerListResponses = [];
+async function fetchAllCustomers(params) {
+  const allCustomers = [];
   // Automatically fetches more pages as needed.
-  for await (const customerListResponse of client.beta.pay.customers.list({
-    limit: 100,
-    starting_after: 'id_123',
-  })) {
-    allCustomerListResponses.push(customerListResponse);
+  for await (const customer of client.beta.pay.customers.list({ limit: 100, starting_after: 'id_123' })) {
+    allCustomers.push(customer);
   }
-  return allCustomerListResponses;
+  return allCustomers;
 }
 ```
 
@@ -164,8 +161,8 @@ Alternatively, you can request a single page at a time:
 
 ```ts
 let page = await client.beta.pay.customers.list({ limit: 100, starting_after: 'id_123' });
-for (const customerListResponse of page.data) {
-  console.log(customerListResponse);
+for (const customer of page.data) {
+  console.log(customer);
 }
 
 // Convenience methods are provided for manually paginating:

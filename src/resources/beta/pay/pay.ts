@@ -3,54 +3,42 @@
 import { APIResource } from '../../../core/resource';
 import * as CouponsAPI from './coupons';
 import {
+  Coupon,
   CouponCreateParams,
-  CouponCreateResponse,
-  CouponGetResponse,
   CouponListParams,
-  CouponListResponse,
-  CouponListResponsesCursorIDPage,
   CouponUpdateParams,
-  CouponUpdateResponse,
   Coupons,
+  CouponsCursorIDPage,
 } from './coupons';
 import * as CustomersAPI from './customers';
 import {
+  Customer,
+  CustomerAddress,
   CustomerBillingPortalParams,
   CustomerBillingPortalResponse,
   CustomerCreateParams,
-  CustomerCreateResponse,
-  CustomerGetResponse,
   CustomerListParams,
-  CustomerListResponse,
-  CustomerListResponsesCursorIDPage,
   CustomerUpdateParams,
-  CustomerUpdateResponse,
   Customers,
+  CustomersCursorIDPage,
 } from './customers';
 import * as EntitlementsAPI from './entitlements';
 import {
+  Entitlement,
   EntitlementCreateParams,
-  EntitlementCreateResponse,
-  EntitlementGetResponse,
   EntitlementListParams,
-  EntitlementListResponse,
-  EntitlementListResponsesCursorIDPage,
   EntitlementUpdateParams,
-  EntitlementUpdateResponse,
   Entitlements,
+  EntitlementsCursorIDPage,
 } from './entitlements';
 import * as ProductsAPI from './products/products';
 import {
-  ProductArchiveResponse,
+  Product,
   ProductCreateParams,
-  ProductCreateResponse,
-  ProductGetResponse,
   ProductListParams,
-  ProductListResponse,
-  ProductListResponsesCursorIDPage,
   ProductUpdateParams,
-  ProductUpdateResponse,
   Products,
+  ProductsCursorIDPage,
 } from './products/products';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -229,12 +217,10 @@ export declare namespace Pay {
 
   export {
     Customers as Customers,
-    type CustomerCreateResponse as CustomerCreateResponse,
-    type CustomerUpdateResponse as CustomerUpdateResponse,
-    type CustomerListResponse as CustomerListResponse,
+    type Customer as Customer,
+    type CustomerAddress as CustomerAddress,
     type CustomerBillingPortalResponse as CustomerBillingPortalResponse,
-    type CustomerGetResponse as CustomerGetResponse,
-    type CustomerListResponsesCursorIDPage as CustomerListResponsesCursorIDPage,
+    type CustomersCursorIDPage as CustomersCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -243,12 +229,8 @@ export declare namespace Pay {
 
   export {
     Products as Products,
-    type ProductCreateResponse as ProductCreateResponse,
-    type ProductUpdateResponse as ProductUpdateResponse,
-    type ProductListResponse as ProductListResponse,
-    type ProductArchiveResponse as ProductArchiveResponse,
-    type ProductGetResponse as ProductGetResponse,
-    type ProductListResponsesCursorIDPage as ProductListResponsesCursorIDPage,
+    type Product as Product,
+    type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
@@ -256,11 +238,8 @@ export declare namespace Pay {
 
   export {
     Entitlements as Entitlements,
-    type EntitlementCreateResponse as EntitlementCreateResponse,
-    type EntitlementUpdateResponse as EntitlementUpdateResponse,
-    type EntitlementListResponse as EntitlementListResponse,
-    type EntitlementGetResponse as EntitlementGetResponse,
-    type EntitlementListResponsesCursorIDPage as EntitlementListResponsesCursorIDPage,
+    type Entitlement as Entitlement,
+    type EntitlementsCursorIDPage as EntitlementsCursorIDPage,
     type EntitlementCreateParams as EntitlementCreateParams,
     type EntitlementUpdateParams as EntitlementUpdateParams,
     type EntitlementListParams as EntitlementListParams,
@@ -268,11 +247,8 @@ export declare namespace Pay {
 
   export {
     Coupons as Coupons,
-    type CouponCreateResponse as CouponCreateResponse,
-    type CouponUpdateResponse as CouponUpdateResponse,
-    type CouponListResponse as CouponListResponse,
-    type CouponGetResponse as CouponGetResponse,
-    type CouponListResponsesCursorIDPage as CouponListResponsesCursorIDPage,
+    type Coupon as Coupon,
+    type CouponsCursorIDPage as CouponsCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
     type CouponListParams as CouponListParams,

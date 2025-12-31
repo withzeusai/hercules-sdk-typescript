@@ -18,81 +18,68 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/beta/pay/customers.ts">CustomerCreateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/customers.ts">CustomerUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/customers.ts">CustomerListResponse</a></code>
+- <code><a href="./src/resources/beta/pay/customers.ts">Customer</a></code>
+- <code><a href="./src/resources/beta/pay/customers.ts">CustomerAddress</a></code>
 - <code><a href="./src/resources/beta/pay/customers.ts">CustomerBillingPortalResponse</a></code>
-- <code><a href="./src/resources/beta/pay/customers.ts">CustomerGetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/pay/customers">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
-- <code title="patch /v1/pay/customers/{customer_id}">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
-- <code title="get /v1/pay/customers">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">list</a>({ ...params }) -> CustomerListResponsesCursorIDPage</code>
+- <code title="post /v1/pay/customers">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">create</a>({ ...params }) -> Customer</code>
+- <code title="patch /v1/pay/customers/{customer_id}">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">update</a>(customerID, { ...params }) -> Customer</code>
+- <code title="get /v1/pay/customers">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">list</a>({ ...params }) -> CustomersCursorIDPage</code>
 - <code title="delete /v1/pay/customers/{customer_id}">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">delete</a>(customerID) -> void</code>
 - <code title="post /v1/pay/customers/{customer_id}/billing_portal">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">billingPortal</a>(customerID, { ...params }) -> CustomerBillingPortalResponse</code>
-- <code title="get /v1/pay/customers/{customer_id}">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">get</a>(customerID) -> CustomerGetResponse</code>
+- <code title="get /v1/pay/customers/{customer_id}">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">get</a>(customerID) -> Customer</code>
 
 ### Products
 
 Types:
 
-- <code><a href="./src/resources/beta/pay/products/products.ts">ProductCreateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/products/products.ts">ProductUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/products/products.ts">ProductListResponse</a></code>
-- <code><a href="./src/resources/beta/pay/products/products.ts">ProductArchiveResponse</a></code>
-- <code><a href="./src/resources/beta/pay/products/products.ts">ProductGetResponse</a></code>
+- <code><a href="./src/resources/beta/pay/products/products.ts">Product</a></code>
 
 Methods:
 
-- <code title="post /v1/pay/products">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">create</a>({ ...params }) -> ProductCreateResponse</code>
-- <code title="patch /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">update</a>(productID, { ...params }) -> ProductUpdateResponse</code>
-- <code title="get /v1/pay/products">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">list</a>({ ...params }) -> ProductListResponsesCursorIDPage</code>
-- <code title="delete /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">archive</a>(productID) -> ProductArchiveResponse</code>
-- <code title="get /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">get</a>(productID) -> ProductGetResponse</code>
+- <code title="post /v1/pay/products">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">create</a>({ ...params }) -> Product</code>
+- <code title="patch /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">update</a>(productID, { ...params }) -> Product</code>
+- <code title="get /v1/pay/products">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">list</a>({ ...params }) -> ProductsCursorIDPage</code>
+- <code title="delete /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">archive</a>(productID) -> Product</code>
+- <code title="get /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">get</a>(productID) -> Product</code>
 
 #### Entitlements
 
 Types:
 
-- <code><a href="./src/resources/beta/pay/products/entitlements.ts">EntitlementListResponse</a></code>
-- <code><a href="./src/resources/beta/pay/products/entitlements.ts">EntitlementAttachResponse</a></code>
+- <code><a href="./src/resources/beta/pay/products/entitlements.ts">ProductEntitlement</a></code>
 
 Methods:
 
-- <code title="get /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">list</a>(productID, { ...params }) -> EntitlementListResponsesCursorIDPage</code>
-- <code title="post /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">attach</a>(productID, { ...params }) -> EntitlementAttachResponse</code>
+- <code title="get /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">list</a>(productID, { ...params }) -> ProductEntitlementsCursorIDPage</code>
+- <code title="post /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">attach</a>(productID, { ...params }) -> ProductEntitlement</code>
 - <code title="delete /v1/pay/products/{product_id}/entitlements/{feature_id}">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">remove</a>(featureID, { ...params }) -> void</code>
 
 ### Entitlements
 
 Types:
 
-- <code><a href="./src/resources/beta/pay/entitlements.ts">EntitlementCreateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/entitlements.ts">EntitlementUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/entitlements.ts">EntitlementListResponse</a></code>
-- <code><a href="./src/resources/beta/pay/entitlements.ts">EntitlementGetResponse</a></code>
+- <code><a href="./src/resources/beta/pay/entitlements.ts">Entitlement</a></code>
 
 Methods:
 
-- <code title="post /v1/pay/entitlements">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">create</a>({ ...params }) -> EntitlementCreateResponse</code>
-- <code title="patch /v1/pay/entitlements/{entitlement_id}">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">update</a>(entitlementID, { ...params }) -> EntitlementUpdateResponse</code>
-- <code title="get /v1/pay/entitlements">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">list</a>({ ...params }) -> EntitlementListResponsesCursorIDPage</code>
-- <code title="get /v1/pay/entitlements/{entitlement_id}">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">get</a>(entitlementID) -> EntitlementGetResponse</code>
+- <code title="post /v1/pay/entitlements">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">create</a>({ ...params }) -> Entitlement</code>
+- <code title="patch /v1/pay/entitlements/{entitlement_id}">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">update</a>(entitlementID, { ...params }) -> Entitlement</code>
+- <code title="get /v1/pay/entitlements">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">list</a>({ ...params }) -> EntitlementsCursorIDPage</code>
+- <code title="get /v1/pay/entitlements/{entitlement_id}">client.beta.pay.entitlements.<a href="./src/resources/beta/pay/entitlements.ts">get</a>(entitlementID) -> Entitlement</code>
 
 ### Coupons
 
 Types:
 
-- <code><a href="./src/resources/beta/pay/coupons.ts">CouponCreateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/coupons.ts">CouponUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/pay/coupons.ts">CouponListResponse</a></code>
-- <code><a href="./src/resources/beta/pay/coupons.ts">CouponGetResponse</a></code>
+- <code><a href="./src/resources/beta/pay/coupons.ts">Coupon</a></code>
 
 Methods:
 
-- <code title="post /v1/pay/coupons">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">create</a>({ ...params }) -> CouponCreateResponse</code>
-- <code title="patch /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">update</a>(couponID, { ...params }) -> CouponUpdateResponse</code>
-- <code title="get /v1/pay/coupons">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">list</a>({ ...params }) -> CouponListResponsesCursorIDPage</code>
+- <code title="post /v1/pay/coupons">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">create</a>({ ...params }) -> Coupon</code>
+- <code title="patch /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">update</a>(couponID, { ...params }) -> Coupon</code>
+- <code title="get /v1/pay/coupons">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">list</a>({ ...params }) -> CouponsCursorIDPage</code>
 - <code title="delete /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">delete</a>(couponID) -> void</code>
-- <code title="get /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">get</a>(couponID) -> CouponGetResponse</code>
+- <code title="get /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">get</a>(couponID) -> Coupon</code>

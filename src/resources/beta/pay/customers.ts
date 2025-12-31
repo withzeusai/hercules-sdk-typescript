@@ -14,10 +14,7 @@ export class Customers extends APIResource {
    * recommends creating a customer immediately after creating the corresponding
    * entity in your app.
    */
-  create(
-    body: CustomerCreateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomerCreateResponse> {
+  create(body: CustomerCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<Customer> {
     return this._client.post('/v1/pay/customers', { body, ...options });
   }
 
@@ -29,7 +26,7 @@ export class Customers extends APIResource {
     customerID: string,
     body: CustomerUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomerUpdateResponse> {
+  ): APIPromise<Customer> {
     return this._client.patch(path`/v1/pay/customers/${customerID}`, { body, ...options });
   }
 
@@ -40,11 +37,8 @@ export class Customers extends APIResource {
   list(
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<CustomerListResponsesCursorIDPage, CustomerListResponse> {
-    return this._client.getAPIList('/v1/pay/customers', CursorIDPage<CustomerListResponse>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<CustomersCursorIDPage, Customer> {
+    return this._client.getAPIList('/v1/pay/customers', CursorIDPage<Customer>, { query, ...options });
   }
 
   /**
@@ -75,18 +69,18 @@ export class Customers extends APIResource {
    * Retrieves a customer by ID. Returns the customer object including contact
    * information and billing address.
    */
-  get(customerID: string, options?: RequestOptions): APIPromise<CustomerGetResponse> {
+  get(customerID: string, options?: RequestOptions): APIPromise<Customer> {
     return this._client.get(path`/v1/pay/customers/${customerID}`, options);
   }
 }
 
-export type CustomerListResponsesCursorIDPage = CursorIDPage<CustomerListResponse>;
+export type CustomersCursorIDPage = CursorIDPage<Customer>;
 
 /**
  * A billable customer. Represents the entity in your app that will be
  * charged—typically a user, organization, or project.
  */
-export interface CustomerCreateResponse {
+export interface Customer {
   /**
    * Unique identifier for the entitlement
    */
@@ -100,7 +94,7 @@ export interface CustomerCreateResponse {
   /**
    * The customer's billing address
    */
-  address?: CustomerCreateResponse.Address | null;
+  address?: CustomerAddress | null;
 
   /**
    * The customer's email address for receipts and notifications
@@ -118,187 +112,39 @@ export interface CustomerCreateResponse {
   phone?: string | null;
 }
 
-export namespace CustomerCreateResponse {
-  /**
-   * The customer's billing address
-   */
-  export interface Address {
-    /**
-     * City name
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter ISO country code
-     */
-    country?: string | null;
-
-    /**
-     * Street address line 1
-     */
-    line1?: string | null;
-
-    /**
-     * Street address line 2 (apartment, suite, etc.)
-     */
-    line2?: string | null;
-
-    /**
-     * Postal or ZIP code
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, province, or region
-     */
-    state?: string | null;
-  }
-}
-
 /**
- * A billable customer. Represents the entity in your app that will be
- * charged—typically a user, organization, or project.
+ * The customer's billing address
  */
-export interface CustomerUpdateResponse {
+export interface CustomerAddress {
   /**
-   * Unique identifier for the entitlement
+   * City name
    */
-  id: string;
-
-  /**
-   * Timestamp when the customer was created
-   */
-  created: string;
+  city?: string | null;
 
   /**
-   * The customer's billing address
+   * Two-letter ISO country code
    */
-  address?: CustomerUpdateResponse.Address | null;
+  country?: string | null;
 
   /**
-   * The customer's email address for receipts and notifications
+   * Street address line 1
    */
-  email?: string | null;
+  line1?: string | null;
 
   /**
-   * The customer's full name
+   * Street address line 2 (apartment, suite, etc.)
    */
-  name?: string | null;
+  line2?: string | null;
 
   /**
-   * The customer's phone number
+   * Postal or ZIP code
    */
-  phone?: string | null;
-}
-
-export namespace CustomerUpdateResponse {
-  /**
-   * The customer's billing address
-   */
-  export interface Address {
-    /**
-     * City name
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter ISO country code
-     */
-    country?: string | null;
-
-    /**
-     * Street address line 1
-     */
-    line1?: string | null;
-
-    /**
-     * Street address line 2 (apartment, suite, etc.)
-     */
-    line2?: string | null;
-
-    /**
-     * Postal or ZIP code
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, province, or region
-     */
-    state?: string | null;
-  }
-}
-
-/**
- * A billable customer. Represents the entity in your app that will be
- * charged—typically a user, organization, or project.
- */
-export interface CustomerListResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
+  postal_code?: string | null;
 
   /**
-   * Timestamp when the customer was created
+   * State, province, or region
    */
-  created: string;
-
-  /**
-   * The customer's billing address
-   */
-  address?: CustomerListResponse.Address | null;
-
-  /**
-   * The customer's email address for receipts and notifications
-   */
-  email?: string | null;
-
-  /**
-   * The customer's full name
-   */
-  name?: string | null;
-
-  /**
-   * The customer's phone number
-   */
-  phone?: string | null;
-}
-
-export namespace CustomerListResponse {
-  /**
-   * The customer's billing address
-   */
-  export interface Address {
-    /**
-     * City name
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter ISO country code
-     */
-    country?: string | null;
-
-    /**
-     * Street address line 1
-     */
-    line1?: string | null;
-
-    /**
-     * Street address line 2 (apartment, suite, etc.)
-     */
-    line2?: string | null;
-
-    /**
-     * Postal or ZIP code
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, province, or region
-     */
-    state?: string | null;
-  }
+  state?: string | null;
 }
 
 /**
@@ -311,79 +157,6 @@ export interface CustomerBillingPortalResponse {
   url: string;
 }
 
-/**
- * A billable customer. Represents the entity in your app that will be
- * charged—typically a user, organization, or project.
- */
-export interface CustomerGetResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Timestamp when the customer was created
-   */
-  created: string;
-
-  /**
-   * The customer's billing address
-   */
-  address?: CustomerGetResponse.Address | null;
-
-  /**
-   * The customer's email address for receipts and notifications
-   */
-  email?: string | null;
-
-  /**
-   * The customer's full name
-   */
-  name?: string | null;
-
-  /**
-   * The customer's phone number
-   */
-  phone?: string | null;
-}
-
-export namespace CustomerGetResponse {
-  /**
-   * The customer's billing address
-   */
-  export interface Address {
-    /**
-     * City name
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter ISO country code
-     */
-    country?: string | null;
-
-    /**
-     * Street address line 1
-     */
-    line1?: string | null;
-
-    /**
-     * Street address line 2 (apartment, suite, etc.)
-     */
-    line2?: string | null;
-
-    /**
-     * Postal or ZIP code
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, province, or region
-     */
-    state?: string | null;
-  }
-}
-
 export interface CustomerCreateParams {
   /**
    * Optional custom ID for the customer. If not provided, one will be generated.
@@ -393,7 +166,7 @@ export interface CustomerCreateParams {
   /**
    * The customer's billing address
    */
-  address?: CustomerCreateParams.Address;
+  address?: CustomerAddress;
 
   /**
    * The customer's email address for receipts and notifications
@@ -409,50 +182,13 @@ export interface CustomerCreateParams {
    * The customer's phone number
    */
   phone?: string;
-}
-
-export namespace CustomerCreateParams {
-  /**
-   * The customer's billing address
-   */
-  export interface Address {
-    /**
-     * City name
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter ISO country code
-     */
-    country?: string | null;
-
-    /**
-     * Street address line 1
-     */
-    line1?: string | null;
-
-    /**
-     * Street address line 2 (apartment, suite, etc.)
-     */
-    line2?: string | null;
-
-    /**
-     * Postal or ZIP code
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, province, or region
-     */
-    state?: string | null;
-  }
 }
 
 export interface CustomerUpdateParams {
   /**
    * The customer's billing address
    */
-  address?: CustomerUpdateParams.Address;
+  address?: CustomerAddress;
 
   /**
    * The customer's email address for receipts and notifications
@@ -468,43 +204,6 @@ export interface CustomerUpdateParams {
    * The customer's phone number
    */
   phone?: string;
-}
-
-export namespace CustomerUpdateParams {
-  /**
-   * The customer's billing address
-   */
-  export interface Address {
-    /**
-     * City name
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter ISO country code
-     */
-    country?: string | null;
-
-    /**
-     * Street address line 1
-     */
-    line1?: string | null;
-
-    /**
-     * Street address line 2 (apartment, suite, etc.)
-     */
-    line2?: string | null;
-
-    /**
-     * Postal or ZIP code
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, province, or region
-     */
-    state?: string | null;
-  }
 }
 
 export interface CustomerListParams extends CursorIDPageParams {}
@@ -518,12 +217,10 @@ export interface CustomerBillingPortalParams {
 
 export declare namespace Customers {
   export {
-    type CustomerCreateResponse as CustomerCreateResponse,
-    type CustomerUpdateResponse as CustomerUpdateResponse,
-    type CustomerListResponse as CustomerListResponse,
+    type Customer as Customer,
+    type CustomerAddress as CustomerAddress,
     type CustomerBillingPortalResponse as CustomerBillingPortalResponse,
-    type CustomerGetResponse as CustomerGetResponse,
-    type CustomerListResponsesCursorIDPage as CustomerListResponsesCursorIDPage,
+    type CustomersCursorIDPage as CustomersCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,

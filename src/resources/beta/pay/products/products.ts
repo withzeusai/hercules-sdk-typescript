@@ -4,12 +4,11 @@ import { APIResource } from '../../../../core/resource';
 import * as EntitlementsAPI from './entitlements';
 import {
   EntitlementAttachParams,
-  EntitlementAttachResponse,
   EntitlementListParams,
-  EntitlementListResponse,
-  EntitlementListResponsesCursorIDPage,
   EntitlementRemoveParams,
   Entitlements,
+  ProductEntitlement,
+  ProductEntitlementsCursorIDPage,
 } from './entitlements';
 import { APIPromise } from '../../../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../../core/pagination';
@@ -24,7 +23,7 @@ export class Products extends APIResource {
    * include Free, Pro, Business, or Teams tiers. After creating a product, attach
    * entitlements to define which features customers on this product can access.
    */
-  create(body: ProductCreateParams, options?: RequestOptions): APIPromise<ProductCreateResponse> {
+  create(body: ProductCreateParams, options?: RequestOptions): APIPromise<Product> {
     return this._client.post('/v1/pay/products', { body, ...options });
   }
 
@@ -37,7 +36,7 @@ export class Products extends APIResource {
     productID: string,
     body: ProductUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ProductUpdateResponse> {
+  ): APIPromise<Product> {
     return this._client.patch(path`/v1/pay/products/${productID}`, { body, ...options });
   }
 
@@ -49,18 +48,15 @@ export class Products extends APIResource {
   list(
     query: ProductListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ProductListResponsesCursorIDPage, ProductListResponse> {
-    return this._client.getAPIList('/v1/pay/products', CursorIDPage<ProductListResponse>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<ProductsCursorIDPage, Product> {
+    return this._client.getAPIList('/v1/pay/products', CursorIDPage<Product>, { query, ...options });
   }
 
   /**
    * Archives a product, preventing new subscriptions. Existing subscriptions remain
    * active. Use this instead of deletion to preserve subscription history.
    */
-  archive(productID: string, options?: RequestOptions): APIPromise<ProductArchiveResponse> {
+  archive(productID: string, options?: RequestOptions): APIPromise<Product> {
     return this._client.delete(path`/v1/pay/products/${productID}`, options);
   }
 
@@ -68,19 +64,19 @@ export class Products extends APIResource {
    * Retrieves a product by ID. Returns the product object including pricing details
    * and status.
    */
-  get(productID: string, options?: RequestOptions): APIPromise<ProductGetResponse> {
+  get(productID: string, options?: RequestOptions): APIPromise<Product> {
     return this._client.get(path`/v1/pay/products/${productID}`, options);
   }
 }
 
-export type ProductListResponsesCursorIDPage = CursorIDPage<ProductListResponse>;
+export type ProductsCursorIDPage = CursorIDPage<Product>;
 
 /**
  * A subscription product that customers can subscribe to. Products define pricing
  * and billing intervals. Attach entitlements to a product to grant features to all
  * subscribed customers.
  */
-export interface ProductCreateResponse {
+export interface Product {
   /**
    * Unique identifier for the entitlement
    */
@@ -104,7 +100,7 @@ export interface ProductCreateResponse {
   /**
    * The recurring price configuration for a product
    */
-  default_price?: ProductCreateResponse.DefaultPrice | null;
+  default_price?: Product.DefaultPrice | null;
 
   /**
    * Detailed description of what the product includes
@@ -112,283 +108,7 @@ export interface ProductCreateResponse {
   description?: string | null;
 }
 
-export namespace ProductCreateResponse {
-  /**
-   * The recurring price configuration for a product
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the entitlement
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency: day, week, month, or year
-     */
-    interval: 'day' | 'week' | 'month' | 'year';
-
-    /**
-     * Number of intervals between billings (e.g., 2 for biweekly)
-     */
-    interval_count: number;
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-}
-
-/**
- * A subscription product that customers can subscribe to. Products define pricing
- * and billing intervals. Attach entitlements to a product to grant features to all
- * subscribed customers.
- */
-export interface ProductUpdateResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new subscriptions
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * The recurring price configuration for a product
-   */
-  default_price?: ProductUpdateResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-}
-
-export namespace ProductUpdateResponse {
-  /**
-   * The recurring price configuration for a product
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the entitlement
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency: day, week, month, or year
-     */
-    interval: 'day' | 'week' | 'month' | 'year';
-
-    /**
-     * Number of intervals between billings (e.g., 2 for biweekly)
-     */
-    interval_count: number;
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-}
-
-/**
- * A subscription product that customers can subscribe to. Products define pricing
- * and billing intervals. Attach entitlements to a product to grant features to all
- * subscribed customers.
- */
-export interface ProductListResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new subscriptions
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * The recurring price configuration for a product
-   */
-  default_price?: ProductListResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-}
-
-export namespace ProductListResponse {
-  /**
-   * The recurring price configuration for a product
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the entitlement
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency: day, week, month, or year
-     */
-    interval: 'day' | 'week' | 'month' | 'year';
-
-    /**
-     * Number of intervals between billings (e.g., 2 for biweekly)
-     */
-    interval_count: number;
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-}
-
-/**
- * A subscription product that customers can subscribe to. Products define pricing
- * and billing intervals. Attach entitlements to a product to grant features to all
- * subscribed customers.
- */
-export interface ProductArchiveResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new subscriptions
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * The recurring price configuration for a product
-   */
-  default_price?: ProductArchiveResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-}
-
-export namespace ProductArchiveResponse {
-  /**
-   * The recurring price configuration for a product
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the entitlement
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency: day, week, month, or year
-     */
-    interval: 'day' | 'week' | 'month' | 'year';
-
-    /**
-     * Number of intervals between billings (e.g., 2 for biweekly)
-     */
-    interval_count: number;
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-}
-
-/**
- * A subscription product that customers can subscribe to. Products define pricing
- * and billing intervals. Attach entitlements to a product to grant features to all
- * subscribed customers.
- */
-export interface ProductGetResponse {
-  /**
-   * Unique identifier for the entitlement
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new subscriptions
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * The recurring price configuration for a product
-   */
-  default_price?: ProductGetResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-}
-
-export namespace ProductGetResponse {
+export namespace Product {
   /**
    * The recurring price configuration for a product
    */
@@ -486,12 +206,8 @@ Products.Entitlements = Entitlements;
 
 export declare namespace Products {
   export {
-    type ProductCreateResponse as ProductCreateResponse,
-    type ProductUpdateResponse as ProductUpdateResponse,
-    type ProductListResponse as ProductListResponse,
-    type ProductArchiveResponse as ProductArchiveResponse,
-    type ProductGetResponse as ProductGetResponse,
-    type ProductListResponsesCursorIDPage as ProductListResponsesCursorIDPage,
+    type Product as Product,
+    type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
@@ -499,9 +215,8 @@ export declare namespace Products {
 
   export {
     Entitlements as Entitlements,
-    type EntitlementListResponse as EntitlementListResponse,
-    type EntitlementAttachResponse as EntitlementAttachResponse,
-    type EntitlementListResponsesCursorIDPage as EntitlementListResponsesCursorIDPage,
+    type ProductEntitlement as ProductEntitlement,
+    type ProductEntitlementsCursorIDPage as ProductEntitlementsCursorIDPage,
     type EntitlementListParams as EntitlementListParams,
     type EntitlementAttachParams as EntitlementAttachParams,
     type EntitlementRemoveParams as EntitlementRemoveParams,
