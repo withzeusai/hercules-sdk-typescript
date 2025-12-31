@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource subscriptions', () => {
+describe('resource pay', () => {
   // Prism tests are disabled
   test.skip('cancel: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.cancel({
+    const responsePromise = client.beta.pay.cancel({
       customer_id: 'customer_id',
       subscription_id: 'subscription_id',
     });
@@ -26,7 +26,7 @@ describe('resource subscriptions', () => {
 
   // Prism tests are disabled
   test.skip('cancel: required and optional params', async () => {
-    const response = await client.beta.subscriptions.cancel({
+    const response = await client.beta.pay.cancel({
       customer_id: 'customer_id',
       subscription_id: 'subscription_id',
       cancellation_timing: 'immediate',
@@ -35,7 +35,7 @@ describe('resource subscriptions', () => {
 
   // Prism tests are disabled
   test.skip('check: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.check({
+    const responsePromise = client.beta.pay.check({
       customer_id: 'customer_id',
       entitlement_key: 'entitlement_key',
     });
@@ -50,7 +50,7 @@ describe('resource subscriptions', () => {
 
   // Prism tests are disabled
   test.skip('check: required and optional params', async () => {
-    const response = await client.beta.subscriptions.check({
+    const response = await client.beta.pay.check({
       customer_id: 'customer_id',
       entitlement_key: 'entitlement_key',
     });
@@ -58,9 +58,9 @@ describe('resource subscriptions', () => {
 
   // Prism tests are disabled
   test.skip('checkout: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.checkout({
+    const responsePromise = client.beta.pay.checkout({
       customer_id: 'customer_id',
-      plan_id: 'plan_id',
+      product_id: 'product_id',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -73,9 +73,10 @@ describe('resource subscriptions', () => {
 
   // Prism tests are disabled
   test.skip('checkout: required and optional params', async () => {
-    const response = await client.beta.subscriptions.checkout({
+    const response = await client.beta.pay.checkout({
       customer_id: 'customer_id',
-      plan_id: 'plan_id',
+      product_id: 'product_id',
+      id: 'id',
       cancel_url: 'https://example.com',
       promotion_code: 'promotion_code',
       success_url: 'https://example.com',

@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource coupons', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.subscriptions.coupons.create({ code: 'code' });
+    const responsePromise = client.beta.pay.coupons.create({ code: 'code' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,8 +23,9 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.subscriptions.coupons.create({
+    const response = await client.beta.pay.coupons.create({
       code: 'code',
+      id: 'id',
       amount_off: -9007199254740991,
       currency: 'currency',
       duration: 'once',
@@ -38,7 +39,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.beta.subscriptions.coupons.update('coupon_id');
+    const responsePromise = client.beta.pay.coupons.update('coupon_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,7 +53,7 @@ describe('resource coupons', () => {
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.subscriptions.coupons.update(
+      client.beta.pay.coupons.update(
         'coupon_id',
         { active: true, name: 'name' },
         { path: '/_stainless_unknown_path' },
@@ -62,7 +63,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.subscriptions.coupons.list();
+    const responsePromise = client.beta.pay.coupons.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -76,7 +77,7 @@ describe('resource coupons', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.subscriptions.coupons.list(
+      client.beta.pay.coupons.list(
         { active: true, ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
         { path: '/_stainless_unknown_path' },
       ),
@@ -85,7 +86,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.beta.subscriptions.coupons.delete('coupon_id');
+    const responsePromise = client.beta.pay.coupons.delete('coupon_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,7 +98,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.beta.subscriptions.coupons.get('coupon_id');
+    const responsePromise = client.beta.pay.coupons.get('coupon_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

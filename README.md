@@ -42,10 +42,7 @@ const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer = await client.beta.subscriptions.customers.create({
-  email: 'john.doe@example.com',
-  name: 'John Doe',
-});
+const customer = await client.beta.pay.customers.create({ email: 'john.doe@example.com', name: 'John Doe' });
 
 console.log(customer.id);
 ```
@@ -63,9 +60,7 @@ const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer: Hercules.Beta.Subscriptions.Customer = await client.beta.subscriptions.customers.get(
-  'REPLACE_ME',
-);
+const customer: Hercules.Beta.Pay.CustomerGetResponse = await client.beta.pay.customers.get('REPLACE_ME');
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -78,7 +73,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const customer = await client.beta.subscriptions.customers.get('REPLACE_ME').catch(async (err) => {
+const customer = await client.beta.pay.customers.get('REPLACE_ME').catch(async (err) => {
   if (err instanceof Hercules.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -119,7 +114,7 @@ const client = new Hercules({
 });
 
 // Or, configure per-request:
-await client.beta.subscriptions.customers.get('REPLACE_ME', {
+await client.beta.pay.customers.get('REPLACE_ME', {
   maxRetries: 5,
 });
 ```
@@ -137,7 +132,7 @@ const client = new Hercules({
 });
 
 // Override per-request:
-await client.beta.subscriptions.customers.get('REPLACE_ME', {
+await client.beta.pay.customers.get('REPLACE_ME', {
   timeout: 5 * 1000,
 });
 ```
@@ -152,25 +147,25 @@ List methods in the Hercules API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllCustomers(params) {
-  const allCustomers = [];
+async function fetchAllCustomerListResponses(params) {
+  const allCustomerListResponses = [];
   // Automatically fetches more pages as needed.
-  for await (const customer of client.beta.subscriptions.customers.list({
+  for await (const customerListResponse of client.beta.pay.customers.list({
     limit: 100,
     starting_after: 'id_123',
   })) {
-    allCustomers.push(customer);
+    allCustomerListResponses.push(customerListResponse);
   }
-  return allCustomers;
+  return allCustomerListResponses;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.beta.subscriptions.customers.list({ limit: 100, starting_after: 'id_123' });
-for (const customer of page.data) {
-  console.log(customer);
+let page = await client.beta.pay.customers.list({ limit: 100, starting_after: 'id_123' });
+for (const customerListResponse of page.data) {
+  console.log(customerListResponse);
 }
 
 // Convenience methods are provided for manually paginating:
@@ -194,13 +189,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Hercules();
 
-const response = await client.beta.subscriptions.customers.get('REPLACE_ME').asResponse();
+const response = await client.beta.pay.customers.get('REPLACE_ME').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: customer, response: raw } = await client.beta.subscriptions.customers
-  .get('REPLACE_ME')
-  .withResponse();
+const { data: customer, response: raw } = await client.beta.pay.customers.get('REPLACE_ME').withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(customer.id);
 ```
@@ -282,7 +275,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.beta.subscriptions.customers.create({
+client.beta.pay.customers.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

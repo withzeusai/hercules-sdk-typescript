@@ -1,31 +1,31 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as SubscriptionsAPI from './subscriptions/subscriptions';
+import * as PayAPI from './pay/pay';
 import {
-  SubscriptionCancelParams,
-  SubscriptionCancelResponse,
-  SubscriptionCheckParams,
-  SubscriptionCheckResponse,
-  SubscriptionCheckoutParams,
-  SubscriptionCheckoutResponse,
-  Subscriptions,
-} from './subscriptions/subscriptions';
+  Pay,
+  PayCancelParams,
+  PayCancelResponse,
+  PayCheckParams,
+  PayCheckResponse,
+  PayCheckoutParams,
+  PayCheckoutResponse,
+} from './pay/pay';
 
 export class Beta extends APIResource {
-  subscriptions: SubscriptionsAPI.Subscriptions = new SubscriptionsAPI.Subscriptions(this._client);
+  pay: PayAPI.Pay = new PayAPI.Pay(this._client);
 }
 
-Beta.Subscriptions = Subscriptions;
+Beta.Pay = Pay;
 
 export declare namespace Beta {
   export {
-    Subscriptions as Subscriptions,
-    type SubscriptionCancelResponse as SubscriptionCancelResponse,
-    type SubscriptionCheckResponse as SubscriptionCheckResponse,
-    type SubscriptionCheckoutResponse as SubscriptionCheckoutResponse,
-    type SubscriptionCancelParams as SubscriptionCancelParams,
-    type SubscriptionCheckParams as SubscriptionCheckParams,
-    type SubscriptionCheckoutParams as SubscriptionCheckoutParams,
+    Pay as Pay,
+    type PayCancelResponse as PayCancelResponse,
+    type PayCheckResponse as PayCheckResponse,
+    type PayCheckoutResponse as PayCheckoutResponse,
+    type PayCancelParams as PayCancelParams,
+    type PayCheckParams as PayCheckParams,
+    type PayCheckoutParams as PayCheckoutParams,
   };
 }
