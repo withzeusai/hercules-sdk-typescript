@@ -59,7 +59,7 @@ export type ProductEntitlementsCursorIDPage = CursorIDPage<ProductEntitlement>;
  */
 export interface ProductEntitlement {
   /**
-   * Unique identifier for the entitlement
+   * Unique identifier for the price
    */
   id: string;
 
