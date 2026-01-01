@@ -67,7 +67,7 @@ export type CouponsCursorIDPage = CursorIDPage<Coupon>;
  */
 export interface Coupon {
   /**
-   * Unique identifier for the entitlement
+   * Unique identifier for the price
    */
   id: string;
 

@@ -82,7 +82,7 @@ export type CustomersCursorIDPage = CursorIDPage<Customer>;
  */
 export interface Customer {
   /**
-   * Unique identifier for the entitlement
+   * Unique identifier for the price
    */
   id: string;
 

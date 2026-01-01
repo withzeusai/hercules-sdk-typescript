@@ -10,6 +10,17 @@ import {
   ProductEntitlement,
   ProductEntitlementsCursorIDPage,
 } from './entitlements';
+import * as VariantsAPI from './variants';
+import {
+  Variant,
+  VariantArchiveParams,
+  VariantCreateParams,
+  VariantGetParams,
+  VariantListParams,
+  VariantUpdateParams,
+  Variants,
+  VariantsCursorIDPage,
+} from './variants';
 import { APIPromise } from '../../../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../../core/pagination';
 import { RequestOptions } from '../../../../internal/request-options';
@@ -17,6 +28,7 @@ import { path } from '../../../../internal/utils/path';
 
 export class Products extends APIResource {
   entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
+  variants: VariantsAPI.Variants = new VariantsAPI.Variants(this._client);
 
   /**
    * Creates a new subscription product with a recurring price. Common examples
@@ -78,7 +90,7 @@ export type ProductsCursorIDPage = CursorIDPage<Product>;
  */
 export interface Product {
   /**
-   * Unique identifier for the entitlement
+   * Unique identifier for the price
    */
   id: string;
 
@@ -114,7 +126,7 @@ export namespace Product {
    */
   export interface DefaultPrice {
     /**
-     * Unique identifier for the entitlement
+     * Unique identifier for the price
      */
     id: string;
 
@@ -203,6 +215,7 @@ export interface ProductListParams extends CursorIDPageParams {
 }
 
 Products.Entitlements = Entitlements;
+Products.Variants = Variants;
 
 export declare namespace Products {
   export {
@@ -220,5 +233,16 @@ export declare namespace Products {
     type EntitlementListParams as EntitlementListParams,
     type EntitlementAttachParams as EntitlementAttachParams,
     type EntitlementRemoveParams as EntitlementRemoveParams,
+  };
+
+  export {
+    Variants as Variants,
+    type Variant as Variant,
+    type VariantsCursorIDPage as VariantsCursorIDPage,
+    type VariantCreateParams as VariantCreateParams,
+    type VariantUpdateParams as VariantUpdateParams,
+    type VariantListParams as VariantListParams,
+    type VariantArchiveParams as VariantArchiveParams,
+    type VariantGetParams as VariantGetParams,
   };
 }

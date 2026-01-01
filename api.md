@@ -57,6 +57,20 @@ Methods:
 - <code title="post /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">attach</a>(productID, { ...params }) -> ProductEntitlement</code>
 - <code title="delete /v1/pay/products/{product_id}/entitlements/{feature_id}">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">remove</a>(featureID, { ...params }) -> void</code>
 
+#### Variants
+
+Types:
+
+- <code><a href="./src/resources/beta/pay/products/variants.ts">Variant</a></code>
+
+Methods:
+
+- <code title="post /v1/pay/products/{product_id}/variants">client.beta.pay.products.variants.<a href="./src/resources/beta/pay/products/variants.ts">create</a>(productID, { ...params }) -> Variant</code>
+- <code title="patch /v1/pay/products/{product_id}/variants/{variant_id}">client.beta.pay.products.variants.<a href="./src/resources/beta/pay/products/variants.ts">update</a>(variantID, { ...params }) -> Variant</code>
+- <code title="get /v1/pay/products/{product_id}/variants">client.beta.pay.products.variants.<a href="./src/resources/beta/pay/products/variants.ts">list</a>(productID, { ...params }) -> VariantsCursorIDPage</code>
+- <code title="delete /v1/pay/products/{product_id}/variants/{variant_id}">client.beta.pay.products.variants.<a href="./src/resources/beta/pay/products/variants.ts">archive</a>(variantID, { ...params }) -> Variant</code>
+- <code title="get /v1/pay/products/{product_id}/variants/{variant_id}">client.beta.pay.products.variants.<a href="./src/resources/beta/pay/products/variants.ts">get</a>(variantID, { ...params }) -> Variant</code>
+
 ### Entitlements
 
 Types:
