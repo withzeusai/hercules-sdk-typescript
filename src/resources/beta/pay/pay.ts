@@ -228,6 +228,13 @@ export interface PayCheckoutParams {
   id?: string;
 
   /**
+   * Override billing cycle anchor behavior for subscription updates. 'now' resets to
+   * current time, 'unchanged' keeps original anchor. If not provided, uses the
+   * price's configured default.
+   */
+  billing_cycle_anchor?: 'now' | 'unchanged';
+
+  /**
    * URL to redirect on cancel
    */
   cancel_url?: string;
@@ -236,6 +243,20 @@ export interface PayCheckoutParams {
    * Promotion code to apply
    */
   promotion_code?: string;
+
+  /**
+   * Override proration behavior for subscription updates. 'default' creates
+   * prorations, 'none' disables them. If not provided, uses the price's configured
+   * default.
+   */
+  proration_behavior?: 'default' | 'none';
+
+  /**
+   * Override proration date calculation for subscription updates. 'now' uses current
+   * time, 'start_of_period' uses billing period start. If not provided, uses the
+   * price's configured default.
+   */
+  proration_date?: 'now' | 'start_of_period';
 
   /**
    * URL to redirect on success

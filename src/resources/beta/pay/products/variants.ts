@@ -112,6 +112,12 @@ export namespace Variant {
     id: string;
 
     /**
+     * How to handle the billing cycle when switching plans. 'now' resets to current
+     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
+     */
+    billing_cycle_anchor: 'now' | 'unchanged' | null;
+
+    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -127,6 +133,18 @@ export namespace Variant {
      * prices.
      */
     interval_count: number | null;
+
+    /**
+     * How to handle prorations when switching plans. 'default' creates prorations,
+     * 'none' disables them. Null for one-time prices.
+     */
+    proration_behavior: 'default' | 'none' | null;
+
+    /**
+     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
+     * billing period start. Null for one-time prices or to use Stripe's default.
+     */
+    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -158,6 +176,13 @@ export interface VariantCreateParams {
   id?: string;
 
   /**
+   * Default billing cycle anchor behavior when switching to this price. 'now' resets
+   * to current time, 'unchanged' keeps original anchor. Only applies to recurring
+   * prices.
+   */
+  billing_cycle_anchor?: 'now' | 'unchanged';
+
+  /**
    * Three-letter ISO currency code
    */
   currency?: string;
@@ -178,6 +203,19 @@ export interface VariantCreateParams {
    * recurring type, ignored for one_time.
    */
   interval_count?: number;
+
+  /**
+   * Default proration behavior when switching to this price. 'default' creates
+   * prorations, 'none' disables them. Only applies to recurring prices.
+   */
+  proration_behavior?: 'default' | 'none';
+
+  /**
+   * Default proration date calculation when switching to this price. 'now' uses
+   * current time, 'start_of_period' uses billing period start. Only applies to
+   * recurring prices.
+   */
+  proration_date?: 'now' | 'start_of_period';
 
   /**
    * Price type: one_time for single purchases, recurring for subscriptions

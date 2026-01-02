@@ -77,8 +77,11 @@ describe('resource pay', () => {
       customer_id: 'customer_id',
       product_id: 'product_id',
       id: 'id',
+      billing_cycle_anchor: 'now',
       cancel_url: 'https://example.com',
       promotion_code: 'promotion_code',
+      proration_behavior: 'default',
+      proration_date: 'now',
       success_url: 'https://example.com',
       variant_id: 'variant_id',
     });
