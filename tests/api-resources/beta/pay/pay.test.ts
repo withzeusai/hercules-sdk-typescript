@@ -80,6 +80,7 @@ describe('resource pay', () => {
       cancel_url: 'https://example.com',
       promotion_code: 'promotion_code',
       success_url: 'https://example.com',
+      variant_id: 'variant_id',
     });
   });
 });
