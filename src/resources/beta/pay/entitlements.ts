@@ -19,7 +19,7 @@ export class Entitlements extends APIResource {
 
   /**
    * Updates an existing entitlement. Use this to modify the name or deactivate the
-   * entitlement. The key cannot be changed after creation.
+   * entitlement.
    */
   update(
     entitlementID: string,
@@ -31,8 +31,7 @@ export class Entitlements extends APIResource {
 
   /**
    * Retrieves a paginated list of all entitlements. Entitlements represent features
-   * or capabilities in your app that can be gated by subscription. Use the key
-   * filter to find a specific entitlement by its key.
+   * or capabilities in your app that can be gated by subscription.
    */
   list(
     query: EntitlementListParams | null | undefined = {},
@@ -43,7 +42,7 @@ export class Entitlements extends APIResource {
 
   /**
    * Retrieves an entitlement by ID. Returns the entitlement object including its
-   * lookup key and active status.
+   * active status.
    */
   get(entitlementID: string, options?: RequestOptions): APIPromise<Entitlement> {
     return this._client.get(path`/v1/pay/entitlements/${entitlementID}`, options);
@@ -67,28 +66,12 @@ export interface Entitlement {
   active: boolean;
 
   /**
-   * Unique key to identify the entitlement when checking access in your app
-   */
-  key: string;
-
-  /**
-   * Whether this is a live mode entitlement (vs test mode)
-   */
-  livemode: boolean;
-
-  /**
    * Display name for the entitlement (e.g., API Access, Premium Support)
    */
   name: string;
 }
 
 export interface EntitlementCreateParams {
-  /**
-   * Unique key to identify the entitlement when checking access. Use a descriptive,
-   * stable key (e.g., api_access, premium_support).
-   */
-  key: string;
-
   /**
    * Display name for the entitlement (e.g., API Access, Premium Support)
    */
@@ -117,11 +100,6 @@ export interface EntitlementListParams extends CursorIDPageParams {
    * Filter by archived status
    */
   archived?: 'true' | 'false';
-
-  /**
-   * Filter by exact key match
-   */
-  key?: string;
 }
 
 export declare namespace Entitlements {
