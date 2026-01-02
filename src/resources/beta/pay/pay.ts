@@ -119,24 +119,65 @@ export interface PayCheckResponse {
 }
 
 /**
- * Checkout session response
+ * Checkout response. For new customers, returns a checkout URL. For existing
+ * subscribers, returns the updated subscription.
  */
 export interface PayCheckoutResponse {
   /**
-   * The checkout session ID
+   * The checkout session ID (for checkout action) or subscription ID (for update
+   * action)
    */
   id: string;
 
   /**
-   * The checkout mode: subscription for recurring prices, payment for one-time
-   * prices
+   * The action taken: 'checkout' for new subscriptions (redirect to URL), 'update'
+   * for subscription changes (already applied)
    */
-  mode: 'subscription' | 'payment';
+  action: 'checkout' | 'update';
 
   /**
-   * The checkout URL to redirect the customer to
+   * The checkout mode: subscription for recurring prices, payment for one-time
+   * prices. Only present for 'checkout' action.
    */
-  url: string;
+  mode?: 'subscription' | 'payment' | null;
+
+  /**
+   * The updated subscription details. Only present for 'update' action.
+   */
+  subscription?: PayCheckoutResponse.Subscription | null;
+
+  /**
+   * The checkout URL to redirect the customer to. Only present for 'checkout'
+   * action.
+   */
+  url?: string | null;
+}
+
+export namespace PayCheckoutResponse {
+  /**
+   * The updated subscription details. Only present for 'update' action.
+   */
+  export interface Subscription {
+    /**
+     * The subscription ID
+     */
+    id: string;
+
+    /**
+     * The product ID
+     */
+    product_id: string;
+
+    /**
+     * The subscription status
+     */
+    status: string;
+
+    /**
+     * The variant ID if applicable
+     */
+    variant_id?: string | null;
+  }
 }
 
 export interface PayCancelParams {
@@ -200,6 +241,12 @@ export interface PayCheckoutParams {
    * URL to redirect on success
    */
   success_url?: string;
+
+  /**
+   * Optional variant ID to specify a particular pricing tier. If not provided, the
+   * product's default price is used.
+   */
+  variant_id?: string;
 }
 
 Pay.Customers = Customers;
