@@ -30,10 +30,13 @@ describe('resource variants', () => {
       name: 'name',
       unit_amount: -9007199254740991,
       id: 'id',
+      billing_cycle_anchor: 'now',
       currency: 'currency',
       description: 'description',
       interval: 'day',
       interval_count: -9007199254740991,
+      proration_behavior: 'default',
+      proration_date: 'now',
       type: 'one_time',
     });
   });
