@@ -133,6 +133,12 @@ export interface PayCheckoutResponse {
   id: string;
 
   /**
+   * The checkout mode: subscription for recurring prices, payment for one-time
+   * prices
+   */
+  mode: 'subscription' | 'payment';
+
+  /**
    * The checkout URL to redirect the customer to
    */
   url: string;
@@ -175,12 +181,13 @@ export interface PayCheckoutParams {
   customer_id: string;
 
   /**
-   * The product ID to subscribe to
+   * The product ID to purchase
    */
   product_id: string;
 
   /**
-   * Optional custom ID for the subscription. If not provided, one will be generated.
+   * Optional custom ID for the subscription or payment. If not provided, one will be
+   * generated.
    */
   id?: string;
 

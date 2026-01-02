@@ -31,6 +31,7 @@ describe('resource products', () => {
       description: 'description',
       interval: 'day',
       interval_count: -9007199254740991,
+      type: 'one_time',
     });
   });
 
