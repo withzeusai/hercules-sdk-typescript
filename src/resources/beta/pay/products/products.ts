@@ -84,9 +84,9 @@ export class Products extends APIResource {
 export type ProductsCursorIDPage = CursorIDPage<Product>;
 
 /**
- * A subscription product that customers can subscribe to. Products define pricing
- * and billing intervals. Attach entitlements to a product to grant features to all
- * subscribed customers.
+ * A product that customers can purchase. Products can be one-time purchases or
+ * recurring subscriptions. Attach entitlements to a product to grant features to
+ * customers.
  */
 export interface Product {
   /**
@@ -95,7 +95,7 @@ export interface Product {
   id: string;
 
   /**
-   * Whether the product is available for new subscriptions
+   * Whether the product is available for new purchases
    */
   active: boolean;
 
@@ -110,7 +110,7 @@ export interface Product {
   name: string;
 
   /**
-   * The recurring price configuration for a product
+   * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: Product.DefaultPrice | null;
 
@@ -122,7 +122,7 @@ export interface Product {
 
 export namespace Product {
   /**
-   * The recurring price configuration for a product
+   * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   export interface DefaultPrice {
     /**
@@ -136,14 +136,21 @@ export namespace Product {
     currency: string;
 
     /**
-     * Billing frequency: day, week, month, or year
+     * Billing frequency for recurring prices: day, week, month, or year. Null for
+     * one-time prices.
      */
-    interval: 'day' | 'week' | 'month' | 'year';
+    interval: 'day' | 'week' | 'month' | 'year' | null;
 
     /**
-     * Number of intervals between billings (e.g., 2 for biweekly)
+     * Number of intervals between billings for recurring prices. Null for one-time
+     * prices.
      */
-    interval_count: number;
+    interval_count: number | null;
+
+    /**
+     * Price type: one_time for single purchases, recurring for subscriptions
+     */
+    type: 'one_time' | 'recurring';
 
     /**
      * Price amount in the smallest currency unit (e.g., cents)
@@ -180,14 +187,21 @@ export interface ProductCreateParams {
   description?: string;
 
   /**
-   * Billing frequency: day, week, month, or year
+   * Billing frequency for recurring prices: day, week, month, or year. Required for
+   * recurring type, ignored for one_time.
    */
   interval?: 'day' | 'week' | 'month' | 'year';
 
   /**
-   * Number of intervals between billings
+   * Number of intervals between billings for recurring prices. Required for
+   * recurring type, ignored for one_time.
    */
   interval_count?: number;
+
+  /**
+   * Price type: one_time for single purchases, recurring for subscriptions
+   */
+  type?: 'one_time' | 'recurring';
 }
 
 export interface ProductUpdateParams {
