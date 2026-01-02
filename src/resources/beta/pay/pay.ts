@@ -108,19 +108,14 @@ export interface PayCancelResponse {
  */
 export interface PayCheckResponse {
   /**
+   * The entitlement ID that was checked
+   */
+  entitlement_id: string;
+
+  /**
    * Whether the customer has the entitlement
    */
   has_entitlement: boolean;
-
-  /**
-   * The entitlement key that was checked
-   */
-  key: string;
-
-  /**
-   * The active entitlement ID if present
-   */
-  entitlement_id?: string | null;
 }
 
 /**
@@ -169,9 +164,9 @@ export interface PayCheckParams {
   customer_id: string;
 
   /**
-   * The entitlement key to check for access
+   * The entitlement ID to check for access
    */
-  entitlement_key: string;
+  entitlement_id: string;
 }
 
 export interface PayCheckoutParams {

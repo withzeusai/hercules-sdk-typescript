@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource entitlements', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.pay.entitlements.create({ key: 'key', name: 'name' });
+    const responsePromise = client.beta.pay.entitlements.create({ name: 'name' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource entitlements', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.pay.entitlements.create({ key: 'key', name: 'name', id: 'id' });
+    const response = await client.beta.pay.entitlements.create({ name: 'name', id: 'id' });
   });
 
   // Prism tests are disabled
@@ -67,13 +67,7 @@ describe('resource entitlements', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.beta.pay.entitlements.list(
-        {
-          archived: 'true',
-          ending_before: 'ending_before',
-          key: 'key',
-          limit: 1,
-          starting_after: 'starting_after',
-        },
+        { archived: 'true', ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);
