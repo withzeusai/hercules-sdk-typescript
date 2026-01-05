@@ -10,6 +10,17 @@ import {
   ProductEntitlement,
   ProductEntitlementsCursorIDPage,
 } from './entitlements';
+import * as VariantsAPI from './variants';
+import {
+  Variant,
+  VariantArchiveParams,
+  VariantCreateParams,
+  VariantGetParams,
+  VariantListParams,
+  VariantUpdateParams,
+  Variants,
+  VariantsCursorIDPage,
+} from './variants';
 import { APIPromise } from '../../../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../../core/pagination';
 import { RequestOptions } from '../../../../internal/request-options';
@@ -17,6 +28,7 @@ import { path } from '../../../../internal/utils/path';
 
 export class Products extends APIResource {
   entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
+  variants: VariantsAPI.Variants = new VariantsAPI.Variants(this._client);
 
   /**
    * Creates a new subscription product with a recurring price. Common examples
@@ -72,18 +84,18 @@ export class Products extends APIResource {
 export type ProductsCursorIDPage = CursorIDPage<Product>;
 
 /**
- * A subscription product that customers can subscribe to. Products define pricing
- * and billing intervals. Attach entitlements to a product to grant features to all
- * subscribed customers.
+ * A product that customers can purchase. Products can be one-time purchases or
+ * recurring subscriptions. Attach entitlements to a product to grant features to
+ * customers.
  */
 export interface Product {
   /**
-   * Unique identifier for the entitlement
+   * Unique identifier for the price
    */
   id: string;
 
   /**
-   * Whether the product is available for new subscriptions
+   * Whether the product is available for new purchases
    */
   active: boolean;
 
@@ -98,7 +110,7 @@ export interface Product {
   name: string;
 
   /**
-   * The recurring price configuration for a product
+   * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: Product.DefaultPrice | null;
 
@@ -110,13 +122,19 @@ export interface Product {
 
 export namespace Product {
   /**
-   * The recurring price configuration for a product
+   * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   export interface DefaultPrice {
     /**
-     * Unique identifier for the entitlement
+     * Unique identifier for the price
      */
     id: string;
+
+    /**
+     * How to handle the billing cycle when switching plans. 'now' resets to current
+     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
+     */
+    billing_cycle_anchor: 'now' | 'unchanged' | null;
 
     /**
      * Three-letter ISO currency code (e.g., usd, eur)
@@ -124,14 +142,33 @@ export namespace Product {
     currency: string;
 
     /**
-     * Billing frequency: day, week, month, or year
+     * Billing frequency for recurring prices: day, week, month, or year. Null for
+     * one-time prices.
      */
-    interval: 'day' | 'week' | 'month' | 'year';
+    interval: 'day' | 'week' | 'month' | 'year' | null;
 
     /**
-     * Number of intervals between billings (e.g., 2 for biweekly)
+     * Number of intervals between billings for recurring prices. Null for one-time
+     * prices.
      */
-    interval_count: number;
+    interval_count: number | null;
+
+    /**
+     * How to handle prorations when switching plans. 'default' creates prorations,
+     * 'none' disables them. Null for one-time prices.
+     */
+    proration_behavior: 'default' | 'none' | null;
+
+    /**
+     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
+     * billing period start. Null for one-time prices or to use Stripe's default.
+     */
+    proration_date: 'now' | 'start_of_period' | null;
+
+    /**
+     * Price type: one_time for single purchases, recurring for subscriptions
+     */
+    type: 'one_time' | 'recurring';
 
     /**
      * Price amount in the smallest currency unit (e.g., cents)
@@ -168,14 +205,21 @@ export interface ProductCreateParams {
   description?: string;
 
   /**
-   * Billing frequency: day, week, month, or year
+   * Billing frequency for recurring prices: day, week, month, or year. Required for
+   * recurring type, ignored for one_time.
    */
   interval?: 'day' | 'week' | 'month' | 'year';
 
   /**
-   * Number of intervals between billings
+   * Number of intervals between billings for recurring prices. Required for
+   * recurring type, ignored for one_time.
    */
   interval_count?: number;
+
+  /**
+   * Price type: one_time for single purchases, recurring for subscriptions
+   */
+  type?: 'one_time' | 'recurring';
 }
 
 export interface ProductUpdateParams {
@@ -203,6 +247,7 @@ export interface ProductListParams extends CursorIDPageParams {
 }
 
 Products.Entitlements = Entitlements;
+Products.Variants = Variants;
 
 export declare namespace Products {
   export {
@@ -220,5 +265,16 @@ export declare namespace Products {
     type EntitlementListParams as EntitlementListParams,
     type EntitlementAttachParams as EntitlementAttachParams,
     type EntitlementRemoveParams as EntitlementRemoveParams,
+  };
+
+  export {
+    Variants as Variants,
+    type Variant as Variant,
+    type VariantsCursorIDPage as VariantsCursorIDPage,
+    type VariantCreateParams as VariantCreateParams,
+    type VariantUpdateParams as VariantUpdateParams,
+    type VariantListParams as VariantListParams,
+    type VariantArchiveParams as VariantArchiveParams,
+    type VariantGetParams as VariantGetParams,
   };
 }

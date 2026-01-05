@@ -37,7 +37,7 @@ describe('resource pay', () => {
   test.skip('check: only required params', async () => {
     const responsePromise = client.beta.pay.check({
       customer_id: 'customer_id',
-      entitlement_key: 'entitlement_key',
+      entitlement_id: 'entitlement_id',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,7 +52,7 @@ describe('resource pay', () => {
   test.skip('check: required and optional params', async () => {
     const response = await client.beta.pay.check({
       customer_id: 'customer_id',
-      entitlement_key: 'entitlement_key',
+      entitlement_id: 'entitlement_id',
     });
   });
 
@@ -77,9 +77,13 @@ describe('resource pay', () => {
       customer_id: 'customer_id',
       product_id: 'product_id',
       id: 'id',
+      billing_cycle_anchor: 'now',
       cancel_url: 'https://example.com',
       promotion_code: 'promotion_code',
+      proration_behavior: 'default',
+      proration_date: 'now',
       success_url: 'https://example.com',
+      variant_id: 'variant_id',
     });
   });
 });
