@@ -97,3 +97,27 @@ Methods:
 - <code title="get /v1/pay/coupons">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">list</a>({ ...params }) -> CouponsCursorIDPage</code>
 - <code title="delete /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">delete</a>(couponID) -> void</code>
 - <code title="get /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">get</a>(couponID) -> Coupon</code>
+
+## PushNotifications
+
+Types:
+
+- <code><a href="./src/resources/beta/push-notifications/push-notifications.ts">PushNotificationEnableResponse</a></code>
+- <code><a href="./src/resources/beta/push-notifications/push-notifications.ts">PushNotificationSendResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/push-notifications/enable">client.beta.pushNotifications.<a href="./src/resources/beta/push-notifications/push-notifications.ts">enable</a>() -> PushNotificationEnableResponse</code>
+- <code title="post /v1/push-notifications/send">client.beta.pushNotifications.<a href="./src/resources/beta/push-notifications/push-notifications.ts">send</a>({ ...params }) -> PushNotificationSendResponse</code>
+
+### Subscriptions
+
+Types:
+
+- <code><a href="./src/resources/beta/push-notifications/subscriptions.ts">SubscriptionCreateResponse</a></code>
+- <code><a href="./src/resources/beta/push-notifications/subscriptions.ts">SubscriptionDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/push-notifications/subscriptions">client.beta.pushNotifications.subscriptions.<a href="./src/resources/beta/push-notifications/subscriptions.ts">create</a>({ ...params }) -> SubscriptionCreateResponse</code>
+- <code title="delete /v1/push-notifications/subscriptions/{id}">client.beta.pushNotifications.subscriptions.<a href="./src/resources/beta/push-notifications/subscriptions.ts">delete</a>(id) -> SubscriptionDeleteResponse</code>

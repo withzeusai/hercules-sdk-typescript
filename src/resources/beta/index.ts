@@ -10,3 +10,9 @@ export {
   type PayCheckParams,
   type PayCheckoutParams,
 } from './pay/index';
+export {
+  PushNotifications,
+  type PushNotificationEnableResponse,
+  type PushNotificationSendResponse,
+  type PushNotificationSendParams,
+} from './push-notifications/index';
