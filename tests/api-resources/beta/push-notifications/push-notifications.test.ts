@@ -41,7 +41,6 @@ describe('resource pushNotifications', () => {
       body: 'body',
       data: { foo: 'bar' },
       icon: 'https://example.com',
-      url: 'https://example.com',
       visitorIds: ['string'],
     });
   });

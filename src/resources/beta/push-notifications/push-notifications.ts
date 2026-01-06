@@ -84,11 +84,6 @@ export interface PushNotificationSendParams {
   icon?: string;
 
   /**
-   * URL to open when notification is clicked
-   */
-  url?: string;
-
-  /**
    * Visitor IDs to send to. Omit to broadcast to all subscribers.
    */
   visitorIds?: Array<string>;
