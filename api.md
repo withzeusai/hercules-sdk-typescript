@@ -121,3 +121,17 @@ Methods:
 
 - <code title="post /v1/push-notifications/subscriptions">client.beta.pushNotifications.subscriptions.<a href="./src/resources/beta/push-notifications/subscriptions.ts">create</a>({ ...params }) -> SubscriptionCreateResponse</code>
 - <code title="delete /v1/push-notifications/subscriptions/{id}">client.beta.pushNotifications.subscriptions.<a href="./src/resources/beta/push-notifications/subscriptions.ts">delete</a>(id) -> SubscriptionDeleteResponse</code>
+
+### Topics
+
+Types:
+
+- <code><a href="./src/resources/beta/push-notifications/topics.ts">TopicListResponse</a></code>
+- <code><a href="./src/resources/beta/push-notifications/topics.ts">TopicSubscribeResponse</a></code>
+- <code><a href="./src/resources/beta/push-notifications/topics.ts">TopicUnsubscribeResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/push-notifications/topics">client.beta.pushNotifications.topics.<a href="./src/resources/beta/push-notifications/topics.ts">list</a>({ ...params }) -> TopicListResponse</code>
+- <code title="post /v1/push-notifications/topics/subscribe">client.beta.pushNotifications.topics.<a href="./src/resources/beta/push-notifications/topics.ts">subscribe</a>({ ...params }) -> TopicSubscribeResponse</code>
+- <code title="post /v1/push-notifications/topics/unsubscribe">client.beta.pushNotifications.topics.<a href="./src/resources/beta/push-notifications/topics.ts">unsubscribe</a>({ ...params }) -> TopicUnsubscribeResponse</code>
