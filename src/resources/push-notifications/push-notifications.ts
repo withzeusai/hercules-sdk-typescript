@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../../core/resource';
+import { APIResource } from '../../core/resource';
 import * as SubscriptionsAPI from './subscriptions';
 import {
   SubscriptionCreateParams,
@@ -8,11 +8,22 @@ import {
   SubscriptionDeleteResponse,
   Subscriptions,
 } from './subscriptions';
-import { APIPromise } from '../../../core/api-promise';
-import { RequestOptions } from '../../../internal/request-options';
+import * as TopicsAPI from './topics';
+import {
+  TopicListParams,
+  TopicListResponse,
+  TopicSubscribeParams,
+  TopicSubscribeResponse,
+  TopicUnsubscribeParams,
+  TopicUnsubscribeResponse,
+  Topics,
+} from './topics';
+import { APIPromise } from '../../core/api-promise';
+import { RequestOptions } from '../../internal/request-options';
 
 export class PushNotifications extends APIResource {
   subscriptions: SubscriptionsAPI.Subscriptions = new SubscriptionsAPI.Subscriptions(this._client);
+  topics: TopicsAPI.Topics = new TopicsAPI.Topics(this._client);
 
   /**
    * Enables push notifications for the app by generating VAPID keys. Idempotent -
@@ -24,8 +35,9 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Sends push notifications to specified visitors. Omit visitorIds to broadcast to
-   * all subscribers. Returns the count of successful and failed deliveries.
+   * Sends push notifications to specified visitors and/or topics. Specify
+   * visitorIds, topics, or both (combined as union). Omit both to broadcast to all
+   * subscribers.
    */
   send(body: PushNotificationSendParams, options?: RequestOptions): APIPromise<PushNotificationSendResponse> {
     return this._client.post('/v1/push-notifications/send', { body, ...options });
@@ -79,22 +91,29 @@ export interface PushNotificationSendParams {
   data?: { [key: string]: unknown };
 
   /**
-   * Icon URL
+   * Icon URL (small icon displayed in the notification)
    */
   icon?: string;
 
   /**
-   * URL to open when notification is clicked
+   * Image URL (larger image displayed in the notification body)
    */
-  url?: string;
+  image?: string;
 
   /**
-   * Visitor IDs to send to. Omit to broadcast to all subscribers.
+   * Topics to send to. All visitors subscribed to any of these topics will receive
+   * the notification. Combined with visitorIds as a union.
+   */
+  topics?: Array<string>;
+
+  /**
+   * Visitor IDs to send to. Combined with topics as a union.
    */
   visitorIds?: Array<string>;
 }
 
 PushNotifications.Subscriptions = Subscriptions;
+PushNotifications.Topics = Topics;
 
 export declare namespace PushNotifications {
   export {
@@ -108,5 +127,15 @@ export declare namespace PushNotifications {
     type SubscriptionCreateResponse as SubscriptionCreateResponse,
     type SubscriptionDeleteResponse as SubscriptionDeleteResponse,
     type SubscriptionCreateParams as SubscriptionCreateParams,
+  };
+
+  export {
+    Topics as Topics,
+    type TopicListResponse as TopicListResponse,
+    type TopicSubscribeResponse as TopicSubscribeResponse,
+    type TopicUnsubscribeResponse as TopicUnsubscribeResponse,
+    type TopicListParams as TopicListParams,
+    type TopicSubscribeParams as TopicSubscribeParams,
+    type TopicUnsubscribeParams as TopicUnsubscribeParams,
   };
 }

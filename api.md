@@ -98,26 +98,40 @@ Methods:
 - <code title="delete /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">delete</a>(couponID) -> void</code>
 - <code title="get /v1/pay/coupons/{coupon_id}">client.beta.pay.coupons.<a href="./src/resources/beta/pay/coupons.ts">get</a>(couponID) -> Coupon</code>
 
-## PushNotifications
+# PushNotifications
 
 Types:
 
-- <code><a href="./src/resources/beta/push-notifications/push-notifications.ts">PushNotificationEnableResponse</a></code>
-- <code><a href="./src/resources/beta/push-notifications/push-notifications.ts">PushNotificationSendResponse</a></code>
+- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationEnableResponse</a></code>
+- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationSendResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/push-notifications/enable">client.beta.pushNotifications.<a href="./src/resources/beta/push-notifications/push-notifications.ts">enable</a>() -> PushNotificationEnableResponse</code>
-- <code title="post /v1/push-notifications/send">client.beta.pushNotifications.<a href="./src/resources/beta/push-notifications/push-notifications.ts">send</a>({ ...params }) -> PushNotificationSendResponse</code>
+- <code title="post /v1/push-notifications/enable">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">enable</a>() -> PushNotificationEnableResponse</code>
+- <code title="post /v1/push-notifications/send">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">send</a>({ ...params }) -> PushNotificationSendResponse</code>
 
-### Subscriptions
+## Subscriptions
 
 Types:
 
-- <code><a href="./src/resources/beta/push-notifications/subscriptions.ts">SubscriptionCreateResponse</a></code>
-- <code><a href="./src/resources/beta/push-notifications/subscriptions.ts">SubscriptionDeleteResponse</a></code>
+- <code><a href="./src/resources/push-notifications/subscriptions.ts">SubscriptionCreateResponse</a></code>
+- <code><a href="./src/resources/push-notifications/subscriptions.ts">SubscriptionDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/push-notifications/subscriptions">client.beta.pushNotifications.subscriptions.<a href="./src/resources/beta/push-notifications/subscriptions.ts">create</a>({ ...params }) -> SubscriptionCreateResponse</code>
-- <code title="delete /v1/push-notifications/subscriptions/{id}">client.beta.pushNotifications.subscriptions.<a href="./src/resources/beta/push-notifications/subscriptions.ts">delete</a>(id) -> SubscriptionDeleteResponse</code>
+- <code title="post /v1/push-notifications/subscriptions">client.pushNotifications.subscriptions.<a href="./src/resources/push-notifications/subscriptions.ts">create</a>({ ...params }) -> SubscriptionCreateResponse</code>
+- <code title="delete /v1/push-notifications/subscriptions/{id}">client.pushNotifications.subscriptions.<a href="./src/resources/push-notifications/subscriptions.ts">delete</a>(id) -> SubscriptionDeleteResponse</code>
+
+## Topics
+
+Types:
+
+- <code><a href="./src/resources/push-notifications/topics.ts">TopicListResponse</a></code>
+- <code><a href="./src/resources/push-notifications/topics.ts">TopicSubscribeResponse</a></code>
+- <code><a href="./src/resources/push-notifications/topics.ts">TopicUnsubscribeResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/push-notifications/topics">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">list</a>({ ...params }) -> TopicListResponse</code>
+- <code title="post /v1/push-notifications/topics/subscribe">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">subscribe</a>({ ...params }) -> TopicSubscribeResponse</code>
+- <code title="post /v1/push-notifications/topics/unsubscribe">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">unsubscribe</a>({ ...params }) -> TopicUnsubscribeResponse</code>

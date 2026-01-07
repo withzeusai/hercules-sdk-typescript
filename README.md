@@ -42,7 +42,10 @@ const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer = await client.beta.pay.customers.create({ email: 'john.doe@example.com', name: 'John Doe' });
+const customer = await client.beta.pay.customers.create({
+  email: 'john.doe@example.com',
+  name: 'John Doe',
+});
 
 console.log(customer.id);
 ```
@@ -150,7 +153,10 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllCustomers(params) {
   const allCustomers = [];
   // Automatically fetches more pages as needed.
-  for await (const customer of client.beta.pay.customers.list({ limit: 100, starting_after: 'id_123' })) {
+  for await (const customer of client.beta.pay.customers.list({
+    limit: 100,
+    starting_after: 'id_123',
+  })) {
     allCustomers.push(customer);
   }
   return allCustomers;
@@ -190,7 +196,9 @@ const response = await client.beta.pay.customers.get('REPLACE_ME').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: customer, response: raw } = await client.beta.pay.customers.get('REPLACE_ME').withResponse();
+const { data: customer, response: raw } = await client.beta.pay.customers
+  .get('REPLACE_ME')
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(customer.id);
 ```

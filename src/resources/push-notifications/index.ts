@@ -12,3 +12,12 @@ export {
   type SubscriptionDeleteResponse,
   type SubscriptionCreateParams,
 } from './subscriptions';
+export {
+  Topics,
+  type TopicListResponse,
+  type TopicSubscribeResponse,
+  type TopicUnsubscribeResponse,
+  type TopicListParams,
+  type TopicSubscribeParams,
+  type TopicUnsubscribeParams,
+} from './topics';
