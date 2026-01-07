@@ -27,7 +27,11 @@ describe('resource entitlements', () => {
     await expect(
       client.beta.pay.products.entitlements.list(
         'product_id',
-        { ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
+        {
+          ending_before: 'ending_before',
+          limit: 1,
+          starting_after: 'starting_after',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);

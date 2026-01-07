@@ -12,7 +12,10 @@ describe('resource subscriptions', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.beta.pushNotifications.subscriptions.create({
-      subscription: { endpoint: 'https://example.com', keys: { auth: 'x', p256dh: 'x' } },
+      subscription: {
+        endpoint: 'https://example.com',
+        keys: { auth: 'x', p256dh: 'x' },
+      },
       visitorId: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -27,7 +30,11 @@ describe('resource subscriptions', () => {
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.beta.pushNotifications.subscriptions.create({
-      subscription: { endpoint: 'https://example.com', keys: { auth: 'x', p256dh: 'x' }, expirationTime: 0 },
+      subscription: {
+        endpoint: 'https://example.com',
+        keys: { auth: 'x', p256dh: 'x' },
+        expirationTime: 0,
+      },
       visitorId: 'x',
     });
   });

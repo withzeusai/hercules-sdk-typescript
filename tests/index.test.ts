@@ -134,7 +134,11 @@ describe('instantiate client', () => {
       };
 
       process.env['HERCULES_LOG'] = 'debug';
-      const client = new Hercules({ logger: logger, apiKey: 'My API Key', apiVersion: '2025-12-09' });
+      const client = new Hercules({
+        logger: logger,
+        apiKey: 'My API Key',
+        apiVersion: '2025-12-09',
+      });
       expect(client.logLevel).toBe('debug');
 
       await forceAPIResponseForClient(client);
@@ -151,7 +155,11 @@ describe('instantiate client', () => {
       };
 
       process.env['HERCULES_LOG'] = 'not a log level';
-      const client = new Hercules({ logger: logger, apiKey: 'My API Key', apiVersion: '2025-12-09' });
+      const client = new Hercules({
+        logger: logger,
+        apiKey: 'My API Key',
+        apiVersion: '2025-12-09',
+      });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
         'process.env[\'HERCULES_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
@@ -383,7 +391,11 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new Hercules({ maxRetries: 4, apiKey: 'My API Key', apiVersion: '2025-12-09' });
+    const client = new Hercules({
+      maxRetries: 4,
+      apiKey: 'My API Key',
+      apiVersion: '2025-12-09',
+    });
     expect(client.maxRetries).toEqual(4);
 
     // default
@@ -773,7 +785,11 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Hercules({ apiKey: 'My API Key', apiVersion: '2025-12-09', fetch: testFetch });
+    const client = new Hercules({
+      apiKey: 'My API Key',
+      apiVersion: '2025-12-09',
+      fetch: testFetch,
+    });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -803,7 +819,11 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Hercules({ apiKey: 'My API Key', apiVersion: '2025-12-09', fetch: testFetch });
+    const client = new Hercules({
+      apiKey: 'My API Key',
+      apiVersion: '2025-12-09',
+      fetch: testFetch,
+    });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
