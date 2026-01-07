@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.6.0 (2026-01-07)
+
+Full Changelog: [v1.5.0...v1.6.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.5.0...v1.6.0)
+
+### Features
+
+* **api:** update api ([57068fd](https://github.com/withzeusai/hercules-sdk-typescript/commit/57068fd2fc2db7f96f01ae6dae3ac45c94f1760c))
+* **api:** update api ([994fd55](https://github.com/withzeusai/hercules-sdk-typescript/commit/994fd55e069da4a0023c42ea0fc64d0e04440838))
+* **api:** update api ([73fc85e](https://github.com/withzeusai/hercules-sdk-typescript/commit/73fc85ec9ca9e23bd56e371fcc0e176e8ddafab2))
+* **api:** update api ([c09c4a8](https://github.com/withzeusai/hercules-sdk-typescript/commit/c09c4a8a513a178034656f260c91e25e414b5c10))
+* **ci:** add breaking change detection workflow ([38b970f](https://github.com/withzeusai/hercules-sdk-typescript/commit/38b970fcb83fa38ae391e7ae71a3d1d9d0fea3b3))
+* **publish:** oidc support ([4457257](https://github.com/withzeusai/hercules-sdk-typescript/commit/4457257b579e710373444297e14987f23673d285))
+
+
+### Bug Fixes
+
+* **mcp:** fix options parsing ([59d1bff](https://github.com/withzeusai/hercules-sdk-typescript/commit/59d1bffca10dd48a08e8fd45777350ad26c6a86f))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([49e143c](https://github.com/withzeusai/hercules-sdk-typescript/commit/49e143c9a42c61298293512bd9e66cacc9c4b056))
+* **internal:** codegen related update ([f19d94a](https://github.com/withzeusai/hercules-sdk-typescript/commit/f19d94af0070c3d73a262a4614140ff55a3fd682))
+* **internal:** codegen related update ([fdae5bf](https://github.com/withzeusai/hercules-sdk-typescript/commit/fdae5bf5ae99809ff2770cb21143f125be39f075))
+* **internal:** codegen related update ([523f42d](https://github.com/withzeusai/hercules-sdk-typescript/commit/523f42d22b3dcf8eeaa9725d6d6b9eb16f90187c))
+* **internal:** codegen related update ([f6b975d](https://github.com/withzeusai/hercules-sdk-typescript/commit/f6b975dd0ab623e0c6d68facab238a4447ba62d3))
+* **internal:** codegen related update ([ea3369e](https://github.com/withzeusai/hercules-sdk-typescript/commit/ea3369e6dcf8050e12ade11269c3163876e1456b))
+* **internal:** codegen related update ([4fdc48d](https://github.com/withzeusai/hercules-sdk-typescript/commit/4fdc48dea8b10d628c60cad75ca6b00a6808bbd6))
+* **internal:** codegen related update ([96d538f](https://github.com/withzeusai/hercules-sdk-typescript/commit/96d538f2048796ab6d6665d7888a97270e731a86))
+
 ## 1.5.0 (2026-01-05)
 
 Full Changelog: [v1.4.0...v1.5.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.4.0...v1.5.0)
