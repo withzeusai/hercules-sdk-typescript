@@ -53,7 +53,11 @@ describe('resource products', () => {
     await expect(
       client.beta.pay.products.update(
         'product_id',
-        { active: true, description: 'description', name: 'name' },
+        {
+          active: true,
+          description: 'description',
+          name: 'name',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);
@@ -76,7 +80,12 @@ describe('resource products', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.beta.pay.products.list(
-        { active: 'true', ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
+        {
+          active: 'true',
+          ending_before: 'ending_before',
+          limit: 1,
+          starting_after: 'starting_after',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);

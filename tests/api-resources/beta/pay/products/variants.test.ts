@@ -83,7 +83,12 @@ describe('resource variants', () => {
     await expect(
       client.beta.pay.products.variants.list(
         'product_id',
-        { active: 'true', ending_before: 'ending_before', limit: 1, starting_after: 'starting_after' },
+        {
+          active: 'true',
+          ending_before: 'ending_before',
+          limit: 1,
+          starting_after: 'starting_after',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);
