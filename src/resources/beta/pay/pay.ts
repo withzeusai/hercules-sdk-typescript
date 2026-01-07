@@ -31,6 +31,8 @@ import {
   Entitlements,
   EntitlementsCursorIDPage,
 } from './entitlements';
+import * as ProductGroupsAPI from './product-groups';
+import { ProductGroups } from './product-groups';
 import * as ProductsAPI from './products/products';
 import {
   Product,
@@ -45,6 +47,7 @@ import { RequestOptions } from '../../../internal/request-options';
 
 export class Pay extends APIResource {
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
+  productGroups: ProductGroupsAPI.ProductGroups = new ProductGroupsAPI.ProductGroups(this._client);
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
   entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
@@ -271,6 +274,7 @@ export interface PayCheckoutParams {
 }
 
 Pay.Customers = Customers;
+Pay.ProductGroups = ProductGroups;
 Pay.Products = Products;
 Pay.Entitlements = Entitlements;
 Pay.Coupons = Coupons;
@@ -296,6 +300,8 @@ export declare namespace Pay {
     type CustomerListParams as CustomerListParams,
     type CustomerBillingPortalParams as CustomerBillingPortalParams,
   };
+
+  export { ProductGroups as ProductGroups };
 
   export {
     Products as Products,

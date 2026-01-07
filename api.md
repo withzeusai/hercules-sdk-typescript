@@ -31,6 +31,8 @@ Methods:
 - <code title="post /v1/pay/customers/{customer_id}/billing_portal">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">billingPortal</a>(customerID, { ...params }) -> CustomerBillingPortalResponse</code>
 - <code title="get /v1/pay/customers/{customer_id}">client.beta.pay.customers.<a href="./src/resources/beta/pay/customers.ts">get</a>(customerID) -> Customer</code>
 
+### ProductGroups
+
 ### Products
 
 Types:
@@ -45,17 +47,7 @@ Methods:
 - <code title="delete /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">archive</a>(productID) -> Product</code>
 - <code title="get /v1/pay/products/{product_id}">client.beta.pay.products.<a href="./src/resources/beta/pay/products/products.ts">get</a>(productID) -> Product</code>
 
-#### Entitlements
-
-Types:
-
-- <code><a href="./src/resources/beta/pay/products/entitlements.ts">ProductEntitlement</a></code>
-
-Methods:
-
-- <code title="get /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">list</a>(productID, { ...params }) -> ProductEntitlementsCursorIDPage</code>
-- <code title="post /v1/pay/products/{product_id}/entitlements">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">attach</a>(productID, { ...params }) -> ProductEntitlement</code>
-- <code title="delete /v1/pay/products/{product_id}/entitlements/{feature_id}">client.beta.pay.products.entitlements.<a href="./src/resources/beta/pay/products/entitlements.ts">remove</a>(featureID, { ...params }) -> void</code>
+#### Resources
 
 #### Variants
 

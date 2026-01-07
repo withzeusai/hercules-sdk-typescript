@@ -1,15 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
-import * as EntitlementsAPI from './entitlements';
-import {
-  EntitlementAttachParams,
-  EntitlementListParams,
-  EntitlementRemoveParams,
-  Entitlements,
-  ProductEntitlement,
-  ProductEntitlementsCursorIDPage,
-} from './entitlements';
+import * as ResourcesAPI from './resources';
+import { Resources } from './resources';
 import * as VariantsAPI from './variants';
 import {
   Variant,
@@ -27,7 +20,7 @@ import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
 
 export class Products extends APIResource {
-  entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
+  resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
   variants: VariantsAPI.Variants = new VariantsAPI.Variants(this._client);
 
   /**
@@ -246,7 +239,7 @@ export interface ProductListParams extends CursorIDPageParams {
   active?: 'true' | 'false';
 }
 
-Products.Entitlements = Entitlements;
+Products.Resources = Resources;
 Products.Variants = Variants;
 
 export declare namespace Products {
@@ -258,14 +251,7 @@ export declare namespace Products {
     type ProductListParams as ProductListParams,
   };
 
-  export {
-    Entitlements as Entitlements,
-    type ProductEntitlement as ProductEntitlement,
-    type ProductEntitlementsCursorIDPage as ProductEntitlementsCursorIDPage,
-    type EntitlementListParams as EntitlementListParams,
-    type EntitlementAttachParams as EntitlementAttachParams,
-    type EntitlementRemoveParams as EntitlementRemoveParams,
-  };
+  export { Resources as Resources };
 
   export {
     Variants as Variants,
