@@ -19,6 +19,12 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Beta } from './resources/beta/beta';
+import {
+  PushNotificationEnableResponse,
+  PushNotificationSendParams,
+  PushNotificationSendResponse,
+  PushNotifications,
+} from './resources/push-notifications/push-notifications';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -754,9 +760,11 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   beta: API.Beta = new API.Beta(this);
+  pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
 Hercules.Beta = Beta;
+Hercules.PushNotifications = PushNotifications;
 
 export declare namespace Hercules {
   export type RequestOptions = Opts.RequestOptions;
@@ -765,4 +773,11 @@ export declare namespace Hercules {
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
   export { Beta as Beta };
+
+  export {
+    PushNotifications as PushNotifications,
+    type PushNotificationEnableResponse as PushNotificationEnableResponse,
+    type PushNotificationSendResponse as PushNotificationSendResponse,
+    type PushNotificationSendParams as PushNotificationSendParams,
+  };
 }

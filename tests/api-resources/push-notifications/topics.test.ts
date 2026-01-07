@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource topics', () => {
   // Prism tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.beta.pushNotifications.topics.list({ visitorId: 'x' });
+    const responsePromise = client.pushNotifications.topics.list({ visitorId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,12 +23,12 @@ describe('resource topics', () => {
 
   // Prism tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.beta.pushNotifications.topics.list({ visitorId: 'x' });
+    const response = await client.pushNotifications.topics.list({ visitorId: 'x' });
   });
 
   // Prism tests are disabled
   test.skip('subscribe: only required params', async () => {
-    const responsePromise = client.beta.pushNotifications.topics.subscribe({ topics: ['x'], visitorId: 'x' });
+    const responsePromise = client.pushNotifications.topics.subscribe({ topics: ['x'], visitorId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,15 +40,12 @@ describe('resource topics', () => {
 
   // Prism tests are disabled
   test.skip('subscribe: required and optional params', async () => {
-    const response = await client.beta.pushNotifications.topics.subscribe({ topics: ['x'], visitorId: 'x' });
+    const response = await client.pushNotifications.topics.subscribe({ topics: ['x'], visitorId: 'x' });
   });
 
   // Prism tests are disabled
   test.skip('unsubscribe: only required params', async () => {
-    const responsePromise = client.beta.pushNotifications.topics.unsubscribe({
-      topics: ['x'],
-      visitorId: 'x',
-    });
+    const responsePromise = client.pushNotifications.topics.unsubscribe({ topics: ['x'], visitorId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,9 +57,6 @@ describe('resource topics', () => {
 
   // Prism tests are disabled
   test.skip('unsubscribe: required and optional params', async () => {
-    const response = await client.beta.pushNotifications.topics.unsubscribe({
-      topics: ['x'],
-      visitorId: 'x',
-    });
+    const response = await client.pushNotifications.topics.unsubscribe({ topics: ['x'], visitorId: 'x' });
   });
 });
