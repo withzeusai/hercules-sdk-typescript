@@ -11,23 +11,12 @@ import {
   PayCheckoutParams,
   PayCheckoutResponse,
 } from './pay/pay';
-import * as PushNotificationsAPI from './push-notifications/push-notifications';
-import {
-  PushNotificationEnableResponse,
-  PushNotificationSendParams,
-  PushNotificationSendResponse,
-  PushNotifications,
-} from './push-notifications/push-notifications';
 
 export class Beta extends APIResource {
   pay: PayAPI.Pay = new PayAPI.Pay(this._client);
-  pushNotifications: PushNotificationsAPI.PushNotifications = new PushNotificationsAPI.PushNotifications(
-    this._client,
-  );
 }
 
 Beta.Pay = Pay;
-Beta.PushNotifications = PushNotifications;
 
 export declare namespace Beta {
   export {
@@ -38,12 +27,5 @@ export declare namespace Beta {
     type PayCancelParams as PayCancelParams,
     type PayCheckParams as PayCheckParams,
     type PayCheckoutParams as PayCheckoutParams,
-  };
-
-  export {
-    PushNotifications as PushNotifications,
-    type PushNotificationEnableResponse as PushNotificationEnableResponse,
-    type PushNotificationSendResponse as PushNotificationSendResponse,
-    type PushNotificationSendParams as PushNotificationSendParams,
   };
 }
