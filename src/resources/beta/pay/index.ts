@@ -36,6 +36,7 @@ export {
   type PayCheckParams,
   type PayCheckoutParams,
 } from './pay';
+export { ProductGroups } from './product-groups';
 export {
   Products,
   type Product,
