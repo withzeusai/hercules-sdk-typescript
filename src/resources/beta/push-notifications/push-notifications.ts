@@ -91,9 +91,14 @@ export interface PushNotificationSendParams {
   data?: { [key: string]: unknown };
 
   /**
-   * Icon URL
+   * Icon URL (small icon displayed in the notification)
    */
   icon?: string;
+
+  /**
+   * Image URL (larger image displayed in the notification body)
+   */
+  image?: string;
 
   /**
    * Topics to send to. All visitors subscribed to any of these topics will receive
