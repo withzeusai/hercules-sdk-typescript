@@ -103,24 +103,18 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationEnableResponse</a></code>
+- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationIdentifyResponse</a></code>
 - <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationSendResponse</a></code>
+- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationSubscribeResponse</a></code>
+- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationUnsubscribeResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/push-notifications/enable">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">enable</a>() -> PushNotificationEnableResponse</code>
+- <code title="post /v1/push-notifications/identify">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">identify</a>({ ...params }) -> PushNotificationIdentifyResponse</code>
 - <code title="post /v1/push-notifications/send">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">send</a>({ ...params }) -> PushNotificationSendResponse</code>
-
-## Subscriptions
-
-Types:
-
-- <code><a href="./src/resources/push-notifications/subscriptions.ts">SubscriptionCreateResponse</a></code>
-- <code><a href="./src/resources/push-notifications/subscriptions.ts">SubscriptionDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/push-notifications/subscriptions">client.pushNotifications.subscriptions.<a href="./src/resources/push-notifications/subscriptions.ts">create</a>({ ...params }) -> SubscriptionCreateResponse</code>
-- <code title="delete /v1/push-notifications/subscriptions/{id}">client.pushNotifications.subscriptions.<a href="./src/resources/push-notifications/subscriptions.ts">delete</a>(id) -> SubscriptionDeleteResponse</code>
+- <code title="post /v1/push-notifications/subscribe">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">subscribe</a>({ ...params }) -> PushNotificationSubscribeResponse</code>
+- <code title="post /v1/push-notifications/unsubscribe">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">unsubscribe</a>({ ...params }) -> PushNotificationUnsubscribeResponse</code>
 
 ## Topics
 
@@ -132,6 +126,6 @@ Types:
 
 Methods:
 
-- <code title="get /v1/push-notifications/topics">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">list</a>({ ...params }) -> TopicListResponse</code>
+- <code title="get /v1/push-notifications/topics">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">list</a>({ ...params }) -> TopicListResponsesCursorIDPage</code>
 - <code title="post /v1/push-notifications/topics/subscribe">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">subscribe</a>({ ...params }) -> TopicSubscribeResponse</code>
 - <code title="post /v1/push-notifications/topics/unsubscribe">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">unsubscribe</a>({ ...params }) -> TopicUnsubscribeResponse</code>

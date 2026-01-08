@@ -22,6 +22,23 @@ describe('resource pushNotifications', () => {
   });
 
   // Prism tests are disabled
+  test.skip('identify: only required params', async () => {
+    const responsePromise = client.pushNotifications.identify({ secret: 'x', userId: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('identify: required and optional params', async () => {
+    const response = await client.pushNotifications.identify({ secret: 'x', userId: 'x' });
+  });
+
+  // Prism tests are disabled
   test.skip('send: only required params', async () => {
     const responsePromise = client.pushNotifications.send({ title: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -45,5 +62,51 @@ describe('resource pushNotifications', () => {
       topics: ['string'],
       visitorIds: ['string'],
     });
+  });
+
+  // Prism tests are disabled
+  test.skip('subscribe: only required params', async () => {
+    const responsePromise = client.pushNotifications.subscribe({
+      subscription: {
+        endpoint: 'https://example.com',
+        keys: { auth: 'auth', p256dh: 'p256dh' },
+      },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('subscribe: required and optional params', async () => {
+    const response = await client.pushNotifications.subscribe({
+      subscription: {
+        endpoint: 'https://example.com',
+        keys: { auth: 'auth', p256dh: 'p256dh' },
+        expirationTime: 0,
+      },
+      userId: 'x',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('unsubscribe: only required params', async () => {
+    const responsePromise = client.pushNotifications.unsubscribe({ secret: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('unsubscribe: required and optional params', async () => {
+    const response = await client.pushNotifications.unsubscribe({ secret: 'x' });
   });
 });

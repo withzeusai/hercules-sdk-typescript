@@ -71,7 +71,7 @@ export type VariantsCursorIDPage = CursorIDPage<Variant>;
  */
 export interface Variant {
   /**
-   * Unique identifier for the price
+   * Unique identifier for the topic subscription
    */
   id: string;
 
@@ -107,7 +107,7 @@ export namespace Variant {
    */
   export interface DefaultPrice {
     /**
-     * Unique identifier for the price
+     * Unique identifier for the topic subscription
      */
     id: string;
 
