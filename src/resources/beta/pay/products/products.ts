@@ -83,7 +83,7 @@ export type ProductsCursorIDPage = CursorIDPage<Product>;
  */
 export interface Product {
   /**
-   * Unique identifier for the price
+   * Unique identifier for the topic subscription
    */
   id: string;
 
@@ -119,7 +119,7 @@ export namespace Product {
    */
   export interface DefaultPrice {
     /**
-     * Unique identifier for the price
+     * Unique identifier for the topic subscription
      */
     id: string;
 

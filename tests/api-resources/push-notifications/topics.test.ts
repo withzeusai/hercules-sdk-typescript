@@ -23,7 +23,12 @@ describe('resource topics', () => {
 
   // Prism tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.pushNotifications.topics.list({ visitorId: 'x' });
+    const response = await client.pushNotifications.topics.list({
+      visitorId: 'x',
+      ending_before: 'ending_before',
+      limit: 1,
+      starting_after: 'starting_after',
+    });
   });
 
   // Prism tests are disabled

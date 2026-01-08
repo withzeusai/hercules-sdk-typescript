@@ -2,14 +2,21 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
+import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 
 export class Topics extends APIResource {
   /**
-   * Lists all topics a visitor is subscribed to.
+   * Lists topics a visitor is subscribed to.
    */
-  list(query: TopicListParams, options?: RequestOptions): APIPromise<TopicListResponse> {
-    return this._client.get('/v1/push-notifications/topics', { query, ...options });
+  list(
+    query: TopicListParams,
+    options?: RequestOptions,
+  ): PagePromise<TopicListResponsesCursorIDPage, TopicListResponse> {
+    return this._client.getAPIList('/v1/push-notifications/topics', CursorIDPage<TopicListResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -28,14 +35,21 @@ export class Topics extends APIResource {
   }
 }
 
+export type TopicListResponsesCursorIDPage = CursorIDPage<TopicListResponse>;
+
 /**
- * List of topics the visitor is subscribed to.
+ * A topic subscription for a visitor.
  */
 export interface TopicListResponse {
   /**
-   * Topics the visitor is subscribed to
+   * Unique identifier for the topic subscription
    */
-  topics: Array<string>;
+  id: string;
+
+  /**
+   * Topic name (e.g., 'announcements', 'channel:general')
+   */
+  topic: string;
 }
 
 /**
@@ -58,7 +72,7 @@ export interface TopicUnsubscribeResponse {
   topics: Array<string>;
 }
 
-export interface TopicListParams {
+export interface TopicListParams extends CursorIDPageParams {
   /**
    * Visitor ID to list topics for
    */
@@ -94,6 +108,7 @@ export declare namespace Topics {
     type TopicListResponse as TopicListResponse,
     type TopicSubscribeResponse as TopicSubscribeResponse,
     type TopicUnsubscribeResponse as TopicUnsubscribeResponse,
+    type TopicListResponsesCursorIDPage as TopicListResponsesCursorIDPage,
     type TopicListParams as TopicListParams,
     type TopicSubscribeParams as TopicSubscribeParams,
     type TopicUnsubscribeParams as TopicUnsubscribeParams,
