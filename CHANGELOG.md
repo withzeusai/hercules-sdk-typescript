@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.8.0 (2026-01-08)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* **api:** update api ([fbd0fea](https://github.com/withzeusai/hercules-sdk-typescript/commit/fbd0fea496a3b231c1d64b62c798178c12b8c8f5))
+* **api:** update api ([9e6bd68](https://github.com/withzeusai/hercules-sdk-typescript/commit/9e6bd689985d61e22725adb62848775c53defaf1))
+
+
+### Bug Fixes
+
+* **internal:** don't try to push symbols to nuget as separate package ([3d0a989](https://github.com/withzeusai/hercules-sdk-typescript/commit/3d0a98978117f84d90b92b7d9c4ef7fb44583d47))
+
+
+### Chores
+
+* **internal:** codegen related update ([e7f55d0](https://github.com/withzeusai/hercules-sdk-typescript/commit/e7f55d043d75661be0cefafc3445f767b20622b6))
+* **internal:** codegen related update ([d6711e1](https://github.com/withzeusai/hercules-sdk-typescript/commit/d6711e1a9979e42e0d9ee9f9e99eb0ee56a1f7ce))
+* **internal:** codegen related update ([528f959](https://github.com/withzeusai/hercules-sdk-typescript/commit/528f959507a9dbf74fd1c23255d9bfd0442fe530))
+
 ## 1.7.0 (2026-01-08)
 
 Full Changelog: [v1.6.0...v1.7.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.6.0...v1.7.0)
