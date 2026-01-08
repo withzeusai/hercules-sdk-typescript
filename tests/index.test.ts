@@ -506,7 +506,7 @@ describe('idempotency', () => {
       apiKey: 'My API Key',
       apiVersion: '2025-12-09',
     });
-    await client.beta.pay.cancel(
+    await client.beta.commerce.cancel(
       { customer_id: 'customer_id', subscription_id: 'subscription_id' },
       { idempotencyKey: 'my-idempotency-key' },
     );

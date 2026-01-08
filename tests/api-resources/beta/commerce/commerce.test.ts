@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource pay', () => {
+describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('cancel: only required params', async () => {
-    const responsePromise = client.beta.pay.cancel({
+    const responsePromise = client.beta.commerce.cancel({
       customer_id: 'customer_id',
       subscription_id: 'subscription_id',
     });
@@ -26,7 +26,7 @@ describe('resource pay', () => {
 
   // Prism tests are disabled
   test.skip('cancel: required and optional params', async () => {
-    const response = await client.beta.pay.cancel({
+    const response = await client.beta.commerce.cancel({
       customer_id: 'customer_id',
       subscription_id: 'subscription_id',
       cancellation_timing: 'immediate',
@@ -35,9 +35,9 @@ describe('resource pay', () => {
 
   // Prism tests are disabled
   test.skip('check: only required params', async () => {
-    const responsePromise = client.beta.pay.check({
+    const responsePromise = client.beta.commerce.check({
       customer_id: 'customer_id',
-      entitlement_id: 'entitlement_id',
+      resource_id: 'resource_id',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -50,17 +50,17 @@ describe('resource pay', () => {
 
   // Prism tests are disabled
   test.skip('check: required and optional params', async () => {
-    const response = await client.beta.pay.check({
+    const response = await client.beta.commerce.check({
       customer_id: 'customer_id',
-      entitlement_id: 'entitlement_id',
+      resource_id: 'resource_id',
     });
   });
 
   // Prism tests are disabled
   test.skip('checkout: only required params', async () => {
-    const responsePromise = client.beta.pay.checkout({
+    const responsePromise = client.beta.commerce.checkout({
       customer_id: 'customer_id',
-      product_id: 'product_id',
+      variant_id: 'variant_id',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -73,17 +73,16 @@ describe('resource pay', () => {
 
   // Prism tests are disabled
   test.skip('checkout: required and optional params', async () => {
-    const response = await client.beta.pay.checkout({
+    const response = await client.beta.commerce.checkout({
       customer_id: 'customer_id',
-      product_id: 'product_id',
+      variant_id: 'variant_id',
       id: 'id',
       billing_cycle_anchor: 'now',
       cancel_url: 'https://example.com',
       promotion_code: 'promotion_code',
-      proration_behavior: 'default',
+      proration_behavior: 'create_prorations',
       proration_date: 'now',
       success_url: 'https://example.com',
-      variant_id: 'variant_id',
     });
   });
 });

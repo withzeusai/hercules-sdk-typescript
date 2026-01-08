@@ -2,11 +2,11 @@
 
 export { Beta } from './beta';
 export {
-  Pay,
-  type PayCancelResponse,
-  type PayCheckResponse,
-  type PayCheckoutResponse,
-  type PayCancelParams,
-  type PayCheckParams,
-  type PayCheckoutParams,
-} from './pay/index';
+  Commerce,
+  type CommerceCancelResponse,
+  type CommerceCheckResponse,
+  type CommerceCheckoutResponse,
+  type CommerceCancelParams,
+  type CommerceCheckParams,
+  type CommerceCheckoutParams,
+} from './commerce/index';
