@@ -20,4 +20,5 @@ export {
   type TopicListParams,
   type TopicSubscribeParams,
   type TopicUnsubscribeParams,
+  type TopicListResponsesCursorIDPage,
 } from './topics';

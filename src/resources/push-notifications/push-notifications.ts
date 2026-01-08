@@ -12,6 +12,7 @@ import * as TopicsAPI from './topics';
 import {
   TopicListParams,
   TopicListResponse,
+  TopicListResponsesCursorIDPage,
   TopicSubscribeParams,
   TopicSubscribeResponse,
   TopicUnsubscribeParams,
@@ -134,6 +135,7 @@ export declare namespace PushNotifications {
     type TopicListResponse as TopicListResponse,
     type TopicSubscribeResponse as TopicSubscribeResponse,
     type TopicUnsubscribeResponse as TopicUnsubscribeResponse,
+    type TopicListResponsesCursorIDPage as TopicListResponsesCursorIDPage,
     type TopicListParams as TopicListParams,
     type TopicSubscribeParams as TopicSubscribeParams,
     type TopicUnsubscribeParams as TopicUnsubscribeParams,
