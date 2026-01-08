@@ -28,9 +28,8 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Links an anonymous subscription to an authenticated user. Call after sign-in to
-   * merge the user's anonymous subscription with their account. Hercules recommends
-   * calling this immediately after authentication.
+   * Updates a subscription's visitorId to the provided userId. Call after sign-in to
+   * link the subscription to the authenticated user's account.
    */
   identify(
     body: PushNotificationIdentifyParams,
@@ -49,9 +48,9 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Registers a push subscription. Server generates visitorId (uses userId if
-   * provided, else anonymous). Upserts by endpoint to handle re-subscriptions.
-   * Returns a secret for subscription ownership.
+   * Registers a push subscription with the provided visitorId. Use authenticated
+   * userId or generate a UUID for anonymous users. Upserts by endpoint to handle
+   * re-subscriptions. Returns a secret for subscription ownership.
    */
   subscribe(
     body: PushNotificationSubscribeParams,
@@ -194,10 +193,10 @@ export interface PushNotificationSubscribeParams {
   subscription: PushNotificationSubscribeParams.Subscription;
 
   /**
-   * Authenticated user ID. Omit for anonymous subscriptions (server generates a
-   * visitor ID).
+   * Visitor identifier. Use authenticated userId or generate a UUID for anonymous
+   * users.
    */
-  userId?: string;
+  visitorId: string;
 }
 
 export namespace PushNotificationSubscribeParams {

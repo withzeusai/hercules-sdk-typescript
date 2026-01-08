@@ -71,6 +71,7 @@ describe('resource pushNotifications', () => {
         endpoint: 'https://example.com',
         keys: { auth: 'auth', p256dh: 'p256dh' },
       },
+      visitorId: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -89,7 +90,7 @@ describe('resource pushNotifications', () => {
         keys: { auth: 'auth', p256dh: 'p256dh' },
         expirationTime: 0,
       },
-      userId: 'x',
+      visitorId: 'x',
     });
   });
 
