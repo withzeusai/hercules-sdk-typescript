@@ -21,8 +21,14 @@ import { APIPromise } from './core/api-promise';
 import { Beta } from './resources/beta/beta';
 import {
   PushNotificationEnableResponse,
+  PushNotificationIdentifyParams,
+  PushNotificationIdentifyResponse,
   PushNotificationSendParams,
   PushNotificationSendResponse,
+  PushNotificationSubscribeParams,
+  PushNotificationSubscribeResponse,
+  PushNotificationUnsubscribeParams,
+  PushNotificationUnsubscribeResponse,
   PushNotifications,
 } from './resources/push-notifications/push-notifications';
 import { type Fetch } from './internal/builtin-types';
@@ -775,7 +781,13 @@ export declare namespace Hercules {
   export {
     PushNotifications as PushNotifications,
     type PushNotificationEnableResponse as PushNotificationEnableResponse,
+    type PushNotificationIdentifyResponse as PushNotificationIdentifyResponse,
     type PushNotificationSendResponse as PushNotificationSendResponse,
+    type PushNotificationSubscribeResponse as PushNotificationSubscribeResponse,
+    type PushNotificationUnsubscribeResponse as PushNotificationUnsubscribeResponse,
+    type PushNotificationIdentifyParams as PushNotificationIdentifyParams,
     type PushNotificationSendParams as PushNotificationSendParams,
+    type PushNotificationSubscribeParams as PushNotificationSubscribeParams,
+    type PushNotificationUnsubscribeParams as PushNotificationUnsubscribeParams,
   };
 }
