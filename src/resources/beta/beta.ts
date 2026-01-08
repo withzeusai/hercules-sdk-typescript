@@ -1,31 +1,31 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as PayAPI from './pay/pay';
+import * as CommerceAPI from './commerce/commerce';
 import {
-  Pay,
-  PayCancelParams,
-  PayCancelResponse,
-  PayCheckParams,
-  PayCheckResponse,
-  PayCheckoutParams,
-  PayCheckoutResponse,
-} from './pay/pay';
+  Commerce,
+  CommerceCancelParams,
+  CommerceCancelResponse,
+  CommerceCheckParams,
+  CommerceCheckResponse,
+  CommerceCheckoutParams,
+  CommerceCheckoutResponse,
+} from './commerce/commerce';
 
 export class Beta extends APIResource {
-  pay: PayAPI.Pay = new PayAPI.Pay(this._client);
+  commerce: CommerceAPI.Commerce = new CommerceAPI.Commerce(this._client);
 }
 
-Beta.Pay = Pay;
+Beta.Commerce = Commerce;
 
 export declare namespace Beta {
   export {
-    Pay as Pay,
-    type PayCancelResponse as PayCancelResponse,
-    type PayCheckResponse as PayCheckResponse,
-    type PayCheckoutResponse as PayCheckoutResponse,
-    type PayCancelParams as PayCancelParams,
-    type PayCheckParams as PayCheckParams,
-    type PayCheckoutParams as PayCheckoutParams,
+    Commerce as Commerce,
+    type CommerceCancelResponse as CommerceCancelResponse,
+    type CommerceCheckResponse as CommerceCheckResponse,
+    type CommerceCheckoutResponse as CommerceCheckoutResponse,
+    type CommerceCancelParams as CommerceCancelParams,
+    type CommerceCheckParams as CommerceCheckParams,
+    type CommerceCheckoutParams as CommerceCheckoutParams,
   };
 }
