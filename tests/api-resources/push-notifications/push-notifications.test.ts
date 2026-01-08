@@ -69,7 +69,7 @@ describe('resource pushNotifications', () => {
     const responsePromise = client.pushNotifications.subscribe({
       subscription: {
         endpoint: 'https://example.com',
-        keys: { auth: 'x', p256dh: 'x' },
+        keys: { auth: 'auth', p256dh: 'p256dh' },
       },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -86,7 +86,7 @@ describe('resource pushNotifications', () => {
     const response = await client.pushNotifications.subscribe({
       subscription: {
         endpoint: 'https://example.com',
-        keys: { auth: 'x', p256dh: 'x' },
+        keys: { auth: 'auth', p256dh: 'p256dh' },
         expirationTime: 0,
       },
       userId: 'x',
