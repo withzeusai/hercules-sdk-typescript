@@ -3,50 +3,49 @@
 import { APIResource } from '../../../core/resource';
 import * as CouponsAPI from './coupons';
 import {
-  Coupon,
   CouponCreateParams,
+  CouponCreateResponse,
+  CouponGetResponse,
   CouponListParams,
+  CouponListResponse,
+  CouponListResponsesCursorIDPage,
   CouponUpdateParams,
+  CouponUpdateResponse,
   Coupons,
-  CouponsCursorIDPage,
 } from './coupons';
 import * as CustomersAPI from './customers';
 import {
-  Customer,
-  CustomerAddress,
   CustomerBillingPortalParams,
   CustomerBillingPortalResponse,
   CustomerCreateParams,
+  CustomerCreateResponse,
+  CustomerGetResponse,
   CustomerListParams,
+  CustomerListResponse,
+  CustomerListResponsesCursorIDPage,
   CustomerUpdateParams,
+  CustomerUpdateResponse,
   Customers,
-  CustomersCursorIDPage,
 } from './customers';
-import * as EntitlementsAPI from './entitlements';
-import {
-  Entitlement,
-  EntitlementCreateParams,
-  EntitlementListParams,
-  EntitlementUpdateParams,
-  Entitlements,
-  EntitlementsCursorIDPage,
-} from './entitlements';
 import * as ProductsAPI from './products/products';
 import {
-  Product,
+  ProductArchiveResponse,
   ProductCreateParams,
+  ProductCreateResponse,
+  ProductGetResponse,
   ProductListParams,
+  ProductListResponse,
+  ProductListResponsesCursorIDPage,
   ProductUpdateParams,
+  ProductUpdateResponse,
   Products,
-  ProductsCursorIDPage,
 } from './products/products';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 
-export class Pay extends APIResource {
+export class Commerce extends APIResource {
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
-  entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
 
   /**
@@ -54,8 +53,8 @@ export class Pay extends APIResource {
    * until the end of the current billing period. Set cancellation_timing to
    * 'immediate' to cancel immediately.
    */
-  cancel(body: PayCancelParams, options?: RequestOptions): APIPromise<PayCancelResponse> {
-    return this._client.post('/v1/pay/cancel', { body, ...options });
+  cancel(body: CommerceCancelParams, options?: RequestOptions): APIPromise<CommerceCancelResponse> {
+    return this._client.post('/v1/commerce/cancel', { body, ...options });
   }
 
   /**
@@ -64,8 +63,8 @@ export class Pay extends APIResource {
    * entitlements attached to their product. Hercules recommends calling this before
    * allowing access to premium features.
    */
-  check(body: PayCheckParams, options?: RequestOptions): APIPromise<PayCheckResponse> {
-    return this._client.post('/v1/pay/check', { body, ...options });
+  check(body: CommerceCheckParams, options?: RequestOptions): APIPromise<CommerceCheckResponse> {
+    return this._client.post('/v1/commerce/check', { body, ...options });
   }
 
   /**
@@ -73,15 +72,15 @@ export class Pay extends APIResource {
    * URL to redirect the customer to for payment. After successful payment, the
    * customer is subscribed to the product and gains access to its entitlements.
    */
-  checkout(body: PayCheckoutParams, options?: RequestOptions): APIPromise<PayCheckoutResponse> {
-    return this._client.post('/v1/pay/checkout', { body, ...options });
+  checkout(body: CommerceCheckoutParams, options?: RequestOptions): APIPromise<CommerceCheckoutResponse> {
+    return this._client.post('/v1/commerce/checkout', { body, ...options });
   }
 }
 
 /**
  * Cancel subscription response
  */
-export interface PayCancelResponse {
+export interface CommerceCancelResponse {
   /**
    * The subscription ID
    */
@@ -104,25 +103,32 @@ export interface PayCancelResponse {
 }
 
 /**
- * Check entitlement response
+ * Check resource access response. Indicates whether access is granted and through
+ * what means.
  */
-export interface PayCheckResponse {
+export interface CommerceCheckResponse {
   /**
-   * The entitlement ID that was checked
+   * How the customer has access: through a subscription, one-time purchase, manual
+   * grant, or no access
    */
-  entitlement_id: string;
+  access_type: 'subscription' | 'one_time_purchase' | 'manual_grant' | 'none';
 
   /**
-   * Whether the customer has the entitlement
+   * Whether the customer has access to the resource
    */
-  has_entitlement: boolean;
+  has_access: boolean;
+
+  /**
+   * The resource ID that was checked
+   */
+  resource_id: string;
 }
 
 /**
  * Checkout response. For new customers, returns a checkout URL. For existing
  * subscribers, returns the updated subscription.
  */
-export interface PayCheckoutResponse {
+export interface CommerceCheckoutResponse {
   /**
    * The checkout session ID (for checkout action) or subscription ID (for update
    * action)
@@ -144,7 +150,7 @@ export interface PayCheckoutResponse {
   /**
    * The updated subscription details. Only present for 'update' action.
    */
-  subscription?: PayCheckoutResponse.Subscription | null;
+  subscription?: CommerceCheckoutResponse.Subscription | null;
 
   /**
    * The checkout URL to redirect the customer to. Only present for 'checkout'
@@ -153,7 +159,7 @@ export interface PayCheckoutResponse {
   url?: string | null;
 }
 
-export namespace PayCheckoutResponse {
+export namespace CommerceCheckoutResponse {
   /**
    * The updated subscription details. Only present for 'update' action.
    */
@@ -180,7 +186,7 @@ export namespace PayCheckoutResponse {
   }
 }
 
-export interface PayCancelParams {
+export interface CommerceCancelParams {
   /**
    * The customer ID
    */
@@ -198,28 +204,29 @@ export interface PayCancelParams {
   cancellation_timing?: 'immediate' | 'at_billing_period_end';
 }
 
-export interface PayCheckParams {
+export interface CommerceCheckParams {
   /**
    * The customer ID
    */
   customer_id: string;
 
   /**
-   * The entitlement ID to check for access
+   * The resource ID to check for access
    */
-  entitlement_id: string;
+  resource_id: string;
 }
 
-export interface PayCheckoutParams {
+export interface CommerceCheckoutParams {
   /**
    * The customer ID
    */
   customer_id: string;
 
   /**
-   * The product ID to purchase
+   * The variant ID to purchase. Determines pricing and whether this is a
+   * subscription or one-time payment.
    */
-  product_id: string;
+  variant_id: string;
 
   /**
    * Optional custom ID for the subscription or payment. If not provided, one will be
@@ -228,11 +235,10 @@ export interface PayCheckoutParams {
   id?: string;
 
   /**
-   * Override billing cycle anchor behavior for subscription updates. 'now' resets to
-   * current time, 'unchanged' keeps original anchor. If not provided, uses the
-   * price's configured default.
+   * Override billing cycle anchor behavior for subscription updates. If not
+   * provided, uses the product group's configured default.
    */
-  billing_cycle_anchor?: 'now' | 'unchanged';
+  billing_cycle_anchor?: 'now' | 'unchanged' | 'reset';
 
   /**
    * URL to redirect on cancel
@@ -245,16 +251,14 @@ export interface PayCheckoutParams {
   promotion_code?: string;
 
   /**
-   * Override proration behavior for subscription updates. 'default' creates
-   * prorations, 'none' disables them. If not provided, uses the price's configured
-   * default.
+   * Override proration behavior for subscription updates. If not provided, uses the
+   * product group's configured default.
    */
-  proration_behavior?: 'default' | 'none';
+  proration_behavior?: 'create_prorations' | 'none' | 'always_invoice';
 
   /**
-   * Override proration date calculation for subscription updates. 'now' uses current
-   * time, 'start_of_period' uses billing period start. If not provided, uses the
-   * price's configured default.
+   * Override proration date calculation for subscription updates. If not provided,
+   * uses the product group's configured default.
    */
   proration_date?: 'now' | 'start_of_period';
 
@@ -262,35 +266,30 @@ export interface PayCheckoutParams {
    * URL to redirect on success
    */
   success_url?: string;
-
-  /**
-   * Optional variant ID to specify a particular pricing tier. If not provided, the
-   * product's default price is used.
-   */
-  variant_id?: string;
 }
 
-Pay.Customers = Customers;
-Pay.Products = Products;
-Pay.Entitlements = Entitlements;
-Pay.Coupons = Coupons;
+Commerce.Customers = Customers;
+Commerce.Products = Products;
+Commerce.Coupons = Coupons;
 
-export declare namespace Pay {
+export declare namespace Commerce {
   export {
-    type PayCancelResponse as PayCancelResponse,
-    type PayCheckResponse as PayCheckResponse,
-    type PayCheckoutResponse as PayCheckoutResponse,
-    type PayCancelParams as PayCancelParams,
-    type PayCheckParams as PayCheckParams,
-    type PayCheckoutParams as PayCheckoutParams,
+    type CommerceCancelResponse as CommerceCancelResponse,
+    type CommerceCheckResponse as CommerceCheckResponse,
+    type CommerceCheckoutResponse as CommerceCheckoutResponse,
+    type CommerceCancelParams as CommerceCancelParams,
+    type CommerceCheckParams as CommerceCheckParams,
+    type CommerceCheckoutParams as CommerceCheckoutParams,
   };
 
   export {
     Customers as Customers,
-    type Customer as Customer,
-    type CustomerAddress as CustomerAddress,
+    type CustomerCreateResponse as CustomerCreateResponse,
+    type CustomerUpdateResponse as CustomerUpdateResponse,
+    type CustomerListResponse as CustomerListResponse,
     type CustomerBillingPortalResponse as CustomerBillingPortalResponse,
-    type CustomersCursorIDPage as CustomersCursorIDPage,
+    type CustomerGetResponse as CustomerGetResponse,
+    type CustomerListResponsesCursorIDPage as CustomerListResponsesCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -299,26 +298,24 @@ export declare namespace Pay {
 
   export {
     Products as Products,
-    type Product as Product,
-    type ProductsCursorIDPage as ProductsCursorIDPage,
+    type ProductCreateResponse as ProductCreateResponse,
+    type ProductUpdateResponse as ProductUpdateResponse,
+    type ProductListResponse as ProductListResponse,
+    type ProductArchiveResponse as ProductArchiveResponse,
+    type ProductGetResponse as ProductGetResponse,
+    type ProductListResponsesCursorIDPage as ProductListResponsesCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
   };
 
   export {
-    Entitlements as Entitlements,
-    type Entitlement as Entitlement,
-    type EntitlementsCursorIDPage as EntitlementsCursorIDPage,
-    type EntitlementCreateParams as EntitlementCreateParams,
-    type EntitlementUpdateParams as EntitlementUpdateParams,
-    type EntitlementListParams as EntitlementListParams,
-  };
-
-  export {
     Coupons as Coupons,
-    type Coupon as Coupon,
-    type CouponsCursorIDPage as CouponsCursorIDPage,
+    type CouponCreateResponse as CouponCreateResponse,
+    type CouponUpdateResponse as CouponUpdateResponse,
+    type CouponListResponse as CouponListResponse,
+    type CouponGetResponse as CouponGetResponse,
+    type CouponListResponsesCursorIDPage as CouponListResponsesCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
     type CouponListParams as CouponListParams,

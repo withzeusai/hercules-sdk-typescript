@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource customers', () => {
+describe('resource variants', () => {
   // Prism tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.beta.pay.customers.create();
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.beta.commerce.products.variants.create('product_id', { name: 'name' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,32 +22,24 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.beta.pay.customers.create(
-        {
-          id: 'id',
-          address: {
-            city: 'city',
-            country: 'country',
-            line1: 'line1',
-            line2: 'line2',
-            postal_code: 'postal_code',
-            state: 'state',
-          },
-          email: 'dev@stainless.com',
-          name: 'name',
-          phone: 'phone',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
+  test.skip('create: required and optional params', async () => {
+    const response = await client.beta.commerce.products.variants.create('product_id', {
+      name: 'name',
+      id: 'id',
+      currency: 'currency',
+      description: 'description',
+      media: [{ type: 'image', url: 'https://example.com' }],
+      metadata: { foo: 'bar' },
+      recurring: { interval: 'day', interval_count: 1 },
+      unit_amount: -9007199254740991,
+    });
   });
 
   // Prism tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.beta.pay.customers.update('customer_id');
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.beta.commerce.products.variants.update('variant_id', {
+      product_id: 'product_id',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,32 +50,20 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.beta.pay.customers.update(
-        'customer_id',
-        {
-          address: {
-            city: 'city',
-            country: 'country',
-            line1: 'line1',
-            line2: 'line2',
-            postal_code: 'postal_code',
-            state: 'state',
-          },
-          email: 'dev@stainless.com',
-          name: 'name',
-          phone: 'phone',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
+  test.skip('update: required and optional params', async () => {
+    const response = await client.beta.commerce.products.variants.update('variant_id', {
+      product_id: 'product_id',
+      active: true,
+      description: 'description',
+      media: [{ type: 'image', url: 'https://example.com' }],
+      metadata: { foo: 'bar' },
+      name: 'name',
+    });
   });
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.pay.customers.list();
+    const responsePromise = client.beta.commerce.products.variants.list('product_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,8 +77,10 @@ describe('resource customers', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.pay.customers.list(
+      client.beta.commerce.products.variants.list(
+        'product_id',
         {
+          active: 'true',
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',
@@ -109,8 +91,10 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.beta.pay.customers.delete('customer_id');
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.beta.commerce.products.variants.archive('variant_id', {
+      product_id: 'product_id',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -121,8 +105,17 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('billingPortal', async () => {
-    const responsePromise = client.beta.pay.customers.billingPortal('customer_id');
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.beta.commerce.products.variants.archive('variant_id', {
+      product_id: 'product_id',
+    });
+  });
+
+  // Prism tests are disabled
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.beta.commerce.products.variants.get('variant_id', {
+      product_id: 'product_id',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -133,26 +126,9 @@ describe('resource customers', () => {
   });
 
   // Prism tests are disabled
-  test.skip('billingPortal: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.beta.pay.customers.billingPortal(
-        'customer_id',
-        { return_url: 'https://example.com' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Prism tests are disabled
-  test.skip('get', async () => {
-    const responsePromise = client.beta.pay.customers.get('customer_id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+  test.skip('get: required and optional params', async () => {
+    const response = await client.beta.commerce.products.variants.get('variant_id', {
+      product_id: 'product_id',
+    });
   });
 });

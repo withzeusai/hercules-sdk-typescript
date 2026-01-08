@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource variants', () => {
+describe('resource products', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.pay.products.variants.create('product_id', {
+    const responsePromise = client.beta.commerce.products.create({
       name: 'name',
       unit_amount: -9007199254740991,
     });
@@ -26,26 +26,25 @@ describe('resource variants', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.pay.products.variants.create('product_id', {
+    const response = await client.beta.commerce.products.create({
       name: 'name',
       unit_amount: -9007199254740991,
       id: 'id',
-      billing_cycle_anchor: 'now',
       currency: 'currency',
       description: 'description',
       interval: 'day',
       interval_count: -9007199254740991,
-      proration_behavior: 'default',
-      proration_date: 'now',
+      media: [{ type: 'image', url: 'https://example.com' }],
+      metadata: { foo: 'bar' },
+      product_group_id: 'product_group_id',
+      tags: ['string'],
       type: 'one_time',
     });
   });
 
   // Prism tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.beta.pay.products.variants.update('variant_id', {
-      product_id: 'product_id',
-    });
+  test.skip('update', async () => {
+    const responsePromise = client.beta.commerce.products.update('product_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,18 +55,28 @@ describe('resource variants', () => {
   });
 
   // Prism tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.beta.pay.products.variants.update('variant_id', {
-      product_id: 'product_id',
-      active: true,
-      description: 'description',
-      name: 'name',
-    });
+  test.skip('update: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.beta.commerce.products.update(
+        'product_id',
+        {
+          active: true,
+          description: 'description',
+          media: [{ type: 'image', url: 'https://example.com' }],
+          metadata: { foo: 'bar' },
+          name: 'name',
+          product_group_id: 'product_group_id',
+          tags: ['string'],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.pay.products.variants.list('product_id');
+    const responsePromise = client.beta.commerce.products.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -81,8 +90,7 @@ describe('resource variants', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.pay.products.variants.list(
-        'product_id',
+      client.beta.commerce.products.list(
         {
           active: 'true',
           ending_before: 'ending_before',
@@ -95,10 +103,8 @@ describe('resource variants', () => {
   });
 
   // Prism tests are disabled
-  test.skip('archive: only required params', async () => {
-    const responsePromise = client.beta.pay.products.variants.archive('variant_id', {
-      product_id: 'product_id',
-    });
+  test.skip('archive', async () => {
+    const responsePromise = client.beta.commerce.products.archive('product_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -109,15 +115,8 @@ describe('resource variants', () => {
   });
 
   // Prism tests are disabled
-  test.skip('archive: required and optional params', async () => {
-    const response = await client.beta.pay.products.variants.archive('variant_id', {
-      product_id: 'product_id',
-    });
-  });
-
-  // Prism tests are disabled
-  test.skip('get: only required params', async () => {
-    const responsePromise = client.beta.pay.products.variants.get('variant_id', { product_id: 'product_id' });
+  test.skip('get', async () => {
+    const responsePromise = client.beta.commerce.products.get('product_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -125,10 +124,5 @@ describe('resource variants', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('get: required and optional params', async () => {
-    const response = await client.beta.pay.products.variants.get('variant_id', { product_id: 'product_id' });
   });
 });
