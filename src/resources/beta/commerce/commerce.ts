@@ -236,7 +236,7 @@ export interface CommerceCheckoutParams {
 
   /**
    * Override billing cycle anchor behavior for subscription updates. If not
-   * provided, uses the product group's configured default.
+   * provided, uses the subscription group's configured default.
    */
   billing_cycle_anchor?: 'now' | 'unchanged' | 'reset';
 
@@ -252,13 +252,13 @@ export interface CommerceCheckoutParams {
 
   /**
    * Override proration behavior for subscription updates. If not provided, uses the
-   * product group's configured default.
+   * subscription group's configured default.
    */
   proration_behavior?: 'create_prorations' | 'none' | 'always_invoice';
 
   /**
    * Override proration date calculation for subscription updates. If not provided,
-   * uses the product group's configured default.
+   * uses the subscription group's configured default.
    */
   proration_date?: 'now' | 'start_of_period';
 
