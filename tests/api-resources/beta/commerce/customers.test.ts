@@ -27,7 +27,7 @@ describe('resource customers', () => {
     await expect(
       client.beta.commerce.customers.create(
         {
-          id: 'id',
+          id: 'cus_-K0---P3EA--',
           address: {
             city: 'city',
             country: 'country',

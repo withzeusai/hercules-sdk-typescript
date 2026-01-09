@@ -264,7 +264,8 @@ export namespace ProductCreateResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -448,7 +449,8 @@ export namespace ProductUpdateResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -632,7 +634,8 @@ export namespace ProductListResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -816,7 +819,8 @@ export namespace ProductArchiveResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -1000,7 +1004,8 @@ export namespace ProductGetResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -1025,7 +1030,8 @@ export interface ProductCreateParams {
   unit_amount: number;
 
   /**
-   * Optional custom ID for the product. If not provided, one will be generated.
+   * Optional custom ID for the product. Must start with 'prod\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 

@@ -57,9 +57,9 @@ describe('resource resources', () => {
   test.skip('attach: required and optional params', async () => {
     const response = await client.beta.commerce.products.resources.attach('product_id', {
       type: 'custom_entitlement',
-      id: 'id',
+      id: 'res_-K0---P3EA--',
       custom_entitlement: {
-        id: 'id',
+        id: 'ent_J!Q0Ok0bzJb7',
         metadata: { foo: 'bar' },
       },
     });

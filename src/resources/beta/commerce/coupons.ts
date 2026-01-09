@@ -360,7 +360,8 @@ export interface CouponCreateParams {
   code: string;
 
   /**
-   * Optional custom ID for the coupon. If not provided, one will be generated.
+   * Optional custom ID for the coupon. Must start with 'coupon\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 

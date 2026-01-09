@@ -92,7 +92,8 @@ export namespace ResourceListResponse {
    */
   export interface CustomEntitlement {
     /**
-     * Unique identifier for the custom entitlement. Must not contain '.'
+     * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+     * not contain '.'
      */
     id: string;
 
@@ -140,7 +141,8 @@ export namespace ResourceAttachResponse {
    */
   export interface CustomEntitlement {
     /**
-     * Unique identifier for the custom entitlement. Must not contain '.'
+     * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+     * not contain '.'
      */
     id: string;
 
@@ -170,7 +172,8 @@ export interface ResourceAttachParams {
   type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
 
   /**
-   * Optional custom ID for the resource. If not provided, one will be generated.
+   * Optional custom ID for the resource. Must start with 'res\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 
@@ -186,7 +189,8 @@ export namespace ResourceAttachParams {
    */
   export interface CustomEntitlement {
     /**
-     * Unique identifier for the custom entitlement. Must not contain '.'
+     * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+     * not contain '.'
      */
     id: string;
 

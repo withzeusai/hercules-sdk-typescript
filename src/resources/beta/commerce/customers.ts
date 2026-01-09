@@ -644,7 +644,8 @@ export namespace CustomerGetResponse {
 
 export interface CustomerCreateParams {
   /**
-   * Optional custom ID for the customer. If not provided, one will be generated.
+   * Optional custom ID for the customer. Must start with 'cus\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 
