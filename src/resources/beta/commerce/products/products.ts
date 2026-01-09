@@ -248,9 +248,9 @@ export namespace ProductCreateResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -433,9 +433,9 @@ export namespace ProductUpdateResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -618,9 +618,9 @@ export namespace ProductListResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -803,9 +803,9 @@ export namespace ProductArchiveResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -988,9 +988,9 @@ export namespace ProductGetResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
