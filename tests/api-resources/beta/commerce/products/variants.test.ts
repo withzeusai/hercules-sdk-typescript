@@ -25,7 +25,7 @@ describe('resource variants', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.beta.commerce.products.variants.create('product_id', {
       name: 'name',
-      id: 'id',
+      id: 'var_-K0---P3EA--',
       currency: 'currency',
       description: 'description',
       media: [{ type: 'image', url: 'https://example.com' }],

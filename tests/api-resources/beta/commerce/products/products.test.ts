@@ -29,7 +29,7 @@ describe('resource products', () => {
     const response = await client.beta.commerce.products.create({
       name: 'name',
       unit_amount: -9007199254740991,
-      id: 'id',
+      id: 'prod_-K0---P3EA--',
       currency: 'currency',
       description: 'description',
       interval: 'day',

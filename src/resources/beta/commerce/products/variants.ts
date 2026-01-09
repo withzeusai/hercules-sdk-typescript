@@ -829,7 +829,8 @@ export interface VariantCreateParams {
   name: string;
 
   /**
-   * Optional custom ID for the variant. If not provided, one will be generated.
+   * Optional custom ID for the variant. Must start with 'var\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 
