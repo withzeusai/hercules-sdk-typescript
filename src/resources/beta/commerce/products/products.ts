@@ -119,6 +119,12 @@ export interface ProductCreateResponse {
   name: string;
 
   /**
+   * ID of the product group this product belongs to. Product groups define shared
+   * billing configuration. All products must belong to a product group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductCreateResponse.DefaultPrice | null;
@@ -137,12 +143,6 @@ export interface ProductCreateResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -304,6 +304,12 @@ export interface ProductUpdateResponse {
   name: string;
 
   /**
+   * ID of the product group this product belongs to. Product groups define shared
+   * billing configuration. All products must belong to a product group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductUpdateResponse.DefaultPrice | null;
@@ -322,12 +328,6 @@ export interface ProductUpdateResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -489,6 +489,12 @@ export interface ProductListResponse {
   name: string;
 
   /**
+   * ID of the product group this product belongs to. Product groups define shared
+   * billing configuration. All products must belong to a product group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductListResponse.DefaultPrice | null;
@@ -507,12 +513,6 @@ export interface ProductListResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -674,6 +674,12 @@ export interface ProductArchiveResponse {
   name: string;
 
   /**
+   * ID of the product group this product belongs to. Product groups define shared
+   * billing configuration. All products must belong to a product group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductArchiveResponse.DefaultPrice | null;
@@ -692,12 +698,6 @@ export interface ProductArchiveResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -859,6 +859,12 @@ export interface ProductGetResponse {
   name: string;
 
   /**
+   * ID of the product group this product belongs to. Product groups define shared
+   * billing configuration. All products must belong to a product group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductGetResponse.DefaultPrice | null;
@@ -877,12 +883,6 @@ export interface ProductGetResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -1128,9 +1128,10 @@ export interface ProductUpdateParams {
   name?: string;
 
   /**
-   * ID of the product group. Set to null to remove from a group.
+   * ID of the product group to move this product to. All products must belong to a
+   * product group.
    */
-  product_group_id?: string | null;
+  product_group_id?: string;
 
   /**
    * Tags for categorizing and filtering products

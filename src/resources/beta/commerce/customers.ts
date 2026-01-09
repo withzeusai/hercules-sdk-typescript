@@ -766,7 +766,52 @@ export namespace CustomerUpdateParams {
   }
 }
 
-export interface CustomerListParams extends CursorIDPageParams {}
+export interface CustomerListParams extends CursorIDPageParams {
+  /**
+   * Filter by creation date. Accepts an object with gt, gte, lt, lte operators using
+   * Unix timestamps.
+   */
+  created?: CustomerListParams.Created;
+
+  /**
+   * Filter by exact email address match.
+   */
+  email?: string;
+
+  /**
+   * Search query to filter customers. Searches across name, email, and ID fields
+   * (case-insensitive).
+   */
+  query?: string;
+}
+
+export namespace CustomerListParams {
+  /**
+   * Filter by creation date. Accepts an object with gt, gte, lt, lte operators using
+   * Unix timestamps.
+   */
+  export interface Created {
+    /**
+     * Greater than (Unix timestamp)
+     */
+    gt?: number;
+
+    /**
+     * Greater than or equal to (Unix timestamp)
+     */
+    gte?: number;
+
+    /**
+     * Less than (Unix timestamp)
+     */
+    lt?: number;
+
+    /**
+     * Less than or equal to (Unix timestamp)
+     */
+    lte?: number;
+  }
+}
 
 export interface CustomerBillingPortalParams {
   /**
