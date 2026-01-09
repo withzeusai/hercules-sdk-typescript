@@ -783,6 +783,12 @@ export interface CustomerListParams extends CursorIDPageParams {
    * (case-insensitive).
    */
   query?: string;
+
+  /**
+   * Sort order for customers. Prefix with '-' for descending order. Valid values:
+   * name, -name, email, -email, created, -created. Default: -created (newest first).
+   */
+  sort?: string;
 }
 
 export namespace CustomerListParams {
