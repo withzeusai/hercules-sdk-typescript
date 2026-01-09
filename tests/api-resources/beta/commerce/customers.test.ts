@@ -109,6 +109,7 @@ describe('resource customers', () => {
           ending_before: 'ending_before',
           limit: 1,
           query: 'query',
+          sort: '-created',
           starting_after: 'starting_after',
         },
         { path: '/_stainless_unknown_path' },
