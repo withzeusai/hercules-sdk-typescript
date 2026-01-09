@@ -119,8 +119,8 @@ export interface ProductCreateResponse {
   name: string;
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration. All products must belong to a product group.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
    */
   product_group_id: string;
 
@@ -304,8 +304,8 @@ export interface ProductUpdateResponse {
   name: string;
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration. All products must belong to a product group.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
    */
   product_group_id: string;
 
@@ -489,8 +489,8 @@ export interface ProductListResponse {
   name: string;
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration. All products must belong to a product group.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
    */
   product_group_id: string;
 
@@ -674,8 +674,8 @@ export interface ProductArchiveResponse {
   name: string;
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration. All products must belong to a product group.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
    */
   product_group_id: string;
 
@@ -859,8 +859,8 @@ export interface ProductGetResponse {
   name: string;
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration. All products must belong to a product group.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
    */
   product_group_id: string;
 
@@ -1068,8 +1068,8 @@ export interface ProductCreateParams {
   metadata?: { [key: string]: unknown };
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration.
    */
   product_group_id?: string;
 
@@ -1128,8 +1128,8 @@ export interface ProductUpdateParams {
   name?: string;
 
   /**
-   * ID of the product group to move this product to. All products must belong to a
-   * product group.
+   * ID of the subscription group to move this product to. All products must belong
+   * to a subscription group.
    */
   product_group_id?: string;
 
