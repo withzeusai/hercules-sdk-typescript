@@ -29,12 +29,18 @@ describe('resource products', () => {
     const response = await client.beta.commerce.products.create({
       name: 'name',
       unit_amount: -9007199254740991,
-      id: 'id',
+      id: 'prod_-K0---P3EA--',
       currency: 'currency',
       description: 'description',
       interval: 'day',
       interval_count: -9007199254740991,
-      media: [{ type: 'image', url: 'https://example.com' }],
+      media: [
+        {
+          cdn_file_id: 'cdn_file_id',
+          type: 'image',
+          display_order: 0,
+        },
+      ],
       metadata: { foo: 'bar' },
       product_group_id: 'product_group_id',
       tags: ['string'],
@@ -63,7 +69,13 @@ describe('resource products', () => {
         {
           active: true,
           description: 'description',
-          media: [{ type: 'image', url: 'https://example.com' }],
+          media: [
+            {
+              cdn_file_id: 'cdn_file_id',
+              type: 'image',
+              display_order: 0,
+            },
+          ],
           metadata: { foo: 'bar' },
           name: 'name',
           product_group_id: 'product_group_id',

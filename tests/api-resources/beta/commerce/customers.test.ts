@@ -27,7 +27,7 @@ describe('resource customers', () => {
     await expect(
       client.beta.commerce.customers.create(
         {
-          id: 'id',
+          id: 'cus_-K0---P3EA--',
           address: {
             city: 'city',
             country: 'country',
@@ -99,8 +99,17 @@ describe('resource customers', () => {
     await expect(
       client.beta.commerce.customers.list(
         {
+          created: {
+            gt: 0,
+            gte: 0,
+            lt: 0,
+            lte: 0,
+          },
+          email: 'email',
           ending_before: 'ending_before',
           limit: 1,
+          query: 'query',
+          sort: '-created',
           starting_after: 'starting_after',
         },
         { path: '/_stainless_unknown_path' },

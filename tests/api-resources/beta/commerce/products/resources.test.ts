@@ -42,6 +42,7 @@ describe('resource resources', () => {
   // Prism tests are disabled
   test.skip('attach: only required params', async () => {
     const responsePromise = client.beta.commerce.products.resources.attach('product_id', {
+      custom_entitlement: { id: 'id' },
       type: 'custom_entitlement',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -56,12 +57,12 @@ describe('resource resources', () => {
   // Prism tests are disabled
   test.skip('attach: required and optional params', async () => {
     const response = await client.beta.commerce.products.resources.attach('product_id', {
-      type: 'custom_entitlement',
-      id: 'id',
       custom_entitlement: {
         id: 'id',
         metadata: { foo: 'bar' },
       },
+      type: 'custom_entitlement',
+      id: 'res_-K0---P3EA--',
     });
   });
 

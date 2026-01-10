@@ -25,10 +25,16 @@ describe('resource variants', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.beta.commerce.products.variants.create('product_id', {
       name: 'name',
-      id: 'id',
+      id: 'var_-K0---P3EA--',
       currency: 'currency',
       description: 'description',
-      media: [{ type: 'image', url: 'https://example.com' }],
+      media: [
+        {
+          cdn_file_id: 'cdn_file_id',
+          type: 'image',
+          display_order: 0,
+        },
+      ],
       metadata: { foo: 'bar' },
       recurring: { interval: 'day', interval_count: 1 },
       unit_amount: -9007199254740991,
@@ -55,7 +61,13 @@ describe('resource variants', () => {
       product_id: 'product_id',
       active: true,
       description: 'description',
-      media: [{ type: 'image', url: 'https://example.com' }],
+      media: [
+        {
+          cdn_file_id: 'cdn_file_id',
+          type: 'image',
+          display_order: 0,
+        },
+      ],
       metadata: { foo: 'bar' },
       name: 'name',
     });

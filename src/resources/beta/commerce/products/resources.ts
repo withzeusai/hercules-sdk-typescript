@@ -76,9 +76,9 @@ export interface ResourceListResponse {
   created: string;
 
   /**
-   * Type of resource: custom_entitlement, file, content, course, or ticket
+   * Type of resource
    */
-  type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+  type: 'custom_entitlement';
 
   /**
    * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -92,7 +92,8 @@ export namespace ResourceListResponse {
    */
   export interface CustomEntitlement {
     /**
-     * Unique identifier for the custom entitlement. Must not contain '.'
+     * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+     * not contain '.'
      */
     id: string;
 
@@ -124,9 +125,9 @@ export interface ResourceAttachResponse {
   created: string;
 
   /**
-   * Type of resource: custom_entitlement, file, content, course, or ticket
+   * Type of resource
    */
-  type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+  type: 'custom_entitlement';
 
   /**
    * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -140,7 +141,8 @@ export namespace ResourceAttachResponse {
    */
   export interface CustomEntitlement {
     /**
-     * Unique identifier for the custom entitlement. Must not contain '.'
+     * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+     * not contain '.'
      */
     id: string;
 
@@ -160,24 +162,25 @@ export interface ResourceListParams extends CursorIDPageParams {
   /**
    * Filter by resource type
    */
-  type?: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+  type?: 'custom_entitlement';
 }
 
 export interface ResourceAttachParams {
   /**
-   * Type of resource: custom_entitlement, file, content, course, or ticket
-   */
-  type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
-
-  /**
-   * Optional custom ID for the resource. If not provided, one will be generated.
-   */
-  id?: string;
-
-  /**
    * Custom entitlement data. Required when type is 'custom_entitlement'.
    */
-  custom_entitlement?: ResourceAttachParams.CustomEntitlement;
+  custom_entitlement: ResourceAttachParams.CustomEntitlement;
+
+  /**
+   * Type of resource
+   */
+  type: 'custom_entitlement';
+
+  /**
+   * Optional custom ID for the resource. Must start with 'res\_'. If not provided,
+   * one will be generated.
+   */
+  id?: string;
 }
 
 export namespace ResourceAttachParams {
@@ -186,7 +189,8 @@ export namespace ResourceAttachParams {
    */
   export interface CustomEntitlement {
     /**
-     * Unique identifier for the custom entitlement. Must not contain '.'
+     * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+     * not contain '.'
      */
     id: string;
 

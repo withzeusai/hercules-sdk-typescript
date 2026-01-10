@@ -119,6 +119,12 @@ export interface ProductCreateResponse {
   name: string;
 
   /**
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductCreateResponse.DefaultPrice | null;
@@ -137,12 +143,6 @@ export interface ProductCreateResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -217,14 +217,39 @@ export namespace ProductCreateResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -248,9 +273,9 @@ export namespace ProductCreateResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -264,7 +289,8 @@ export namespace ProductCreateResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -303,6 +329,12 @@ export interface ProductUpdateResponse {
   name: string;
 
   /**
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductUpdateResponse.DefaultPrice | null;
@@ -321,12 +353,6 @@ export interface ProductUpdateResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -401,14 +427,39 @@ export namespace ProductUpdateResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -432,9 +483,9 @@ export namespace ProductUpdateResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -448,7 +499,8 @@ export namespace ProductUpdateResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -487,6 +539,12 @@ export interface ProductListResponse {
   name: string;
 
   /**
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductListResponse.DefaultPrice | null;
@@ -505,12 +563,6 @@ export interface ProductListResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -585,14 +637,39 @@ export namespace ProductListResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -616,9 +693,9 @@ export namespace ProductListResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -632,7 +709,8 @@ export namespace ProductListResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -671,6 +749,12 @@ export interface ProductArchiveResponse {
   name: string;
 
   /**
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductArchiveResponse.DefaultPrice | null;
@@ -689,12 +773,6 @@ export interface ProductArchiveResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -769,14 +847,39 @@ export namespace ProductArchiveResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -800,9 +903,9 @@ export namespace ProductArchiveResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -816,7 +919,8 @@ export namespace ProductArchiveResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -855,6 +959,12 @@ export interface ProductGetResponse {
   name: string;
 
   /**
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
+   */
+  product_group_id: string;
+
+  /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
   default_price?: ProductGetResponse.DefaultPrice | null;
@@ -873,12 +983,6 @@ export interface ProductGetResponse {
    * Custom metadata for the product
    */
   metadata?: { [key: string]: unknown };
-
-  /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
-   */
-  product_group_id?: string | null;
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -953,14 +1057,39 @@ export namespace ProductGetResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -984,9 +1113,9 @@ export namespace ProductGetResponse {
     created: string;
 
     /**
-     * Type of resource: custom_entitlement, file, content, course, or ticket
+     * Type of resource
      */
-    type: 'custom_entitlement' | 'file' | 'content' | 'course' | 'ticket';
+    type: 'custom_entitlement';
 
     /**
      * Custom entitlement data. Required when type is 'custom_entitlement'.
@@ -1000,7 +1129,8 @@ export namespace ProductGetResponse {
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must not contain '.'
+       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
+       * not contain '.'
        */
       id: string;
 
@@ -1025,7 +1155,8 @@ export interface ProductCreateParams {
   unit_amount: number;
 
   /**
-   * Optional custom ID for the product. If not provided, one will be generated.
+   * Optional custom ID for the product. Must start with 'prod\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 
@@ -1052,7 +1183,7 @@ export interface ProductCreateParams {
   interval_count?: number;
 
   /**
-   * Media attachments (images, videos) for the product
+   * Media attachments by CDN file ID
    */
   media?: Array<ProductCreateParams.Media>;
 
@@ -1062,8 +1193,8 @@ export interface ProductCreateParams {
   metadata?: { [key: string]: unknown };
 
   /**
-   * ID of the product group this product belongs to. Product groups define shared
-   * billing configuration.
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration.
    */
   product_group_id?: string;
 
@@ -1080,18 +1211,23 @@ export interface ProductCreateParams {
 
 export namespace ProductCreateParams {
   /**
-   * Media attachment for products or variants
+   * Media input for attaching to products or variants
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID from upload
      */
-    type: 'image' | 'video' | 'external';
+    cdn_file_id: string;
 
     /**
-     * URL of the media resource
+     * Type of media: image or video
      */
-    url: string;
+    type: 'image' | 'video';
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order?: number;
   }
 }
 
@@ -1107,7 +1243,7 @@ export interface ProductUpdateParams {
   description?: string;
 
   /**
-   * Media attachments (images, videos) for the product
+   * Replace all media attachments. Pass empty array to remove all media.
    */
   media?: Array<ProductUpdateParams.Media>;
 
@@ -1122,9 +1258,10 @@ export interface ProductUpdateParams {
   name?: string;
 
   /**
-   * ID of the product group. Set to null to remove from a group.
+   * ID of the subscription group to move this product to. All products must belong
+   * to a subscription group.
    */
-  product_group_id?: string | null;
+  product_group_id?: string;
 
   /**
    * Tags for categorizing and filtering products
@@ -1134,18 +1271,23 @@ export interface ProductUpdateParams {
 
 export namespace ProductUpdateParams {
   /**
-   * Media attachment for products or variants
+   * Media input for attaching to products or variants
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID from upload
      */
-    type: 'image' | 'video' | 'external';
+    cdn_file_id: string;
 
     /**
-     * URL of the media resource
+     * Type of media: image or video
      */
-    url: string;
+    type: 'image' | 'video';
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order?: number;
   }
 }
 
