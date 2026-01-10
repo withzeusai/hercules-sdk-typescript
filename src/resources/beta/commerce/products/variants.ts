@@ -200,14 +200,39 @@ export namespace VariantCreateResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -349,14 +374,39 @@ export namespace VariantUpdateResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -498,14 +548,39 @@ export namespace VariantListResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -647,14 +722,39 @@ export namespace VariantArchiveResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -796,14 +896,39 @@ export namespace VariantGetResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -845,7 +970,7 @@ export interface VariantCreateParams {
   description?: string;
 
   /**
-   * Media attachments (images, videos) for the variant
+   * Media attachments by CDN file ID
    */
   media?: Array<VariantCreateParams.Media>;
 
@@ -868,18 +993,23 @@ export interface VariantCreateParams {
 
 export namespace VariantCreateParams {
   /**
-   * Media attachment for products or variants
+   * Media input for attaching to products or variants
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID from upload
      */
-    type: 'image' | 'video' | 'external';
+    cdn_file_id: string;
 
     /**
-     * URL of the media resource
+     * Type of media: image or video
      */
-    url: string;
+    type: 'image' | 'video';
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order?: number;
   }
 
   /**
@@ -915,7 +1045,7 @@ export interface VariantUpdateParams {
   description?: string;
 
   /**
-   * Body param: Media attachments (images, videos) for the variant
+   * Body param: Replace all media attachments. Pass empty array to remove all media.
    */
   media?: Array<VariantUpdateParams.Media>;
 
@@ -932,18 +1062,23 @@ export interface VariantUpdateParams {
 
 export namespace VariantUpdateParams {
   /**
-   * Media attachment for products or variants
+   * Media input for attaching to products or variants
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID from upload
      */
-    type: 'image' | 'video' | 'external';
+    cdn_file_id: string;
 
     /**
-     * URL of the media resource
+     * Type of media: image or video
      */
-    url: string;
+    type: 'image' | 'video';
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order?: number;
   }
 }
 
