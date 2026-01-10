@@ -217,14 +217,39 @@ export namespace ProductCreateResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -402,14 +427,39 @@ export namespace ProductUpdateResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -587,14 +637,39 @@ export namespace ProductListResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -772,14 +847,39 @@ export namespace ProductArchiveResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -957,14 +1057,39 @@ export namespace ProductGetResponse {
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID
      */
-    type: 'image' | 'video' | 'external';
+    id: string;
 
     /**
-     * URL of the media resource
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
      */
     url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
   }
 
   /**
@@ -1058,7 +1183,7 @@ export interface ProductCreateParams {
   interval_count?: number;
 
   /**
-   * Media attachments (images, videos) for the product
+   * Media attachments by CDN file ID
    */
   media?: Array<ProductCreateParams.Media>;
 
@@ -1086,18 +1211,23 @@ export interface ProductCreateParams {
 
 export namespace ProductCreateParams {
   /**
-   * Media attachment for products or variants
+   * Media input for attaching to products or variants
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID from upload
      */
-    type: 'image' | 'video' | 'external';
+    cdn_file_id: string;
 
     /**
-     * URL of the media resource
+     * Type of media: image or video
      */
-    url: string;
+    type: 'image' | 'video';
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order?: number;
   }
 }
 
@@ -1113,7 +1243,7 @@ export interface ProductUpdateParams {
   description?: string;
 
   /**
-   * Media attachments (images, videos) for the product
+   * Replace all media attachments. Pass empty array to remove all media.
    */
   media?: Array<ProductUpdateParams.Media>;
 
@@ -1141,18 +1271,23 @@ export interface ProductUpdateParams {
 
 export namespace ProductUpdateParams {
   /**
-   * Media attachment for products or variants
+   * Media input for attaching to products or variants
    */
   export interface Media {
     /**
-     * Type of media: image, video, or external link
+     * CDN file ID from upload
      */
-    type: 'image' | 'video' | 'external';
+    cdn_file_id: string;
 
     /**
-     * URL of the media resource
+     * Type of media: image or video
      */
-    url: string;
+    type: 'image' | 'video';
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order?: number;
   }
 }
 
