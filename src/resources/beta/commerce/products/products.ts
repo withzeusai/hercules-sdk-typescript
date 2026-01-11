@@ -1059,10 +1059,10 @@ export interface ProductCreateParams {
   name: string;
 
   /**
-   * Price amount in the smallest currency unit (e.g., cents). Use 0 for free
-   * products.
+   * Variants to create with the product. Each variant has its own pricing. At least
+   * one variant is required.
    */
-  unit_amount: number;
+  variants: Array<ProductCreateParams.Variant>;
 
   /**
    * Optional custom ID for the product. Must start with 'prod\_'. If not provided,
@@ -1071,26 +1071,9 @@ export interface ProductCreateParams {
   id?: string;
 
   /**
-   * Three-letter ISO currency code
-   */
-  currency?: string;
-
-  /**
    * Detailed description of what the product includes
    */
   description?: string;
-
-  /**
-   * Billing frequency for recurring prices: day, week, month, or year. Required for
-   * recurring type, ignored for one_time.
-   */
-  interval?: 'day' | 'week' | 'month' | 'year';
-
-  /**
-   * Number of intervals between billings for recurring prices. Required for
-   * recurring type, ignored for one_time.
-   */
-  interval_count?: number;
 
   /**
    * Media attachments by CDN file ID
@@ -1112,14 +1095,96 @@ export interface ProductCreateParams {
    * Tags for categorizing and filtering products
    */
   tags?: Array<string>;
-
-  /**
-   * Price type: one_time for single purchases, recurring for subscriptions
-   */
-  type?: 'one_time' | 'recurring';
 }
 
 export namespace ProductCreateParams {
+  /**
+   * Variant configuration for inline creation with a product
+   */
+  export interface Variant {
+    /**
+     * Display name for the variant
+     */
+    name: string;
+
+    /**
+     * Optional custom ID for the variant. Must start with 'var\_'.
+     */
+    id?: string;
+
+    /**
+     * Three-letter ISO currency code
+     */
+    currency?: string;
+
+    /**
+     * Detailed description of what this variant includes
+     */
+    description?: string;
+
+    /**
+     * Mark as the default variant for checkout. Only one variant can be default.
+     */
+    is_default?: boolean;
+
+    /**
+     * Media attachments by CDN file ID
+     */
+    media?: Array<Variant.Media>;
+
+    /**
+     * Custom metadata for the variant
+     */
+    metadata?: { [key: string]: unknown };
+
+    /**
+     * Recurring billing configuration for subscription variants
+     */
+    recurring?: Variant.Recurring;
+
+    /**
+     * Price amount in smallest currency unit (e.g., cents)
+     */
+    unit_amount?: number;
+  }
+
+  export namespace Variant {
+    /**
+     * Media input for attaching to products or variants
+     */
+    export interface Media {
+      /**
+       * CDN file ID from upload
+       */
+      cdn_file_id: string;
+
+      /**
+       * Type of media: image or video
+       */
+      type: 'image' | 'video';
+
+      /**
+       * Display order in gallery (0-indexed)
+       */
+      display_order?: number;
+    }
+
+    /**
+     * Recurring billing configuration for subscription variants
+     */
+    export interface Recurring {
+      /**
+       * Billing frequency: day, week, month, or year
+       */
+      interval: 'day' | 'week' | 'month' | 'year';
+
+      /**
+       * Number of intervals between billings
+       */
+      interval_count?: number;
+    }
+  }
+
   /**
    * Media input for attaching to products or variants
    */

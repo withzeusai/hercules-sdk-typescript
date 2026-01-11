@@ -13,7 +13,7 @@ describe('resource products', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.beta.commerce.products.create({
       name: 'name',
-      unit_amount: -9007199254740991,
+      variants: [{ name: 'name' }],
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,12 +28,27 @@ describe('resource products', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.beta.commerce.products.create({
       name: 'name',
-      unit_amount: -9007199254740991,
+      variants: [
+        {
+          name: 'name',
+          id: 'var_-K0---P3EA--',
+          currency: 'currency',
+          description: 'description',
+          is_default: true,
+          media: [
+            {
+              cdn_file_id: 'cdn_file_id',
+              type: 'image',
+              display_order: 0,
+            },
+          ],
+          metadata: { foo: 'bar' },
+          recurring: { interval: 'day', interval_count: 1 },
+          unit_amount: -9007199254740991,
+        },
+      ],
       id: 'prod_-K0---P3EA--',
-      currency: 'currency',
       description: 'description',
-      interval: 'day',
-      interval_count: -9007199254740991,
       media: [
         {
           cdn_file_id: 'cdn_file_id',
@@ -44,7 +59,6 @@ describe('resource products', () => {
       metadata: { foo: 'bar' },
       product_group_id: 'product_group_id',
       tags: ['string'],
-      type: 'one_time',
     });
   });
 
