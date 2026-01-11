@@ -167,12 +167,6 @@ export namespace ProductCreateResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -188,18 +182,6 @@ export namespace ProductCreateResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -377,12 +359,6 @@ export namespace ProductUpdateResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -398,18 +374,6 @@ export namespace ProductUpdateResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -587,12 +551,6 @@ export namespace ProductListResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -608,18 +566,6 @@ export namespace ProductListResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -797,12 +743,6 @@ export namespace ProductArchiveResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -818,18 +758,6 @@ export namespace ProductArchiveResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -1007,12 +935,6 @@ export namespace ProductGetResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -1028,18 +950,6 @@ export namespace ProductGetResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
