@@ -77,11 +77,12 @@ describe('resource commerce', () => {
       customer_id: 'customer_id',
       variant_id: 'variant_id',
       id: 'id',
-      billing_cycle_anchor: 'now',
       cancel_url: 'https://example.com',
+      charge_timing: 'immediate',
+      interval_downgrade_behavior: 'immediate',
+      plan_downgrade_behavior: 'immediate',
       promotion_code: 'promotion_code',
-      proration_behavior: 'create_prorations',
-      proration_date: 'now',
+      proration_behavior: 'none',
       success_url: 'https://example.com',
     });
   });

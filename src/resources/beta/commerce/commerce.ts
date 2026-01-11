@@ -235,15 +235,27 @@ export interface CommerceCheckoutParams {
   id?: string;
 
   /**
-   * Override billing cycle anchor behavior for subscription updates. If not
-   * provided, uses the subscription group's configured default.
-   */
-  billing_cycle_anchor?: 'now' | 'unchanged' | 'reset';
-
-  /**
    * URL to redirect on cancel
    */
   cancel_url?: string;
+
+  /**
+   * Override charge timing for subscription updates. If not provided, uses the
+   * subscription group's configured default.
+   */
+  charge_timing?: 'immediate' | 'end_of_period';
+
+  /**
+   * Override interval downgrade behavior for subscription updates. If not provided,
+   * uses the subscription group's configured default.
+   */
+  interval_downgrade_behavior?: 'immediate' | 'end_of_period';
+
+  /**
+   * Override plan downgrade behavior for subscription updates. If not provided, uses
+   * the subscription group's configured default.
+   */
+  plan_downgrade_behavior?: 'immediate' | 'end_of_period';
 
   /**
    * Promotion code to apply
@@ -254,13 +266,7 @@ export interface CommerceCheckoutParams {
    * Override proration behavior for subscription updates. If not provided, uses the
    * subscription group's configured default.
    */
-  proration_behavior?: 'create_prorations' | 'none' | 'always_invoice';
-
-  /**
-   * Override proration date calculation for subscription updates. If not provided,
-   * uses the subscription group's configured default.
-   */
-  proration_date?: 'now' | 'start_of_period';
+  proration_behavior?: 'none' | 'prorate' | 'full_difference';
 
   /**
    * URL to redirect on success
