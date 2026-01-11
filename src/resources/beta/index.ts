@@ -10,3 +10,4 @@ export {
   type CommerceCheckParams,
   type CommerceCheckoutParams,
 } from './commerce/index';
+export { Content } from './content/index';
