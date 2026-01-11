@@ -11,12 +11,16 @@ import {
   CommerceCheckoutParams,
   CommerceCheckoutResponse,
 } from './commerce/commerce';
+import * as ContentAPI from './content/content';
+import { Content } from './content/content';
 
 export class Beta extends APIResource {
   commerce: CommerceAPI.Commerce = new CommerceAPI.Commerce(this._client);
+  content: ContentAPI.Content = new ContentAPI.Content(this._client);
 }
 
 Beta.Commerce = Commerce;
+Beta.Content = Content;
 
 export declare namespace Beta {
   export {
@@ -28,4 +32,6 @@ export declare namespace Beta {
     type CommerceCheckParams as CommerceCheckParams,
     type CommerceCheckoutParams as CommerceCheckoutParams,
   };
+
+  export { Content as Content };
 }
