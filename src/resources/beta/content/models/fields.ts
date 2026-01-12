@@ -54,7 +54,7 @@ export interface FieldCreateParams {
    */
   type:
     | 'text'
-    | 'richtext'
+    | 'markdown'
     | 'number'
     | 'boolean'
     | 'date'
@@ -117,7 +117,7 @@ export namespace FieldCreateParams {
      */
     array_item_type?:
       | 'text'
-      | 'richtext'
+      | 'markdown'
       | 'number'
       | 'boolean'
       | 'date'
@@ -217,7 +217,7 @@ export namespace FieldUpdateParams {
      */
     array_item_type?:
       | 'text'
-      | 'richtext'
+      | 'markdown'
       | 'number'
       | 'boolean'
       | 'date'

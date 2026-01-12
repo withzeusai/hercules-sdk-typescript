@@ -90,7 +90,7 @@ export interface Field {
    */
   type:
     | 'text'
-    | 'richtext'
+    | 'markdown'
     | 'number'
     | 'boolean'
     | 'date'
@@ -147,7 +147,7 @@ export namespace Field {
      */
     array_item_type?:
       | 'text'
-      | 'richtext'
+      | 'markdown'
       | 'number'
       | 'boolean'
       | 'date'
@@ -289,7 +289,7 @@ export namespace ModelCreateParams {
      */
     type:
       | 'text'
-      | 'richtext'
+      | 'markdown'
       | 'number'
       | 'boolean'
       | 'date'
@@ -352,7 +352,7 @@ export namespace ModelCreateParams {
        */
       array_item_type?:
         | 'text'
-        | 'richtext'
+        | 'markdown'
         | 'number'
         | 'boolean'
         | 'date'
