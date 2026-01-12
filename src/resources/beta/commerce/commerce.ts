@@ -3,42 +3,43 @@
 import { APIResource } from '../../../core/resource';
 import * as CouponsAPI from './coupons';
 import {
+  Coupon,
   CouponCreateParams,
-  CouponCreateResponse,
-  CouponGetResponse,
   CouponListParams,
-  CouponListResponse,
-  CouponListResponsesCursorIDPage,
   CouponUpdateParams,
-  CouponUpdateResponse,
   Coupons,
+  CouponsCursorIDPage,
 } from './coupons';
 import * as CustomersAPI from './customers';
 import {
+  Customer,
+  CustomerAddress,
   CustomerBillingPortalParams,
   CustomerBillingPortalResponse,
   CustomerCreateParams,
-  CustomerCreateResponse,
   CustomerGetResponse,
   CustomerListParams,
-  CustomerListResponse,
-  CustomerListResponsesCursorIDPage,
   CustomerUpdateParams,
-  CustomerUpdateResponse,
   Customers,
+  CustomersCursorIDPage,
 } from './customers';
+import * as FeaturesAPI from './features';
+import {
+  Feature,
+  FeatureCreateParams,
+  FeatureListParams,
+  FeatureUpdateParams,
+  Features,
+  FeaturesCursorIDPage,
+} from './features';
 import * as ProductsAPI from './products/products';
 import {
-  ProductArchiveResponse,
+  Product,
   ProductCreateParams,
-  ProductCreateResponse,
-  ProductGetResponse,
   ProductListParams,
-  ProductListResponse,
-  ProductListResponsesCursorIDPage,
   ProductUpdateParams,
-  ProductUpdateResponse,
   Products,
+  ProductsCursorIDPage,
 } from './products/products';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -47,6 +48,7 @@ export class Commerce extends APIResource {
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
+  features: FeaturesAPI.Features = new FeaturesAPI.Features(this._client);
 
   /**
    * Cancels a customer's subscription. By default, the subscription remains active
@@ -223,10 +225,14 @@ export interface CommerceCheckoutParams {
   customer_id: string;
 
   /**
-   * The variant ID to purchase. Determines pricing and whether this is a
-   * subscription or one-time payment.
+   * List of items to purchase. Each item specifies a variant and quantity.
    */
-  variant_id: string;
+  line_items: Array<CommerceCheckoutParams.LineItem>;
+
+  /**
+   * URL to redirect on success
+   */
+  success_url: string;
 
   /**
    * Optional custom ID for the subscription or payment. If not provided, one will be
@@ -267,16 +273,31 @@ export interface CommerceCheckoutParams {
    * subscription group's configured default.
    */
   proration_behavior?: 'none' | 'prorate' | 'full_difference';
+}
 
+export namespace CommerceCheckoutParams {
   /**
-   * URL to redirect on success
+   * A line item in the checkout
    */
-  success_url?: string;
+  export interface LineItem {
+    /**
+     * The variant ID to purchase. Determines pricing and whether this is a
+     * subscription or one-time payment.
+     */
+    variant_id: string;
+
+    /**
+     * Quantity of this item. For subscriptions, this typically represents seat count.
+     * Defaults to 1.
+     */
+    quantity?: number;
+  }
 }
 
 Commerce.Customers = Customers;
 Commerce.Products = Products;
 Commerce.Coupons = Coupons;
+Commerce.Features = Features;
 
 export declare namespace Commerce {
   export {
@@ -290,12 +311,11 @@ export declare namespace Commerce {
 
   export {
     Customers as Customers,
-    type CustomerCreateResponse as CustomerCreateResponse,
-    type CustomerUpdateResponse as CustomerUpdateResponse,
-    type CustomerListResponse as CustomerListResponse,
+    type Customer as Customer,
+    type CustomerAddress as CustomerAddress,
     type CustomerBillingPortalResponse as CustomerBillingPortalResponse,
     type CustomerGetResponse as CustomerGetResponse,
-    type CustomerListResponsesCursorIDPage as CustomerListResponsesCursorIDPage,
+    type CustomersCursorIDPage as CustomersCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -304,12 +324,8 @@ export declare namespace Commerce {
 
   export {
     Products as Products,
-    type ProductCreateResponse as ProductCreateResponse,
-    type ProductUpdateResponse as ProductUpdateResponse,
-    type ProductListResponse as ProductListResponse,
-    type ProductArchiveResponse as ProductArchiveResponse,
-    type ProductGetResponse as ProductGetResponse,
-    type ProductListResponsesCursorIDPage as ProductListResponsesCursorIDPage,
+    type Product as Product,
+    type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
@@ -317,13 +333,19 @@ export declare namespace Commerce {
 
   export {
     Coupons as Coupons,
-    type CouponCreateResponse as CouponCreateResponse,
-    type CouponUpdateResponse as CouponUpdateResponse,
-    type CouponListResponse as CouponListResponse,
-    type CouponGetResponse as CouponGetResponse,
-    type CouponListResponsesCursorIDPage as CouponListResponsesCursorIDPage,
+    type Coupon as Coupon,
+    type CouponsCursorIDPage as CouponsCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
     type CouponListParams as CouponListParams,
+  };
+
+  export {
+    Features as Features,
+    type Feature as Feature,
+    type FeaturesCursorIDPage as FeaturesCursorIDPage,
+    type FeatureCreateParams as FeatureCreateParams,
+    type FeatureUpdateParams as FeatureUpdateParams,
+    type FeatureListParams as FeatureListParams,
   };
 }

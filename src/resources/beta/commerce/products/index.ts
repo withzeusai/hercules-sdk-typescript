@@ -2,15 +2,11 @@
 
 export {
   Products,
-  type ProductCreateResponse,
-  type ProductUpdateResponse,
-  type ProductListResponse,
-  type ProductArchiveResponse,
-  type ProductGetResponse,
+  type Product,
   type ProductCreateParams,
   type ProductUpdateParams,
   type ProductListParams,
-  type ProductListResponsesCursorIDPage,
+  type ProductsCursorIDPage,
 } from './products';
 export {
   Resources,
@@ -23,15 +19,11 @@ export {
 } from './resources';
 export {
   Variants,
-  type VariantCreateResponse,
-  type VariantUpdateResponse,
-  type VariantListResponse,
-  type VariantArchiveResponse,
-  type VariantGetResponse,
+  type Variant,
   type VariantCreateParams,
   type VariantUpdateParams,
   type VariantListParams,
   type VariantArchiveParams,
   type VariantGetParams,
-  type VariantListResponsesCursorIDPage,
+  type VariantsCursorIDPage,
 } from './variants';
