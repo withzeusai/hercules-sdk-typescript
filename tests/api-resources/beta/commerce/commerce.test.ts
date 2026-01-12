@@ -60,7 +60,8 @@ describe('resource commerce', () => {
   test.skip('checkout: only required params', async () => {
     const responsePromise = client.beta.commerce.checkout({
       customer_id: 'customer_id',
-      variant_id: 'variant_id',
+      line_items: [{ variant_id: 'variant_id' }],
+      success_url: 'https://example.com',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -75,7 +76,8 @@ describe('resource commerce', () => {
   test.skip('checkout: required and optional params', async () => {
     const response = await client.beta.commerce.checkout({
       customer_id: 'customer_id',
-      variant_id: 'variant_id',
+      line_items: [{ variant_id: 'variant_id', quantity: 1 }],
+      success_url: 'https://example.com',
       id: 'id',
       cancel_url: 'https://example.com',
       charge_timing: 'immediate',
@@ -83,7 +85,6 @@ describe('resource commerce', () => {
       plan_downgrade_behavior: 'immediate',
       promotion_code: 'promotion_code',
       proration_behavior: 'none',
-      success_url: 'https://example.com',
     });
   });
 });

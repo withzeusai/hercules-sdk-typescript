@@ -223,10 +223,14 @@ export interface CommerceCheckoutParams {
   customer_id: string;
 
   /**
-   * The variant ID to purchase. Determines pricing and whether this is a
-   * subscription or one-time payment.
+   * List of items to purchase. Each item specifies a variant and quantity.
    */
-  variant_id: string;
+  line_items: Array<CommerceCheckoutParams.LineItem>;
+
+  /**
+   * URL to redirect on success
+   */
+  success_url: string;
 
   /**
    * Optional custom ID for the subscription or payment. If not provided, one will be
@@ -267,11 +271,25 @@ export interface CommerceCheckoutParams {
    * subscription group's configured default.
    */
   proration_behavior?: 'none' | 'prorate' | 'full_difference';
+}
 
+export namespace CommerceCheckoutParams {
   /**
-   * URL to redirect on success
+   * A line item in the checkout
    */
-  success_url?: string;
+  export interface LineItem {
+    /**
+     * The variant ID to purchase. Determines pricing and whether this is a
+     * subscription or one-time payment.
+     */
+    variant_id: string;
+
+    /**
+     * Quantity of this item. For subscriptions, this typically represents seat count.
+     * Defaults to 1.
+     */
+    quantity?: number;
+  }
 }
 
 Commerce.Customers = Customers;
