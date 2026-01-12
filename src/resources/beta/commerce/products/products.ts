@@ -257,27 +257,26 @@ export namespace ProductCreateResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -449,27 +448,26 @@ export namespace ProductUpdateResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -641,27 +639,26 @@ export namespace ProductListResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -833,27 +830,26 @@ export namespace ProductArchiveResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -1025,27 +1021,26 @@ export namespace ProductGetResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
