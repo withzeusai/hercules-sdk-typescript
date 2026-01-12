@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.10.1 (2026-01-12)
+
+Full Changelog: [v1.10.0...v1.10.1](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.10.0...v1.10.1)
+
+### Bug Fixes
+
+* use /tmp directory for OIDC npm installation in publish script ([46a1078](https://github.com/withzeusai/hercules-sdk-typescript/commit/46a1078b8d9bdce1ae29c0355fd32005b18b2d75))
+
+
+### Chores
+
+* **internal:** codegen related update ([71592ef](https://github.com/withzeusai/hercules-sdk-typescript/commit/71592ef304b7bda872664bed1db01add8025b5b8))
+* **internal:** codegen related update ([2734b0c](https://github.com/withzeusai/hercules-sdk-typescript/commit/2734b0c4f8d20aef6496eae237f5e3f279fe4937))
+
 ## 1.10.0 (2026-01-12)
 
 Full Changelog: [v1.9.0...v1.10.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.9.0...v1.10.0)
