@@ -167,12 +167,6 @@ export namespace ProductCreateResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -188,18 +182,6 @@ export namespace ProductCreateResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -275,27 +257,26 @@ export namespace ProductCreateResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -377,12 +358,6 @@ export namespace ProductUpdateResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -398,18 +373,6 @@ export namespace ProductUpdateResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -485,27 +448,26 @@ export namespace ProductUpdateResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -587,12 +549,6 @@ export namespace ProductListResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -608,18 +564,6 @@ export namespace ProductListResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -695,27 +639,26 @@ export namespace ProductListResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -797,12 +740,6 @@ export namespace ProductArchiveResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -818,18 +755,6 @@ export namespace ProductArchiveResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -905,27 +830,26 @@ export namespace ProductArchiveResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -1007,12 +931,6 @@ export namespace ProductGetResponse {
     id: string;
 
     /**
-     * How to handle the billing cycle when switching plans. 'now' resets to current
-     * time, 'unchanged' keeps the original anchor. Null for one-time prices.
-     */
-    billing_cycle_anchor: 'now' | 'unchanged' | null;
-
-    /**
      * Three-letter ISO currency code (e.g., usd, eur)
      */
     currency: string;
@@ -1028,18 +946,6 @@ export namespace ProductGetResponse {
      * prices.
      */
     interval_count: number | null;
-
-    /**
-     * How to handle prorations when switching plans. 'default' creates prorations,
-     * 'none' disables them. Null for one-time prices.
-     */
-    proration_behavior: 'default' | 'none' | null;
-
-    /**
-     * When to calculate proration. 'now' uses current time, 'start_of_period' uses the
-     * billing period start. Null for one-time prices or to use Stripe's default.
-     */
-    proration_date: 'now' | 'start_of_period' | null;
 
     /**
      * Price type: one_time for single purchases, recurring for subscriptions
@@ -1115,27 +1021,26 @@ export namespace ProductGetResponse {
     /**
      * Type of resource
      */
-    type: 'custom_entitlement';
+    type: 'feature';
 
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Custom entitlement data. Required when type is 'custom_entitlement'.
+     * Feature grant data. Required when type is 'feature'.
      */
     export interface CustomEntitlement {
       /**
-       * Unique identifier for the custom entitlement. Must start with 'ent\_' and must
-       * not contain '.'
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
       id: string;
 
       /**
-       * Custom metadata for the entitlement
+       * Custom metadata for the feature grant
        */
       metadata?: { [key: string]: unknown };
     }
@@ -1149,10 +1054,10 @@ export interface ProductCreateParams {
   name: string;
 
   /**
-   * Price amount in the smallest currency unit (e.g., cents). Use 0 for free
-   * products.
+   * Variants to create with the product. Each variant has its own pricing. At least
+   * one variant is required.
    */
-  unit_amount: number;
+  variants: Array<ProductCreateParams.Variant>;
 
   /**
    * Optional custom ID for the product. Must start with 'prod\_'. If not provided,
@@ -1161,26 +1066,9 @@ export interface ProductCreateParams {
   id?: string;
 
   /**
-   * Three-letter ISO currency code
-   */
-  currency?: string;
-
-  /**
    * Detailed description of what the product includes
    */
   description?: string;
-
-  /**
-   * Billing frequency for recurring prices: day, week, month, or year. Required for
-   * recurring type, ignored for one_time.
-   */
-  interval?: 'day' | 'week' | 'month' | 'year';
-
-  /**
-   * Number of intervals between billings for recurring prices. Required for
-   * recurring type, ignored for one_time.
-   */
-  interval_count?: number;
 
   /**
    * Media attachments by CDN file ID
@@ -1202,14 +1090,96 @@ export interface ProductCreateParams {
    * Tags for categorizing and filtering products
    */
   tags?: Array<string>;
-
-  /**
-   * Price type: one_time for single purchases, recurring for subscriptions
-   */
-  type?: 'one_time' | 'recurring';
 }
 
 export namespace ProductCreateParams {
+  /**
+   * Variant configuration for inline creation with a product
+   */
+  export interface Variant {
+    /**
+     * Display name for the variant
+     */
+    name: string;
+
+    /**
+     * Optional custom ID for the variant. Must start with 'var\_'.
+     */
+    id?: string;
+
+    /**
+     * Three-letter ISO currency code
+     */
+    currency?: string;
+
+    /**
+     * Detailed description of what this variant includes
+     */
+    description?: string;
+
+    /**
+     * Mark as the default variant for checkout. Only one variant can be default.
+     */
+    is_default?: boolean;
+
+    /**
+     * Media attachments by CDN file ID
+     */
+    media?: Array<Variant.Media>;
+
+    /**
+     * Custom metadata for the variant
+     */
+    metadata?: { [key: string]: unknown };
+
+    /**
+     * Recurring billing configuration for subscription variants
+     */
+    recurring?: Variant.Recurring;
+
+    /**
+     * Price amount in smallest currency unit (e.g., cents)
+     */
+    unit_amount?: number;
+  }
+
+  export namespace Variant {
+    /**
+     * Media input for attaching to products or variants
+     */
+    export interface Media {
+      /**
+       * CDN file ID from upload
+       */
+      cdn_file_id: string;
+
+      /**
+       * Type of media: image or video
+       */
+      type: 'image' | 'video';
+
+      /**
+       * Display order in gallery (0-indexed)
+       */
+      display_order?: number;
+    }
+
+    /**
+     * Recurring billing configuration for subscription variants
+     */
+    export interface Recurring {
+      /**
+       * Billing frequency: day, week, month, or year
+       */
+      interval: 'day' | 'week' | 'month' | 'year';
+
+      /**
+       * Number of intervals between billings
+       */
+      interval_count?: number;
+    }
+  }
+
   /**
    * Media input for attaching to products or variants
    */

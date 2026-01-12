@@ -8,13 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource products', () => {
+describe('resource releases', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.commerce.products.create({
-      name: 'name',
-      variants: [{ name: 'name' }],
-    });
+    const responsePromise = client.beta.content.releases.create({ name: 'name' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,45 +23,16 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.commerce.products.create({
+    const response = await client.beta.content.releases.create({
       name: 'name',
-      variants: [
-        {
-          name: 'name',
-          id: 'var_-K0---P3EA--',
-          currency: 'currency',
-          description: 'description',
-          is_default: true,
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'bar' },
-          recurring: { interval: 'day', interval_count: 1 },
-          unit_amount: -9007199254740991,
-        },
-      ],
-      id: 'prod_-K0---P3EA--',
+      id: 'cr_-K0---P3EA--',
       description: 'description',
-      media: [
-        {
-          cdn_file_id: 'cdn_file_id',
-          type: 'image',
-          display_order: 0,
-        },
-      ],
-      metadata: { foo: 'bar' },
-      product_group_id: 'product_group_id',
-      tags: ['string'],
     });
   });
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.beta.commerce.products.update('product_id');
+    const responsePromise = client.beta.content.releases.update('release_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -78,23 +46,9 @@ describe('resource products', () => {
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.commerce.products.update(
-        'product_id',
-        {
-          active: true,
-          description: 'description',
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'bar' },
-          name: 'name',
-          product_group_id: 'product_group_id',
-          tags: ['string'],
-        },
+      client.beta.content.releases.update(
+        'release_id',
+        { description: 'description', name: 'name' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Hercules.NotFoundError);
@@ -102,7 +56,7 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.commerce.products.list();
+    const responsePromise = client.beta.content.releases.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -116,12 +70,12 @@ describe('resource products', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.commerce.products.list(
+      client.beta.content.releases.list(
         {
-          active: 'true',
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',
+          status: 'draft',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -129,8 +83,8 @@ describe('resource products', () => {
   });
 
   // Prism tests are disabled
-  test.skip('archive', async () => {
-    const responsePromise = client.beta.commerce.products.archive('product_id');
+  test.skip('delete', async () => {
+    const responsePromise = client.beta.content.releases.delete('release_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -142,7 +96,7 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.beta.commerce.products.get('product_id');
+    const responsePromise = client.beta.content.releases.get('release_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -150,5 +104,38 @@ describe('resource products', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('publish', async () => {
+    const responsePromise = client.beta.content.releases.publish('release_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('schedule: only required params', async () => {
+    const responsePromise = client.beta.content.releases.schedule('release_id', {
+      scheduled_at: '2019-12-27T18:11:19.117Z',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('schedule: required and optional params', async () => {
+    const response = await client.beta.content.releases.schedule('release_id', {
+      scheduled_at: '2019-12-27T18:11:19.117Z',
+    });
   });
 });

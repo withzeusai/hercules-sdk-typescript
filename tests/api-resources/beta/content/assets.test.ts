@@ -8,12 +8,13 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource products', () => {
+describe('resource assets', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.commerce.products.create({
-      name: 'name',
-      variants: [{ name: 'name' }],
+    const responsePromise = client.beta.content.assets.create({
+      filename: 'filename',
+      mime_type: 'mime_type',
+      size: -9007199254740991,
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -26,45 +27,24 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.commerce.products.create({
-      name: 'name',
-      variants: [
-        {
-          name: 'name',
-          id: 'var_-K0---P3EA--',
-          currency: 'currency',
-          description: 'description',
-          is_default: true,
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'bar' },
-          recurring: { interval: 'day', interval_count: 1 },
-          unit_amount: -9007199254740991,
-        },
-      ],
-      id: 'prod_-K0---P3EA--',
+    const response = await client.beta.content.assets.create({
+      filename: 'filename',
+      mime_type: 'mime_type',
+      size: -9007199254740991,
+      id: 'ca_-K0---P3EA--',
       description: 'description',
-      media: [
-        {
-          cdn_file_id: 'cdn_file_id',
-          type: 'image',
-          display_order: 0,
-        },
-      ],
+      folder: 'folder',
+      height: -9007199254740991,
       metadata: { foo: 'bar' },
-      product_group_id: 'product_group_id',
-      tags: ['string'],
+      title: 'title',
+      url: 'url',
+      width: -9007199254740991,
     });
   });
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.beta.commerce.products.update('product_id');
+    const responsePromise = client.beta.content.assets.update('asset_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -78,22 +58,14 @@ describe('resource products', () => {
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.commerce.products.update(
-        'product_id',
+      client.beta.content.assets.update(
+        'asset_id',
         {
-          active: true,
           description: 'description',
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
+          folder: 'folder',
           metadata: { foo: 'bar' },
-          name: 'name',
-          product_group_id: 'product_group_id',
-          tags: ['string'],
+          title: 'title',
+          url: 'url',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -102,7 +74,7 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.commerce.products.list();
+    const responsePromise = client.beta.content.assets.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -116,12 +88,21 @@ describe('resource products', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.commerce.products.list(
+      client.beta.content.assets.list(
         {
-          active: 'true',
+          created: {
+            gt: 0,
+            gte: 0,
+            lt: 0,
+            lte: 0,
+          },
           ending_before: 'ending_before',
+          folder: 'folder',
           limit: 1,
+          mime_type: 'mime_type',
+          query: 'query',
           starting_after: 'starting_after',
+          status: 'draft',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -129,8 +110,8 @@ describe('resource products', () => {
   });
 
   // Prism tests are disabled
-  test.skip('archive', async () => {
-    const responsePromise = client.beta.commerce.products.archive('product_id');
+  test.skip('delete', async () => {
+    const responsePromise = client.beta.content.assets.delete('asset_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -142,7 +123,19 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.beta.commerce.products.get('product_id');
+    const responsePromise = client.beta.content.assets.get('asset_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('publish', async () => {
+    const responsePromise = client.beta.content.assets.publish('asset_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

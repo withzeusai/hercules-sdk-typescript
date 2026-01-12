@@ -8,13 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource products', () => {
+describe('resource entries', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.commerce.products.create({
-      name: 'name',
-      variants: [{ name: 'name' }],
-    });
+    const responsePromise = client.beta.content.entries.create({ model: 'model' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,45 +23,18 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.beta.commerce.products.create({
-      name: 'name',
-      variants: [
-        {
-          name: 'name',
-          id: 'var_-K0---P3EA--',
-          currency: 'currency',
-          description: 'description',
-          is_default: true,
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'bar' },
-          recurring: { interval: 'day', interval_count: 1 },
-          unit_amount: -9007199254740991,
-        },
-      ],
-      id: 'prod_-K0---P3EA--',
-      description: 'description',
-      media: [
-        {
-          cdn_file_id: 'cdn_file_id',
-          type: 'image',
-          display_order: 0,
-        },
-      ],
-      metadata: { foo: 'bar' },
-      product_group_id: 'product_group_id',
-      tags: ['string'],
+    const response = await client.beta.content.entries.create({
+      model: 'model',
+      id: 'ce_-K0---P3EA--',
+      fields: { foo: 'bar' },
+      locale: 'locale',
+      status: 'draft',
     });
   });
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.beta.commerce.products.update('product_id');
+    const responsePromise = client.beta.content.entries.update('entry_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -78,22 +48,12 @@ describe('resource products', () => {
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.commerce.products.update(
-        'product_id',
+      client.beta.content.entries.update(
+        'entry_id',
         {
-          active: true,
-          description: 'description',
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'bar' },
-          name: 'name',
-          product_group_id: 'product_group_id',
-          tags: ['string'],
+          fields: { foo: 'bar' },
+          locale: 'locale',
+          version: -9007199254740991,
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -102,7 +62,7 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.beta.commerce.products.list();
+    const responsePromise = client.beta.content.entries.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -116,12 +76,36 @@ describe('resource products', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.beta.commerce.products.list(
+      client.beta.content.entries.list(
         {
-          active: 'true',
+          created: {
+            gt: 0,
+            gte: 0,
+            lt: 0,
+            lte: 0,
+          },
           ending_before: 'ending_before',
+          include_depth: 0,
           limit: 1,
+          locale: 'locale',
+          model: 'model',
+          order_by: 'order_by',
+          published: {
+            gt: 0,
+            gte: 0,
+            lt: 0,
+            lte: 0,
+          },
+          query: 'query',
           starting_after: 'starting_after',
+          status: 'draft',
+          updated: {
+            gt: 0,
+            gte: 0,
+            lt: 0,
+            lte: 0,
+          },
+          where: 'where',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -130,7 +114,7 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('archive', async () => {
-    const responsePromise = client.beta.commerce.products.archive('product_id');
+    const responsePromise = client.beta.content.entries.archive('entry_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -142,7 +126,43 @@ describe('resource products', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.beta.commerce.products.get('product_id');
+    const responsePromise = client.beta.content.entries.get('entry_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('publish', async () => {
+    const responsePromise = client.beta.content.entries.publish('entry_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('publish: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.beta.content.entries.publish(
+        'entry_id',
+        { scheduled_at: '2019-12-27T18:11:19.117Z' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
+  });
+
+  // Prism tests are disabled
+  test.skip('unpublish', async () => {
+    const responsePromise = client.beta.content.entries.unpublish('entry_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
