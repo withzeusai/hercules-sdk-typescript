@@ -18,17 +18,16 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/beta/commerce/customers.ts">CustomerCreateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/customers.ts">CustomerUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/customers.ts">CustomerListResponse</a></code>
+- <code><a href="./src/resources/beta/commerce/customers.ts">Customer</a></code>
+- <code><a href="./src/resources/beta/commerce/customers.ts">CustomerAddress</a></code>
 - <code><a href="./src/resources/beta/commerce/customers.ts">CustomerBillingPortalResponse</a></code>
 - <code><a href="./src/resources/beta/commerce/customers.ts">CustomerGetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/commerce/customers">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
-- <code title="patch /v1/commerce/customers/{customer_id}">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
-- <code title="get /v1/commerce/customers">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">list</a>({ ...params }) -> CustomerListResponsesCursorIDPage</code>
+- <code title="post /v1/commerce/customers">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">create</a>({ ...params }) -> Customer</code>
+- <code title="patch /v1/commerce/customers/{customer_id}">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">update</a>(customerID, { ...params }) -> Customer</code>
+- <code title="get /v1/commerce/customers">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">list</a>({ ...params }) -> CustomersCursorIDPage</code>
 - <code title="delete /v1/commerce/customers/{customer_id}">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">delete</a>(customerID) -> void</code>
 - <code title="post /v1/commerce/customers/{customer_id}/billing_portal">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">billingPortal</a>(customerID, { ...params }) -> CustomerBillingPortalResponse</code>
 - <code title="get /v1/commerce/customers/{customer_id}">client.beta.commerce.customers.<a href="./src/resources/beta/commerce/customers.ts">get</a>(customerID) -> CustomerGetResponse</code>
@@ -37,19 +36,15 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/beta/commerce/products/products.ts">ProductCreateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/products.ts">ProductUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/products.ts">ProductListResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/products.ts">ProductArchiveResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/products.ts">ProductGetResponse</a></code>
+- <code><a href="./src/resources/beta/commerce/products/products.ts">Product</a></code>
 
 Methods:
 
-- <code title="post /v1/commerce/products">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">create</a>({ ...params }) -> ProductCreateResponse</code>
-- <code title="patch /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">update</a>(productID, { ...params }) -> ProductUpdateResponse</code>
-- <code title="get /v1/commerce/products">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">list</a>({ ...params }) -> ProductListResponsesCursorIDPage</code>
-- <code title="delete /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">archive</a>(productID) -> ProductArchiveResponse</code>
-- <code title="get /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">get</a>(productID) -> ProductGetResponse</code>
+- <code title="post /v1/commerce/products">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">create</a>({ ...params }) -> Product</code>
+- <code title="patch /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">update</a>(productID, { ...params }) -> Product</code>
+- <code title="get /v1/commerce/products">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">list</a>({ ...params }) -> ProductsCursorIDPage</code>
+- <code title="delete /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">archive</a>(productID) -> Product</code>
+- <code title="get /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">get</a>(productID) -> Product</code>
 
 #### Resources
 
@@ -68,36 +63,43 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/beta/commerce/products/variants.ts">VariantCreateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/variants.ts">VariantUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/variants.ts">VariantListResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/variants.ts">VariantArchiveResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/variants.ts">VariantGetResponse</a></code>
+- <code><a href="./src/resources/beta/commerce/products/variants.ts">Variant</a></code>
 
 Methods:
 
-- <code title="post /v1/commerce/products/{product_id}/variants">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">create</a>(productID, { ...params }) -> VariantCreateResponse</code>
-- <code title="patch /v1/commerce/products/{product_id}/variants/{variant_id}">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">update</a>(variantID, { ...params }) -> VariantUpdateResponse</code>
-- <code title="get /v1/commerce/products/{product_id}/variants">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">list</a>(productID, { ...params }) -> VariantListResponsesCursorIDPage</code>
-- <code title="delete /v1/commerce/products/{product_id}/variants/{variant_id}">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">archive</a>(variantID, { ...params }) -> VariantArchiveResponse</code>
-- <code title="get /v1/commerce/products/{product_id}/variants/{variant_id}">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">get</a>(variantID, { ...params }) -> VariantGetResponse</code>
+- <code title="post /v1/commerce/products/{product_id}/variants">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">create</a>(productID, { ...params }) -> Variant</code>
+- <code title="patch /v1/commerce/products/{product_id}/variants/{variant_id}">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">update</a>(variantID, { ...params }) -> Variant</code>
+- <code title="get /v1/commerce/products/{product_id}/variants">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">list</a>(productID, { ...params }) -> VariantsCursorIDPage</code>
+- <code title="delete /v1/commerce/products/{product_id}/variants/{variant_id}">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">archive</a>(variantID, { ...params }) -> Variant</code>
+- <code title="get /v1/commerce/products/{product_id}/variants/{variant_id}">client.beta.commerce.products.variants.<a href="./src/resources/beta/commerce/products/variants.ts">get</a>(variantID, { ...params }) -> Variant</code>
 
 ### Coupons
 
 Types:
 
-- <code><a href="./src/resources/beta/commerce/coupons.ts">CouponCreateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/coupons.ts">CouponUpdateResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/coupons.ts">CouponListResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/coupons.ts">CouponGetResponse</a></code>
+- <code><a href="./src/resources/beta/commerce/coupons.ts">Coupon</a></code>
 
 Methods:
 
-- <code title="post /v1/commerce/coupons">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">create</a>({ ...params }) -> CouponCreateResponse</code>
-- <code title="patch /v1/commerce/coupons/{coupon_id}">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">update</a>(couponID, { ...params }) -> CouponUpdateResponse</code>
-- <code title="get /v1/commerce/coupons">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">list</a>({ ...params }) -> CouponListResponsesCursorIDPage</code>
+- <code title="post /v1/commerce/coupons">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">create</a>({ ...params }) -> Coupon</code>
+- <code title="patch /v1/commerce/coupons/{coupon_id}">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">update</a>(couponID, { ...params }) -> Coupon</code>
+- <code title="get /v1/commerce/coupons">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">list</a>({ ...params }) -> CouponsCursorIDPage</code>
 - <code title="delete /v1/commerce/coupons/{coupon_id}">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">delete</a>(couponID) -> void</code>
-- <code title="get /v1/commerce/coupons/{coupon_id}">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">get</a>(couponID) -> CouponGetResponse</code>
+- <code title="get /v1/commerce/coupons/{coupon_id}">client.beta.commerce.coupons.<a href="./src/resources/beta/commerce/coupons.ts">get</a>(couponID) -> Coupon</code>
+
+### Features
+
+Types:
+
+- <code><a href="./src/resources/beta/commerce/features.ts">Feature</a></code>
+
+Methods:
+
+- <code title="post /v1/commerce/features">client.beta.commerce.features.<a href="./src/resources/beta/commerce/features.ts">create</a>({ ...params }) -> Feature</code>
+- <code title="patch /v1/commerce/features/{feature_id}">client.beta.commerce.features.<a href="./src/resources/beta/commerce/features.ts">update</a>(featureID, { ...params }) -> Feature</code>
+- <code title="get /v1/commerce/features">client.beta.commerce.features.<a href="./src/resources/beta/commerce/features.ts">list</a>({ ...params }) -> FeaturesCursorIDPage</code>
+- <code title="delete /v1/commerce/features/{feature_id}">client.beta.commerce.features.<a href="./src/resources/beta/commerce/features.ts">delete</a>(featureID) -> void</code>
+- <code title="get /v1/commerce/features/{feature_id}">client.beta.commerce.features.<a href="./src/resources/beta/commerce/features.ts">get</a>(featureID) -> Feature</code>
 
 ## Content
 

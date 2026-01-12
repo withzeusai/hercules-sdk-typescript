@@ -13,18 +13,14 @@ import {
 } from './resources';
 import * as VariantsAPI from './variants';
 import {
+  Variant as VariantsAPIVariant,
   VariantArchiveParams,
-  VariantArchiveResponse,
   VariantCreateParams,
-  VariantCreateResponse,
   VariantGetParams,
-  VariantGetResponse,
   VariantListParams,
-  VariantListResponse,
-  VariantListResponsesCursorIDPage,
   VariantUpdateParams,
-  VariantUpdateResponse,
   Variants,
+  VariantsCursorIDPage,
 } from './variants';
 import { APIPromise } from '../../../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../../core/pagination';
@@ -41,7 +37,7 @@ export class Products extends APIResource {
    * resources to define which features or content customers on this product can
    * access.
    */
-  create(body: ProductCreateParams, options?: RequestOptions): APIPromise<ProductCreateResponse> {
+  create(body: ProductCreateParams, options?: RequestOptions): APIPromise<Product> {
     return this._client.post('/v1/commerce/products', { body, ...options });
   }
 
@@ -54,7 +50,7 @@ export class Products extends APIResource {
     productID: string,
     body: ProductUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ProductUpdateResponse> {
+  ): APIPromise<Product> {
     return this._client.patch(path`/v1/commerce/products/${productID}`, { body, ...options });
   }
 
@@ -66,18 +62,15 @@ export class Products extends APIResource {
   list(
     query: ProductListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ProductListResponsesCursorIDPage, ProductListResponse> {
-    return this._client.getAPIList('/v1/commerce/products', CursorIDPage<ProductListResponse>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<ProductsCursorIDPage, Product> {
+    return this._client.getAPIList('/v1/commerce/products', CursorIDPage<Product>, { query, ...options });
   }
 
   /**
    * Archives a product, preventing new subscriptions. Existing subscriptions remain
    * active. Use this instead of deletion to preserve subscription history.
    */
-  archive(productID: string, options?: RequestOptions): APIPromise<ProductArchiveResponse> {
+  archive(productID: string, options?: RequestOptions): APIPromise<Product> {
     return this._client.delete(path`/v1/commerce/products/${productID}`, options);
   }
 
@@ -85,19 +78,19 @@ export class Products extends APIResource {
    * Retrieves a product by ID. Returns the product object including pricing details
    * and status.
    */
-  get(productID: string, options?: RequestOptions): APIPromise<ProductGetResponse> {
+  get(productID: string, options?: RequestOptions): APIPromise<Product> {
     return this._client.get(path`/v1/commerce/products/${productID}`, options);
   }
 }
 
-export type ProductListResponsesCursorIDPage = CursorIDPage<ProductListResponse>;
+export type ProductsCursorIDPage = CursorIDPage<Product>;
 
 /**
  * A product that customers can purchase. Products can be one-time purchases or
  * recurring subscriptions. Attach resources to a product to grant features to
  * customers.
  */
-export interface ProductCreateResponse {
+export interface Product {
   /**
    * Unique identifier for the topic subscription
    */
@@ -122,12 +115,12 @@ export interface ProductCreateResponse {
    * ID of the subscription group this product belongs to. Subscription groups define
    * shared billing configuration. All products must belong to a subscription group.
    */
-  product_group_id: string;
+  subscription_group_id: string;
 
   /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
-  default_price?: ProductCreateResponse.DefaultPrice | null;
+  default_price?: Product.DefaultPrice | null;
 
   /**
    * Detailed description of what the product includes
@@ -137,7 +130,7 @@ export interface ProductCreateResponse {
   /**
    * Media attachments (images, videos) for the product
    */
-  media?: Array<ProductCreateResponse.Media>;
+  media?: Array<Product.Media>;
 
   /**
    * Custom metadata for the product
@@ -148,7 +141,7 @@ export interface ProductCreateResponse {
    * Resources attached to this product. Customers get access to these resources when
    * they purchase the product.
    */
-  resources?: Array<ProductCreateResponse.Resource>;
+  resources?: Array<Product.Resource>;
 
   /**
    * Tags for categorizing and filtering products
@@ -156,771 +149,7 @@ export interface ProductCreateResponse {
   tags?: Array<string>;
 }
 
-export namespace ProductCreateResponse {
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency for recurring prices: day, week, month, or year. Null for
-     * one-time prices.
-     */
-    interval: 'day' | 'week' | 'month' | 'year' | null;
-
-    /**
-     * Number of intervals between billings for recurring prices. Null for one-time
-     * prices.
-     */
-    interval_count: number | null;
-
-    /**
-     * Price type: one_time for single purchases, recurring for subscriptions
-     */
-    type: 'one_time' | 'recurring';
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-
-  /**
-   * Media attachment for products or variants
-   */
-  export interface Media {
-    /**
-     * CDN file ID
-     */
-    id: string;
-
-    /**
-     * Display order in gallery (0-indexed)
-     */
-    display_order: number;
-
-    /**
-     * Type of media: image or video
-     */
-    type: 'image' | 'video';
-
-    /**
-     * CDN URL of the media resource
-     */
-    url: string;
-
-    /**
-     * File size in bytes
-     */
-    file_size?: number;
-
-    /**
-     * Original filename
-     */
-    filename?: string;
-
-    /**
-     * Optimized thumbnail URL for images
-     */
-    thumbnail_url?: string;
-  }
-
-  /**
-   * A resource that can be attached to products to grant access to customers.
-   * Resources represent monetizable content or features in your app.
-   */
-  export interface Resource {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Whether the resource is active and grants access
-     */
-    active: boolean;
-
-    /**
-     * Timestamp when the resource was created
-     */
-    created: string;
-
-    /**
-     * Type of resource
-     */
-    type: 'feature';
-
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    custom_entitlement?: Resource.CustomEntitlement | null;
-  }
-
-  export namespace Resource {
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    export interface CustomEntitlement {
-      /**
-       * The feature key that identifies what access is granted (e.g., 'pro_features')
-       */
-      id: string;
-
-      /**
-       * Custom metadata for the feature grant
-       */
-      metadata?: { [key: string]: unknown };
-    }
-  }
-}
-
-/**
- * A product that customers can purchase. Products can be one-time purchases or
- * recurring subscriptions. Attach resources to a product to grant features to
- * customers.
- */
-export interface ProductUpdateResponse {
-  /**
-   * Unique identifier for the topic subscription
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new purchases
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * ID of the subscription group this product belongs to. Subscription groups define
-   * shared billing configuration. All products must belong to a subscription group.
-   */
-  product_group_id: string;
-
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  default_price?: ProductUpdateResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-
-  /**
-   * Media attachments (images, videos) for the product
-   */
-  media?: Array<ProductUpdateResponse.Media>;
-
-  /**
-   * Custom metadata for the product
-   */
-  metadata?: { [key: string]: unknown };
-
-  /**
-   * Resources attached to this product. Customers get access to these resources when
-   * they purchase the product.
-   */
-  resources?: Array<ProductUpdateResponse.Resource>;
-
-  /**
-   * Tags for categorizing and filtering products
-   */
-  tags?: Array<string>;
-}
-
-export namespace ProductUpdateResponse {
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency for recurring prices: day, week, month, or year. Null for
-     * one-time prices.
-     */
-    interval: 'day' | 'week' | 'month' | 'year' | null;
-
-    /**
-     * Number of intervals between billings for recurring prices. Null for one-time
-     * prices.
-     */
-    interval_count: number | null;
-
-    /**
-     * Price type: one_time for single purchases, recurring for subscriptions
-     */
-    type: 'one_time' | 'recurring';
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-
-  /**
-   * Media attachment for products or variants
-   */
-  export interface Media {
-    /**
-     * CDN file ID
-     */
-    id: string;
-
-    /**
-     * Display order in gallery (0-indexed)
-     */
-    display_order: number;
-
-    /**
-     * Type of media: image or video
-     */
-    type: 'image' | 'video';
-
-    /**
-     * CDN URL of the media resource
-     */
-    url: string;
-
-    /**
-     * File size in bytes
-     */
-    file_size?: number;
-
-    /**
-     * Original filename
-     */
-    filename?: string;
-
-    /**
-     * Optimized thumbnail URL for images
-     */
-    thumbnail_url?: string;
-  }
-
-  /**
-   * A resource that can be attached to products to grant access to customers.
-   * Resources represent monetizable content or features in your app.
-   */
-  export interface Resource {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Whether the resource is active and grants access
-     */
-    active: boolean;
-
-    /**
-     * Timestamp when the resource was created
-     */
-    created: string;
-
-    /**
-     * Type of resource
-     */
-    type: 'feature';
-
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    custom_entitlement?: Resource.CustomEntitlement | null;
-  }
-
-  export namespace Resource {
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    export interface CustomEntitlement {
-      /**
-       * The feature key that identifies what access is granted (e.g., 'pro_features')
-       */
-      id: string;
-
-      /**
-       * Custom metadata for the feature grant
-       */
-      metadata?: { [key: string]: unknown };
-    }
-  }
-}
-
-/**
- * A product that customers can purchase. Products can be one-time purchases or
- * recurring subscriptions. Attach resources to a product to grant features to
- * customers.
- */
-export interface ProductListResponse {
-  /**
-   * Unique identifier for the topic subscription
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new purchases
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * ID of the subscription group this product belongs to. Subscription groups define
-   * shared billing configuration. All products must belong to a subscription group.
-   */
-  product_group_id: string;
-
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  default_price?: ProductListResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-
-  /**
-   * Media attachments (images, videos) for the product
-   */
-  media?: Array<ProductListResponse.Media>;
-
-  /**
-   * Custom metadata for the product
-   */
-  metadata?: { [key: string]: unknown };
-
-  /**
-   * Resources attached to this product. Customers get access to these resources when
-   * they purchase the product.
-   */
-  resources?: Array<ProductListResponse.Resource>;
-
-  /**
-   * Tags for categorizing and filtering products
-   */
-  tags?: Array<string>;
-}
-
-export namespace ProductListResponse {
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency for recurring prices: day, week, month, or year. Null for
-     * one-time prices.
-     */
-    interval: 'day' | 'week' | 'month' | 'year' | null;
-
-    /**
-     * Number of intervals between billings for recurring prices. Null for one-time
-     * prices.
-     */
-    interval_count: number | null;
-
-    /**
-     * Price type: one_time for single purchases, recurring for subscriptions
-     */
-    type: 'one_time' | 'recurring';
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-
-  /**
-   * Media attachment for products or variants
-   */
-  export interface Media {
-    /**
-     * CDN file ID
-     */
-    id: string;
-
-    /**
-     * Display order in gallery (0-indexed)
-     */
-    display_order: number;
-
-    /**
-     * Type of media: image or video
-     */
-    type: 'image' | 'video';
-
-    /**
-     * CDN URL of the media resource
-     */
-    url: string;
-
-    /**
-     * File size in bytes
-     */
-    file_size?: number;
-
-    /**
-     * Original filename
-     */
-    filename?: string;
-
-    /**
-     * Optimized thumbnail URL for images
-     */
-    thumbnail_url?: string;
-  }
-
-  /**
-   * A resource that can be attached to products to grant access to customers.
-   * Resources represent monetizable content or features in your app.
-   */
-  export interface Resource {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Whether the resource is active and grants access
-     */
-    active: boolean;
-
-    /**
-     * Timestamp when the resource was created
-     */
-    created: string;
-
-    /**
-     * Type of resource
-     */
-    type: 'feature';
-
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    custom_entitlement?: Resource.CustomEntitlement | null;
-  }
-
-  export namespace Resource {
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    export interface CustomEntitlement {
-      /**
-       * The feature key that identifies what access is granted (e.g., 'pro_features')
-       */
-      id: string;
-
-      /**
-       * Custom metadata for the feature grant
-       */
-      metadata?: { [key: string]: unknown };
-    }
-  }
-}
-
-/**
- * A product that customers can purchase. Products can be one-time purchases or
- * recurring subscriptions. Attach resources to a product to grant features to
- * customers.
- */
-export interface ProductArchiveResponse {
-  /**
-   * Unique identifier for the topic subscription
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new purchases
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * ID of the subscription group this product belongs to. Subscription groups define
-   * shared billing configuration. All products must belong to a subscription group.
-   */
-  product_group_id: string;
-
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  default_price?: ProductArchiveResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-
-  /**
-   * Media attachments (images, videos) for the product
-   */
-  media?: Array<ProductArchiveResponse.Media>;
-
-  /**
-   * Custom metadata for the product
-   */
-  metadata?: { [key: string]: unknown };
-
-  /**
-   * Resources attached to this product. Customers get access to these resources when
-   * they purchase the product.
-   */
-  resources?: Array<ProductArchiveResponse.Resource>;
-
-  /**
-   * Tags for categorizing and filtering products
-   */
-  tags?: Array<string>;
-}
-
-export namespace ProductArchiveResponse {
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency for recurring prices: day, week, month, or year. Null for
-     * one-time prices.
-     */
-    interval: 'day' | 'week' | 'month' | 'year' | null;
-
-    /**
-     * Number of intervals between billings for recurring prices. Null for one-time
-     * prices.
-     */
-    interval_count: number | null;
-
-    /**
-     * Price type: one_time for single purchases, recurring for subscriptions
-     */
-    type: 'one_time' | 'recurring';
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-
-  /**
-   * Media attachment for products or variants
-   */
-  export interface Media {
-    /**
-     * CDN file ID
-     */
-    id: string;
-
-    /**
-     * Display order in gallery (0-indexed)
-     */
-    display_order: number;
-
-    /**
-     * Type of media: image or video
-     */
-    type: 'image' | 'video';
-
-    /**
-     * CDN URL of the media resource
-     */
-    url: string;
-
-    /**
-     * File size in bytes
-     */
-    file_size?: number;
-
-    /**
-     * Original filename
-     */
-    filename?: string;
-
-    /**
-     * Optimized thumbnail URL for images
-     */
-    thumbnail_url?: string;
-  }
-
-  /**
-   * A resource that can be attached to products to grant access to customers.
-   * Resources represent monetizable content or features in your app.
-   */
-  export interface Resource {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Whether the resource is active and grants access
-     */
-    active: boolean;
-
-    /**
-     * Timestamp when the resource was created
-     */
-    created: string;
-
-    /**
-     * Type of resource
-     */
-    type: 'feature';
-
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    custom_entitlement?: Resource.CustomEntitlement | null;
-  }
-
-  export namespace Resource {
-    /**
-     * Feature grant data. Required when type is 'feature'.
-     */
-    export interface CustomEntitlement {
-      /**
-       * The feature key that identifies what access is granted (e.g., 'pro_features')
-       */
-      id: string;
-
-      /**
-       * Custom metadata for the feature grant
-       */
-      metadata?: { [key: string]: unknown };
-    }
-  }
-}
-
-/**
- * A product that customers can purchase. Products can be one-time purchases or
- * recurring subscriptions. Attach resources to a product to grant features to
- * customers.
- */
-export interface ProductGetResponse {
-  /**
-   * Unique identifier for the topic subscription
-   */
-  id: string;
-
-  /**
-   * Whether the product is available for new purchases
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the product was created
-   */
-  created: string;
-
-  /**
-   * Display name for the product (e.g., Pro, Business, Teams)
-   */
-  name: string;
-
-  /**
-   * ID of the subscription group this product belongs to. Subscription groups define
-   * shared billing configuration. All products must belong to a subscription group.
-   */
-  product_group_id: string;
-
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  default_price?: ProductGetResponse.DefaultPrice | null;
-
-  /**
-   * Detailed description of what the product includes
-   */
-  description?: string | null;
-
-  /**
-   * Media attachments (images, videos) for the product
-   */
-  media?: Array<ProductGetResponse.Media>;
-
-  /**
-   * Custom metadata for the product
-   */
-  metadata?: { [key: string]: unknown };
-
-  /**
-   * Resources attached to this product. Customers get access to these resources when
-   * they purchase the product.
-   */
-  resources?: Array<ProductGetResponse.Resource>;
-
-  /**
-   * Tags for categorizing and filtering products
-   */
-  tags?: Array<string>;
-}
-
-export namespace ProductGetResponse {
+export namespace Product {
   /**
    * Price configuration for a product. Can be one-time or recurring (subscription).
    */
@@ -1084,7 +313,7 @@ export interface ProductCreateParams {
    * ID of the subscription group this product belongs to. Subscription groups define
    * shared billing configuration.
    */
-  product_group_id?: string;
+  subscription_group_id?: string;
 
   /**
    * Tags for categorizing and filtering products
@@ -1231,7 +460,7 @@ export interface ProductUpdateParams {
    * ID of the subscription group to move this product to. All products must belong
    * to a subscription group.
    */
-  product_group_id?: string;
+  subscription_group_id?: string;
 
   /**
    * Tags for categorizing and filtering products
@@ -1273,12 +502,8 @@ Products.Variants = Variants;
 
 export declare namespace Products {
   export {
-    type ProductCreateResponse as ProductCreateResponse,
-    type ProductUpdateResponse as ProductUpdateResponse,
-    type ProductListResponse as ProductListResponse,
-    type ProductArchiveResponse as ProductArchiveResponse,
-    type ProductGetResponse as ProductGetResponse,
-    type ProductListResponsesCursorIDPage as ProductListResponsesCursorIDPage,
+    type Product as Product,
+    type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
@@ -1296,12 +521,8 @@ export declare namespace Products {
 
   export {
     Variants as Variants,
-    type VariantCreateResponse as VariantCreateResponse,
-    type VariantUpdateResponse as VariantUpdateResponse,
-    type VariantListResponse as VariantListResponse,
-    type VariantArchiveResponse as VariantArchiveResponse,
-    type VariantGetResponse as VariantGetResponse,
-    type VariantListResponsesCursorIDPage as VariantListResponsesCursorIDPage,
+    type VariantsAPIVariant as Variant,
+    type VariantsCursorIDPage as VariantsCursorIDPage,
     type VariantCreateParams as VariantCreateParams,
     type VariantUpdateParams as VariantUpdateParams,
     type VariantListParams as VariantListParams,
