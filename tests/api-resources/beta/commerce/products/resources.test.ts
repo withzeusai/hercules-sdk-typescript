@@ -32,7 +32,7 @@ describe('resource resources', () => {
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',
-          type: 'custom_entitlement',
+          type: 'feature',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -43,7 +43,7 @@ describe('resource resources', () => {
   test.skip('attach: only required params', async () => {
     const responsePromise = client.beta.commerce.products.resources.attach('product_id', {
       custom_entitlement: { id: 'id' },
-      type: 'custom_entitlement',
+      type: 'feature',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -61,7 +61,7 @@ describe('resource resources', () => {
         id: 'id',
         metadata: { foo: 'bar' },
       },
-      type: 'custom_entitlement',
+      type: 'feature',
       id: 'res_-K0---P3EA--',
     });
   });
