@@ -15,7 +15,6 @@ export class Features extends APIResource {
    * @example
    * ```ts
    * const feature = await client.commerce.features.create({
-   *   lookup_key: 'lookup_key',
    *   name: 'x',
    * });
    * ```
@@ -104,11 +103,6 @@ export interface Feature {
   description: string | null;
 
   /**
-   * The lookup key used to check access (e.g., 'feature.pro_features')
-   */
-  lookup_key: string;
-
-  /**
    * Human-readable name for the feature
    */
   name: string;
@@ -125,12 +119,6 @@ export interface Feature {
 }
 
 export interface FeatureCreateParams {
-  /**
-   * The lookup key used to check access. Will be prefixed with 'feature.'
-   * automatically.
-   */
-  lookup_key: string;
-
   /**
    * Human-readable name for the feature
    */
