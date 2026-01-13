@@ -19,7 +19,16 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Beta } from './resources/beta/beta';
+import {
+  Commerce,
+  CommerceCancelParams,
+  CommerceCancelResponse,
+  CommerceCheckParams,
+  CommerceCheckResponse,
+  CommerceCheckoutParams,
+  CommerceCheckoutResponse,
+} from './resources/commerce/commerce';
+import { Content } from './resources/content/content';
 import {
   PushNotificationEnableResponse,
   PushNotificationIdentifyParams,
@@ -750,11 +759,19 @@ export class Hercules {
 
   static toFile = Uploads.toFile;
 
-  beta: API.Beta = new API.Beta(this);
+  /**
+   * Commerce APIs are currently in beta.
+   */
+  commerce: API.Commerce = new API.Commerce(this);
+  /**
+   * Content APIs are currently in beta.
+   */
+  content: API.Content = new API.Content(this);
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
-Hercules.Beta = Beta;
+Hercules.Commerce = Commerce;
+Hercules.Content = Content;
 Hercules.PushNotifications = PushNotifications;
 
 export declare namespace Hercules {
@@ -763,7 +780,17 @@ export declare namespace Hercules {
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
-  export { Beta as Beta };
+  export {
+    Commerce as Commerce,
+    type CommerceCancelResponse as CommerceCancelResponse,
+    type CommerceCheckResponse as CommerceCheckResponse,
+    type CommerceCheckoutResponse as CommerceCheckoutResponse,
+    type CommerceCancelParams as CommerceCancelParams,
+    type CommerceCheckParams as CommerceCheckParams,
+    type CommerceCheckoutParams as CommerceCheckoutParams,
+  };
+
+  export { Content as Content };
 
   export {
     PushNotifications as PushNotifications,
