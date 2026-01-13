@@ -2,7 +2,7 @@
   "name": "@usehercules/sdk",
   "version": "1.11.0",
   "description": "The official TypeScript library for the Hercules API",
-  "author": "Hercules <>",
+  "author": "Hercules <hello@hercules.app>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",

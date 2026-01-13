@@ -42,7 +42,7 @@ describe('resource resources', () => {
   // Prism tests are disabled
   test.skip('attach: only required params', async () => {
     const responsePromise = client.commerce.products.resources.attach('product_id', {
-      resource_id: 'resource_id',
+      resource_ids: ['string'],
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -56,14 +56,14 @@ describe('resource resources', () => {
   // Prism tests are disabled
   test.skip('attach: required and optional params', async () => {
     const response = await client.commerce.products.resources.attach('product_id', {
-      resource_id: 'resource_id',
+      resource_ids: ['string'],
     });
   });
 
   // Prism tests are disabled
   test.skip('detach: only required params', async () => {
-    const responsePromise = client.commerce.products.resources.detach('resource_id', {
-      product_id: 'product_id',
+    const responsePromise = client.commerce.products.resources.detach('product_id', {
+      resource_ids: ['string'],
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -76,8 +76,8 @@ describe('resource resources', () => {
 
   // Prism tests are disabled
   test.skip('detach: required and optional params', async () => {
-    const response = await client.commerce.products.resources.detach('resource_id', {
-      product_id: 'product_id',
+    const response = await client.commerce.products.resources.detach('product_id', {
+      resource_ids: ['string'],
     });
   });
 });
