@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.12.0 (2026-01-13)
+
+Full Changelog: [v1.11.0...v1.12.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.11.0...v1.12.0)
+
+### Features
+
+* **api:** update api ([aed5987](https://github.com/withzeusai/hercules-sdk-typescript/commit/aed5987087d3f8c2a40c1d1cf3948e61dad5c90d))
+* **api:** update api ([eafe262](https://github.com/withzeusai/hercules-sdk-typescript/commit/eafe262c0c4b97295c4fb7de7ff4f09ff4b73eb7))
+* **api:** update api ([00f838e](https://github.com/withzeusai/hercules-sdk-typescript/commit/00f838ea32b0c1a237936c96dab9fe129507fd35))
+* **api:** update api ([5202a48](https://github.com/withzeusai/hercules-sdk-typescript/commit/5202a4826653580195be843fe95054d664aad16d))
+* **api:** update api ([5b55e99](https://github.com/withzeusai/hercules-sdk-typescript/commit/5b55e9984ae1e73d681b625cfd9cc0421ad676b2))
+* **api:** update api ([921b4df](https://github.com/withzeusai/hercules-sdk-typescript/commit/921b4df366d22a7d31267c6e0871bb51e9e38db8))
+* **api:** update api ([cd500d9](https://github.com/withzeusai/hercules-sdk-typescript/commit/cd500d99060552c4fc57dac79762378c6b75c78a))
+* **api:** update api ([72f1a2e](https://github.com/withzeusai/hercules-sdk-typescript/commit/72f1a2eb2ae1df58185057e0c8be2b5b9ce6b485))
+* **api:** update api ([f79eba2](https://github.com/withzeusai/hercules-sdk-typescript/commit/f79eba2d23e3718680362a49e64368b1ecac5b1e))
+* **api:** update api ([74ccf79](https://github.com/withzeusai/hercules-sdk-typescript/commit/74ccf79af179a220cdd4a5d97d7752cdf166cf95))
+* **api:** update api ([3d64048](https://github.com/withzeusai/hercules-sdk-typescript/commit/3d640488f7240a114b3cb79792995a8411db0cd3))
+* **api:** update api ([73f495b](https://github.com/withzeusai/hercules-sdk-typescript/commit/73f495b684fe7b703691c8282ba59b3fb5dd950b))
+* **api:** update api ([46250dd](https://github.com/withzeusai/hercules-sdk-typescript/commit/46250dde42142598a41ed26ccd3278e3194c9aa4))
+
 ## 1.11.0 (2026-01-12)
 
 Full Changelog: [v1.10.1...v1.11.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.10.1...v1.11.0)
