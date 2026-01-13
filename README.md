@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Hercules REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs-cloud.hercules.app](https://docs-cloud.hercules.app/). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -42,7 +42,7 @@ const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer = await client.beta.commerce.customers.create({
+const customer = await client.commerce.customers.create({
   email: 'john.doe@example.com',
   name: 'John Doe',
 });
@@ -63,8 +63,9 @@ const client = new Hercules({
   apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted
 });
 
-const customer: Hercules.Beta.Commerce.CustomerGetResponse =
-  await client.beta.commerce.customers.get('REPLACE_ME');
+const customer: Hercules.Commerce.CustomerGetResponse = await client.commerce.customers.get(
+  'REPLACE_ME',
+);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -77,7 +78,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const customer = await client.beta.commerce.customers.get('REPLACE_ME').catch(async (err) => {
+const customer = await client.commerce.customers.get('REPLACE_ME').catch(async (err) => {
   if (err instanceof Hercules.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -118,7 +119,7 @@ const client = new Hercules({
 });
 
 // Or, configure per-request:
-await client.beta.commerce.customers.get('REPLACE_ME', {
+await client.commerce.customers.get('REPLACE_ME', {
   maxRetries: 5,
 });
 ```
@@ -136,7 +137,7 @@ const client = new Hercules({
 });
 
 // Override per-request:
-await client.beta.commerce.customers.get('REPLACE_ME', {
+await client.commerce.customers.get('REPLACE_ME', {
   timeout: 5 * 1000,
 });
 ```
@@ -154,7 +155,7 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllCustomers(params) {
   const allCustomers = [];
   // Automatically fetches more pages as needed.
-  for await (const customer of client.beta.commerce.customers.list({
+  for await (const customer of client.commerce.customers.list({
     limit: 100,
     starting_after: 'id_123',
   })) {
@@ -167,7 +168,7 @@ async function fetchAllCustomers(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.beta.commerce.customers.list({ limit: 100, starting_after: 'id_123' });
+let page = await client.commerce.customers.list({ limit: 100, starting_after: 'id_123' });
 for (const customer of page.data) {
   console.log(customer);
 }
@@ -193,11 +194,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Hercules();
 
-const response = await client.beta.commerce.customers.get('REPLACE_ME').asResponse();
+const response = await client.commerce.customers.get('REPLACE_ME').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: customer, response: raw } = await client.beta.commerce.customers
+const { data: customer, response: raw } = await client.commerce.customers
   .get('REPLACE_ME')
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
@@ -281,7 +282,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.beta.commerce.customers.create({
+client.commerce.customers.create({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
