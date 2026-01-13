@@ -1,11 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export {
-  Features,
-  type FeatureListParams,
-  type FeatureAttachParams,
-  type FeatureRemoveParams,
-} from './features';
+export { Features } from './features';
 export {
   Products,
   type Product,

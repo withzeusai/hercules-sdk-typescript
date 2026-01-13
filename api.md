@@ -46,12 +46,6 @@ Methods:
 
 ### Features
 
-Methods:
-
-- <code title="get /v1/commerce/products/{product_id}/features">client.commerce.products.features.<a href="./src/resources/commerce/products/features.ts">list</a>(productID, { ...params }) -> FeaturesCursorIDPage</code>
-- <code title="post /v1/commerce/products/{product_id}/features">client.commerce.products.features.<a href="./src/resources/commerce/products/features.ts">attach</a>(productID, { ...params }) -> Feature</code>
-- <code title="delete /v1/commerce/products/{product_id}/features/{feature_id}">client.commerce.products.features.<a href="./src/resources/commerce/products/features.ts">remove</a>(featureID, { ...params }) -> void</code>
-
 ### Variants
 
 Types:
