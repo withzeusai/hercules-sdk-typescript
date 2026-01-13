@@ -13,7 +13,7 @@ describe('resource commerce', () => {
   test.skip('cancel: only required params', async () => {
     const responsePromise = client.beta.commerce.cancel({
       customer_id: 'cus_1234567890',
-      subscription_id: 'subscription_id',
+      subscription_id: 'sub_1234567890',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,7 +28,7 @@ describe('resource commerce', () => {
   test.skip('cancel: required and optional params', async () => {
     const response = await client.beta.commerce.cancel({
       customer_id: 'cus_1234567890',
-      subscription_id: 'subscription_id',
+      subscription_id: 'sub_1234567890',
       cancellation_timing: 'immediate',
     });
   });
@@ -37,7 +37,7 @@ describe('resource commerce', () => {
   test.skip('check: only required params', async () => {
     const responsePromise = client.beta.commerce.check({
       customer_id: 'cus_1234567890',
-      resource_id: 'resource_id',
+      resource_id: 'feat_1234567890',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,7 +52,7 @@ describe('resource commerce', () => {
   test.skip('check: required and optional params', async () => {
     const response = await client.beta.commerce.check({
       customer_id: 'cus_1234567890',
-      resource_id: 'resource_id',
+      resource_id: 'feat_1234567890',
     });
   });
 

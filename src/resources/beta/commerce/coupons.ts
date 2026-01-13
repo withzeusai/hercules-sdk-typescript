@@ -16,7 +16,7 @@ export class Coupons extends APIResource {
    * @example
    * ```ts
    * const coupon = await client.beta.commerce.coupons.create({
-   *   code: 'code',
+   *   code: 'LAUNCH20',
    * });
    * ```
    */
@@ -31,7 +31,7 @@ export class Coupons extends APIResource {
    * @example
    * ```ts
    * const coupon = await client.beta.commerce.coupons.update(
-   *   'coupon_id',
+   *   'coupon_1234567890',
    * );
    * ```
    */
@@ -68,7 +68,9 @@ export class Coupons extends APIResource {
    *
    * @example
    * ```ts
-   * await client.beta.commerce.coupons.delete('coupon_id');
+   * await client.beta.commerce.coupons.delete(
+   *   'coupon_1234567890',
+   * );
    * ```
    */
   delete(couponID: string, options?: RequestOptions): APIPromise<void> {
@@ -85,7 +87,7 @@ export class Coupons extends APIResource {
    * @example
    * ```ts
    * const coupon = await client.beta.commerce.coupons.get(
-   *   'coupon_id',
+   *   'coupon_1234567890',
    * );
    * ```
    */
