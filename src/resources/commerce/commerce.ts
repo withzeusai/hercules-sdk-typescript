@@ -133,25 +133,13 @@ export interface CommerceCancelResponse {
 }
 
 /**
- * Check resource access response. Indicates whether access is granted and through
- * what means.
+ * Check resource access response.
  */
 export interface CommerceCheckResponse {
-  /**
-   * How the customer has access: through a subscription, one-time purchase, manual
-   * grant, or no access
-   */
-  access_type: 'subscription' | 'one_time_purchase' | 'manual_grant' | 'none';
-
   /**
    * Whether the customer has access to the resource
    */
   has_access: boolean;
-
-  /**
-   * The resource ID that was checked
-   */
-  resource_id: string;
 }
 
 /**

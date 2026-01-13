@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as FeaturesAPI from './features';
-import { FeatureAttachParams, FeatureListParams, FeatureRemoveParams, Features } from './features';
+import { Features } from './features';
 import * as VariantsAPI from './variants';
 import {
   Variant as VariantsAPIVariant,
@@ -242,14 +242,14 @@ export namespace Product {
     /**
      * Feature grant that provides access to features or functionality in your app
      */
-    custom_entitlement?: Resource.CustomEntitlement | null;
+    feature?: Resource.Feature | null;
   }
 
   export namespace Resource {
     /**
      * Feature grant that provides access to features or functionality in your app
      */
-    export interface CustomEntitlement {
+    export interface Feature {
       /**
        * The feature key that identifies what access is granted (e.g., 'pro_features')
        */
@@ -496,12 +496,7 @@ export declare namespace Products {
     type ProductListParams as ProductListParams,
   };
 
-  export {
-    Features as Features,
-    type FeatureListParams as FeatureListParams,
-    type FeatureAttachParams as FeatureAttachParams,
-    type FeatureRemoveParams as FeatureRemoveParams,
-  };
+  export { Features as Features };
 
   export {
     Variants as Variants,
