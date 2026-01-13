@@ -35,16 +35,16 @@ export class Resources extends APIResource {
   }
 
   /**
-   * Attaches an existing resource to a product. Customers who purchase this product
-   * will gain access to the attached resource. Resource type is inferred from the ID
-   * prefix (e.g., 'feat\_' for features).
+   * Attaches one or more resources to a product. Customers who purchase this product
+   * will gain access to the attached resources. Resource type is inferred from the
+   * ID prefix (e.g., 'feat\_' for features).
    *
    * @example
    * ```ts
    * const response =
    *   await client.commerce.products.resources.attach(
    *     'product_id',
-   *     { resource_id: 'resource_id' },
+   *     { resource_ids: ['string'] },
    *   );
    * ```
    */
@@ -57,20 +57,20 @@ export class Resources extends APIResource {
   }
 
   /**
-   * Detaches a resource from a product. Customers will lose access to this resource
-   * when they purchase this product.
+   * Detaches one or more resources from a product. Customers will lose access to
+   * these resources when they purchase this product.
    *
    * @example
    * ```ts
    * await client.commerce.products.resources.detach(
-   *   'resource_id',
-   *   { product_id: 'product_id' },
+   *   'product_id',
+   *   { resource_ids: ['string'] },
    * );
    * ```
    */
-  detach(resourceID: string, params: ResourceDetachParams, options?: RequestOptions): APIPromise<void> {
-    const { product_id } = params;
-    return this._client.delete(path`/v1/commerce/products/${product_id}/resources/${resourceID}`, {
+  detach(productID: string, body: ResourceDetachParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/v1/commerce/products/${productID}/resources`, {
+      body,
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -128,50 +128,62 @@ export namespace ResourceListResponse {
 }
 
 /**
- * A resource that can be attached to products to grant access to customers.
- * Resources represent monetizable content or features in your app.
+ * Response containing attached resources
  */
 export interface ResourceAttachResponse {
   /**
-   * Unique identifier for the resource
+   * Array of attached resource objects
    */
-  id: string;
-
-  /**
-   * Whether the resource is active and grants access
-   */
-  active: boolean;
-
-  /**
-   * Timestamp when the resource was created
-   */
-  created: string;
-
-  /**
-   * Type of resource
-   */
-  type: 'feature';
-
-  /**
-   * Feature grant that provides access to features or functionality in your app
-   */
-  feature?: ResourceAttachResponse.Feature | null;
+  data: Array<ResourceAttachResponse.Data>;
 }
 
 export namespace ResourceAttachResponse {
   /**
-   * Feature grant that provides access to features or functionality in your app
+   * A resource that can be attached to products to grant access to customers.
+   * Resources represent monetizable content or features in your app.
    */
-  export interface Feature {
+  export interface Data {
     /**
-     * The feature key that identifies what access is granted (e.g., 'pro_features')
+     * Unique identifier for the resource
      */
     id: string;
 
     /**
-     * Custom metadata for the feature grant
+     * Whether the resource is active and grants access
      */
-    metadata?: { [key: string]: unknown };
+    active: boolean;
+
+    /**
+     * Timestamp when the resource was created
+     */
+    created: string;
+
+    /**
+     * Type of resource
+     */
+    type: 'feature';
+
+    /**
+     * Feature grant that provides access to features or functionality in your app
+     */
+    feature?: Data.Feature | null;
+  }
+
+  export namespace Data {
+    /**
+     * Feature grant that provides access to features or functionality in your app
+     */
+    export interface Feature {
+      /**
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
+       */
+      id: string;
+
+      /**
+       * Custom metadata for the feature grant
+       */
+      metadata?: { [key: string]: unknown };
+    }
   }
 }
 
@@ -189,17 +201,17 @@ export interface ResourceListParams extends CursorIDPageParams {
 
 export interface ResourceAttachParams {
   /**
-   * The ID of the resource to attach. Type is inferred from the ID prefix (e.g.,
-   * 'feat\_' for features).
+   * Resource IDs to attach. Type is inferred from ID prefix (e.g., 'feat\_' for
+   * features).
    */
-  resource_id: string;
+  resource_ids: Array<string>;
 }
 
 export interface ResourceDetachParams {
   /**
-   * The product ID
+   * Resource IDs to detach from the product.
    */
-  product_id: string;
+  resource_ids: Array<string>;
 }
 
 export declare namespace Resources {
