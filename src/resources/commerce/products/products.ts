@@ -1,8 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as FeaturesAPI from './features';
-import { Features } from './features';
+import * as ResourcesAPI from './resources';
+import {
+  ResourceAttachParams,
+  ResourceAttachResponse,
+  ResourceDetachParams,
+  ResourceListParams,
+  ResourceListResponse,
+  ResourceListResponsesCursorIDPage,
+  Resources,
+} from './resources';
 import * as VariantsAPI from './variants';
 import {
   Variant as VariantsAPIVariant,
@@ -20,7 +28,7 @@ import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 export class Products extends APIResource {
-  features: FeaturesAPI.Features = new FeaturesAPI.Features(this._client);
+  resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
   variants: VariantsAPI.Variants = new VariantsAPI.Variants(this._client);
 
   /**
@@ -484,7 +492,7 @@ export interface ProductListParams extends CursorIDPageParams {
   active?: boolean;
 }
 
-Products.Features = Features;
+Products.Resources = Resources;
 Products.Variants = Variants;
 
 export declare namespace Products {
@@ -496,7 +504,15 @@ export declare namespace Products {
     type ProductListParams as ProductListParams,
   };
 
-  export { Features as Features };
+  export {
+    Resources as Resources,
+    type ResourceListResponse as ResourceListResponse,
+    type ResourceAttachResponse as ResourceAttachResponse,
+    type ResourceListResponsesCursorIDPage as ResourceListResponsesCursorIDPage,
+    type ResourceListParams as ResourceListParams,
+    type ResourceAttachParams as ResourceAttachParams,
+    type ResourceDetachParams as ResourceDetachParams,
+  };
 
   export {
     Variants as Variants,

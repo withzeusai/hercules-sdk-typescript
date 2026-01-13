@@ -44,7 +44,18 @@ Methods:
 - <code title="delete /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">archive</a>(productID) -> Product</code>
 - <code title="get /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">get</a>(productID) -> Product</code>
 
-### Features
+### Resources
+
+Types:
+
+- <code><a href="./src/resources/commerce/products/resources.ts">ResourceListResponse</a></code>
+- <code><a href="./src/resources/commerce/products/resources.ts">ResourceAttachResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/commerce/products/{product_id}/resources">client.commerce.products.resources.<a href="./src/resources/commerce/products/resources.ts">list</a>(productID, { ...params }) -> ResourceListResponsesCursorIDPage</code>
+- <code title="post /v1/commerce/products/{product_id}/resources">client.commerce.products.resources.<a href="./src/resources/commerce/products/resources.ts">attach</a>(productID, { ...params }) -> ResourceAttachResponse</code>
+- <code title="delete /v1/commerce/products/{product_id}/resources/{resource_id}">client.commerce.products.resources.<a href="./src/resources/commerce/products/resources.ts">detach</a>(resourceID, { ...params }) -> void</code>
 
 ### Variants
 
