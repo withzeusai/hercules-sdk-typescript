@@ -48,16 +48,13 @@ Methods:
 
 #### Resources
 
-Types:
-
-- <code><a href="./src/resources/beta/commerce/products/resources.ts">ResourceListResponse</a></code>
-- <code><a href="./src/resources/beta/commerce/products/resources.ts">ResourceAttachResponse</a></code>
+#### Features
 
 Methods:
 
-- <code title="get /v1/commerce/products/{product_id}/resources">client.beta.commerce.products.resources.<a href="./src/resources/beta/commerce/products/resources.ts">list</a>(productID, { ...params }) -> ResourceListResponsesCursorIDPage</code>
-- <code title="post /v1/commerce/products/{product_id}/resources">client.beta.commerce.products.resources.<a href="./src/resources/beta/commerce/products/resources.ts">attach</a>(productID, { ...params }) -> ResourceAttachResponse</code>
-- <code title="delete /v1/commerce/products/{product_id}/resources/{resource_id}">client.beta.commerce.products.resources.<a href="./src/resources/beta/commerce/products/resources.ts">remove</a>(resourceID, { ...params }) -> void</code>
+- <code title="get /v1/commerce/products/{product_id}/features">client.beta.commerce.products.features.<a href="./src/resources/beta/commerce/products/features.ts">list</a>(productID, { ...params }) -> FeaturesCursorIDPage</code>
+- <code title="post /v1/commerce/products/{product_id}/features">client.beta.commerce.products.features.<a href="./src/resources/beta/commerce/products/features.ts">attach</a>(productID, { ...params }) -> Feature</code>
+- <code title="delete /v1/commerce/products/{product_id}/features/{feature_id}">client.beta.commerce.products.features.<a href="./src/resources/beta/commerce/products/features.ts">remove</a>(featureID, { ...params }) -> void</code>
 
 #### Variants
 

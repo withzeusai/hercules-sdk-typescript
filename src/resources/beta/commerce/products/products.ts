@@ -1,16 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
+import * as FeaturesAPI from './features';
+import { FeatureAttachParams, FeatureListParams, FeatureRemoveParams, Features } from './features';
 import * as ResourcesAPI from './resources';
-import {
-  ResourceAttachParams,
-  ResourceAttachResponse,
-  ResourceListParams,
-  ResourceListResponse,
-  ResourceListResponsesCursorIDPage,
-  ResourceRemoveParams,
-  Resources,
-} from './resources';
+import { Resources } from './resources';
 import * as VariantsAPI from './variants';
 import {
   Variant as VariantsAPIVariant,
@@ -29,6 +23,7 @@ import { path } from '../../../../internal/utils/path';
 
 export class Products extends APIResource {
   resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
+  features: FeaturesAPI.Features = new FeaturesAPI.Features(this._client);
   variants: VariantsAPI.Variants = new VariantsAPI.Variants(this._client);
 
   /**
@@ -248,14 +243,14 @@ export namespace Product {
     type: 'feature';
 
     /**
-     * Feature grant data. Required when type is 'feature'.
+     * Feature grant that provides access to features or functionality in your app
      */
     custom_entitlement?: Resource.CustomEntitlement | null;
   }
 
   export namespace Resource {
     /**
-     * Feature grant data. Required when type is 'feature'.
+     * Feature grant that provides access to features or functionality in your app
      */
     export interface CustomEntitlement {
       /**
@@ -493,6 +488,7 @@ export interface ProductListParams extends CursorIDPageParams {
 }
 
 Products.Resources = Resources;
+Products.Features = Features;
 Products.Variants = Variants;
 
 export declare namespace Products {
@@ -504,14 +500,13 @@ export declare namespace Products {
     type ProductListParams as ProductListParams,
   };
 
+  export { Resources as Resources };
+
   export {
-    Resources as Resources,
-    type ResourceListResponse as ResourceListResponse,
-    type ResourceAttachResponse as ResourceAttachResponse,
-    type ResourceListResponsesCursorIDPage as ResourceListResponsesCursorIDPage,
-    type ResourceListParams as ResourceListParams,
-    type ResourceAttachParams as ResourceAttachParams,
-    type ResourceRemoveParams as ResourceRemoveParams,
+    Features as Features,
+    type FeatureListParams as FeatureListParams,
+    type FeatureAttachParams as FeatureAttachParams,
+    type FeatureRemoveParams as FeatureRemoveParams,
   };
 
   export {
