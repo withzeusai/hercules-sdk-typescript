@@ -11,6 +11,15 @@ export class Items extends APIResource {
   /**
    * Adds an entry or asset to a release with a specified action (publish or
    * unpublish). Only draft releases can have items added.
+   *
+   * @example
+   * ```ts
+   * const releaseItem =
+   *   await client.beta.content.releases.items.add(
+   *     'release_id',
+   *     { item_id: 'item_id', type: 'entry' },
+   *   );
+   * ```
    */
   add(releaseID: string, body: ItemAddParams, options?: RequestOptions): APIPromise<ReleasesAPI.ReleaseItem> {
     return this._client.post(path`/v1/content/releases/${releaseID}/items`, { body, ...options });
@@ -18,6 +27,13 @@ export class Items extends APIResource {
 
   /**
    * Removes an item from a release. Only draft releases can have items removed.
+   *
+   * @example
+   * ```ts
+   * await client.beta.content.releases.items.remove('item_id', {
+   *   release_id: 'release_id',
+   * });
+   * ```
    */
   remove(itemID: string, params: ItemRemoveParams, options?: RequestOptions): APIPromise<void> {
     const { release_id } = params;

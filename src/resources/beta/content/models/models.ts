@@ -14,6 +14,14 @@ export class Models extends APIResource {
   /**
    * Creates a new content model with optional initial fields. Content models define
    * the schema for entries. Example models: 'Blog Post', 'Product', 'Author'.
+   *
+   * @example
+   * ```ts
+   * const model = await client.beta.content.models.create({
+   *   api_id: 'nXI',
+   *   name: 'name',
+   * });
+   * ```
    */
   create(body: ModelCreateParams, options?: RequestOptions): APIPromise<Model> {
     return this._client.post('/v1/content/models', { body, ...options });
@@ -22,6 +30,13 @@ export class Models extends APIResource {
   /**
    * Updates an existing content model. Use this to modify the name, description, or
    * lock status. The api_id cannot be changed after creation.
+   *
+   * @example
+   * ```ts
+   * const model = await client.beta.content.models.update(
+   *   'model_id',
+   * );
+   * ```
    */
   update(
     modelID: string,
@@ -34,6 +49,14 @@ export class Models extends APIResource {
   /**
    * Retrieves a paginated list of content models. Content models define the
    * schema/structure for content entries.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const model of client.beta.content.models.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: ModelListParams | null | undefined = {},
@@ -45,6 +68,13 @@ export class Models extends APIResource {
   /**
    * Archives a content model, hiding it from the API. Existing entries are
    * preserved. Use this instead of deletion to maintain data integrity.
+   *
+   * @example
+   * ```ts
+   * const model = await client.beta.content.models.archive(
+   *   'model_id',
+   * );
+   * ```
    */
   archive(modelID: string, options?: RequestOptions): APIPromise<Model> {
     return this._client.delete(path`/v1/content/models/${modelID}`, options);
@@ -53,6 +83,13 @@ export class Models extends APIResource {
   /**
    * Retrieves a content model by ID. Returns the model object including all field
    * definitions.
+   *
+   * @example
+   * ```ts
+   * const model = await client.beta.content.models.get(
+   *   'model_id',
+   * );
+   * ```
    */
   get(modelID: string, options?: RequestOptions): APIPromise<Model> {
     return this._client.get(path`/v1/content/models/${modelID}`, options);
@@ -66,7 +103,7 @@ export type ModelsCursorIDPage = CursorIDPage<Model>;
  */
 export interface Field {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the field
    */
   id: string;
 
@@ -196,7 +233,7 @@ export namespace Field {
  */
 export interface Model {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the content model
    */
   id: string;
 

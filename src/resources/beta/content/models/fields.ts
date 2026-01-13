@@ -11,6 +11,19 @@ export class Fields extends APIResource {
   /**
    * Adds a new field to a content model. Fields define the structure of entries. The
    * model must not be locked. Adding a field increments the model version.
+   *
+   * @example
+   * ```ts
+   * const field =
+   *   await client.beta.content.models.fields.create(
+   *     'model_id',
+   *     {
+   *       api_id: 'nXI',
+   *       name: 'name',
+   *       type: 'text',
+   *     },
+   *   );
+   * ```
    */
   create(modelID: string, body: FieldCreateParams, options?: RequestOptions): APIPromise<ModelsAPI.Field> {
     return this._client.post(path`/v1/content/models/${modelID}/fields`, { body, ...options });
@@ -19,6 +32,15 @@ export class Fields extends APIResource {
   /**
    * Updates an existing field in a content model. The field type cannot be changed
    * after creation. The model must not be locked.
+   *
+   * @example
+   * ```ts
+   * const field =
+   *   await client.beta.content.models.fields.update(
+   *     'field_id',
+   *     { model_id: 'model_id' },
+   *   );
+   * ```
    */
   update(fieldID: string, params: FieldUpdateParams, options?: RequestOptions): APIPromise<ModelsAPI.Field> {
     const { model_id, ...body } = params;
@@ -28,6 +50,13 @@ export class Fields extends APIResource {
   /**
    * Removes a field from a content model. Existing entry data for this field is
    * preserved but will no longer be validated. The model must not be locked.
+   *
+   * @example
+   * ```ts
+   * await client.beta.content.models.fields.delete('field_id', {
+   *   model_id: 'model_id',
+   * });
+   * ```
    */
   delete(fieldID: string, params: FieldDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { model_id } = params;

@@ -12,7 +12,7 @@ describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('cancel: only required params', async () => {
     const responsePromise = client.beta.commerce.cancel({
-      customer_id: 'customer_id',
+      customer_id: 'cus_1234567890',
       subscription_id: 'subscription_id',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -27,7 +27,7 @@ describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('cancel: required and optional params', async () => {
     const response = await client.beta.commerce.cancel({
-      customer_id: 'customer_id',
+      customer_id: 'cus_1234567890',
       subscription_id: 'subscription_id',
       cancellation_timing: 'immediate',
     });
@@ -36,7 +36,7 @@ describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('check: only required params', async () => {
     const responsePromise = client.beta.commerce.check({
-      customer_id: 'customer_id',
+      customer_id: 'cus_1234567890',
       resource_id: 'resource_id',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -51,7 +51,7 @@ describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('check: required and optional params', async () => {
     const response = await client.beta.commerce.check({
-      customer_id: 'customer_id',
+      customer_id: 'cus_1234567890',
       resource_id: 'resource_id',
     });
   });
@@ -59,8 +59,8 @@ describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('checkout: only required params', async () => {
     const responsePromise = client.beta.commerce.checkout({
-      customer_id: 'customer_id',
-      line_items: [{ variant_id: 'variant_id' }],
+      customer_id: 'cus_1234567890',
+      line_items: [{ variant_id: 'var_1234567890' }],
       success_url: 'https://example.com',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -75,10 +75,9 @@ describe('resource commerce', () => {
   // Prism tests are disabled
   test.skip('checkout: required and optional params', async () => {
     const response = await client.beta.commerce.checkout({
-      customer_id: 'customer_id',
-      line_items: [{ variant_id: 'variant_id', quantity: 1 }],
+      customer_id: 'cus_1234567890',
+      line_items: [{ variant_id: 'var_1234567890', quantity: 1 }],
       success_url: 'https://example.com',
-      id: 'id',
       cancel_url: 'https://example.com',
       charge_timing: 'immediate',
       interval_downgrade_behavior: 'immediate',

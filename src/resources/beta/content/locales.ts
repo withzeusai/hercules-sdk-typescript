@@ -11,6 +11,14 @@ export class Locales extends APIResource {
   /**
    * Creates a new locale for content localization. Configure fallback chains by
    * setting the fallback_locale to another locale code.
+   *
+   * @example
+   * ```ts
+   * const locale = await client.beta.content.locales.create({
+   *   code: 'xx',
+   *   name: 'name',
+   * });
+   * ```
    */
   create(body: LocaleCreateParams, options?: RequestOptions): APIPromise<Locale> {
     return this._client.post('/v1/content/locales', { body, ...options });
@@ -19,6 +27,13 @@ export class Locales extends APIResource {
   /**
    * Updates a locale's configuration including name, fallback, default status, and
    * active status.
+   *
+   * @example
+   * ```ts
+   * const locale = await client.beta.content.locales.update(
+   *   'locale_code',
+   * );
+   * ```
    */
   update(
     localeCode: string,
@@ -31,6 +46,14 @@ export class Locales extends APIResource {
   /**
    * Retrieves a list of configured locales. Locales define the languages available
    * for content localization.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const locale of client.beta.content.locales.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: LocaleListParams | null | undefined = {},
@@ -42,6 +65,11 @@ export class Locales extends APIResource {
   /**
    * Deletes a locale. The default locale cannot be deleted - set another locale as
    * default first. Existing localized content is preserved.
+   *
+   * @example
+   * ```ts
+   * await client.beta.content.locales.delete('locale_code');
+   * ```
    */
   delete(localeCode: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/content/locales/${localeCode}`, {
@@ -52,6 +80,13 @@ export class Locales extends APIResource {
 
   /**
    * Retrieves a locale by its code.
+   *
+   * @example
+   * ```ts
+   * const locale = await client.beta.content.locales.get(
+   *   'locale_code',
+   * );
+   * ```
    */
   get(localeCode: string, options?: RequestOptions): APIPromise<Locale> {
     return this._client.get(path`/v1/content/locales/${localeCode}`, options);
@@ -66,7 +101,7 @@ export type LocalesCursorIDPage = CursorIDPage<Locale>;
  */
 export interface Locale {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the locale
    */
   id: string;
 

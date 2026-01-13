@@ -13,6 +13,12 @@ export class Customers extends APIResource {
    * that will be charged—typically a user, organization, or project. Hercules
    * recommends creating a customer immediately after creating the corresponding
    * entity in your app.
+   *
+   * @example
+   * ```ts
+   * const customer =
+   *   await client.beta.commerce.customers.create();
+   * ```
    */
   create(body: CustomerCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<Customer> {
     return this._client.post('/v1/commerce/customers', { body, ...options });
@@ -21,6 +27,14 @@ export class Customers extends APIResource {
   /**
    * Updates an existing customer. Use this to modify contact information or billing
    * address. Only provided fields are updated; omitted fields remain unchanged.
+   *
+   * @example
+   * ```ts
+   * const customer =
+   *   await client.beta.commerce.customers.update(
+   *     'cus_1234567890',
+   *   );
+   * ```
    */
   update(
     customerID: string,
@@ -33,6 +47,14 @@ export class Customers extends APIResource {
   /**
    * Retrieves a paginated list of all customers. Customers are the billable entities
    * in your app—typically users, organizations, or projects.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const customer of client.beta.commerce.customers.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: CustomerListParams | null | undefined = {},
@@ -44,6 +66,13 @@ export class Customers extends APIResource {
   /**
    * Permanently deletes a customer. This also cancels any active subscriptions. This
    * action cannot be undone.
+   *
+   * @example
+   * ```ts
+   * await client.beta.commerce.customers.delete(
+   *   'cus_1234567890',
+   * );
+   * ```
    */
   delete(customerID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/commerce/customers/${customerID}`, {
@@ -56,6 +85,14 @@ export class Customers extends APIResource {
    * Generates a URL to a hosted billing portal where the customer can view invoices,
    * update payment methods, and manage billing details. Redirect the customer to the
    * returned URL.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.beta.commerce.customers.billingPortal(
+   *     'cus_1234567890',
+   *   );
+   * ```
    */
   billingPortal(
     customerID: string,
@@ -69,6 +106,13 @@ export class Customers extends APIResource {
    * Retrieves a customer by ID. Returns the customer object including contact
    * information, billing address, active subscriptions, recent invoices, and saved
    * payment methods.
+   *
+   * @example
+   * ```ts
+   * const customer = await client.beta.commerce.customers.get(
+   *   'cus_1234567890',
+   * );
+   * ```
    */
   get(customerID: string, options?: RequestOptions): APIPromise<CustomerGetResponse> {
     return this._client.get(path`/v1/commerce/customers/${customerID}`, options);
@@ -83,7 +127,7 @@ export type CustomersCursorIDPage = CursorIDPage<Customer>;
  */
 export interface Customer {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the customer
    */
   id: string;
 
@@ -164,7 +208,7 @@ export interface CustomerBillingPortalResponse {
  */
 export interface CustomerGetResponse {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the customer
    */
   id: string;
 
@@ -221,7 +265,7 @@ export namespace CustomerGetResponse {
    */
   export interface Invoice {
     /**
-     * Unique identifier for the topic subscription
+     * Unique identifier for the invoice
      */
     id: string;
 
@@ -306,7 +350,7 @@ export namespace CustomerGetResponse {
    */
   export interface PaymentMethod {
     /**
-     * Unique identifier for the topic subscription
+     * Unique identifier for the payment method
      */
     id: string;
 
@@ -363,7 +407,7 @@ export namespace CustomerGetResponse {
    */
   export interface Subscription {
     /**
-     * Unique identifier for the topic subscription
+     * Unique identifier for the subscription
      */
     id: string;
 
@@ -432,7 +476,7 @@ export namespace CustomerGetResponse {
      */
     export interface Product {
       /**
-       * Unique identifier for the topic subscription
+       * Unique identifier for the product
        */
       id: string;
 
@@ -447,7 +491,7 @@ export namespace CustomerGetResponse {
      */
     export interface Variant {
       /**
-       * Unique identifier for the topic subscription
+       * Unique identifier for the variant
        */
       id: string;
 

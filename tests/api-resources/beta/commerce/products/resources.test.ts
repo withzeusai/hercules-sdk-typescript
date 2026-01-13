@@ -62,7 +62,7 @@ describe('resource resources', () => {
         metadata: { foo: 'bar' },
       },
       type: 'feature',
-      id: 'res_-K0---P3EA--',
+      id: 'res_1234567890',
     });
   });
 

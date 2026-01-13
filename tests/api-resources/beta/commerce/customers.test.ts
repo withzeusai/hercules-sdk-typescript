@@ -27,7 +27,7 @@ describe('resource customers', () => {
     await expect(
       client.beta.commerce.customers.create(
         {
-          id: 'cus_-K0---P3EA--',
+          id: 'cus_1234567890',
           address: {
             city: 'city',
             country: 'country',
@@ -47,7 +47,7 @@ describe('resource customers', () => {
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.beta.commerce.customers.update('customer_id');
+    const responsePromise = client.beta.commerce.customers.update('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -62,7 +62,7 @@ describe('resource customers', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.beta.commerce.customers.update(
-        'customer_id',
+        'cus_1234567890',
         {
           address: {
             city: 'city',
@@ -119,7 +119,7 @@ describe('resource customers', () => {
 
   // Prism tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.beta.commerce.customers.delete('customer_id');
+    const responsePromise = client.beta.commerce.customers.delete('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -131,7 +131,7 @@ describe('resource customers', () => {
 
   // Prism tests are disabled
   test.skip('billingPortal', async () => {
-    const responsePromise = client.beta.commerce.customers.billingPortal('customer_id');
+    const responsePromise = client.beta.commerce.customers.billingPortal('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -146,7 +146,7 @@ describe('resource customers', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.beta.commerce.customers.billingPortal(
-        'customer_id',
+        'cus_1234567890',
         { return_url: 'https://example.com' },
         { path: '/_stainless_unknown_path' },
       ),
@@ -155,7 +155,7 @@ describe('resource customers', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.beta.commerce.customers.get('customer_id');
+    const responsePromise = client.beta.commerce.customers.get('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
