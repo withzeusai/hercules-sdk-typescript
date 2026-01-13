@@ -79,7 +79,7 @@ describe('resource features', () => {
     await expect(
       client.beta.commerce.features.list(
         {
-          active: 'true',
+          active: true,
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',

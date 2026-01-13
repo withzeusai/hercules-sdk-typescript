@@ -161,7 +161,7 @@ export interface FeatureListParams extends CursorIDPageParams {
   /**
    * Filter by active status
    */
-  active?: 'true' | 'false';
+  active?: boolean;
 }
 
 export declare namespace Features {

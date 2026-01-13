@@ -118,7 +118,7 @@ describe('resource products', () => {
     await expect(
       client.beta.commerce.products.list(
         {
-          active: 'true',
+          active: true,
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',

@@ -26,7 +26,7 @@ describe('resource coupons', () => {
     const response = await client.beta.commerce.coupons.create({
       code: 'code',
       id: 'coupon_-K0---P3EA--',
-      amount_off: -9007199254740991,
+      amount_off: 0,
       currency: 'currency',
       duration: 'once',
       duration_in_months: 0,

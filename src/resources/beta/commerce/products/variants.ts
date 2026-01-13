@@ -96,11 +96,6 @@ export interface Variant {
   currency?: string;
 
   /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  default_price?: Variant.DefaultPrice | null;
-
-  /**
    * Detailed description of what this variant includes
    */
   description?: string | null;
@@ -127,43 +122,6 @@ export interface Variant {
 }
 
 export namespace Variant {
-  /**
-   * Price configuration for a product. Can be one-time or recurring (subscription).
-   */
-  export interface DefaultPrice {
-    /**
-     * Unique identifier for the topic subscription
-     */
-    id: string;
-
-    /**
-     * Three-letter ISO currency code (e.g., usd, eur)
-     */
-    currency: string;
-
-    /**
-     * Billing frequency for recurring prices: day, week, month, or year. Null for
-     * one-time prices.
-     */
-    interval: 'day' | 'week' | 'month' | 'year' | null;
-
-    /**
-     * Number of intervals between billings for recurring prices. Null for one-time
-     * prices.
-     */
-    interval_count: number | null;
-
-    /**
-     * Price type: one_time for single purchases, recurring for subscriptions
-     */
-    type: 'one_time' | 'recurring';
-
-    /**
-     * Price amount in the smallest currency unit (e.g., cents)
-     */
-    unit_amount: number | null;
-  }
-
   /**
    * Media attachment for products or variants
    */
@@ -359,7 +317,7 @@ export interface VariantListParams extends CursorIDPageParams {
   /**
    * Filter by active status
    */
-  active?: 'true' | 'false';
+  active?: boolean;
 }
 
 export interface VariantArchiveParams {
