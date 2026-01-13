@@ -155,7 +155,7 @@ export interface ResourceListParams extends CursorIDPageParams {
   /**
    * Filter by active status
    */
-  active?: 'true' | 'false';
+  active?: boolean;
 
   /**
    * Filter by resource type

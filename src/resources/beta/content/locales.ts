@@ -155,7 +155,7 @@ export interface LocaleListParams extends CursorIDPageParams {
   /**
    * Filter by active status
    */
-  active?: 'true' | 'false';
+  active?: boolean;
 }
 
 export declare namespace Locales {

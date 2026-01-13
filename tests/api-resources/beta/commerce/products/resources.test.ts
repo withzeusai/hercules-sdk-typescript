@@ -28,7 +28,7 @@ describe('resource resources', () => {
       client.beta.commerce.products.resources.list(
         'product_id',
         {
-          active: 'true',
+          active: true,
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',
