@@ -36,6 +36,14 @@ export class Products extends APIResource {
    * include Free, Pro, Business, or Teams tiers. After creating a product, attach
    * resources to define which features or content customers on this product can
    * access.
+   *
+   * @example
+   * ```ts
+   * const product = await client.beta.commerce.products.create({
+   *   name: 'name',
+   *   variants: [{ name: 'name' }],
+   * });
+   * ```
    */
   create(body: ProductCreateParams, options?: RequestOptions): APIPromise<Product> {
     return this._client.post('/v1/commerce/products', { body, ...options });
@@ -45,6 +53,13 @@ export class Products extends APIResource {
    * Updates an existing product. Use this to modify the product name, description,
    * or active status. Pricing cannot be changed after creation—create a new product
    * instead.
+   *
+   * @example
+   * ```ts
+   * const product = await client.beta.commerce.products.update(
+   *   'product_id',
+   * );
+   * ```
    */
   update(
     productID: string,
@@ -58,6 +73,14 @@ export class Products extends APIResource {
    * Retrieves a paginated list of subscription products. Products define the pricing
    * and billing intervals for subscriptions. Each product can have resources
    * attached that grant access to features or content.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const product of client.beta.commerce.products.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: ProductListParams | null | undefined = {},
@@ -69,6 +92,13 @@ export class Products extends APIResource {
   /**
    * Archives a product, preventing new subscriptions. Existing subscriptions remain
    * active. Use this instead of deletion to preserve subscription history.
+   *
+   * @example
+   * ```ts
+   * const product = await client.beta.commerce.products.archive(
+   *   'product_id',
+   * );
+   * ```
    */
   archive(productID: string, options?: RequestOptions): APIPromise<Product> {
     return this._client.delete(path`/v1/commerce/products/${productID}`, options);
@@ -77,6 +107,13 @@ export class Products extends APIResource {
   /**
    * Retrieves a product by ID. Returns the product object including pricing details
    * and status.
+   *
+   * @example
+   * ```ts
+   * const product = await client.beta.commerce.products.get(
+   *   'product_id',
+   * );
+   * ```
    */
   get(productID: string, options?: RequestOptions): APIPromise<Product> {
     return this._client.get(path`/v1/commerce/products/${productID}`, options);
@@ -92,7 +129,7 @@ export type ProductsCursorIDPage = CursorIDPage<Product>;
  */
 export interface Product {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the product
    */
   id: string;
 
@@ -191,7 +228,7 @@ export namespace Product {
    */
   export interface Resource {
     /**
-     * Unique identifier for the topic subscription
+     * Unique identifier for the resource
      */
     id: string;
 

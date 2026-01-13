@@ -12,6 +12,16 @@ export class Resources extends APIResource {
    * Retrieves all resources attached to a product. Resources define the features,
    * content, or entitlements that customers gain access to when purchasing this
    * product.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const resourceListResponse of client.beta.commerce.products.resources.list(
+   *   'product_id',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     productID: string,
@@ -30,6 +40,18 @@ export class Resources extends APIResource {
    * subscription or one-time payment) will gain access to the attached resource. For
    * subscriptions, access is granted while active. For one-time purchases, access is
    * permanent.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.beta.commerce.products.resources.attach(
+   *     'product_id',
+   *     {
+   *       custom_entitlement: { id: 'id' },
+   *       type: 'feature',
+   *     },
+   *   );
+   * ```
    */
   attach(
     productID: string,
@@ -43,6 +65,14 @@ export class Resources extends APIResource {
    * Removes a resource from a product. Customers will lose access to this resource.
    * For subscriptions, access is revoked immediately. For one-time purchases,
    * existing grants are not affected.
+   *
+   * @example
+   * ```ts
+   * await client.beta.commerce.products.resources.remove(
+   *   'resource_id',
+   *   { product_id: 'product_id' },
+   * );
+   * ```
    */
   remove(resourceID: string, params: ResourceRemoveParams, options?: RequestOptions): APIPromise<void> {
     const { product_id } = params;
@@ -61,7 +91,7 @@ export type ResourceListResponsesCursorIDPage = CursorIDPage<ResourceListRespons
  */
 export interface ResourceListResponse {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the resource
    */
   id: string;
 
@@ -109,7 +139,7 @@ export namespace ResourceListResponse {
  */
 export interface ResourceAttachResponse {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the resource
    */
   id: string;
 

@@ -15,6 +15,13 @@ export class Releases extends APIResource {
   /**
    * Creates a new release. Add items using the add items endpoint, then publish or
    * schedule the release.
+   *
+   * @example
+   * ```ts
+   * const release = await client.beta.content.releases.create({
+   *   name: 'name',
+   * });
+   * ```
    */
   create(body: ReleaseCreateParams, options?: RequestOptions): APIPromise<Release> {
     return this._client.post('/v1/content/releases', { body, ...options });
@@ -22,6 +29,13 @@ export class Releases extends APIResource {
 
   /**
    * Updates a release name and description. Only draft releases can be updated.
+   *
+   * @example
+   * ```ts
+   * const release = await client.beta.content.releases.update(
+   *   'release_id',
+   * );
+   * ```
    */
   update(
     releaseID: string,
@@ -34,6 +48,14 @@ export class Releases extends APIResource {
   /**
    * Retrieves a paginated list of releases. Releases group entries and assets for
    * atomic publishing.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const release of client.beta.content.releases.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: ReleaseListParams | null | undefined = {},
@@ -44,6 +66,11 @@ export class Releases extends APIResource {
 
   /**
    * Deletes a draft release. Published releases cannot be deleted.
+   *
+   * @example
+   * ```ts
+   * await client.beta.content.releases.delete('release_id');
+   * ```
    */
   delete(releaseID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/content/releases/${releaseID}`, {
@@ -54,6 +81,13 @@ export class Releases extends APIResource {
 
   /**
    * Retrieves a release by ID with all its items.
+   *
+   * @example
+   * ```ts
+   * const release = await client.beta.content.releases.get(
+   *   'release_id',
+   * );
+   * ```
    */
   get(releaseID: string, options?: RequestOptions): APIPromise<Release> {
     return this._client.get(path`/v1/content/releases/${releaseID}`, options);
@@ -62,6 +96,13 @@ export class Releases extends APIResource {
   /**
    * Publishes all items in the release immediately. Each item's action (publish or
    * unpublish) is executed atomically.
+   *
+   * @example
+   * ```ts
+   * const release = await client.beta.content.releases.publish(
+   *   'release_id',
+   * );
+   * ```
    */
   publish(releaseID: string, options?: RequestOptions): APIPromise<Release> {
     return this._client.post(path`/v1/content/releases/${releaseID}/publish`, options);
@@ -70,6 +111,14 @@ export class Releases extends APIResource {
   /**
    * Schedules a release for future publication. The release will be automatically
    * published at the specified time.
+   *
+   * @example
+   * ```ts
+   * const release = await client.beta.content.releases.schedule(
+   *   'release_id',
+   *   { scheduled_at: '2019-12-27T18:11:19.117Z' },
+   * );
+   * ```
    */
   schedule(releaseID: string, body: ReleaseScheduleParams, options?: RequestOptions): APIPromise<Release> {
     return this._client.post(path`/v1/content/releases/${releaseID}/schedule`, { body, ...options });
@@ -84,7 +133,7 @@ export type ReleasesCursorIDPage = CursorIDPage<Release>;
  */
 export interface Release {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the release
    */
   id: string;
 
@@ -139,7 +188,7 @@ export interface Release {
  */
 export interface ReleaseItem {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the release item
    */
   id: string;
 

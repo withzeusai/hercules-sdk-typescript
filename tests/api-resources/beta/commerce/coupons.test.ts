@@ -25,7 +25,7 @@ describe('resource coupons', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.beta.commerce.coupons.create({
       code: 'code',
-      id: 'coupon_-K0---P3EA--',
+      id: 'coupon_1234567890',
       amount_off: 0,
       currency: 'currency',
       duration: 'once',

@@ -54,6 +54,14 @@ export class Commerce extends APIResource {
    * Cancels a customer's subscription. By default, the subscription remains active
    * until the end of the current billing period. Set cancellation_timing to
    * 'immediate' to cancel immediately.
+   *
+   * @example
+   * ```ts
+   * const response = await client.beta.commerce.cancel({
+   *   customer_id: 'cus_1234567890',
+   *   subscription_id: 'subscription_id',
+   * });
+   * ```
    */
   cancel(body: CommerceCancelParams, options?: RequestOptions): APIPromise<CommerceCancelResponse> {
     return this._client.post('/v1/commerce/cancel', { body, ...options });
@@ -64,6 +72,14 @@ export class Commerce extends APIResource {
    * features in your app based on the customer's active subscription and the
    * entitlements attached to their product. Hercules recommends calling this before
    * allowing access to premium features.
+   *
+   * @example
+   * ```ts
+   * const response = await client.beta.commerce.check({
+   *   customer_id: 'cus_1234567890',
+   *   resource_id: 'resource_id',
+   * });
+   * ```
    */
   check(body: CommerceCheckParams, options?: RequestOptions): APIPromise<CommerceCheckResponse> {
     return this._client.post('/v1/commerce/check', { body, ...options });
@@ -73,6 +89,15 @@ export class Commerce extends APIResource {
    * Creates a checkout session for a customer to subscribe to a product. Returns a
    * URL to redirect the customer to for payment. After successful payment, the
    * customer is subscribed to the product and gains access to its entitlements.
+   *
+   * @example
+   * ```ts
+   * const response = await client.beta.commerce.checkout({
+   *   customer_id: 'cus_1234567890',
+   *   line_items: [{ variant_id: 'var_1234567890' }],
+   *   success_url: 'https://example.com',
+   * });
+   * ```
    */
   checkout(body: CommerceCheckoutParams, options?: RequestOptions): APIPromise<CommerceCheckoutResponse> {
     return this._client.post('/v1/commerce/checkout', { body, ...options });
@@ -233,12 +258,6 @@ export interface CommerceCheckoutParams {
    * URL to redirect on success
    */
   success_url: string;
-
-  /**
-   * Optional custom ID for the subscription or payment. If not provided, one will be
-   * generated.
-   */
-  id?: string;
 
   /**
    * URL to redirect on cancel

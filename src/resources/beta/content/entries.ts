@@ -10,6 +10,13 @@ export class Entries extends APIResource {
   /**
    * Creates a new content entry for a given model. Entries start as drafts by
    * default. Use the publish endpoint to make entries publicly accessible.
+   *
+   * @example
+   * ```ts
+   * const entry = await client.beta.content.entries.create({
+   *   model: 'model',
+   * });
+   * ```
    */
   create(body: EntryCreateParams, options?: RequestOptions): APIPromise<Entry> {
     return this._client.post('/v1/content/entries', { body, ...options });
@@ -19,6 +26,13 @@ export class Entries extends APIResource {
    * Updates an existing content entry. Supports partial updates - only specified
    * fields are modified. Use the version parameter for optimistic locking to prevent
    * concurrent update conflicts.
+   *
+   * @example
+   * ```ts
+   * const entry = await client.beta.content.entries.update(
+   *   'entry_id',
+   * );
+   * ```
    */
   update(
     entryID: string,
@@ -32,6 +46,14 @@ export class Entries extends APIResource {
    * Retrieves a paginated list of content entries. Supports filtering by model,
    * status, locale, and custom field queries. Use the 'where' parameter for
    * field-based filtering with operators like $eq, $contains, $gt, etc.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const entry of client.beta.content.entries.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: EntryListParams | null | undefined = {},
@@ -43,6 +65,13 @@ export class Entries extends APIResource {
   /**
    * Archives a content entry, hiding it from the API and public access. The entry
    * data is preserved and can be restored later.
+   *
+   * @example
+   * ```ts
+   * const entry = await client.beta.content.entries.archive(
+   *   'entry_id',
+   * );
+   * ```
    */
   archive(entryID: string, options?: RequestOptions): APIPromise<Entry> {
     return this._client.delete(path`/v1/content/entries/${entryID}`, options);
@@ -51,6 +80,13 @@ export class Entries extends APIResource {
   /**
    * Retrieves a content entry by ID. Optionally specify a locale to get localized
    * field values with fallback resolution.
+   *
+   * @example
+   * ```ts
+   * const entry = await client.beta.content.entries.get(
+   *   'entry_id',
+   * );
+   * ```
    */
   get(entryID: string, options?: RequestOptions): APIPromise<Entry> {
     return this._client.get(path`/v1/content/entries/${entryID}`, options);
@@ -60,6 +96,13 @@ export class Entries extends APIResource {
    * Publishes a content entry, making it publicly accessible. Optionally schedule
    * publishing for a future time. Publishing validates that all required fields have
    * values.
+   *
+   * @example
+   * ```ts
+   * const entry = await client.beta.content.entries.publish(
+   *   'entry_id',
+   * );
+   * ```
    */
   publish(
     entryID: string,
@@ -72,6 +115,13 @@ export class Entries extends APIResource {
   /**
    * Unpublishes a content entry, reverting it to draft status. The entry will no
    * longer be publicly accessible but all data is preserved.
+   *
+   * @example
+   * ```ts
+   * const entry = await client.beta.content.entries.unpublish(
+   *   'entry_id',
+   * );
+   * ```
    */
   unpublish(entryID: string, options?: RequestOptions): APIPromise<Entry> {
     return this._client.post(path`/v1/content/entries/${entryID}/unpublish`, options);
@@ -86,7 +136,7 @@ export type EntriesCursorIDPage = CursorIDPage<Entry>;
  */
 export interface Entry {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the entry
    */
   id: string;
 

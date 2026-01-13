@@ -31,7 +31,7 @@ describe('resource products', () => {
       variants: [
         {
           name: 'name',
-          id: 'var_-K0---P3EA--',
+          id: 'var_1234567890',
           currency: 'currency',
           description: 'description',
           is_default: true,
@@ -47,7 +47,7 @@ describe('resource products', () => {
           unit_amount: -9007199254740991,
         },
       ],
-      id: 'prod_-K0---P3EA--',
+      id: 'prod_1234567890',
       description: 'description',
       media: [
         {

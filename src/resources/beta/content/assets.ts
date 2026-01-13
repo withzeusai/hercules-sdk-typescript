@@ -12,6 +12,15 @@ export class Assets extends APIResource {
    * Creates a new content asset with metadata. For now, this creates asset metadata
    * only - provide a URL for an externally hosted file. Full upload support coming
    * soon.
+   *
+   * @example
+   * ```ts
+   * const asset = await client.beta.content.assets.create({
+   *   filename: 'filename',
+   *   mime_type: 'mime_type',
+   *   size: -9007199254740991,
+   * });
+   * ```
    */
   create(body: AssetCreateParams, options?: RequestOptions): APIPromise<Asset> {
     return this._client.post('/v1/content/assets', { body, ...options });
@@ -20,6 +29,13 @@ export class Assets extends APIResource {
   /**
    * Updates asset metadata including URL, folder, title, description, and custom
    * metadata.
+   *
+   * @example
+   * ```ts
+   * const asset = await client.beta.content.assets.update(
+   *   'asset_id',
+   * );
+   * ```
    */
   update(
     assetID: string,
@@ -32,6 +48,14 @@ export class Assets extends APIResource {
   /**
    * Retrieves a paginated list of content assets (images, videos, documents, etc.).
    * Supports filtering by status, MIME type, folder, and search.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const asset of client.beta.content.assets.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: AssetListParams | null | undefined = {},
@@ -43,6 +67,11 @@ export class Assets extends APIResource {
   /**
    * Permanently deletes a content asset. This action cannot be undone. Entries
    * referencing this asset will have broken references.
+   *
+   * @example
+   * ```ts
+   * await client.beta.content.assets.delete('asset_id');
+   * ```
    */
   delete(assetID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/content/assets/${assetID}`, {
@@ -53,6 +82,13 @@ export class Assets extends APIResource {
 
   /**
    * Retrieves a content asset by ID with its metadata.
+   *
+   * @example
+   * ```ts
+   * const asset = await client.beta.content.assets.get(
+   *   'asset_id',
+   * );
+   * ```
    */
   get(assetID: string, options?: RequestOptions): APIPromise<Asset> {
     return this._client.get(path`/v1/content/assets/${assetID}`, options);
@@ -60,6 +96,13 @@ export class Assets extends APIResource {
 
   /**
    * Publishes a content asset, making it publicly accessible via its URL.
+   *
+   * @example
+   * ```ts
+   * const asset = await client.beta.content.assets.publish(
+   *   'asset_id',
+   * );
+   * ```
    */
   publish(assetID: string, options?: RequestOptions): APIPromise<Asset> {
     return this._client.post(path`/v1/content/assets/${assetID}/publish`, options);
@@ -74,7 +117,7 @@ export type AssetsCursorIDPage = CursorIDPage<Asset>;
  */
 export interface Asset {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the asset
    */
   id: string;
 

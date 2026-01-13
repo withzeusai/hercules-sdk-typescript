@@ -11,6 +11,15 @@ export class Variants extends APIResource {
    * Creates a new variant with pricing for a product. Use variants to offer multiple
    * pricing tiers or configurations (e.g., Basic at $10/month, Pro at $25/month). A
    * Stripe Price is automatically created.
+   *
+   * @example
+   * ```ts
+   * const variant =
+   *   await client.beta.commerce.products.variants.create(
+   *     'product_id',
+   *     { name: 'name' },
+   *   );
+   * ```
    */
   create(productID: string, body: VariantCreateParams, options?: RequestOptions): APIPromise<Variant> {
     return this._client.post(path`/v1/commerce/products/${productID}/variants`, { body, ...options });
@@ -19,6 +28,15 @@ export class Variants extends APIResource {
   /**
    * Updates an existing variant. Use this to modify the name, description, or active
    * status. Pricing cannot be changed after creation—create a new variant instead.
+   *
+   * @example
+   * ```ts
+   * const variant =
+   *   await client.beta.commerce.products.variants.update(
+   *     'variant_id',
+   *     { product_id: 'product_id' },
+   *   );
+   * ```
    */
   update(variantID: string, params: VariantUpdateParams, options?: RequestOptions): APIPromise<Variant> {
     const { product_id, ...body } = params;
@@ -31,6 +49,16 @@ export class Variants extends APIResource {
   /**
    * Retrieves all variants for a product. Variants represent different pricing tiers
    * or configurations (e.g., Basic, Pro, Enterprise) within a single product.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const variant of client.beta.commerce.products.variants.list(
+   *   'product_id',
+   * )) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     productID: string,
@@ -46,6 +74,15 @@ export class Variants extends APIResource {
   /**
    * Archives a variant, preventing new subscriptions. The associated Stripe Price is
    * also archived. Existing subscriptions remain active.
+   *
+   * @example
+   * ```ts
+   * const variant =
+   *   await client.beta.commerce.products.variants.archive(
+   *     'variant_id',
+   *     { product_id: 'product_id' },
+   *   );
+   * ```
    */
   archive(variantID: string, params: VariantArchiveParams, options?: RequestOptions): APIPromise<Variant> {
     const { product_id } = params;
@@ -55,6 +92,15 @@ export class Variants extends APIResource {
   /**
    * Retrieves a variant by ID. Returns the variant object including pricing details
    * and status.
+   *
+   * @example
+   * ```ts
+   * const variant =
+   *   await client.beta.commerce.products.variants.get(
+   *     'variant_id',
+   *     { product_id: 'product_id' },
+   *   );
+   * ```
    */
   get(variantID: string, params: VariantGetParams, options?: RequestOptions): APIPromise<Variant> {
     const { product_id } = params;
@@ -71,7 +117,7 @@ export type VariantsCursorIDPage = CursorIDPage<Variant>;
  */
 export interface Variant {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the variant
    */
   id: string;
 

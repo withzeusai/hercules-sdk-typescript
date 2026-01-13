@@ -12,6 +12,14 @@ export class Features extends APIResource {
    * Creates a new feature with a lookup key. Features can be attached to multiple
    * products to grant customers access to the same entitlement across different
    * subscription tiers.
+   *
+   * @example
+   * ```ts
+   * const feature = await client.beta.commerce.features.create({
+   *   lookup_key: 'lookup_key',
+   *   name: 'x',
+   * });
+   * ```
    */
   create(body: FeatureCreateParams, options?: RequestOptions): APIPromise<Feature> {
     return this._client.post('/v1/commerce/features', { body, ...options });
@@ -19,6 +27,13 @@ export class Features extends APIResource {
 
   /**
    * Updates an existing feature. Use this to modify metadata or active status.
+   *
+   * @example
+   * ```ts
+   * const feature = await client.beta.commerce.features.update(
+   *   'feature_id',
+   * );
+   * ```
    */
   update(
     featureID: string,
@@ -31,6 +46,14 @@ export class Features extends APIResource {
   /**
    * Retrieves a paginated list of features. Features are reusable entitlements that
    * can be attached to multiple products.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const feature of client.beta.commerce.features.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: FeatureListParams | null | undefined = {},
@@ -42,6 +65,11 @@ export class Features extends APIResource {
   /**
    * Deletes a feature. This will also remove all product attachments for this
    * feature.
+   *
+   * @example
+   * ```ts
+   * await client.beta.commerce.features.delete('feature_id');
+   * ```
    */
   delete(featureID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/v1/commerce/features/${featureID}`, {
@@ -52,6 +80,13 @@ export class Features extends APIResource {
 
   /**
    * Retrieves a feature by ID.
+   *
+   * @example
+   * ```ts
+   * const feature = await client.beta.commerce.features.get(
+   *   'feature_id',
+   * );
+   * ```
    */
   get(featureID: string, options?: RequestOptions): APIPromise<Feature> {
     return this._client.get(path`/v1/commerce/features/${featureID}`, options);
@@ -66,7 +101,7 @@ export type FeaturesCursorIDPage = CursorIDPage<Feature>;
  */
 export interface Feature {
   /**
-   * Unique identifier for the topic subscription
+   * Unique identifier for the feature
    */
   id: string;
 
