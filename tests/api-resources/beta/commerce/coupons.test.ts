@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource coupons', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.beta.commerce.coupons.create({ code: 'code' });
+    const responsePromise = client.beta.commerce.coupons.create({ code: 'LAUNCH20' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,7 +24,7 @@ describe('resource coupons', () => {
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.beta.commerce.coupons.create({
-      code: 'code',
+      code: 'LAUNCH20',
       id: 'coupon_1234567890',
       amount_off: 0,
       currency: 'currency',
@@ -39,7 +39,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.beta.commerce.coupons.update('coupon_id');
+    const responsePromise = client.beta.commerce.coupons.update('coupon_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,7 +54,7 @@ describe('resource coupons', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.beta.commerce.coupons.update(
-        'coupon_id',
+        'coupon_1234567890',
         { active: true, name: 'name' },
         { path: '/_stainless_unknown_path' },
       ),
@@ -91,7 +91,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.beta.commerce.coupons.delete('coupon_id');
+    const responsePromise = client.beta.commerce.coupons.delete('coupon_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -103,7 +103,7 @@ describe('resource coupons', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.beta.commerce.coupons.get('coupon_id');
+    const responsePromise = client.beta.commerce.coupons.get('coupon_1234567890');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

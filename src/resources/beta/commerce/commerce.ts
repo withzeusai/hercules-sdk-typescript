@@ -59,7 +59,7 @@ export class Commerce extends APIResource {
    * ```ts
    * const response = await client.beta.commerce.cancel({
    *   customer_id: 'cus_1234567890',
-   *   subscription_id: 'subscription_id',
+   *   subscription_id: 'sub_1234567890',
    * });
    * ```
    */
@@ -77,7 +77,7 @@ export class Commerce extends APIResource {
    * ```ts
    * const response = await client.beta.commerce.check({
    *   customer_id: 'cus_1234567890',
-   *   resource_id: 'resource_id',
+   *   resource_id: 'feat_1234567890',
    * });
    * ```
    */
