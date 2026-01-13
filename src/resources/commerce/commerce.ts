@@ -38,6 +38,7 @@ import * as ProductsAPI from './products/products';
 import {
   Product,
   ProductCreateParams,
+  ProductCreateResponse,
   ProductListParams,
   ProductUpdateParams,
   Products,
@@ -341,6 +342,7 @@ export declare namespace Commerce {
   export {
     Products as Products,
     type Product as Product,
+    type ProductCreateResponse as ProductCreateResponse,
     type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,

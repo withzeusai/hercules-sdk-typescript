@@ -40,6 +40,7 @@ export {
 export {
   Products,
   type Product,
+  type ProductCreateResponse,
   type ProductCreateParams,
   type ProductUpdateParams,
   type ProductListParams,

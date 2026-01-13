@@ -44,7 +44,7 @@ export class Products extends APIResource {
    * });
    * ```
    */
-  create(body: ProductCreateParams, options?: RequestOptions): APIPromise<Product> {
+  create(body: ProductCreateParams, options?: RequestOptions): APIPromise<ProductCreateResponse> {
     return this._client.post('/v1/commerce/products', { body, ...options });
   }
 
@@ -166,6 +166,159 @@ export interface Product {
 }
 
 export namespace Product {
+  /**
+   * Media attachment for products or variants
+   */
+  export interface Media {
+    /**
+     * CDN file ID
+     */
+    id: string;
+
+    /**
+     * Display order in gallery (0-indexed)
+     */
+    display_order: number;
+
+    /**
+     * Type of media: image or video
+     */
+    type: 'image' | 'video';
+
+    /**
+     * CDN URL of the media resource
+     */
+    url: string;
+
+    /**
+     * File size in bytes
+     */
+    file_size?: number;
+
+    /**
+     * Original filename
+     */
+    filename?: string;
+
+    /**
+     * Optimized thumbnail URL for images
+     */
+    thumbnail_url?: string;
+  }
+
+  /**
+   * A resource that can be attached to products to grant access to customers.
+   * Resources represent monetizable content or features in your app.
+   */
+  export interface Resource {
+    /**
+     * Unique identifier for the resource
+     */
+    id: string;
+
+    /**
+     * Whether the resource is active and grants access
+     */
+    active: boolean;
+
+    /**
+     * Timestamp when the resource was created
+     */
+    created: string;
+
+    /**
+     * Type of resource
+     */
+    type: 'feature';
+
+    /**
+     * Feature grant that provides access to features or functionality in your app
+     */
+    feature?: Resource.Feature | null;
+  }
+
+  export namespace Resource {
+    /**
+     * Feature grant that provides access to features or functionality in your app
+     */
+    export interface Feature {
+      /**
+       * The feature key that identifies what access is granted (e.g., 'pro_features')
+       */
+      id: string;
+
+      /**
+       * Custom metadata for the feature grant
+       */
+      metadata?: { [key: string]: unknown };
+    }
+  }
+}
+
+/**
+ * Response from creating a product, including the created variants.
+ */
+export interface ProductCreateResponse {
+  /**
+   * Unique identifier for the product
+   */
+  id: string;
+
+  /**
+   * Whether the product is available for new purchases
+   */
+  active: boolean;
+
+  /**
+   * Timestamp when the product was created
+   */
+  created: string;
+
+  /**
+   * Display name for the product (e.g., Pro, Business, Teams)
+   */
+  name: string;
+
+  /**
+   * ID of the subscription group this product belongs to. Subscription groups define
+   * shared billing configuration. All products must belong to a subscription group.
+   */
+  subscription_group_id: string;
+
+  /**
+   * The created variants for this product. Each variant represents a pricing tier or
+   * configuration.
+   */
+  variants: Array<VariantsAPI.Variant>;
+
+  /**
+   * Detailed description of what the product includes
+   */
+  description?: string | null;
+
+  /**
+   * Media attachments (images, videos) for the product
+   */
+  media?: Array<ProductCreateResponse.Media>;
+
+  /**
+   * Custom metadata for the product
+   */
+  metadata?: { [key: string]: unknown };
+
+  /**
+   * Resources attached to this product. Customers get access to these resources when
+   * they purchase the product.
+   */
+  resources?: Array<ProductCreateResponse.Resource>;
+
+  /**
+   * Tags for categorizing and filtering products
+   */
+  tags?: Array<string>;
+}
+
+export namespace ProductCreateResponse {
   /**
    * Media attachment for products or variants
    */
@@ -482,6 +635,7 @@ Products.Variants = Variants;
 export declare namespace Products {
   export {
     type Product as Product,
+    type ProductCreateResponse as ProductCreateResponse,
     type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
