@@ -46,8 +46,6 @@ Methods:
 - <code title="delete /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">archive</a>(productID) -> Product</code>
 - <code title="get /v1/commerce/products/{product_id}">client.beta.commerce.products.<a href="./src/resources/beta/commerce/products/products.ts">get</a>(productID) -> Product</code>
 
-#### Resources
-
 #### Features
 
 Methods:

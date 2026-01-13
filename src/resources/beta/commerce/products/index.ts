@@ -14,7 +14,6 @@ export {
   type ProductListParams,
   type ProductsCursorIDPage,
 } from './products';
-export { Resources } from './resources';
 export {
   Variants,
   type Variant,

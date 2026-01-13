@@ -3,8 +3,6 @@
 import { APIResource } from '../../../../core/resource';
 import * as FeaturesAPI from './features';
 import { FeatureAttachParams, FeatureListParams, FeatureRemoveParams, Features } from './features';
-import * as ResourcesAPI from './resources';
-import { Resources } from './resources';
 import * as VariantsAPI from './variants';
 import {
   Variant as VariantsAPIVariant,
@@ -22,7 +20,6 @@ import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
 
 export class Products extends APIResource {
-  resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
   features: FeaturesAPI.Features = new FeaturesAPI.Features(this._client);
   variants: VariantsAPI.Variants = new VariantsAPI.Variants(this._client);
 
@@ -487,7 +484,6 @@ export interface ProductListParams extends CursorIDPageParams {
   active?: boolean;
 }
 
-Products.Resources = Resources;
 Products.Features = Features;
 Products.Variants = Variants;
 
@@ -499,8 +495,6 @@ export declare namespace Products {
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
   };
-
-  export { Resources as Resources };
 
   export {
     Features as Features,
