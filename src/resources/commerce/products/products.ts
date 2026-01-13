@@ -14,7 +14,6 @@ import {
 import * as VariantsAPI from './variants';
 import {
   Variant as VariantsAPIVariant,
-  VariantArchiveParams,
   VariantCreateParams,
   VariantGetParams,
   VariantListParams,
@@ -87,21 +86,6 @@ export class Products extends APIResource {
     options?: RequestOptions,
   ): PagePromise<ProductsCursorIDPage, Product> {
     return this._client.getAPIList('/v1/commerce/products', CursorIDPage<Product>, { query, ...options });
-  }
-
-  /**
-   * Archives a product, preventing new subscriptions. Existing subscriptions remain
-   * active. Use this instead of deletion to preserve subscription history.
-   *
-   * @example
-   * ```ts
-   * const product = await client.commerce.products.archive(
-   *   'product_id',
-   * );
-   * ```
-   */
-  archive(productID: string, options?: RequestOptions): APIPromise<Product> {
-    return this._client.delete(path`/v1/commerce/products/${productID}`, options);
   }
 
   /**
@@ -521,7 +505,6 @@ export declare namespace Products {
     type VariantCreateParams as VariantCreateParams,
     type VariantUpdateParams as VariantUpdateParams,
     type VariantListParams as VariantListParams,
-    type VariantArchiveParams as VariantArchiveParams,
     type VariantGetParams as VariantGetParams,
   };
 }

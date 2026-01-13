@@ -103,27 +103,6 @@ describe('resource variants', () => {
   });
 
   // Prism tests are disabled
-  test.skip('archive: only required params', async () => {
-    const responsePromise = client.commerce.products.variants.archive('variant_id', {
-      product_id: 'product_id',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('archive: required and optional params', async () => {
-    const response = await client.commerce.products.variants.archive('variant_id', {
-      product_id: 'product_id',
-    });
-  });
-
-  // Prism tests are disabled
   test.skip('get: only required params', async () => {
     const responsePromise = client.commerce.products.variants.get('variant_id', { product_id: 'product_id' });
     const rawResponse = await responsePromise.asResponse();

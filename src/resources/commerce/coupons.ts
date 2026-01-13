@@ -3,7 +3,6 @@
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -60,22 +59,6 @@ export class Coupons extends APIResource {
     options?: RequestOptions,
   ): PagePromise<CouponsCursorIDPage, Coupon> {
     return this._client.getAPIList('/v1/commerce/coupons', CursorIDPage<Coupon>, { query, ...options });
-  }
-
-  /**
-   * Permanently deletes a coupon. The promo code can no longer be used. Existing
-   * discounts applied to active subscriptions are not affected.
-   *
-   * @example
-   * ```ts
-   * await client.commerce.coupons.delete('coupon_1234567890');
-   * ```
-   */
-  delete(couponID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/commerce/coupons/${couponID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
   }
 
   /**
