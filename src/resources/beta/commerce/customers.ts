@@ -179,6 +179,12 @@ export interface CustomerGetResponse {
   address?: CustomerAddress | null;
 
   /**
+   * Current customer balance in cents (negative = credit available to apply to
+   * future invoices)
+   */
+  balance?: number;
+
+  /**
    * The customer's email address for receipts and notifications
    */
   email?: string | null;
