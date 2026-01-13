@@ -72,24 +72,6 @@ export class Variants extends APIResource {
   }
 
   /**
-   * Archives a variant, preventing new subscriptions. The associated Stripe Price is
-   * also archived. Existing subscriptions remain active.
-   *
-   * @example
-   * ```ts
-   * const variant =
-   *   await client.commerce.products.variants.archive(
-   *     'variant_id',
-   *     { product_id: 'product_id' },
-   *   );
-   * ```
-   */
-  archive(variantID: string, params: VariantArchiveParams, options?: RequestOptions): APIPromise<Variant> {
-    const { product_id } = params;
-    return this._client.delete(path`/v1/commerce/products/${product_id}/variants/${variantID}`, options);
-  }
-
-  /**
    * Retrieves a variant by ID. Returns the variant object including pricing details
    * and status.
    *
@@ -365,13 +347,6 @@ export interface VariantListParams extends CursorIDPageParams {
   active?: boolean;
 }
 
-export interface VariantArchiveParams {
-  /**
-   * The unique identifier of the product
-   */
-  product_id: string;
-}
-
 export interface VariantGetParams {
   /**
    * The unique identifier of the product
@@ -386,7 +361,6 @@ export declare namespace Variants {
     type VariantCreateParams as VariantCreateParams,
     type VariantUpdateParams as VariantUpdateParams,
     type VariantListParams as VariantListParams,
-    type VariantArchiveParams as VariantArchiveParams,
     type VariantGetParams as VariantGetParams,
   };
 }

@@ -26,7 +26,6 @@ Methods:
 - <code title="post /v1/commerce/customers">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">create</a>({ ...params }) -> Customer</code>
 - <code title="patch /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">update</a>(customerID, { ...params }) -> Customer</code>
 - <code title="get /v1/commerce/customers">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">list</a>({ ...params }) -> CustomersCursorIDPage</code>
-- <code title="delete /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">delete</a>(customerID) -> void</code>
 - <code title="post /v1/commerce/customers/{customer_id}/billing_portal">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">billingPortal</a>(customerID, { ...params }) -> CustomerBillingPortalResponse</code>
 - <code title="get /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">get</a>(customerID) -> CustomerGetResponse</code>
 
@@ -41,7 +40,6 @@ Methods:
 - <code title="post /v1/commerce/products">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">create</a>({ ...params }) -> Product</code>
 - <code title="patch /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">update</a>(productID, { ...params }) -> Product</code>
 - <code title="get /v1/commerce/products">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">list</a>({ ...params }) -> ProductsCursorIDPage</code>
-- <code title="delete /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">archive</a>(productID) -> Product</code>
 - <code title="get /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">get</a>(productID) -> Product</code>
 
 ### Resources
@@ -68,7 +66,6 @@ Methods:
 - <code title="post /v1/commerce/products/{product_id}/variants">client.commerce.products.variants.<a href="./src/resources/commerce/products/variants.ts">create</a>(productID, { ...params }) -> Variant</code>
 - <code title="patch /v1/commerce/products/{product_id}/variants/{variant_id}">client.commerce.products.variants.<a href="./src/resources/commerce/products/variants.ts">update</a>(variantID, { ...params }) -> Variant</code>
 - <code title="get /v1/commerce/products/{product_id}/variants">client.commerce.products.variants.<a href="./src/resources/commerce/products/variants.ts">list</a>(productID, { ...params }) -> VariantsCursorIDPage</code>
-- <code title="delete /v1/commerce/products/{product_id}/variants/{variant_id}">client.commerce.products.variants.<a href="./src/resources/commerce/products/variants.ts">archive</a>(variantID, { ...params }) -> Variant</code>
 - <code title="get /v1/commerce/products/{product_id}/variants/{variant_id}">client.commerce.products.variants.<a href="./src/resources/commerce/products/variants.ts">get</a>(variantID, { ...params }) -> Variant</code>
 
 ## Coupons
@@ -82,7 +79,6 @@ Methods:
 - <code title="post /v1/commerce/coupons">client.commerce.coupons.<a href="./src/resources/commerce/coupons.ts">create</a>({ ...params }) -> Coupon</code>
 - <code title="patch /v1/commerce/coupons/{coupon_id}">client.commerce.coupons.<a href="./src/resources/commerce/coupons.ts">update</a>(couponID, { ...params }) -> Coupon</code>
 - <code title="get /v1/commerce/coupons">client.commerce.coupons.<a href="./src/resources/commerce/coupons.ts">list</a>({ ...params }) -> CouponsCursorIDPage</code>
-- <code title="delete /v1/commerce/coupons/{coupon_id}">client.commerce.coupons.<a href="./src/resources/commerce/coupons.ts">delete</a>(couponID) -> void</code>
 - <code title="get /v1/commerce/coupons/{coupon_id}">client.commerce.coupons.<a href="./src/resources/commerce/coupons.ts">get</a>(couponID) -> Coupon</code>
 
 ## Features
@@ -96,7 +92,6 @@ Methods:
 - <code title="post /v1/commerce/features">client.commerce.features.<a href="./src/resources/commerce/features.ts">create</a>({ ...params }) -> Feature</code>
 - <code title="patch /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">update</a>(featureID, { ...params }) -> Feature</code>
 - <code title="get /v1/commerce/features">client.commerce.features.<a href="./src/resources/commerce/features.ts">list</a>({ ...params }) -> FeaturesCursorIDPage</code>
-- <code title="delete /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">delete</a>(featureID) -> void</code>
 - <code title="get /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">get</a>(featureID) -> Feature</code>
 
 # Content

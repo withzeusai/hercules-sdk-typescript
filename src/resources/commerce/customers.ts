@@ -3,7 +3,6 @@
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -59,22 +58,6 @@ export class Customers extends APIResource {
     options?: RequestOptions,
   ): PagePromise<CustomersCursorIDPage, Customer> {
     return this._client.getAPIList('/v1/commerce/customers', CursorIDPage<Customer>, { query, ...options });
-  }
-
-  /**
-   * Permanently deletes a customer. This also cancels any active subscriptions. This
-   * action cannot be undone.
-   *
-   * @example
-   * ```ts
-   * await client.commerce.customers.delete('cus_1234567890');
-   * ```
-   */
-  delete(customerID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/commerce/customers/${customerID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
   }
 
   /**

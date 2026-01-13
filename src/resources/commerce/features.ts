@@ -3,7 +3,6 @@
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -60,22 +59,6 @@ export class Features extends APIResource {
     options?: RequestOptions,
   ): PagePromise<FeaturesCursorIDPage, Feature> {
     return this._client.getAPIList('/v1/commerce/features', CursorIDPage<Feature>, { query, ...options });
-  }
-
-  /**
-   * Deletes a feature. This will also remove all product attachments for this
-   * feature.
-   *
-   * @example
-   * ```ts
-   * await client.commerce.features.delete('feature_id');
-   * ```
-   */
-  delete(featureID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/commerce/features/${featureID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
   }
 
   /**

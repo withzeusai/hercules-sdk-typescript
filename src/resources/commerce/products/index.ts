@@ -23,7 +23,6 @@ export {
   type VariantCreateParams,
   type VariantUpdateParams,
   type VariantListParams,
-  type VariantArchiveParams,
   type VariantGetParams,
   type VariantsCursorIDPage,
 } from './variants';
