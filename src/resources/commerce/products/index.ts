@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Features } from './features';
 export {
   Products,
   type Product,
@@ -9,6 +8,15 @@ export {
   type ProductListParams,
   type ProductsCursorIDPage,
 } from './products';
+export {
+  Resources,
+  type ResourceListResponse,
+  type ResourceAttachResponse,
+  type ResourceListParams,
+  type ResourceAttachParams,
+  type ResourceDetachParams,
+  type ResourceListResponsesCursorIDPage,
+} from './resources';
 export {
   Variants,
   type Variant,
