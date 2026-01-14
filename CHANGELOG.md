@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.13.0 (2026-01-14)
+
+Full Changelog: [v1.12.2...v1.13.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.12.2...v1.13.0)
+
+### Features
+
+* **api:** update api ([53c5eae](https://github.com/withzeusai/hercules-sdk-typescript/commit/53c5eae622033bc530d46e496006c2b88a3795af))
+* **api:** update api ([a9a6061](https://github.com/withzeusai/hercules-sdk-typescript/commit/a9a60610b5d634016317d71ab900c29263594cb3))
+* **api:** update api ([5488aac](https://github.com/withzeusai/hercules-sdk-typescript/commit/5488aac848b947cf8010ae56ea0d9cff9d19db9f))
+* **api:** update api ([759415d](https://github.com/withzeusai/hercules-sdk-typescript/commit/759415daaa691775e27ecb4090e182a65e759e3a))
+* **api:** update api ([ff39927](https://github.com/withzeusai/hercules-sdk-typescript/commit/ff3992700eb74469f91e293ff08d5c4de801c940))
+
+
+### Bug Fixes
+
+* **client:** rename identifiers that conflict with child namespaces ([1a90eb6](https://github.com/withzeusai/hercules-sdk-typescript/commit/1a90eb68a42f33a1a3b30f332e37179787421e6b))
+* **publish:** remove extraneous npm copy from package ([b37b89c](https://github.com/withzeusai/hercules-sdk-typescript/commit/b37b89cfbca7f2a0bc2d59cbdeba49326a744652))
+
+
+### Chores
+
+* fix typo in descriptions ([f2eec3f](https://github.com/withzeusai/hercules-sdk-typescript/commit/f2eec3fd181cf94395abd797493c76ad0a28e90a))
+* **internal:** codegen related update ([4047d46](https://github.com/withzeusai/hercules-sdk-typescript/commit/4047d46f0b6eea4507a89d22e197e07eb648799f))
+* **internal:** codegen related update ([1ba29ca](https://github.com/withzeusai/hercules-sdk-typescript/commit/1ba29cabbd79ec91df624792a88d92e5554350f9))
+* **internal:** codegen related update ([59f0a8b](https://github.com/withzeusai/hercules-sdk-typescript/commit/59f0a8bf079083d47d5dd05a8d3fd7473415156a))
+* **internal:** codegen related update ([5a56ebd](https://github.com/withzeusai/hercules-sdk-typescript/commit/5a56ebd38759d5735e535f89303f3e8a192c4098))
+* **internal:** codegen related update ([8e0c68b](https://github.com/withzeusai/hercules-sdk-typescript/commit/8e0c68b7f5548fb33c2d8d66c2818d86f1c62d34))
+* **internal:** codegen related update ([acafb26](https://github.com/withzeusai/hercules-sdk-typescript/commit/acafb261ffcee2b1eff895ab1c900b000471745c))
+* **internal:** codegen related update ([56ca240](https://github.com/withzeusai/hercules-sdk-typescript/commit/56ca240b2300c586a7e26bac28218f8ac107416a))
+* **internal:** codegen related update ([72e5fd3](https://github.com/withzeusai/hercules-sdk-typescript/commit/72e5fd3bc51d50098ebbe48627e2497a7db524e6))
+* **internal:** codegen related update ([6db3dd4](https://github.com/withzeusai/hercules-sdk-typescript/commit/6db3dd4892a95c9572c3b66b1306e177b7a1354d))
+* **internal:** codegen related update ([d38ee88](https://github.com/withzeusai/hercules-sdk-typescript/commit/d38ee886e21386fc564d4f9aa34cbf3772364046))
+* **internal:** codegen related update ([829c382](https://github.com/withzeusai/hercules-sdk-typescript/commit/829c382e99beb02b46baeed85a2d14d8fc3a68bd))
+* **internal:** codegen related update ([7dc51ff](https://github.com/withzeusai/hercules-sdk-typescript/commit/7dc51ffbe67b6d5efc72b65fa850525b16a48d8d))
+* **readme:** remove beta warning now that we're in ga ([0b15c21](https://github.com/withzeusai/hercules-sdk-typescript/commit/0b15c21ce0655248571c7e137aa204909aaaf409))
+
 ## 1.12.2 (2026-01-13)
 
 Full Changelog: [v1.12.1...v1.12.2](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.12.1...v1.12.2)
