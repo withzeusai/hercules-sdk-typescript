@@ -510,7 +510,7 @@ export interface CustomerCreateParams {
   name?: string;
 
   /**
-   * The customer's phone number
+   * The customer's phone number in E.164 format (e.g., +14155551234)
    */
   phone?: string;
 }
@@ -532,7 +532,7 @@ export interface CustomerUpdateParams {
   name?: string;
 
   /**
-   * The customer's phone number
+   * The customer's phone number in E.164 format (e.g., +14155551234)
    */
   phone?: string;
 }
