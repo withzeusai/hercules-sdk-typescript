@@ -16,20 +16,18 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/commerce/customers/customers.ts">Customer</a></code>
-- <code><a href="./src/resources/commerce/customers/customers.ts">CustomerAddress</a></code>
-- <code><a href="./src/resources/commerce/customers/customers.ts">CustomerBillingPortalResponse</a></code>
-- <code><a href="./src/resources/commerce/customers/customers.ts">CustomerGetResponse</a></code>
+- <code><a href="./src/resources/commerce/customers.ts">Customer</a></code>
+- <code><a href="./src/resources/commerce/customers.ts">CustomerAddress</a></code>
+- <code><a href="./src/resources/commerce/customers.ts">CustomerBillingPortalResponse</a></code>
+- <code><a href="./src/resources/commerce/customers.ts">CustomerGetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/commerce/customers">client.commerce.customers.<a href="./src/resources/commerce/customers/customers.ts">create</a>({ ...params }) -> Customer</code>
-- <code title="patch /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers/customers.ts">update</a>(customerID, { ...params }) -> Customer</code>
-- <code title="get /v1/commerce/customers">client.commerce.customers.<a href="./src/resources/commerce/customers/customers.ts">list</a>({ ...params }) -> CustomersCursorIDPage</code>
-- <code title="post /v1/commerce/customers/{customer_id}/billing_portal">client.commerce.customers.<a href="./src/resources/commerce/customers/customers.ts">billingPortal</a>(customerID, { ...params }) -> CustomerBillingPortalResponse</code>
-- <code title="get /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers/customers.ts">get</a>(customerID) -> CustomerGetResponse</code>
-
-### BalanceTransactions
+- <code title="post /v1/commerce/customers">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">create</a>({ ...params }) -> Customer</code>
+- <code title="patch /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">update</a>(customerID, { ...params }) -> Customer</code>
+- <code title="get /v1/commerce/customers">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">list</a>({ ...params }) -> CustomersCursorIDPage</code>
+- <code title="post /v1/commerce/customers/{customer_id}/billing_portal">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">billingPortal</a>(customerID, { ...params }) -> CustomerBillingPortalResponse</code>
+- <code title="get /v1/commerce/customers/{customer_id}">client.commerce.customers.<a href="./src/resources/commerce/customers.ts">get</a>(customerID) -> CustomerGetResponse</code>
 
 ## Products
 
@@ -96,8 +94,6 @@ Methods:
 - <code title="patch /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">update</a>(featureID, { ...params }) -> Feature</code>
 - <code title="get /v1/commerce/features">client.commerce.features.<a href="./src/resources/commerce/features.ts">list</a>({ ...params }) -> FeaturesCursorIDPage</code>
 - <code title="get /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">get</a>(featureID) -> Feature</code>
-
-## SubscriptionGroups
 
 # Content
 

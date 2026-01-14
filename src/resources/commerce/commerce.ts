@@ -10,18 +10,7 @@ import {
   Coupons,
   CouponsCursorIDPage,
 } from './coupons';
-import * as FeaturesAPI from './features';
-import {
-  Feature,
-  FeatureCreateParams,
-  FeatureListParams,
-  FeatureUpdateParams,
-  Features,
-  FeaturesCursorIDPage,
-} from './features';
-import * as SubscriptionGroupsAPI from './subscription-groups';
-import { SubscriptionGroups } from './subscription-groups';
-import * as CustomersAPI from './customers/customers';
+import * as CustomersAPI from './customers';
 import {
   Customer,
   CustomerAddress,
@@ -33,7 +22,16 @@ import {
   CustomerUpdateParams,
   Customers,
   CustomersCursorIDPage,
-} from './customers/customers';
+} from './customers';
+import * as FeaturesAPI from './features';
+import {
+  Feature,
+  FeatureCreateParams,
+  FeatureListParams,
+  FeatureUpdateParams,
+  Features,
+  FeaturesCursorIDPage,
+} from './features';
 import * as ProductsAPI from './products/products';
 import {
   Product,
@@ -55,9 +53,6 @@ export class Commerce extends APIResource {
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
   features: FeaturesAPI.Features = new FeaturesAPI.Features(this._client);
-  subscriptionGroups: SubscriptionGroupsAPI.SubscriptionGroups = new SubscriptionGroupsAPI.SubscriptionGroups(
-    this._client,
-  );
 
   /**
    * Cancels a customer's subscription. By default, the subscription remains active
@@ -314,7 +309,6 @@ Commerce.Customers = Customers;
 Commerce.Products = Products;
 Commerce.Coupons = Coupons;
 Commerce.Features = Features;
-Commerce.SubscriptionGroups = SubscriptionGroups;
 
 export declare namespace Commerce {
   export {
@@ -366,6 +360,4 @@ export declare namespace Commerce {
     type FeatureUpdateParams as FeatureUpdateParams,
     type FeatureListParams as FeatureListParams,
   };
-
-  export { SubscriptionGroups as SubscriptionGroups };
 }
