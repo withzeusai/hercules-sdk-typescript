@@ -63,7 +63,7 @@ else
 fi
 
 # Install OIDC compatible npm version
-npm install --prefix /tmp/oidc/ npm@11.6.2
+npm install --prefix ../oidc/ npm@11.6.2
 
 # Publish with the appropriate tag
-pnpm publish --npm-path "/tmp/oidc/node_modules/.bin/npm" --no-git-checks --tag "$TAG"
+pnpm publish --npm-path "$(cd ../ && pwd)/oidc/node_modules/.bin/npm" --no-git-checks --tag "$TAG"
