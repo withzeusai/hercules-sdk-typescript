@@ -108,11 +108,6 @@ export interface Feature {
   name: string;
 
   /**
-   * Type of feature
-   */
-  type: 'feature';
-
-  /**
    * Custom metadata for the feature
    */
   metadata?: { [key: string]: unknown };
