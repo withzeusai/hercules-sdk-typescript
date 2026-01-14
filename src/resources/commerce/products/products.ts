@@ -39,8 +39,8 @@ export class Products extends APIResource {
    * @example
    * ```ts
    * const product = await client.commerce.products.create({
-   *   name: 'name',
-   *   variants: [{ name: 'name' }],
+   *   name: 'x',
+   *   variants: [{ name: 'x' }],
    * });
    * ```
    */

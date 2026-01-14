@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource products', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.commerce.products.create({ name: 'name', variants: [{ name: 'name' }] });
+    const responsePromise = client.commerce.products.create({ name: 'x', variants: [{ name: 'x' }] });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,10 +24,10 @@ describe('resource products', () => {
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.commerce.products.create({
-      name: 'name',
+      name: 'x',
       variants: [
         {
-          name: 'name',
+          name: 'x',
           id: 'var_1234567890',
           currency: 'currency',
           description: 'description',
@@ -41,7 +41,7 @@ describe('resource products', () => {
           ],
           metadata: { foo: 'bar' },
           recurring: { interval: 'day', interval_count: 1 },
-          unit_amount: -9007199254740991,
+          unit_amount: 0,
         },
       ],
       id: 'prod_1234567890',
