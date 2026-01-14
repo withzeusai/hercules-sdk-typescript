@@ -29,7 +29,7 @@ describe('resource products', () => {
         {
           name: 'x',
           id: 'var_1234567890',
-          currency: 'currency',
+          currency: 'xxx',
           description: 'description',
           is_default: true,
           media: [
