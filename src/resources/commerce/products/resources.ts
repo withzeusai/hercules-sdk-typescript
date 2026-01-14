@@ -123,7 +123,7 @@ export namespace ResourceListResponse {
     /**
      * Custom metadata for the feature grant
      */
-    metadata?: { [key: string]: unknown };
+    metadata?: { [key: string]: string };
   }
 }
 
@@ -182,7 +182,7 @@ export namespace ResourceAttachResponse {
       /**
        * Custom metadata for the feature grant
        */
-      metadata?: { [key: string]: unknown };
+      metadata?: { [key: string]: string };
     }
   }
 }

@@ -29,7 +29,7 @@ describe('resource products', () => {
         {
           name: 'x',
           id: 'var_1234567890',
-          currency: 'xxx',
+          currency: 'usd',
           description: 'description',
           is_default: true,
           media: [
@@ -39,13 +39,13 @@ describe('resource products', () => {
               display_order: 0,
             },
           ],
-          metadata: { foo: 'bar' },
+          metadata: { foo: 'string' },
           recurring: { interval: 'day', interval_count: 1 },
           unit_amount: 0,
         },
       ],
       id: 'prod_1234567890',
-      description: 'description',
+      description: 'x',
       media: [
         {
           cdn_file_id: 'cdn_file_id',
@@ -53,7 +53,7 @@ describe('resource products', () => {
           display_order: 0,
         },
       ],
-      metadata: { foo: 'bar' },
+      metadata: { foo: 'string' },
       subscription_group_id: 'subscription_group_id',
       tags: ['string'],
     });
@@ -87,7 +87,7 @@ describe('resource products', () => {
               display_order: 0,
             },
           ],
-          metadata: { foo: 'bar' },
+          metadata: { foo: 'string' },
           name: 'name',
           subscription_group_id: 'subscription_group_id',
           tags: ['string'],

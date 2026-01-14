@@ -35,7 +35,7 @@ describe('resource assets', () => {
       description: 'description',
       folder: 'folder',
       height: -9007199254740991,
-      metadata: { foo: 'bar' },
+      metadata: { foo: 'string' },
       title: 'title',
       url: 'url',
       width: -9007199254740991,
@@ -63,7 +63,7 @@ describe('resource assets', () => {
         {
           description: 'description',
           folder: 'folder',
-          metadata: { foo: 'bar' },
+          metadata: { foo: 'string' },
           title: 'title',
           url: 'url',
         },
