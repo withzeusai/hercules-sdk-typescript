@@ -30,7 +30,7 @@ describe('resource customers', () => {
           id: 'cus_1234567890',
           address: {
             city: 'city',
-            country: 'country',
+            country: 'xx',
             line1: 'line1',
             line2: 'line2',
             postal_code: 'postal_code',
@@ -38,7 +38,7 @@ describe('resource customers', () => {
           },
           email: 'dev@stainless.com',
           name: 'name',
-          phone: 'phone',
+          phone: '+4699102',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -66,7 +66,7 @@ describe('resource customers', () => {
         {
           address: {
             city: 'city',
-            country: 'country',
+            country: 'xx',
             line1: 'line1',
             line2: 'line2',
             postal_code: 'postal_code',
@@ -74,7 +74,7 @@ describe('resource customers', () => {
           },
           email: 'dev@stainless.com',
           name: 'name',
-          phone: 'phone',
+          phone: '+4699102',
         },
         { path: '/_stainless_unknown_path' },
       ),

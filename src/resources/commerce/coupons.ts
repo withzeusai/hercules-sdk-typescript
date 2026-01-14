@@ -170,9 +170,10 @@ export interface CouponCreateParams {
   amount_off?: number;
 
   /**
-   * Three-letter ISO currency code for amount_off discounts
+   * Three-letter ISO currency code for amount_off discounts. Supported: usd, eur,
+   * gbp, jpy, cad, aud
    */
-  currency?: string;
+  currency?: 'usd' | 'eur' | 'gbp' | 'jpy' | 'cad' | 'aud';
 
   /**
    * How long the discount applies: once (first payment only), repeating (for

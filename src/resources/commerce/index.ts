@@ -28,7 +28,7 @@ export {
   type CustomerListParams,
   type CustomerBillingPortalParams,
   type CustomersCursorIDPage,
-} from './customers/index';
+} from './customers';
 export {
   Features,
   type Feature,
@@ -46,4 +46,3 @@ export {
   type ProductListParams,
   type ProductsCursorIDPage,
 } from './products/index';
-export { SubscriptionGroups } from './subscription-groups';

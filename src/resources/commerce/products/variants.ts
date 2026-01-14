@@ -17,7 +17,7 @@ export class Variants extends APIResource {
    * const variant =
    *   await client.commerce.products.variants.create(
    *     'product_id',
-   *     { name: 'name' },
+   *     { name: 'x' },
    *   );
    * ```
    */
@@ -135,7 +135,7 @@ export interface Variant {
   /**
    * Custom metadata for the variant
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Recurring billing configuration for subscription variants
@@ -218,9 +218,9 @@ export interface VariantCreateParams {
   id?: string;
 
   /**
-   * Three-letter ISO currency code
+   * Three-letter ISO currency code. Supported: usd, eur, gbp, jpy, cad, aud
    */
-  currency?: string;
+  currency?: 'usd' | 'eur' | 'gbp' | 'jpy' | 'cad' | 'aud';
 
   /**
    * Detailed description of what this variant includes
@@ -235,7 +235,7 @@ export interface VariantCreateParams {
   /**
    * Custom metadata for the variant
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Recurring billing configuration for subscription variants
@@ -310,7 +310,7 @@ export interface VariantUpdateParams {
   /**
    * Body param: Custom metadata for the variant
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Body param: Display name for the variant

@@ -126,7 +126,7 @@ export interface Asset {
   /**
    * Custom metadata (alt text, caption, tags, etc.)
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Timestamp when published
@@ -189,7 +189,7 @@ export interface AssetCreateParams {
   /**
    * Custom metadata
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Display title
@@ -221,7 +221,7 @@ export interface AssetUpdateParams {
   /**
    * Custom metadata
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Display title
