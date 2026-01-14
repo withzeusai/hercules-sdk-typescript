@@ -17,7 +17,7 @@ export class Variants extends APIResource {
    * const variant =
    *   await client.commerce.products.variants.create(
    *     'product_id',
-   *     { name: 'name' },
+   *     { name: 'x' },
    *   );
    * ```
    */
