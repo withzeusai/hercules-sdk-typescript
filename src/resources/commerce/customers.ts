@@ -83,8 +83,7 @@ export class Customers extends APIResource {
 
   /**
    * Retrieves a customer by ID. Returns the customer object including contact
-   * information, billing address, active subscriptions, recent invoices, and saved
-   * payment methods.
+   * information and billing address.
    *
    * @example
    * ```ts
