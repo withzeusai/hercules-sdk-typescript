@@ -110,7 +110,7 @@ export interface Feature {
   /**
    * Custom metadata for the feature
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 }
 
 export interface FeatureCreateParams {
@@ -133,7 +133,7 @@ export interface FeatureCreateParams {
   /**
    * Custom metadata for the feature
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 }
 
 export interface FeatureUpdateParams {
@@ -150,7 +150,7 @@ export interface FeatureUpdateParams {
   /**
    * Custom metadata for the feature
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Human-readable name for the feature

@@ -151,7 +151,7 @@ export interface Product {
   /**
    * Custom metadata for the product
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -250,7 +250,7 @@ export namespace Product {
       /**
        * Custom metadata for the feature grant
        */
-      metadata?: { [key: string]: unknown };
+      metadata?: { [key: string]: string };
     }
   }
 }
@@ -304,7 +304,7 @@ export interface ProductCreateResponse {
   /**
    * Custom metadata for the product
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Resources attached to this product. Customers get access to these resources when
@@ -403,7 +403,7 @@ export namespace ProductCreateResponse {
       /**
        * Custom metadata for the feature grant
        */
-      metadata?: { [key: string]: unknown };
+      metadata?: { [key: string]: string };
     }
   }
 }
@@ -439,7 +439,7 @@ export interface ProductCreateParams {
   /**
    * Custom metadata for the product
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * ID of the subscription group this product belongs to. Subscription groups define
@@ -469,9 +469,9 @@ export namespace ProductCreateParams {
     id?: string;
 
     /**
-     * Three-letter ISO currency code
+     * Three-letter ISO currency code. Supported: usd, eur, gbp, jpy, cad, aud
      */
-    currency?: string;
+    currency?: 'usd' | 'eur' | 'gbp' | 'jpy' | 'cad' | 'aud';
 
     /**
      * Detailed description of what this variant includes
@@ -491,7 +491,7 @@ export namespace ProductCreateParams {
     /**
      * Custom metadata for the variant
      */
-    metadata?: { [key: string]: unknown };
+    metadata?: { [key: string]: string };
 
     /**
      * Recurring billing configuration for subscription variants
@@ -581,7 +581,7 @@ export interface ProductUpdateParams {
   /**
    * Custom metadata for the product
    */
-  metadata?: { [key: string]: unknown };
+  metadata?: { [key: string]: string };
 
   /**
    * Display name for the product

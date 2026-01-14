@@ -27,7 +27,7 @@ describe('resource coupons', () => {
       code: 'LAUNCH20',
       id: 'coupon_1234567890',
       amount_off: 1,
-      currency: 'xxx',
+      currency: 'usd',
       duration: 'once',
       duration_in_months: 1,
       max_redemptions: 1,

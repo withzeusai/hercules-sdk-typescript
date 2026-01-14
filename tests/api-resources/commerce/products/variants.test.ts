@@ -26,7 +26,7 @@ describe('resource variants', () => {
     const response = await client.commerce.products.variants.create('product_id', {
       name: 'x',
       id: 'var_1234567890',
-      currency: 'xxx',
+      currency: 'usd',
       description: 'description',
       media: [
         {
@@ -35,7 +35,7 @@ describe('resource variants', () => {
           display_order: 0,
         },
       ],
-      metadata: { foo: 'bar' },
+      metadata: { foo: 'string' },
       recurring: { interval: 'day', interval_count: 1 },
       unit_amount: 0,
     });
@@ -68,7 +68,7 @@ describe('resource variants', () => {
           display_order: 0,
         },
       ],
-      metadata: { foo: 'bar' },
+      metadata: { foo: 'string' },
       name: 'name',
     });
   });

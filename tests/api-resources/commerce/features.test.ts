@@ -27,7 +27,7 @@ describe('resource features', () => {
       name: 'x',
       id: 'feat_-K0---P3EA--',
       description: 'description',
-      metadata: { foo: 'bar' },
+      metadata: { foo: 'string' },
     });
   });
 
@@ -52,7 +52,7 @@ describe('resource features', () => {
         {
           active: true,
           description: 'description',
-          metadata: { foo: 'bar' },
+          metadata: { foo: 'string' },
           name: 'x',
         },
         { path: '/_stainless_unknown_path' },
