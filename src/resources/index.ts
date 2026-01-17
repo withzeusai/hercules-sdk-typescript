@@ -2,6 +2,7 @@
 
 export {
   Commerce,
+  type Currency,
   type CommerceCancelResponse,
   type CommerceCheckResponse,
   type CommerceCheckoutResponse,

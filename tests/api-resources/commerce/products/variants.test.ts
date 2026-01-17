@@ -26,7 +26,7 @@ describe('resource variants', () => {
     const response = await client.commerce.products.variants.create('product_id', {
       name: 'x',
       id: 'var_1234567890',
-      currency: 'usd',
+      currency: 'USD',
       description: 'description',
       media: [
         {

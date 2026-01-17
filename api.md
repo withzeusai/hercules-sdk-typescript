@@ -2,6 +2,7 @@
 
 Types:
 
+- <code><a href="./src/resources/commerce/commerce.ts">Currency</a></code>
 - <code><a href="./src/resources/commerce/commerce.ts">CommerceCancelResponse</a></code>
 - <code><a href="./src/resources/commerce/commerce.ts">CommerceCheckResponse</a></code>
 - <code><a href="./src/resources/commerce/commerce.ts">CommerceCheckoutResponse</a></code>
