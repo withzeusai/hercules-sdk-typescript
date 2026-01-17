@@ -27,6 +27,7 @@ import {
   CommerceCheckResponse,
   CommerceCheckoutParams,
   CommerceCheckoutResponse,
+  Currency,
 } from './resources/commerce/commerce';
 import { Content } from './resources/content/content';
 import {
@@ -780,6 +781,7 @@ export declare namespace Hercules {
 
   export {
     Commerce as Commerce,
+    type Currency as Currency,
     type CommerceCancelResponse as CommerceCancelResponse,
     type CommerceCheckResponse as CommerceCheckResponse,
     type CommerceCheckoutResponse as CommerceCheckoutResponse,
