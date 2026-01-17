@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.13.1 (2026-01-17)
+
+Full Changelog: [v1.13.0...v1.13.1](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.13.0...v1.13.1)
+
+### Features
+
+* **api:** update api ([29e49bd](https://github.com/withzeusai/hercules-sdk-typescript/commit/29e49bd0ed2ff809ec8bf97ef5e0b20c66f13109))
+* **api:** update api ([2cf6cf8](https://github.com/withzeusai/hercules-sdk-typescript/commit/2cf6cf827df151c2f9ce7ec5f0e5ae43d3f69c80))
+* **api:** update api ([d1153c9](https://github.com/withzeusai/hercules-sdk-typescript/commit/d1153c9d5aa004cc87f0a683bb86285ef50217a2))
+* **api:** update api ([9830ecc](https://github.com/withzeusai/hercules-sdk-typescript/commit/9830eccadfc98f33907f47bcfe97a80c731d3766))
+* **api:** update api ([00bb161](https://github.com/withzeusai/hercules-sdk-typescript/commit/00bb16121b0a599dbb1d757f8071c82520ed9411))
+
+
+### Bug Fixes
+
+* **client:** invalid URL ([8e68168](https://github.com/withzeusai/hercules-sdk-typescript/commit/8e681681dff6e65da4f35f6b8997b426abb30e3a))
+
+
+### Chores
+
+* **internal:** codegen related update ([5585d29](https://github.com/withzeusai/hercules-sdk-typescript/commit/5585d296c84c6e2b211f634d6b79a027fa9cf316))
+* **internal:** codegen related update ([c03b51f](https://github.com/withzeusai/hercules-sdk-typescript/commit/c03b51f1f1c49cfdde32a233b7ac8566f905d9ae))
+* **internal:** update `actions/checkout` version ([e773874](https://github.com/withzeusai/hercules-sdk-typescript/commit/e773874545244254959bb2694faff07d26c6cb44))
+* **internal:** update lock file ([25c77c1](https://github.com/withzeusai/hercules-sdk-typescript/commit/25c77c117cf98b4dd2eae66eaf7cf798d1e4deda))
+* **internal:** upgrade brace-expansion and @babel/helpers ([f20a72c](https://github.com/withzeusai/hercules-sdk-typescript/commit/f20a72c93420ae6ec2792ba3f7c1bbf03dd7f4fc))
+* **mcp:** pass intent param to execute handler ([8193b99](https://github.com/withzeusai/hercules-sdk-typescript/commit/8193b9976feebc0f9c347c313c3843e8f30cbc2f))
+
 ## 1.13.0 (2026-01-14)
 
 Full Changelog: [v1.12.2...v1.13.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.12.2...v1.13.0)
