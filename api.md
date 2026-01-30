@@ -190,6 +190,16 @@ Methods:
 - <code title="post /v1/content/releases/{release_id}/items">client.content.releases.items.<a href="./src/resources/content/releases/items.ts">add</a>(releaseID, { ...params }) -> ReleaseItem</code>
 - <code title="delete /v1/content/releases/{release_id}/items/{item_id}">client.content.releases.items.<a href="./src/resources/content/releases/items.ts">remove</a>(itemID, { ...params }) -> void</code>
 
+# Domains
+
+Types:
+
+- <code><a href="./src/resources/domains.ts">Domain</a></code>
+
+Methods:
+
+- <code title="get /v1/domains">client.domains.<a href="./src/resources/domains.ts">list</a>({ ...params }) -> DomainsCursorIDPage</code>
+
 # Files
 
 Types:
