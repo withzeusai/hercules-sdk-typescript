@@ -19,6 +19,7 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
@@ -768,6 +769,11 @@ export class Hercules {
    */
   content: API.Content = new API.Content(this);
   /**
+   * List custom domains linked to a website, including Cloudflare verification
+   * and SSL status.
+   */
+  domains: API.Domains = new API.Domains(this);
+  /**
    * Upload, retrieve, and list files and media associated with a website.
    * Upload is a two-step process: first create an upload to get a presigned URL,
    * then complete the upload after putting the file content to the presigned URL.
@@ -778,6 +784,7 @@ export class Hercules {
 
 Hercules.Commerce = Commerce;
 Hercules.Content = Content;
+Hercules.Domains = Domains;
 Hercules.Files = Files;
 Hercules.PushNotifications = PushNotifications;
 
@@ -799,6 +806,13 @@ export declare namespace Hercules {
   };
 
   export { Content as Content };
+
+  export {
+    Domains as Domains,
+    type Domain as Domain,
+    type DomainsCursorIDPage as DomainsCursorIDPage,
+    type DomainListParams as DomainListParams,
+  };
 
   export {
     Files as Files,
