@@ -33,17 +33,17 @@ import {
 } from './resources/commerce/commerce';
 import { Content } from './resources/content/content';
 import {
-  Push,
-  PushEnableResponse,
-  PushIdentifyParams,
-  PushIdentifyResponse,
-  PushSendParams,
-  PushSendResponse,
-  PushSubscribeParams,
-  PushSubscribeResponse,
-  PushUnsubscribeParams,
-  PushUnsubscribeResponse,
-} from './resources/push/push';
+  PushNotificationEnableResponse,
+  PushNotificationIdentifyParams,
+  PushNotificationIdentifyResponse,
+  PushNotificationSendParams,
+  PushNotificationSendResponse,
+  PushNotificationSubscribeParams,
+  PushNotificationSubscribeResponse,
+  PushNotificationUnsubscribeParams,
+  PushNotificationUnsubscribeResponse,
+  PushNotifications,
+} from './resources/push-notifications/push-notifications';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -781,14 +781,14 @@ export class Hercules {
    * then complete the upload after putting the file content to the presigned URL.
    */
   files: API.Files = new API.Files(this);
-  push: API.Push = new API.Push(this);
+  pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
 Hercules.Commerce = Commerce;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
 Hercules.Files = Files;
-Hercules.Push = Push;
+Hercules.PushNotifications = PushNotifications;
 
 export declare namespace Hercules {
   export type RequestOptions = Opts.RequestOptions;
@@ -825,15 +825,15 @@ export declare namespace Hercules {
   };
 
   export {
-    Push as Push,
-    type PushEnableResponse as PushEnableResponse,
-    type PushIdentifyResponse as PushIdentifyResponse,
-    type PushSendResponse as PushSendResponse,
-    type PushSubscribeResponse as PushSubscribeResponse,
-    type PushUnsubscribeResponse as PushUnsubscribeResponse,
-    type PushIdentifyParams as PushIdentifyParams,
-    type PushSendParams as PushSendParams,
-    type PushSubscribeParams as PushSubscribeParams,
-    type PushUnsubscribeParams as PushUnsubscribeParams,
+    PushNotifications as PushNotifications,
+    type PushNotificationEnableResponse as PushNotificationEnableResponse,
+    type PushNotificationIdentifyResponse as PushNotificationIdentifyResponse,
+    type PushNotificationSendResponse as PushNotificationSendResponse,
+    type PushNotificationSubscribeResponse as PushNotificationSubscribeResponse,
+    type PushNotificationUnsubscribeResponse as PushNotificationUnsubscribeResponse,
+    type PushNotificationIdentifyParams as PushNotificationIdentifyParams,
+    type PushNotificationSendParams as PushNotificationSendParams,
+    type PushNotificationSubscribeParams as PushNotificationSubscribeParams,
+    type PushNotificationUnsubscribeParams as PushNotificationUnsubscribeParams,
   };
 }

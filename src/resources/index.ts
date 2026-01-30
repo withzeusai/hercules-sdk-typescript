@@ -14,14 +14,14 @@ export { Content } from './content/content';
 export { Domains, type Domain, type DomainListParams, type DomainsCursorIDPage } from './domains';
 export { Files, type File, type Upload, type FileListParams, type FilesCursorIDPage } from './files';
 export {
-  Push,
-  type PushEnableResponse,
-  type PushIdentifyResponse,
-  type PushSendResponse,
-  type PushSubscribeResponse,
-  type PushUnsubscribeResponse,
-  type PushIdentifyParams,
-  type PushSendParams,
-  type PushSubscribeParams,
-  type PushUnsubscribeParams,
-} from './push/push';
+  PushNotifications,
+  type PushNotificationEnableResponse,
+  type PushNotificationIdentifyResponse,
+  type PushNotificationSendResponse,
+  type PushNotificationSubscribeResponse,
+  type PushNotificationUnsubscribeResponse,
+  type PushNotificationIdentifyParams,
+  type PushNotificationSendParams,
+  type PushNotificationSubscribeParams,
+  type PushNotificationUnsubscribeParams,
+} from './push-notifications/push-notifications';
