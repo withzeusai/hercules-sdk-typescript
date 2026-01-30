@@ -212,34 +212,34 @@ Methods:
 - <code title="get /v1/files">client.files.<a href="./src/resources/files.ts">list</a>({ ...params }) -> FilesCursorIDPage</code>
 - <code title="get /v1/files/{file_id}">client.files.<a href="./src/resources/files.ts">get</a>(fileID) -> File</code>
 
-# PushNotifications
+# Push
 
 Types:
 
-- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationEnableResponse</a></code>
-- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationIdentifyResponse</a></code>
-- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationSendResponse</a></code>
-- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationSubscribeResponse</a></code>
-- <code><a href="./src/resources/push-notifications/push-notifications.ts">PushNotificationUnsubscribeResponse</a></code>
+- <code><a href="./src/resources/push/push.ts">PushEnableResponse</a></code>
+- <code><a href="./src/resources/push/push.ts">PushIdentifyResponse</a></code>
+- <code><a href="./src/resources/push/push.ts">PushSendResponse</a></code>
+- <code><a href="./src/resources/push/push.ts">PushSubscribeResponse</a></code>
+- <code><a href="./src/resources/push/push.ts">PushUnsubscribeResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/push-notifications/enable">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">enable</a>() -> PushNotificationEnableResponse</code>
-- <code title="post /v1/push-notifications/identify">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">identify</a>({ ...params }) -> PushNotificationIdentifyResponse</code>
-- <code title="post /v1/push-notifications/send">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">send</a>({ ...params }) -> PushNotificationSendResponse</code>
-- <code title="post /v1/push-notifications/subscribe">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">subscribe</a>({ ...params }) -> PushNotificationSubscribeResponse</code>
-- <code title="post /v1/push-notifications/unsubscribe">client.pushNotifications.<a href="./src/resources/push-notifications/push-notifications.ts">unsubscribe</a>({ ...params }) -> PushNotificationUnsubscribeResponse</code>
+- <code title="post /v1/push/enable">client.push.<a href="./src/resources/push/push.ts">enable</a>() -> PushEnableResponse</code>
+- <code title="post /v1/push/identify">client.push.<a href="./src/resources/push/push.ts">identify</a>({ ...params }) -> PushIdentifyResponse</code>
+- <code title="post /v1/push/send">client.push.<a href="./src/resources/push/push.ts">send</a>({ ...params }) -> PushSendResponse</code>
+- <code title="post /v1/push/subscribe">client.push.<a href="./src/resources/push/push.ts">subscribe</a>({ ...params }) -> PushSubscribeResponse</code>
+- <code title="post /v1/push/unsubscribe">client.push.<a href="./src/resources/push/push.ts">unsubscribe</a>({ ...params }) -> PushUnsubscribeResponse</code>
 
 ## Topics
 
 Types:
 
-- <code><a href="./src/resources/push-notifications/topics.ts">TopicListResponse</a></code>
-- <code><a href="./src/resources/push-notifications/topics.ts">TopicSubscribeResponse</a></code>
-- <code><a href="./src/resources/push-notifications/topics.ts">TopicUnsubscribeResponse</a></code>
+- <code><a href="./src/resources/push/topics.ts">TopicListResponse</a></code>
+- <code><a href="./src/resources/push/topics.ts">TopicSubscribeResponse</a></code>
+- <code><a href="./src/resources/push/topics.ts">TopicUnsubscribeResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/push-notifications/topics">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">list</a>({ ...params }) -> TopicListResponsesCursorIDPage</code>
-- <code title="post /v1/push-notifications/topics/subscribe">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">subscribe</a>({ ...params }) -> TopicSubscribeResponse</code>
-- <code title="post /v1/push-notifications/topics/unsubscribe">client.pushNotifications.topics.<a href="./src/resources/push-notifications/topics.ts">unsubscribe</a>({ ...params }) -> TopicUnsubscribeResponse</code>
+- <code title="get /v1/push/topics">client.push.topics.<a href="./src/resources/push/topics.ts">list</a>({ ...params }) -> TopicListResponsesCursorIDPage</code>
+- <code title="post /v1/push/topics/subscribe">client.push.topics.<a href="./src/resources/push/topics.ts">subscribe</a>({ ...params }) -> TopicSubscribeResponse</code>
+- <code title="post /v1/push/topics/unsubscribe">client.push.topics.<a href="./src/resources/push/topics.ts">unsubscribe</a>({ ...params }) -> TopicUnsubscribeResponse</code>
