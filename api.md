@@ -190,6 +190,18 @@ Methods:
 - <code title="post /v1/content/releases/{release_id}/items">client.content.releases.items.<a href="./src/resources/content/releases/items.ts">add</a>(releaseID, { ...params }) -> ReleaseItem</code>
 - <code title="delete /v1/content/releases/{release_id}/items/{item_id}">client.content.releases.items.<a href="./src/resources/content/releases/items.ts">remove</a>(itemID, { ...params }) -> void</code>
 
+# Files
+
+Types:
+
+- <code><a href="./src/resources/files.ts">File</a></code>
+- <code><a href="./src/resources/files.ts">Upload</a></code>
+
+Methods:
+
+- <code title="get /v1/files">client.files.<a href="./src/resources/files.ts">list</a>({ ...params }) -> FilesCursorIDPage</code>
+- <code title="get /v1/files/{file_id}">client.files.<a href="./src/resources/files.ts">get</a>(fileID) -> File</code>
+
 # PushNotifications
 
 Types:
