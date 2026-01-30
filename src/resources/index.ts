@@ -11,6 +11,7 @@ export {
   type CommerceCheckoutParams,
 } from './commerce/commerce';
 export { Content } from './content/content';
+export { Files, type File, type Upload, type FileListParams, type FilesCursorIDPage } from './files';
 export {
   PushNotifications,
   type PushNotificationEnableResponse,
