@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource pushNotifications', () => {
+describe('resource push', () => {
   // Prism tests are disabled
   test.skip('enable', async () => {
-    const responsePromise = client.pushNotifications.enable();
+    const responsePromise = client.push.enable();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('identify: only required params', async () => {
-    const responsePromise = client.pushNotifications.identify({ secret: 'x', userId: 'x' });
+    const responsePromise = client.push.identify({ secret: 'x', userId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -35,12 +35,12 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('identify: required and optional params', async () => {
-    const response = await client.pushNotifications.identify({ secret: 'x', userId: 'x' });
+    const response = await client.push.identify({ secret: 'x', userId: 'x' });
   });
 
   // Prism tests are disabled
   test.skip('send: only required params', async () => {
-    const responsePromise = client.pushNotifications.send({ title: 'x' });
+    const responsePromise = client.push.send({ title: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,7 +52,7 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('send: required and optional params', async () => {
-    const response = await client.pushNotifications.send({
+    const response = await client.push.send({
       title: 'x',
       badge: 'https://example.com',
       body: 'body',
@@ -66,7 +66,7 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('subscribe: only required params', async () => {
-    const responsePromise = client.pushNotifications.subscribe({
+    const responsePromise = client.push.subscribe({
       subscription: {
         endpoint: 'https://example.com',
         keys: { auth: 'auth', p256dh: 'p256dh' },
@@ -84,7 +84,7 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('subscribe: required and optional params', async () => {
-    const response = await client.pushNotifications.subscribe({
+    const response = await client.push.subscribe({
       subscription: {
         endpoint: 'https://example.com',
         keys: { auth: 'auth', p256dh: 'p256dh' },
@@ -96,7 +96,7 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('unsubscribe: only required params', async () => {
-    const responsePromise = client.pushNotifications.unsubscribe({ secret: 'x' });
+    const responsePromise = client.push.unsubscribe({ secret: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -108,6 +108,6 @@ describe('resource pushNotifications', () => {
 
   // Prism tests are disabled
   test.skip('unsubscribe: required and optional params', async () => {
-    const response = await client.pushNotifications.unsubscribe({ secret: 'x' });
+    const response = await client.push.unsubscribe({ secret: 'x' });
   });
 });

@@ -13,10 +13,7 @@ export class Topics extends APIResource {
     query: TopicListParams,
     options?: RequestOptions,
   ): PagePromise<TopicListResponsesCursorIDPage, TopicListResponse> {
-    return this._client.getAPIList('/v1/push-notifications/topics', CursorIDPage<TopicListResponse>, {
-      query,
-      ...options,
-    });
+    return this._client.getAPIList('/v1/push/topics', CursorIDPage<TopicListResponse>, { query, ...options });
   }
 
   /**
@@ -24,14 +21,14 @@ export class Topics extends APIResource {
    * visitor will receive notifications sent to these topics.
    */
   subscribe(body: TopicSubscribeParams, options?: RequestOptions): APIPromise<TopicSubscribeResponse> {
-    return this._client.post('/v1/push-notifications/topics/subscribe', { body, ...options });
+    return this._client.post('/v1/push/topics/subscribe', { body, ...options });
   }
 
   /**
    * Unsubscribes a visitor from specified topics.
    */
   unsubscribe(body: TopicUnsubscribeParams, options?: RequestOptions): APIPromise<TopicUnsubscribeResponse> {
-    return this._client.post('/v1/push-notifications/topics/unsubscribe', { body, ...options });
+    return this._client.post('/v1/push/topics/unsubscribe', { body, ...options });
   }
 }
 
