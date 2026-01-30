@@ -15,7 +15,7 @@ import {
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
-export class Push extends APIResource {
+export class PushNotifications extends APIResource {
   topics: TopicsAPI.Topics = new TopicsAPI.Topics(this._client);
 
   /**
@@ -23,16 +23,19 @@ export class Push extends APIResource {
    * returns existing keys if already enabled. Hercules recommends calling this
    * during app initialization.
    */
-  enable(options?: RequestOptions): APIPromise<PushEnableResponse> {
-    return this._client.post('/v1/push/enable', options);
+  enable(options?: RequestOptions): APIPromise<PushNotificationEnableResponse> {
+    return this._client.post('/v1/push-notifications/enable', options);
   }
 
   /**
    * Updates a subscription's visitorId to the provided userId. Call after sign-in to
    * link the subscription to the authenticated user's account.
    */
-  identify(body: PushIdentifyParams, options?: RequestOptions): APIPromise<PushIdentifyResponse> {
-    return this._client.post('/v1/push/identify', { body, ...options });
+  identify(
+    body: PushNotificationIdentifyParams,
+    options?: RequestOptions,
+  ): APIPromise<PushNotificationIdentifyResponse> {
+    return this._client.post('/v1/push-notifications/identify', { body, ...options });
   }
 
   /**
@@ -40,8 +43,8 @@ export class Push extends APIResource {
    * visitorIds, topics, or both (combined as union). Omit both to broadcast to all
    * subscribers.
    */
-  send(body: PushSendParams, options?: RequestOptions): APIPromise<PushSendResponse> {
-    return this._client.post('/v1/push/send', { body, ...options });
+  send(body: PushNotificationSendParams, options?: RequestOptions): APIPromise<PushNotificationSendResponse> {
+    return this._client.post('/v1/push-notifications/send', { body, ...options });
   }
 
   /**
@@ -49,22 +52,28 @@ export class Push extends APIResource {
    * userId or generate a UUID for anonymous users. Upserts by endpoint to handle
    * re-subscriptions. Returns a secret for subscription ownership.
    */
-  subscribe(body: PushSubscribeParams, options?: RequestOptions): APIPromise<PushSubscribeResponse> {
-    return this._client.post('/v1/push/subscribe', { body, ...options });
+  subscribe(
+    body: PushNotificationSubscribeParams,
+    options?: RequestOptions,
+  ): APIPromise<PushNotificationSubscribeResponse> {
+    return this._client.post('/v1/push-notifications/subscribe', { body, ...options });
   }
 
   /**
    * Removes a push subscription by secret.
    */
-  unsubscribe(body: PushUnsubscribeParams, options?: RequestOptions): APIPromise<PushUnsubscribeResponse> {
-    return this._client.post('/v1/push/unsubscribe', { body, ...options });
+  unsubscribe(
+    body: PushNotificationUnsubscribeParams,
+    options?: RequestOptions,
+  ): APIPromise<PushNotificationUnsubscribeResponse> {
+    return this._client.post('/v1/push-notifications/unsubscribe', { body, ...options });
   }
 }
 
 /**
  * Response containing the VAPID public key for push subscriptions.
  */
-export interface PushEnableResponse {
+export interface PushNotificationEnableResponse {
   /**
    * VAPID public key for push subscription (base64url encoded)
    */
@@ -74,7 +83,7 @@ export interface PushEnableResponse {
 /**
  * Result of the identify operation.
  */
-export interface PushIdentifyResponse {
+export interface PushNotificationIdentifyResponse {
   /**
    * Whether the subscription was successfully identified
    */
@@ -89,7 +98,7 @@ export interface PushIdentifyResponse {
 /**
  * Result of the send operation with success and failure counts.
  */
-export interface PushSendResponse {
+export interface PushNotificationSendResponse {
   /**
    * Number of notifications that failed to send
    */
@@ -104,7 +113,7 @@ export interface PushSendResponse {
 /**
  * The created or updated subscription.
  */
-export interface PushSubscribeResponse {
+export interface PushNotificationSubscribeResponse {
   /**
    * Subscription secret for ownership verification. Store securely and use for
    * unsubscribe/identify.
@@ -115,14 +124,14 @@ export interface PushSubscribeResponse {
 /**
  * Result of the unsubscribe operation.
  */
-export interface PushUnsubscribeResponse {
+export interface PushNotificationUnsubscribeResponse {
   /**
    * Whether the subscription was removed
    */
   success: boolean;
 }
 
-export interface PushIdentifyParams {
+export interface PushNotificationIdentifyParams {
   /**
    * Subscription secret from a previous anonymous subscription
    */
@@ -134,7 +143,7 @@ export interface PushIdentifyParams {
   userId: string;
 }
 
-export interface PushSendParams {
+export interface PushNotificationSendParams {
   /**
    * Notification title
    */
@@ -177,11 +186,11 @@ export interface PushSendParams {
   visitorIds?: Array<string>;
 }
 
-export interface PushSubscribeParams {
+export interface PushNotificationSubscribeParams {
   /**
    * Web Push subscription object from pushManager.subscribe()
    */
-  subscription: PushSubscribeParams.Subscription;
+  subscription: PushNotificationSubscribeParams.Subscription;
 
   /**
    * Visitor identifier. Use authenticated userId or generate a UUID for anonymous
@@ -190,7 +199,7 @@ export interface PushSubscribeParams {
   visitorId: string;
 }
 
-export namespace PushSubscribeParams {
+export namespace PushNotificationSubscribeParams {
   /**
    * Web Push subscription object from pushManager.subscribe()
    */
@@ -223,26 +232,26 @@ export namespace PushSubscribeParams {
   }
 }
 
-export interface PushUnsubscribeParams {
+export interface PushNotificationUnsubscribeParams {
   /**
    * Subscription secret to remove
    */
   secret: string;
 }
 
-Push.Topics = Topics;
+PushNotifications.Topics = Topics;
 
-export declare namespace Push {
+export declare namespace PushNotifications {
   export {
-    type PushEnableResponse as PushEnableResponse,
-    type PushIdentifyResponse as PushIdentifyResponse,
-    type PushSendResponse as PushSendResponse,
-    type PushSubscribeResponse as PushSubscribeResponse,
-    type PushUnsubscribeResponse as PushUnsubscribeResponse,
-    type PushIdentifyParams as PushIdentifyParams,
-    type PushSendParams as PushSendParams,
-    type PushSubscribeParams as PushSubscribeParams,
-    type PushUnsubscribeParams as PushUnsubscribeParams,
+    type PushNotificationEnableResponse as PushNotificationEnableResponse,
+    type PushNotificationIdentifyResponse as PushNotificationIdentifyResponse,
+    type PushNotificationSendResponse as PushNotificationSendResponse,
+    type PushNotificationSubscribeResponse as PushNotificationSubscribeResponse,
+    type PushNotificationUnsubscribeResponse as PushNotificationUnsubscribeResponse,
+    type PushNotificationIdentifyParams as PushNotificationIdentifyParams,
+    type PushNotificationSendParams as PushNotificationSendParams,
+    type PushNotificationSubscribeParams as PushNotificationSubscribeParams,
+    type PushNotificationUnsubscribeParams as PushNotificationUnsubscribeParams,
   };
 
   export {
