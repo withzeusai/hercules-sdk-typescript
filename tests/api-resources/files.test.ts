@@ -10,6 +10,32 @@ const client = new Hercules({
 
 describe('resource files', () => {
   // Prism tests are disabled
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.files.create({
+      filename: 'filename',
+      mime_type: 'mime_type',
+      size: 1,
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.files.create({
+      filename: 'filename',
+      mime_type: 'mime_type',
+      size: 1,
+      path: 'path',
+    });
+  });
+
+  // Prism tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.files.list();
     const rawResponse = await responsePromise.asResponse();
