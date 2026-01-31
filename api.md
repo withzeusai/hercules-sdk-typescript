@@ -209,6 +209,7 @@ Types:
 
 Methods:
 
+- <code title="post /v1/files">client.files.<a href="./src/resources/files.ts">create</a>({ ...params }) -> Upload</code>
 - <code title="get /v1/files">client.files.<a href="./src/resources/files.ts">list</a>({ ...params }) -> FilesCursorIDPage</code>
 - <code title="get /v1/files/{file_id}">client.files.<a href="./src/resources/files.ts">get</a>(fileID) -> File</code>
 
