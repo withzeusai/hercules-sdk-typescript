@@ -20,7 +20,7 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
-import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
+import { File, FileCreateParams, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
   CommerceCancelParams,
@@ -775,8 +775,9 @@ export class Hercules {
   domains: API.Domains = new API.Domains(this);
   /**
    * Upload, retrieve, and list files and media associated with a website.
-   * Upload is a two-step process: first create an upload to get a presigned URL,
-   * then complete the upload after putting the file content to the presigned URL.
+   * Upload is a two-step process: first call create to get an upload URL,
+   * then PUT the file content to that URL. The PUT response returns the
+   * completed MediaFile object. No separate complete call is needed.
    */
   files: API.Files = new API.Files(this);
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);
@@ -819,6 +820,7 @@ export declare namespace Hercules {
     type File as File,
     type Upload as Upload,
     type FilesCursorIDPage as FilesCursorIDPage,
+    type FileCreateParams as FileCreateParams,
     type FileListParams as FileListParams,
   };
 
