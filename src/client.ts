@@ -20,7 +20,7 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
-import { File, FileCreateParams, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
+import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
   CommerceCancelParams,
@@ -832,7 +832,6 @@ export declare namespace Hercules {
     type File as File,
     type Upload as Upload,
     type FilesCursorIDPage as FilesCursorIDPage,
-    type FileCreateParams as FileCreateParams,
     type FileListParams as FileListParams,
   };
 
