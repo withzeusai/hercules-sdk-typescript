@@ -14,15 +14,6 @@ import { path } from '../internal/utils/path';
  */
 export class Files extends APIResource {
   /**
-   * Prepares a file upload by returning an upload URL. PUT your file content to the
-   * returned upload_url with the provided headers. The PUT response will contain the
-   * completed MediaFile object with its CDN URL.
-   */
-  create(body: FileCreateParams, options?: RequestOptions): APIPromise<Upload> {
-    return this._client.post('/v1/files', { body, ...options });
-  }
-
-  /**
    * Retrieves a paginated list of files uploaded to the website. Supports filtering
    * by MIME type, folder path, creation date, and filename search.
    */
@@ -120,28 +111,6 @@ export interface Upload {
   upload_url: string;
 }
 
-export interface FileCreateParams {
-  /**
-   * Original filename of the file to upload
-   */
-  filename: string;
-
-  /**
-   * MIME type of the file (e.g., 'image/jpeg')
-   */
-  mime_type: string;
-
-  /**
-   * File size in bytes
-   */
-  size: number;
-
-  /**
-   * Optional folder path within the website
-   */
-  path?: string;
-}
-
 export interface FileListParams extends CursorIDPageParams {
   /**
    * Filter by creation date
@@ -196,7 +165,6 @@ export declare namespace Files {
     type File as File,
     type Upload as Upload,
     type FilesCursorIDPage as FilesCursorIDPage,
-    type FileCreateParams as FileCreateParams,
     type FileListParams as FileListParams,
   };
 }

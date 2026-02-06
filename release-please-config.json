@@ -65,6 +65,11 @@
     "README.md",
     {
       "type": "json",
+      "path": "packages/mcp-server/package.json",
+      "jsonpath": "$.version"
+    },
+    {
+      "type": "json",
       "path": "jsr.json",
       "jsonpath": "$.version"
     }
