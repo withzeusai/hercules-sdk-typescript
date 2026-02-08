@@ -8,7 +8,7 @@ import { path } from '../../internal/utils/path';
 
 export class Entries extends APIResource {
   /**
-   * Creates a new content entry for a given model. Entries start as drafts by
+   * Creates a new content entry for a given collection. Entries start as drafts by
    * default. Use the publish endpoint to make entries publicly accessible.
    */
   create(body: EntryCreateParams, options?: RequestOptions): APIPromise<Entry> {
@@ -29,7 +29,7 @@ export class Entries extends APIResource {
   }
 
   /**
-   * Retrieves a paginated list of content entries. Supports filtering by model,
+   * Retrieves a paginated list of content entries. Supports filtering by collection,
    * status, locale, and custom field queries. Use the 'where' parameter for
    * field-based filtering with operators like $eq, $contains, $gt, etc.
    */
@@ -81,14 +81,19 @@ export class Entries extends APIResource {
 export type EntriesCursorIDPage = CursorIDPage<Entry>;
 
 /**
- * A content entry containing field values based on its model schema. Entries can
- * be drafts, published, or archived.
+ * A content entry containing field values based on its collection schema. Entries
+ * can be drafts, published, or archived.
  */
 export interface Entry {
   /**
    * Unique identifier for the entry
    */
   id: string;
+
+  /**
+   * ID of the content collection this entry belongs to
+   */
+  collection_id: string;
 
   /**
    * Timestamp when the entry was created
@@ -107,11 +112,6 @@ export interface Entry {
   locale: string;
 
   /**
-   * ID of the content model this entry belongs to
-   */
-  model_id: string;
-
-  /**
    * Publishing status: draft, published, or archived
    */
   status: 'draft' | 'published' | 'archived';
@@ -127,14 +127,14 @@ export interface Entry {
   version: number;
 
   /**
+   * API ID of the content collection (included when populated)
+   */
+  collection_api_id?: string;
+
+  /**
    * Timestamp when first published
    */
   first_published_at?: string | null;
-
-  /**
-   * API ID of the content model (included when populated)
-   */
-  model_api_id?: string;
 
   /**
    * Timestamp when last published
@@ -154,9 +154,9 @@ export interface Entry {
 
 export interface EntryCreateParams {
   /**
-   * API ID of the content model (e.g., 'blogPost')
+   * API ID of the content collection (e.g., 'blogPost')
    */
-  model: string;
+  collection: string;
 
   /**
    * Optional custom ID for the entry. Must start with 'ce\_'. If not provided, one
@@ -201,6 +201,11 @@ export interface EntryUpdateParams {
 
 export interface EntryListParams extends CursorIDPageParams {
   /**
+   * Filter by content collection API ID (e.g., 'blogPost')
+   */
+  collection?: string;
+
+  /**
    * Filter by creation date
    */
   created?: EntryListParams.Created;
@@ -214,11 +219,6 @@ export interface EntryListParams extends CursorIDPageParams {
    * Filter by primary locale
    */
   locale?: string;
-
-  /**
-   * Filter by content model API ID (e.g., 'blogPost')
-   */
-  model?: string;
 
   /**
    * JSON-encoded sort order. Example: {"field":"publishedAt","direction":"desc"}

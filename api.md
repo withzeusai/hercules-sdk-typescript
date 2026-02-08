@@ -103,23 +103,8 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/content/models/models.ts">Field</a></code>
-- <code><a href="./src/resources/content/models/models.ts">Model</a></code>
-
-Methods:
-
-- <code title="post /v1/content/models">client.content.models.<a href="./src/resources/content/models/models.ts">create</a>({ ...params }) -> Model</code>
-- <code title="patch /v1/content/models/{model_id}">client.content.models.<a href="./src/resources/content/models/models.ts">update</a>(modelID, { ...params }) -> Model</code>
-- <code title="get /v1/content/models">client.content.models.<a href="./src/resources/content/models/models.ts">list</a>({ ...params }) -> ModelsCursorIDPage</code>
-- <code title="delete /v1/content/models/{model_id}">client.content.models.<a href="./src/resources/content/models/models.ts">archive</a>(modelID) -> Model</code>
-- <code title="get /v1/content/models/{model_id}">client.content.models.<a href="./src/resources/content/models/models.ts">get</a>(modelID) -> Model</code>
 
 ### Fields
-
-Methods:
-
-- <code title="post /v1/content/models/{model_id}/fields">client.content.models.fields.<a href="./src/resources/content/models/fields.ts">create</a>(modelID, { ...params }) -> Field</code>
-- <code title="patch /v1/content/models/{model_id}/fields/{field_id}">client.content.models.fields.<a href="./src/resources/content/models/fields.ts">update</a>(fieldID, { ...params }) -> Field</code>
-- <code title="delete /v1/content/models/{model_id}/fields/{field_id}">client.content.models.fields.<a href="./src/resources/content/models/fields.ts">delete</a>(fieldID, { ...params }) -> void</code>
 
 ## Entries
 

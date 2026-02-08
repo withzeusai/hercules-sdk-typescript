@@ -30,15 +30,7 @@ import {
   LocalesCursorIDPage,
 } from './locales';
 import * as ModelsAPI from './models/models';
-import {
-  Field,
-  Model,
-  ModelCreateParams,
-  ModelListParams,
-  ModelUpdateParams,
-  Models,
-  ModelsCursorIDPage,
-} from './models/models';
+import { Field, Models } from './models/models';
 import * as ReleasesAPI from './releases/releases';
 import {
   Release,
@@ -69,15 +61,7 @@ Content.Locales = Locales;
 Content.Releases = Releases;
 
 export declare namespace Content {
-  export {
-    Models as Models,
-    type Field as Field,
-    type Model as Model,
-    type ModelsCursorIDPage as ModelsCursorIDPage,
-    type ModelCreateParams as ModelCreateParams,
-    type ModelUpdateParams as ModelUpdateParams,
-    type ModelListParams as ModelListParams,
-  };
+  export { Models as Models, type Field as Field };
 
   export {
     Entries as Entries,
