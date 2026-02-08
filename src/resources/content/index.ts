@@ -26,15 +26,7 @@ export {
   type LocaleListParams,
   type LocalesCursorIDPage,
 } from './locales';
-export {
-  Models,
-  type Field,
-  type Model,
-  type ModelCreateParams,
-  type ModelUpdateParams,
-  type ModelListParams,
-  type ModelsCursorIDPage,
-} from './models/index';
+export { Models, type Field } from './models/index';
 export {
   Releases,
   type Release,
