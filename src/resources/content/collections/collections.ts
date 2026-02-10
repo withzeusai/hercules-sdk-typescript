@@ -8,61 +8,116 @@ import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../cor
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
-export class Models extends APIResource {
+export class Collections extends APIResource {
   fields: FieldsAPI.Fields = new FieldsAPI.Fields(this._client);
 
   /**
-   * Creates a new content model with optional initial fields. Content models define
-   * the schema for entries. Example models: 'Blog Post', 'Product', 'Author'.
+   * Creates a new content collection with optional initial fields. Content
+   * collections define the schema for entries. Example collections: 'Blog Post',
+   * 'Product', 'Author'.
    */
-  create(body: ModelCreateParams, options?: RequestOptions): APIPromise<Model> {
-    return this._client.post('/v1/content/models', { body, ...options });
+  create(body: CollectionCreateParams, options?: RequestOptions): APIPromise<Collection> {
+    return this._client.post('/v1/content/collections', { body, ...options });
   }
 
   /**
-   * Updates an existing content model. Use this to modify the name, description, or
-   * lock status. The api_id cannot be changed after creation.
+   * Updates an existing content collection. Use this to modify the name,
+   * description, or lock status. The api_id cannot be changed after creation.
    */
   update(
-    modelID: string,
-    body: ModelUpdateParams | null | undefined = {},
+    collectionID: string,
+    body: CollectionUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<Model> {
-    return this._client.patch(path`/v1/content/models/${modelID}`, { body, ...options });
+  ): APIPromise<Collection> {
+    return this._client.patch(path`/v1/content/collections/${collectionID}`, { body, ...options });
   }
 
   /**
-   * Retrieves a paginated list of content models. Content models define the
-   * schema/structure for content entries.
+   * Retrieves a paginated list of content collections. Content collections define
+   * the schema/structure for content entries.
    */
   list(
-    query: ModelListParams | null | undefined = {},
+    query: CollectionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ModelsCursorIDPage, Model> {
-    return this._client.getAPIList('/v1/content/models', CursorIDPage<Model>, { query, ...options });
+  ): PagePromise<CollectionsCursorIDPage, Collection> {
+    return this._client.getAPIList('/v1/content/collections', CursorIDPage<Collection>, {
+      query,
+      ...options,
+    });
   }
 
   /**
-   * Archives a content model, hiding it from the API. Existing entries are
+   * Archives a content collection, hiding it from the API. Existing entries are
    * preserved. Use this instead of deletion to maintain data integrity.
    */
-  archive(modelID: string, options?: RequestOptions): APIPromise<Model> {
-    return this._client.delete(path`/v1/content/models/${modelID}`, options);
+  archive(collectionID: string, options?: RequestOptions): APIPromise<Collection> {
+    return this._client.delete(path`/v1/content/collections/${collectionID}`, options);
   }
 
   /**
-   * Retrieves a content model by ID. Returns the model object including all field
-   * definitions.
+   * Retrieves a content collection by ID. Returns the collection object including
+   * all field definitions.
    */
-  get(modelID: string, options?: RequestOptions): APIPromise<Model> {
-    return this._client.get(path`/v1/content/models/${modelID}`, options);
+  get(collectionID: string, options?: RequestOptions): APIPromise<Collection> {
+    return this._client.get(path`/v1/content/collections/${collectionID}`, options);
   }
 }
 
-export type ModelsCursorIDPage = CursorIDPage<Model>;
+export type CollectionsCursorIDPage = CursorIDPage<Collection>;
 
 /**
- * A field definition within a content model
+ * A content collection defines the schema/structure for content entries. Each
+ * collection has fields that define what data entries can contain.
+ */
+export interface Collection {
+  /**
+   * Unique identifier for the content collection
+   */
+  id: string;
+
+  /**
+   * API identifier for the collection (camelCase, e.g., 'blogPost', 'product')
+   */
+  api_id: string;
+
+  /**
+   * Timestamp when the collection was created
+   */
+  created: string;
+
+  /**
+   * Whether field modifications are locked (for production safety)
+   */
+  locked: boolean;
+
+  /**
+   * Display name for the collection
+   */
+  name: string;
+
+  /**
+   * Timestamp when the collection was last updated
+   */
+  updated: string;
+
+  /**
+   * Schema version number
+   */
+  version: number;
+
+  /**
+   * Description of the collection
+   */
+  description?: string | null;
+
+  /**
+   * Fields defined in this collection
+   */
+  fields?: Array<Field>;
+}
+
+/**
+ * A field definition within a content collection
  */
 export interface Field {
   /**
@@ -107,7 +162,7 @@ export interface Field {
   description?: string | null;
 
   /**
-   * Display order within the model
+   * Display order within the collection
    */
   display_order?: number;
 
@@ -128,14 +183,14 @@ export namespace Field {
    */
   export interface Validation {
     /**
+     * Allowed collection apiIds for reference fields
+     */
+    allowed_collections?: Array<string>;
+
+    /**
      * Allowed MIME types for asset fields (e.g., 'image/\*', 'application/pdf')
      */
     allowed_mime_types?: Array<string>;
-
-    /**
-     * Allowed model apiIds for reference fields
-     */
-    allowed_models?: Array<string>;
 
     /**
      * Allowed values for enum fields
@@ -190,88 +245,37 @@ export namespace Field {
   }
 }
 
-/**
- * A content model defines the schema/structure for content entries. Each model has
- * fields that define what data entries can contain.
- */
-export interface Model {
+export interface CollectionCreateParams {
   /**
-   * Unique identifier for the content model
-   */
-  id: string;
-
-  /**
-   * API identifier for the model (camelCase, e.g., 'blogPost', 'product')
+   * API identifier for the collection (camelCase, e.g., 'blogPost')
    */
   api_id: string;
 
   /**
-   * Timestamp when the model was created
-   */
-  created: string;
-
-  /**
-   * Whether field modifications are locked (for production safety)
-   */
-  locked: boolean;
-
-  /**
-   * Display name for the model
+   * Display name for the collection
    */
   name: string;
 
   /**
-   * Timestamp when the model was last updated
-   */
-  updated: string;
-
-  /**
-   * Schema version number
-   */
-  version: number;
-
-  /**
-   * Description of the model
-   */
-  description?: string | null;
-
-  /**
-   * Fields defined in this model
-   */
-  fields?: Array<Field>;
-}
-
-export interface ModelCreateParams {
-  /**
-   * API identifier for the model (camelCase, e.g., 'blogPost')
-   */
-  api_id: string;
-
-  /**
-   * Display name for the model
-   */
-  name: string;
-
-  /**
-   * Optional custom ID for the model. Must start with 'cm\_'. If not provided, one
-   * will be generated.
+   * Optional custom ID for the collection. Must start with 'cm\_'. If not provided,
+   * one will be generated.
    */
   id?: string;
 
   /**
-   * Description of the model
+   * Description of the collection
    */
   description?: string;
 
   /**
-   * Initial fields to create with the model
+   * Initial fields to create with the collection
    */
-  fields?: Array<ModelCreateParams.Field>;
+  fields?: Array<CollectionCreateParams.Field>;
 }
 
-export namespace ModelCreateParams {
+export namespace CollectionCreateParams {
   /**
-   * Request to add a new field to a content model
+   * Request to add a new field to a content collection
    */
   export interface Field {
     /**
@@ -312,7 +316,7 @@ export namespace ModelCreateParams {
     description?: string;
 
     /**
-     * Display order within the model
+     * Display order within the collection
      */
     display_order?: number;
 
@@ -333,14 +337,14 @@ export namespace ModelCreateParams {
      */
     export interface Validation {
       /**
+       * Allowed collection apiIds for reference fields
+       */
+      allowed_collections?: Array<string>;
+
+      /**
        * Allowed MIME types for asset fields (e.g., 'image/\*', 'application/pdf')
        */
       allowed_mime_types?: Array<string>;
-
-      /**
-       * Allowed model apiIds for reference fields
-       */
-      allowed_models?: Array<string>;
 
       /**
        * Allowed values for enum fields
@@ -396,35 +400,35 @@ export namespace ModelCreateParams {
   }
 }
 
-export interface ModelUpdateParams {
+export interface CollectionUpdateParams {
   /**
-   * Description of the model
+   * Description of the collection
    */
   description?: string;
 
   /**
-   * Lock the model to prevent field modifications
+   * Lock the collection to prevent field modifications
    */
   locked?: boolean;
 
   /**
-   * Display name for the model
+   * Display name for the collection
    */
   name?: string;
 }
 
-export interface ModelListParams extends CursorIDPageParams {}
+export interface CollectionListParams extends CursorIDPageParams {}
 
-Models.Fields = Fields;
+Collections.Fields = Fields;
 
-export declare namespace Models {
+export declare namespace Collections {
   export {
+    type Collection as Collection,
     type Field as Field,
-    type Model as Model,
-    type ModelsCursorIDPage as ModelsCursorIDPage,
-    type ModelCreateParams as ModelCreateParams,
-    type ModelUpdateParams as ModelUpdateParams,
-    type ModelListParams as ModelListParams,
+    type CollectionsCursorIDPage as CollectionsCursorIDPage,
+    type CollectionCreateParams as CollectionCreateParams,
+    type CollectionUpdateParams as CollectionUpdateParams,
+    type CollectionListParams as CollectionListParams,
   };
 
   export {

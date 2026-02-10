@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource fields', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.content.models.fields.create('model_id', {
+    const responsePromise = client.content.collections.fields.create('collection_id', {
       api_id: 'nXI',
       name: 'name',
       type: 'text',
@@ -27,7 +27,7 @@ describe('resource fields', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.content.models.fields.create('model_id', {
+    const response = await client.content.collections.fields.create('collection_id', {
       api_id: 'nXI',
       name: 'name',
       type: 'text',
@@ -36,8 +36,8 @@ describe('resource fields', () => {
       display_order: -9007199254740991,
       localized: true,
       validation: {
+        allowed_collections: ['string'],
         allowed_mime_types: ['string'],
-        allowed_models: ['string'],
         allowed_values: ['string'],
         array_item_type: 'text',
         default_value: {},
@@ -52,7 +52,9 @@ describe('resource fields', () => {
 
   // Prism tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.content.models.fields.update('field_id', { model_id: 'model_id' });
+    const responsePromise = client.content.collections.fields.update('field_id', {
+      collection_id: 'collection_id',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -64,15 +66,15 @@ describe('resource fields', () => {
 
   // Prism tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.content.models.fields.update('field_id', {
-      model_id: 'model_id',
+    const response = await client.content.collections.fields.update('field_id', {
+      collection_id: 'collection_id',
       description: 'description',
       display_order: -9007199254740991,
       localized: true,
       name: 'name',
       validation: {
+        allowed_collections: ['string'],
         allowed_mime_types: ['string'],
-        allowed_models: ['string'],
         allowed_values: ['string'],
         array_item_type: 'text',
         default_value: {},
@@ -87,7 +89,9 @@ describe('resource fields', () => {
 
   // Prism tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.content.models.fields.delete('field_id', { model_id: 'model_id' });
+    const responsePromise = client.content.collections.fields.delete('field_id', {
+      collection_id: 'collection_id',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -99,6 +103,8 @@ describe('resource fields', () => {
 
   // Prism tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.content.models.fields.delete('field_id', { model_id: 'model_id' });
+    const response = await client.content.collections.fields.delete('field_id', {
+      collection_id: 'collection_id',
+    });
   });
 });

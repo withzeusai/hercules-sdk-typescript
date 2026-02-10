@@ -8,8 +8,9 @@ import { path } from '../internal/utils/path';
 
 /**
  * Upload, retrieve, and list files and media associated with a website.
- * Upload is a two-step process: first create an upload to get a presigned URL,
- * then complete the upload after putting the file content to the presigned URL.
+ * Upload is a two-step process: first call create to get an upload URL,
+ * then PUT the file content to that URL. The PUT response returns the
+ * completed MediaFile object. No separate complete call is needed.
  */
 export class Files extends APIResource {
   /**
@@ -89,12 +90,12 @@ export interface File {
 }
 
 /**
- * Response containing a presigned upload URL. PUT the file content to upload_url
- * with the provided headers, then call complete to finalize.
+ * Response containing an upload URL. PUT the file content to upload_url with the
+ * provided headers. The PUT response will contain the completed MediaFile object.
  */
 export interface Upload {
   /**
-   * File ID to use when completing the upload
+   * File ID assigned to this upload
    */
   id: string;
 
@@ -104,7 +105,8 @@ export interface Upload {
   upload_headers: { [key: string]: string };
 
   /**
-   * Presigned URL to PUT the file content to
+   * URL to PUT the file content to. The upload proxy will store the file, create
+   * database records, and return the completed MediaFile object in the PUT response.
    */
   upload_url: string;
 }

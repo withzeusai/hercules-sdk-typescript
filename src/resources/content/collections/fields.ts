@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as ModelsAPI from './models';
+import * as CollectionsAPI from './collections';
 import { APIPromise } from '../../../core/api-promise';
 import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
@@ -9,29 +9,41 @@ import { path } from '../../../internal/utils/path';
 
 export class Fields extends APIResource {
   /**
-   * Adds a new field to a content model. Fields define the structure of entries. The
-   * model must not be locked. Adding a field increments the model version.
+   * Adds a new field to a content collection. Fields define the structure of
+   * entries. The collection must not be locked. Adding a field increments the
+   * collection version.
    */
-  create(modelID: string, body: FieldCreateParams, options?: RequestOptions): APIPromise<ModelsAPI.Field> {
-    return this._client.post(path`/v1/content/models/${modelID}/fields`, { body, ...options });
+  create(
+    collectionID: string,
+    body: FieldCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<CollectionsAPI.Field> {
+    return this._client.post(path`/v1/content/collections/${collectionID}/fields`, { body, ...options });
   }
 
   /**
-   * Updates an existing field in a content model. The field type cannot be changed
-   * after creation. The model must not be locked.
+   * Updates an existing field in a content collection. The field type cannot be
+   * changed after creation. The collection must not be locked.
    */
-  update(fieldID: string, params: FieldUpdateParams, options?: RequestOptions): APIPromise<ModelsAPI.Field> {
-    const { model_id, ...body } = params;
-    return this._client.patch(path`/v1/content/models/${model_id}/fields/${fieldID}`, { body, ...options });
+  update(
+    fieldID: string,
+    params: FieldUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<CollectionsAPI.Field> {
+    const { collection_id, ...body } = params;
+    return this._client.patch(path`/v1/content/collections/${collection_id}/fields/${fieldID}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
-   * Removes a field from a content model. Existing entry data for this field is
-   * preserved but will no longer be validated. The model must not be locked.
+   * Removes a field from a content collection. Existing entry data for this field is
+   * preserved but will no longer be validated. The collection must not be locked.
    */
   delete(fieldID: string, params: FieldDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { model_id } = params;
-    return this._client.delete(path`/v1/content/models/${model_id}/fields/${fieldID}`, {
+    const { collection_id } = params;
+    return this._client.delete(path`/v1/content/collections/${collection_id}/fields/${fieldID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -77,7 +89,7 @@ export interface FieldCreateParams {
   description?: string;
 
   /**
-   * Display order within the model
+   * Display order within the collection
    */
   display_order?: number;
 
@@ -98,14 +110,14 @@ export namespace FieldCreateParams {
    */
   export interface Validation {
     /**
+     * Allowed collection apiIds for reference fields
+     */
+    allowed_collections?: Array<string>;
+
+    /**
      * Allowed MIME types for asset fields (e.g., 'image/\*', 'application/pdf')
      */
     allowed_mime_types?: Array<string>;
-
-    /**
-     * Allowed model apiIds for reference fields
-     */
-    allowed_models?: Array<string>;
 
     /**
      * Allowed values for enum fields
@@ -162,9 +174,9 @@ export namespace FieldCreateParams {
 
 export interface FieldUpdateParams {
   /**
-   * Path param: The unique identifier of the content model
+   * Path param: The unique identifier of the content collection
    */
-  model_id: string;
+  collection_id: string;
 
   /**
    * Body param: Description of the field
@@ -198,14 +210,14 @@ export namespace FieldUpdateParams {
    */
   export interface Validation {
     /**
+     * Allowed collection apiIds for reference fields
+     */
+    allowed_collections?: Array<string>;
+
+    /**
      * Allowed MIME types for asset fields (e.g., 'image/\*', 'application/pdf')
      */
     allowed_mime_types?: Array<string>;
-
-    /**
-     * Allowed model apiIds for reference fields
-     */
-    allowed_models?: Array<string>;
 
     /**
      * Allowed values for enum fields
@@ -262,9 +274,9 @@ export namespace FieldUpdateParams {
 
 export interface FieldDeleteParams {
   /**
-   * The unique identifier of the content model
+   * The unique identifier of the content collection
    */
-  model_id: string;
+  collection_id: string;
 }
 
 export declare namespace Fields {

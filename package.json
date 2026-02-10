@@ -1,6 +1,6 @@
 {
   "name": "@usehercules/sdk",
-  "version": "1.14.1",
+  "version": "1.14.2",
   "description": "The official TypeScript library for the Hercules API",
   "author": "Hercules <hello@hercules.app>",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
   "type": "commonjs",
   "repository": "github:withzeusai/hercules-sdk-typescript",
   "license": "Apache-2.0",
-  "packageManager": "pnpm@10.24.0",
+  "packageManager": "pnpm@10.27.0",
   "files": [
     "**/*"
   ],

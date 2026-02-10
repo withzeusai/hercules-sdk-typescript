@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource models', () => {
+describe('resource collections', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.content.models.create({ api_id: 'nXI', name: 'name' });
+    const responsePromise = client.content.collections.create({ api_id: 'nXI', name: 'name' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource models', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.content.models.create({
+    const response = await client.content.collections.create({
       api_id: 'nXI',
       name: 'name',
       id: 'cm_-K0---P3EA--',
@@ -38,8 +38,8 @@ describe('resource models', () => {
           display_order: -9007199254740991,
           localized: true,
           validation: {
+            allowed_collections: ['string'],
             allowed_mime_types: ['string'],
-            allowed_models: ['string'],
             allowed_values: ['string'],
             array_item_type: 'text',
             default_value: {},
@@ -56,7 +56,7 @@ describe('resource models', () => {
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.content.models.update('model_id');
+    const responsePromise = client.content.collections.update('collection_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -70,8 +70,8 @@ describe('resource models', () => {
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.content.models.update(
-        'model_id',
+      client.content.collections.update(
+        'collection_id',
         {
           description: 'description',
           locked: true,
@@ -84,7 +84,7 @@ describe('resource models', () => {
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.content.models.list();
+    const responsePromise = client.content.collections.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -98,7 +98,7 @@ describe('resource models', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.content.models.list(
+      client.content.collections.list(
         {
           ending_before: 'ending_before',
           limit: 1,
@@ -111,7 +111,7 @@ describe('resource models', () => {
 
   // Prism tests are disabled
   test.skip('archive', async () => {
-    const responsePromise = client.content.models.archive('model_id');
+    const responsePromise = client.content.collections.archive('collection_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -123,7 +123,7 @@ describe('resource models', () => {
 
   // Prism tests are disabled
   test.skip('get', async () => {
-    const responsePromise = client.content.models.get('model_id');
+    const responsePromise = client.content.collections.get('collection_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

@@ -8,6 +8,15 @@ export {
   type AssetListParams,
   type AssetsCursorIDPage,
 } from './assets';
+export {
+  Collections,
+  type Collection,
+  type Field,
+  type CollectionCreateParams,
+  type CollectionUpdateParams,
+  type CollectionListParams,
+  type CollectionsCursorIDPage,
+} from './collections/index';
 export { Content } from './content';
 export {
   Entries,
@@ -26,15 +35,6 @@ export {
   type LocaleListParams,
   type LocalesCursorIDPage,
 } from './locales';
-export {
-  Models,
-  type Field,
-  type Model,
-  type ModelCreateParams,
-  type ModelUpdateParams,
-  type ModelListParams,
-  type ModelsCursorIDPage,
-} from './models/index';
 export {
   Releases,
   type Release,

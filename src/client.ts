@@ -513,9 +513,14 @@ export class Hercules {
   getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
     path: string,
     Page: new (...args: any[]) => PageClass,
-    opts?: RequestOptions,
+    opts?: PromiseOrValue<RequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
   }
 
   requestAPIList<
@@ -523,7 +528,7 @@ export class Hercules {
     PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
   >(
     Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
-    options: FinalRequestOptions,
+    options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
     return new Pagination.PagePromise<PageClass, Item>(this as any as Hercules, request, Page);
@@ -536,9 +541,10 @@ export class Hercules {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    if (signal) signal.addEventListener('abort', () => controller.abort());
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
 
-    const timeout = setTimeout(() => controller.abort(), ms);
+    const timeout = setTimeout(abort, ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -706,6 +712,12 @@ export class Hercules {
     return headers.values;
   }
 
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -777,8 +789,9 @@ export class Hercules {
   domains: API.Domains = new API.Domains(this);
   /**
    * Upload, retrieve, and list files and media associated with a website.
-   * Upload is a two-step process: first create an upload to get a presigned URL,
-   * then complete the upload after putting the file content to the presigned URL.
+   * Upload is a two-step process: first call create to get an upload URL,
+   * then PUT the file content to that URL. The PUT response returns the
+   * completed MediaFile object. No separate complete call is needed.
    */
   files: API.Files = new API.Files(this);
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);

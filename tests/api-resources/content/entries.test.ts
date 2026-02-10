@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource entries', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.content.entries.create({ model: 'model' });
+    const responsePromise = client.content.entries.create({ collection: 'collection' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,7 +24,7 @@ describe('resource entries', () => {
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.content.entries.create({
-      model: 'model',
+      collection: 'collection',
       id: 'ce_-K0---P3EA--',
       fields: { foo: 'bar' },
       locale: 'locale',
@@ -78,6 +78,7 @@ describe('resource entries', () => {
     await expect(
       client.content.entries.list(
         {
+          collection: 'collection',
           created: {
             gt: 0,
             gte: 0,
@@ -88,7 +89,6 @@ describe('resource entries', () => {
           include_depth: 0,
           limit: 1,
           locale: 'locale',
-          model: 'model',
           order_by: 'order_by',
           published: {
             gt: 0,
