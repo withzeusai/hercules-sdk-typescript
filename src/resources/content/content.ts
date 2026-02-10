@@ -29,8 +29,16 @@ import {
   Locales,
   LocalesCursorIDPage,
 } from './locales';
-import * as ModelsAPI from './models/models';
-import { Field, Models } from './models/models';
+import * as CollectionsAPI from './collections/collections';
+import {
+  Collection,
+  CollectionCreateParams,
+  CollectionListParams,
+  CollectionUpdateParams,
+  Collections,
+  CollectionsCursorIDPage,
+  Field,
+} from './collections/collections';
 import * as ReleasesAPI from './releases/releases';
 import {
   Release,
@@ -47,21 +55,29 @@ import {
  * Content APIs are currently in beta.
  */
 export class Content extends APIResource {
-  models: ModelsAPI.Models = new ModelsAPI.Models(this._client);
+  collections: CollectionsAPI.Collections = new CollectionsAPI.Collections(this._client);
   entries: EntriesAPI.Entries = new EntriesAPI.Entries(this._client);
   assets: AssetsAPI.Assets = new AssetsAPI.Assets(this._client);
   locales: LocalesAPI.Locales = new LocalesAPI.Locales(this._client);
   releases: ReleasesAPI.Releases = new ReleasesAPI.Releases(this._client);
 }
 
-Content.Models = Models;
+Content.Collections = Collections;
 Content.Entries = Entries;
 Content.Assets = Assets;
 Content.Locales = Locales;
 Content.Releases = Releases;
 
 export declare namespace Content {
-  export { Models as Models, type Field as Field };
+  export {
+    Collections as Collections,
+    type Collection as Collection,
+    type Field as Field,
+    type CollectionsCursorIDPage as CollectionsCursorIDPage,
+    type CollectionCreateParams as CollectionCreateParams,
+    type CollectionUpdateParams as CollectionUpdateParams,
+    type CollectionListParams as CollectionListParams,
+  };
 
   export {
     Entries as Entries,

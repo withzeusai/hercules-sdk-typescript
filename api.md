@@ -98,13 +98,28 @@ Methods:
 
 # Content
 
-## Models
+## Collections
 
 Types:
 
-- <code><a href="./src/resources/content/models/models.ts">Field</a></code>
+- <code><a href="./src/resources/content/collections/collections.ts">Collection</a></code>
+- <code><a href="./src/resources/content/collections/collections.ts">Field</a></code>
+
+Methods:
+
+- <code title="post /v1/content/collections">client.content.collections.<a href="./src/resources/content/collections/collections.ts">create</a>({ ...params }) -> Collection</code>
+- <code title="patch /v1/content/collections/{collection_id}">client.content.collections.<a href="./src/resources/content/collections/collections.ts">update</a>(collectionID, { ...params }) -> Collection</code>
+- <code title="get /v1/content/collections">client.content.collections.<a href="./src/resources/content/collections/collections.ts">list</a>({ ...params }) -> CollectionsCursorIDPage</code>
+- <code title="delete /v1/content/collections/{collection_id}">client.content.collections.<a href="./src/resources/content/collections/collections.ts">archive</a>(collectionID) -> Collection</code>
+- <code title="get /v1/content/collections/{collection_id}">client.content.collections.<a href="./src/resources/content/collections/collections.ts">get</a>(collectionID) -> Collection</code>
 
 ### Fields
+
+Methods:
+
+- <code title="post /v1/content/collections/{collection_id}/fields">client.content.collections.fields.<a href="./src/resources/content/collections/fields.ts">create</a>(collectionID, { ...params }) -> Field</code>
+- <code title="patch /v1/content/collections/{collection_id}/fields/{field_id}">client.content.collections.fields.<a href="./src/resources/content/collections/fields.ts">update</a>(fieldID, { ...params }) -> Field</code>
+- <code title="delete /v1/content/collections/{collection_id}/fields/{field_id}">client.content.collections.fields.<a href="./src/resources/content/collections/fields.ts">delete</a>(fieldID, { ...params }) -> void</code>
 
 ## Entries
 
