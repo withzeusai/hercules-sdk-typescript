@@ -93,7 +93,7 @@ export async function initMcpServer(params: {
   };
 
   let client = new Hercules({
-    ...{ apiVersion: readEnvOrError('HERCULES_API_VERSION') },
+    ...{ apiVersion: readEnvOrError('HERCULES_API_VERSION') as ClientOptions['apiVersion'] },
     logger,
     ...params.clientOptions,
     defaultHeaders: {

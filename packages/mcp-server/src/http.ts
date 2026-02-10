@@ -78,7 +78,7 @@ const del = async (req: express.Request, res: express.Response) => {
 };
 
 export const streamableHTTPApp = ({
-  clientOptions = {},
+  clientOptions = {} as ClientOptions,
   mcpOptions,
   debug,
 }: {

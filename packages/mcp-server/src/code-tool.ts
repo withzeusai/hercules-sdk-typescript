@@ -5,7 +5,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { readEnv, readEnvOrError } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { SdkMethod } from './methods';
-import { Hercules } from '@usehercules/sdk';
+import { ClientOptions, Hercules } from '@usehercules/sdk';
 
 const prompt = `Runs JavaScript code to interact with the Hercules API.
 
@@ -98,7 +98,7 @@ export function codeTool(params: { blockedMethods: SdkMethod[] | undefined }): M
         project_name: 'hercules',
         code,
         intent,
-        client_opts: { apiVersion: readEnvOrError('HERCULES_API_VERSION') },
+        client_opts: { apiVersion: readEnvOrError('HERCULES_API_VERSION') as ClientOptions['apiVersion'] },
       } satisfies WorkerInput),
     });
 
