@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.14.2 (2026-02-10)
+
+Full Changelog: [v1.14.1...v1.14.2](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.1...v1.14.2)
+
+### Features
+
+* **api:** update api ([ef01822](https://github.com/withzeusai/hercules-sdk-typescript/commit/ef01822761b4a5c4bab787aa4f87344171cbf111))
+* **api:** update api ([d590c25](https://github.com/withzeusai/hercules-sdk-typescript/commit/d590c25df99d87ac85835362fd3553d4138c6a5a))
+* **api:** update api ([acad3b4](https://github.com/withzeusai/hercules-sdk-typescript/commit/acad3b4291ed306d5b1b2f95f292f496334ebeb7))
+* **api:** update api ([78ad5be](https://github.com/withzeusai/hercules-sdk-typescript/commit/78ad5be7cd15641649a4229cff95686ccca51da3))
+* **api:** update api ([1b65267](https://github.com/withzeusai/hercules-sdk-typescript/commit/1b65267d30860ebd2b9a71f9b98d4bd660728f45))
+* **api:** update api ([993c698](https://github.com/withzeusai/hercules-sdk-typescript/commit/993c698f7469266feb8b5e04910f00b6935be9e5))
+
+
+### Bug Fixes
+
+* apiVersion in mcp-server ([bdcdd40](https://github.com/withzeusai/hercules-sdk-typescript/commit/bdcdd406f1b634403eabca4d4838d0cd571a8df0))
+* **client:** avoid memory leak with abort signals ([ca32fae](https://github.com/withzeusai/hercules-sdk-typescript/commit/ca32faefb8b43d1ff78cbe34c9b7dab0bb95bec8))
+* **client:** avoid removing abort listener too early ([f04e466](https://github.com/withzeusai/hercules-sdk-typescript/commit/f04e46636ae556cc999b81d86523713745aaa2b0))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([620b2a0](https://github.com/withzeusai/hercules-sdk-typescript/commit/620b2a0df59a2efd8bd8310812e16521dfb44006))
+* **client:** restructure abort controller binding ([788b174](https://github.com/withzeusai/hercules-sdk-typescript/commit/788b174af41ff2a847bbd31332cf143fda984862))
+* **internal:** add health check to MCP server when running in HTTP mode ([2ffac41](https://github.com/withzeusai/hercules-sdk-typescript/commit/2ffac41a652f53459f3fd87b7f0d3e5a3f43f224))
+* **internal:** allow basic filtering of methods allowed for MCP code mode ([d7ff97f](https://github.com/withzeusai/hercules-sdk-typescript/commit/d7ff97f3838c711f9e735efb608bf8443c426196))
+* **internal:** always generate MCP server dockerfiles and upgrade associated dependencies ([9061776](https://github.com/withzeusai/hercules-sdk-typescript/commit/9061776e4b28a09d25d665c419315857cc88e7f4))
+* **internal:** fix pagination internals not accepting option promises ([b3c2841](https://github.com/withzeusai/hercules-sdk-typescript/commit/b3c2841985ba284f6dc55de0fc2a8e0429c64053))
+* **internal:** upgrade pnpm ([819c1fe](https://github.com/withzeusai/hercules-sdk-typescript/commit/819c1fed44f2b8ae1ac807e80d47f4c50d3b75f9))
+
 ## 1.14.1 (2026-01-30)
 
 Full Changelog: [v1.14.0...v1.14.1](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.0...v1.14.1)
