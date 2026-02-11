@@ -387,6 +387,48 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/domains',
   },
   {
+    clientCallName: 'client.email.list',
+    fullyQualifiedName: 'email.list',
+    httpMethod: 'get',
+    httpPath: '/v1/email',
+  },
+  {
+    clientCallName: 'client.email.batch',
+    fullyQualifiedName: 'email.batch',
+    httpMethod: 'post',
+    httpPath: '/v1/email/batch',
+  },
+  {
+    clientCallName: 'client.email.send',
+    fullyQualifiedName: 'email.send',
+    httpMethod: 'post',
+    httpPath: '/v1/email',
+  },
+  {
+    clientCallName: 'client.email.identities.create',
+    fullyQualifiedName: 'email.identities.create',
+    httpMethod: 'post',
+    httpPath: '/v1/email/identities',
+  },
+  {
+    clientCallName: 'client.email.identities.list',
+    fullyQualifiedName: 'email.identities.list',
+    httpMethod: 'get',
+    httpPath: '/v1/email/identities',
+  },
+  {
+    clientCallName: 'client.email.identities.delete',
+    fullyQualifiedName: 'email.identities.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/email/identities/{identity_id}',
+  },
+  {
+    clientCallName: 'client.email.identities.get',
+    fullyQualifiedName: 'email.identities.get',
+    httpMethod: 'get',
+    httpPath: '/v1/email/identities/{identity_id}',
+  },
+  {
     clientCallName: 'client.files.list',
     fullyQualifiedName: 'files.list',
     httpMethod: 'get',
