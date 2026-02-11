@@ -20,6 +20,7 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
+import { Attachment, Email, Emails } from './resources/emails';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
@@ -786,6 +787,11 @@ export class Hercules {
    */
   domains: API.Domains = new API.Domains(this);
   /**
+   * Send transactional emails, send batch emails, and retrieve sent email
+   * history with delivery status tracking.
+   */
+  emails: API.Emails = new API.Emails(this);
+  /**
    * Upload, retrieve, and list files and media associated with a website.
    * Upload is a two-step process: first call create to get an upload URL,
    * then PUT the file content to that URL. The PUT response returns the
@@ -798,6 +804,7 @@ export class Hercules {
 Hercules.Commerce = Commerce;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
+Hercules.Emails = Emails;
 Hercules.Files = Files;
 Hercules.PushNotifications = PushNotifications;
 
@@ -826,6 +833,8 @@ export declare namespace Hercules {
     type DomainsCursorIDPage as DomainsCursorIDPage,
     type DomainListParams as DomainListParams,
   };
+
+  export { Emails as Emails, type Attachment as Attachment, type Email as Email };
 
   export {
     Files as Files,

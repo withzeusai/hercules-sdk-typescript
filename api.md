@@ -200,6 +200,13 @@ Methods:
 
 - <code title="get /v1/domains">client.domains.<a href="./src/resources/domains.ts">list</a>({ ...params }) -> DomainsCursorIDPage</code>
 
+# Emails
+
+Types:
+
+- <code><a href="./src/resources/emails.ts">Attachment</a></code>
+- <code><a href="./src/resources/emails.ts">Email</a></code>
+
 # Files
 
 Types:
