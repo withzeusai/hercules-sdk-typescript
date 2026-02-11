@@ -20,7 +20,6 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
-import { Attachment, Email, Emails } from './resources/emails';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
@@ -33,6 +32,17 @@ import {
   Currency,
 } from './resources/commerce/commerce';
 import { Content } from './resources/content/content';
+import {
+  Attachment,
+  Email,
+  EmailBatchParams,
+  EmailBatchResponse,
+  EmailListParams,
+  EmailResource,
+  EmailSendParams,
+  EmailSendResponse,
+  EmailsCursorIDPage,
+} from './resources/email/email';
 import {
   PushNotificationEnableResponse,
   PushNotificationIdentifyParams,
@@ -792,7 +802,7 @@ export class Hercules {
    * Send transactional emails, send batch emails, and retrieve sent email
    * history with delivery status tracking.
    */
-  emails: API.Emails = new API.Emails(this);
+  email: API.EmailResource = new API.EmailResource(this);
   /**
    * Upload, retrieve, and list files and media associated with a website.
    * Upload is a two-step process: first call create to get an upload URL,
@@ -806,7 +816,7 @@ export class Hercules {
 Hercules.Commerce = Commerce;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
-Hercules.Emails = Emails;
+Hercules.EmailResource = EmailResource;
 Hercules.Files = Files;
 Hercules.PushNotifications = PushNotifications;
 
@@ -836,7 +846,17 @@ export declare namespace Hercules {
     type DomainListParams as DomainListParams,
   };
 
-  export { Emails as Emails, type Attachment as Attachment, type Email as Email };
+  export {
+    EmailResource as EmailResource,
+    type Attachment as Attachment,
+    type Email as Email,
+    type EmailBatchResponse as EmailBatchResponse,
+    type EmailSendResponse as EmailSendResponse,
+    type EmailsCursorIDPage as EmailsCursorIDPage,
+    type EmailListParams as EmailListParams,
+    type EmailBatchParams as EmailBatchParams,
+    type EmailSendParams as EmailSendParams,
+  };
 
   export {
     Files as Files,

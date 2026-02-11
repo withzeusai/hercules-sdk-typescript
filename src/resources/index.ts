@@ -12,7 +12,17 @@ export {
 } from './commerce/commerce';
 export { Content } from './content/content';
 export { Domains, type Domain, type DomainListParams, type DomainsCursorIDPage } from './domains';
-export { Emails, type Attachment, type Email } from './emails';
+export {
+  EmailResource,
+  type Attachment,
+  type Email,
+  type EmailBatchResponse,
+  type EmailSendResponse,
+  type EmailListParams,
+  type EmailBatchParams,
+  type EmailSendParams,
+  type EmailsCursorIDPage,
+} from './email/email';
 export { Files, type File, type Upload, type FileListParams, type FilesCursorIDPage } from './files';
 export {
   PushNotifications,
