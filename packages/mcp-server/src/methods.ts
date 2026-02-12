@@ -393,12 +393,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/email',
   },
   {
-    clientCallName: 'client.email.batch',
-    fullyQualifiedName: 'email.batch',
-    httpMethod: 'post',
-    httpPath: '/v1/email/batch',
-  },
-  {
     clientCallName: 'client.email.get',
     fullyQualifiedName: 'email.get',
     httpMethod: 'get',

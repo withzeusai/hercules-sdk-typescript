@@ -37,44 +37,6 @@ describe('resource email', () => {
   });
 
   // Prism tests are disabled
-  test.skip('batch', async () => {
-    const responsePromise = client.email.batch();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('batch: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.email.batch(
-        {
-          body: [
-            {
-              from: 'x',
-              subject: 'x',
-              to: 'dev@stainless.com',
-              bcc: 'dev@stainless.com',
-              cc: 'dev@stainless.com',
-              headers: { foo: 'string' },
-              html: 'html',
-              reply_to: 'dev@stainless.com',
-              tags: [{ name: 'x', value: 'x' }],
-              text: 'text',
-            },
-          ],
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Prism tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.email.get('email_id');
     const rawResponse = await responsePromise.asResponse();
