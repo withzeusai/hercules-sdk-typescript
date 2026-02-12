@@ -33,6 +33,15 @@ import {
 } from './resources/commerce/commerce';
 import { Content } from './resources/content/content';
 import {
+  Attachment,
+  Email,
+  EmailListParams,
+  EmailResource,
+  EmailSendParams,
+  EmailSendResponse,
+  EmailsCursorIDPage,
+} from './resources/email/email';
+import {
   PushNotificationEnableResponse,
   PushNotificationIdentifyParams,
   PushNotificationIdentifyResponse,
@@ -476,7 +485,7 @@ export class Hercules {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText);
+      const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -788,6 +797,11 @@ export class Hercules {
    */
   domains: API.Domains = new API.Domains(this);
   /**
+   * Send transactional emails, send batch emails, and retrieve sent email
+   * history with delivery status tracking.
+   */
+  email: API.EmailResource = new API.EmailResource(this);
+  /**
    * Upload, retrieve, and list files and media associated with a website.
    * Upload is a two-step process: first call create to get an upload URL,
    * then PUT the file content to that URL. The PUT response returns the
@@ -800,6 +814,7 @@ export class Hercules {
 Hercules.Commerce = Commerce;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
+Hercules.EmailResource = EmailResource;
 Hercules.Files = Files;
 Hercules.PushNotifications = PushNotifications;
 
@@ -827,6 +842,16 @@ export declare namespace Hercules {
     type Domain as Domain,
     type DomainsCursorIDPage as DomainsCursorIDPage,
     type DomainListParams as DomainListParams,
+  };
+
+  export {
+    EmailResource as EmailResource,
+    type Attachment as Attachment,
+    type Email as Email,
+    type EmailSendResponse as EmailSendResponse,
+    type EmailsCursorIDPage as EmailsCursorIDPage,
+    type EmailListParams as EmailListParams,
+    type EmailSendParams as EmailSendParams,
   };
 
   export {

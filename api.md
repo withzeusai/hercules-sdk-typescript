@@ -200,6 +200,34 @@ Methods:
 
 - <code title="get /v1/domains">client.domains.<a href="./src/resources/domains.ts">list</a>({ ...params }) -> DomainsCursorIDPage</code>
 
+# Email
+
+Types:
+
+- <code><a href="./src/resources/email/email.ts">Attachment</a></code>
+- <code><a href="./src/resources/email/email.ts">Email</a></code>
+- <code><a href="./src/resources/email/email.ts">EmailSendResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/email">client.email.<a href="./src/resources/email/email.ts">list</a>({ ...params }) -> EmailsCursorIDPage</code>
+- <code title="get /v1/email/{email_id}">client.email.<a href="./src/resources/email/email.ts">get</a>(emailID) -> Email</code>
+- <code title="post /v1/email">client.email.<a href="./src/resources/email/email.ts">send</a>({ ...params }) -> EmailSendResponse</code>
+
+## Identities
+
+Types:
+
+- <code><a href="./src/resources/email/identities.ts">Identity</a></code>
+
+Methods:
+
+- <code title="post /v1/email/identities">client.email.identities.<a href="./src/resources/email/identities.ts">create</a>({ ...params }) -> Identity</code>
+- <code title="get /v1/email/identities">client.email.identities.<a href="./src/resources/email/identities.ts">list</a>({ ...params }) -> IdentitiesCursorIDPage</code>
+- <code title="delete /v1/email/identities/{identity_id}">client.email.identities.<a href="./src/resources/email/identities.ts">delete</a>(identityID) -> void</code>
+- <code title="get /v1/email/identities/{identity_id}">client.email.identities.<a href="./src/resources/email/identities.ts">get</a>(identityID) -> Identity</code>
+- <code title="post /v1/email/identities/{identity_id}/verify">client.email.identities.<a href="./src/resources/email/identities.ts">verify</a>(identityID) -> Identity</code>
+
 # Files
 
 Types:
