@@ -206,12 +206,13 @@ Types:
 
 - <code><a href="./src/resources/email/email.ts">Attachment</a></code>
 - <code><a href="./src/resources/email/email.ts">Email</a></code>
+- <code><a href="./src/resources/email/email.ts">EmailGetResponse</a></code>
 - <code><a href="./src/resources/email/email.ts">EmailSendResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/email">client.email.<a href="./src/resources/email/email.ts">list</a>({ ...params }) -> EmailsCursorIDPage</code>
-- <code title="get /v1/email/{email_id}">client.email.<a href="./src/resources/email/email.ts">get</a>(emailID) -> Email</code>
+- <code title="get /v1/email/{email_id}">client.email.<a href="./src/resources/email/email.ts">get</a>(emailID) -> EmailGetResponse</code>
 - <code title="post /v1/email">client.email.<a href="./src/resources/email/email.ts">send</a>({ ...params }) -> EmailSendResponse</code>
 
 ## Identities

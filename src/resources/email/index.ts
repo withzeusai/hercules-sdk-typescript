@@ -4,6 +4,7 @@ export {
   EmailResource,
   type Attachment,
   type Email,
+  type EmailGetResponse,
   type EmailSendResponse,
   type EmailListParams,
   type EmailSendParams,
