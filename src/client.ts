@@ -35,8 +35,6 @@ import { Content } from './resources/content/content';
 import {
   Attachment,
   Email,
-  EmailBatchParams,
-  EmailBatchResponse,
   EmailListParams,
   EmailResource,
   EmailSendParams,
@@ -848,11 +846,9 @@ export declare namespace Hercules {
     EmailResource as EmailResource,
     type Attachment as Attachment,
     type Email as Email,
-    type EmailBatchResponse as EmailBatchResponse,
     type EmailSendResponse as EmailSendResponse,
     type EmailsCursorIDPage as EmailsCursorIDPage,
     type EmailListParams as EmailListParams,
-    type EmailBatchParams as EmailBatchParams,
     type EmailSendParams as EmailSendParams,
   };
 

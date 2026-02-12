@@ -16,10 +16,8 @@ export {
   EmailResource,
   type Attachment,
   type Email,
-  type EmailBatchResponse,
   type EmailSendResponse,
   type EmailListParams,
-  type EmailBatchParams,
   type EmailSendParams,
   type EmailsCursorIDPage,
 } from './email/email';
