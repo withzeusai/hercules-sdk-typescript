@@ -399,6 +399,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/email/batch',
   },
   {
+    clientCallName: 'client.email.get',
+    fullyQualifiedName: 'email.get',
+    httpMethod: 'get',
+    httpPath: '/v1/email/{email_id}',
+  },
+  {
     clientCallName: 'client.email.send',
     fullyQualifiedName: 'email.send',
     httpMethod: 'post',
@@ -427,6 +433,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'email.identities.get',
     httpMethod: 'get',
     httpPath: '/v1/email/identities/{identity_id}',
+  },
+  {
+    clientCallName: 'client.email.identities.verify',
+    fullyQualifiedName: 'email.identities.verify',
+    httpMethod: 'post',
+    httpPath: '/v1/email/identities/{identity_id}/verify',
   },
   {
     clientCallName: 'client.files.list',

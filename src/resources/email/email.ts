@@ -12,6 +12,7 @@ import {
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
 /**
  * Send transactional emails, send batch emails, and retrieve sent email
@@ -32,8 +33,8 @@ export class EmailResource extends APIResource {
   }
 
   /**
-   * Sends up to 100 emails in a single request. Attachments and scheduled delivery
-   * are not supported in batch mode.
+   * Sends up to 100 emails in a single request. Attachments are not supported in
+   * batch mode.
    */
   batch(
     params: EmailBatchParams | null | undefined = undefined,
@@ -41,6 +42,13 @@ export class EmailResource extends APIResource {
   ): APIPromise<EmailBatchResponse> {
     const { body } = params ?? {};
     return this._client.post('/v1/email/batch', { body: body, ...options });
+  }
+
+  /**
+   * Retrieves a single email by its unique identifier.
+   */
+  get(emailID: string, options?: RequestOptions): APIPromise<Email> {
+    return this._client.get(path`/v1/email/${emailID}`, options);
   }
 
   /**
@@ -283,11 +291,6 @@ export interface EmailSendParams {
    * Reply-to email address(es)
    */
   reply_to?: string | Array<string>;
-
-  /**
-   * Schedule email delivery at a specific time (ISO 8601 format)
-   */
-  scheduled_at?: string;
 
   /**
    * Custom metadata tags for the email (max 50)
