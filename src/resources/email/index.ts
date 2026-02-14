@@ -15,5 +15,6 @@ export {
   type Identity,
   type IdentityCreateParams,
   type IdentityListParams,
+  type IdentityVerifyParams,
   type IdentitiesCursorIDPage,
 } from './identities';
