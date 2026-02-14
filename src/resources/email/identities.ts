@@ -51,8 +51,12 @@ export class Identities extends APIResource {
    * Triggers a manual recheck of the identity's verification status against AWS SES.
    * Returns the identity with its updated status.
    */
-  verify(identityID: string, options?: RequestOptions): APIPromise<Identity> {
-    return this._client.post(path`/v1/email/identities/${identityID}/verify`, options);
+  verify(
+    identityID: string,
+    body: IdentityVerifyParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Identity> {
+    return this._client.post(path`/v1/email/identities/${identityID}/verify`, { body, ...options });
   }
 }
 
@@ -141,11 +145,20 @@ export interface IdentityCreateParams {
 
 export interface IdentityListParams extends CursorIDPageParams {}
 
+export interface IdentityVerifyParams {
+  /**
+   * If true and the identity is an unverified email address, resend the verification
+   * email.
+   */
+  resend?: boolean;
+}
+
 export declare namespace Identities {
   export {
     type Identity as Identity,
     type IdentitiesCursorIDPage as IdentitiesCursorIDPage,
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
+    type IdentityVerifyParams as IdentityVerifyParams,
   };
 }

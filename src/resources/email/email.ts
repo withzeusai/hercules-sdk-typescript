@@ -8,6 +8,7 @@ import {
   Identity,
   IdentityCreateParams,
   IdentityListParams,
+  IdentityVerifyParams,
 } from './identities';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
@@ -286,5 +287,6 @@ export declare namespace EmailResource {
     type IdentitiesCursorIDPage as IdentitiesCursorIDPage,
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
+    type IdentityVerifyParams as IdentityVerifyParams,
   };
 }
