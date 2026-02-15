@@ -1,6 +1,6 @@
 {
   "name": "@usehercules/sdk",
-  "version": "1.14.3",
+  "version": "1.14.4",
   "description": "The official TypeScript library for the Hercules API",
   "author": "Hercules <hello@hercules.app>",
   "types": "dist/index.d.ts",
