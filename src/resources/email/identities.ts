@@ -130,17 +130,32 @@ export namespace Identity {
   }
 }
 
-export interface IdentityCreateParams {
-  /**
-   * The type of identity to create. Use 'email' for a single address or 'domain' for
-   * an entire domain.
-   */
-  type: 'email' | 'domain';
+export type IdentityCreateParams = IdentityCreateParams.Variant0 | IdentityCreateParams.Variant1;
 
-  /**
-   * The email address or domain name to verify
-   */
-  value: string;
+export declare namespace IdentityCreateParams {
+  export interface Variant0 {
+    /**
+     * Create an email address identity
+     */
+    type: 'email';
+
+    /**
+     * The email address to verify
+     */
+    value: string;
+  }
+
+  export interface Variant1 {
+    /**
+     * Create a domain identity
+     */
+    type: 'domain';
+
+    /**
+     * The domain name to verify
+     */
+    value: string;
+  }
 }
 
 export interface IdentityListParams extends CursorIDPageParams {}
