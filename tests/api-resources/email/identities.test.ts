@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource identities', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.email.identities.create({ type: 'email', value: 'x' });
+    const responsePromise = client.email.identities.create({ type: 'email', value: 'dev@stainless.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource identities', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.email.identities.create({ type: 'email', value: 'x' });
+    const response = await client.email.identities.create({ type: 'email', value: 'dev@stainless.com' });
   });
 
   // Prism tests are disabled
