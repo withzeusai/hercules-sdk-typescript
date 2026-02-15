@@ -56,7 +56,7 @@ export const newMcpServer = async () =>
   new McpServer(
     {
       name: 'usehercules_sdk_api',
-      version: '1.14.3',
+      version: '1.14.4',
     },
     {
       instructions: await getInstructions(),
