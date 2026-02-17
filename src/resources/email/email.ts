@@ -8,6 +8,7 @@ import {
   Identity,
   IdentityCreateParams,
   IdentityListParams,
+  IdentityVerifyParams,
 } from './identities';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
@@ -35,7 +36,7 @@ export class EmailResource extends APIResource {
   /**
    * Retrieves a single email by its unique identifier.
    */
-  get(emailID: string, options?: RequestOptions): APIPromise<Email> {
+  get(emailID: string, options?: RequestOptions): APIPromise<EmailGetResponse> {
     return this._client.get(path`/v1/email/${emailID}`, options);
   }
 
@@ -118,6 +119,66 @@ export interface Email {
    * Reply-to addresses
    */
   reply_to?: Array<string> | null;
+}
+
+/**
+ * A sent email object with full body content
+ */
+export interface EmailGetResponse {
+  /**
+   * Unique identifier for the email
+   */
+  id: string;
+
+  /**
+   * Timestamp when the email was sent
+   */
+  created_at: string;
+
+  /**
+   * Sender email address
+   */
+  from: string;
+
+  /**
+   * Email subject line
+   */
+  subject: string;
+
+  /**
+   * Recipient email addresses
+   */
+  to: Array<string>;
+
+  /**
+   * Blind carbon copy recipients
+   */
+  bcc?: Array<string> | null;
+
+  /**
+   * Carbon copy recipients
+   */
+  cc?: Array<string> | null;
+
+  /**
+   * The HTML version of the message body
+   */
+  html?: string | null;
+
+  /**
+   * The most recent event for this email
+   */
+  last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained' | null;
+
+  /**
+   * Reply-to addresses
+   */
+  reply_to?: Array<string> | null;
+
+  /**
+   * The plain text version of the message body
+   */
+  text?: string | null;
 }
 
 /**
@@ -213,6 +274,7 @@ export declare namespace EmailResource {
   export {
     type Attachment as Attachment,
     type Email as Email,
+    type EmailGetResponse as EmailGetResponse,
     type EmailSendResponse as EmailSendResponse,
     type EmailsCursorIDPage as EmailsCursorIDPage,
     type EmailListParams as EmailListParams,
@@ -225,5 +287,6 @@ export declare namespace EmailResource {
     type IdentitiesCursorIDPage as IdentitiesCursorIDPage,
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
+    type IdentityVerifyParams as IdentityVerifyParams,
   };
 }

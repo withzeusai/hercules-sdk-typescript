@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.14.4 (2026-02-17)
+
+Full Changelog: [v1.14.3...v1.14.4](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.3...v1.14.4)
+
+### Features
+
+* **api:** update api ([2a0bcb4](https://github.com/withzeusai/hercules-sdk-typescript/commit/2a0bcb4b3ed2b2b44d7d489ac9a2a816361f44a5))
+* **api:** update api ([8114c44](https://github.com/withzeusai/hercules-sdk-typescript/commit/8114c4419051b1dcbc366b1778ddc43642e00391))
+* **api:** update api ([16502bb](https://github.com/withzeusai/hercules-sdk-typescript/commit/16502bb525bc202748984434e1a31e9d3ac2bf22))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([90dd45c](https://github.com/withzeusai/hercules-sdk-typescript/commit/90dd45cd5dba7d8d26c5838cceeb6c137239602b))
+* **internal:** improve layout of generated MCP server files ([58a545f](https://github.com/withzeusai/hercules-sdk-typescript/commit/58a545fa3d24580952b90521596226affbff80be))
+* **internal:** improve reliability of MCP servers when using local code mode execution ([38d0b20](https://github.com/withzeusai/hercules-sdk-typescript/commit/38d0b203120bdab040ab2bd30594d7250ea0b6fe))
+* **mcp:** forward STAINLESS_API_KEY to docs search endpoint ([f271b19](https://github.com/withzeusai/hercules-sdk-typescript/commit/f271b19075975c8bf9de87147dafcb29eec8f87b))
+
 ## 1.14.3 (2026-02-12)
 
 Full Changelog: [v1.14.2...v1.14.3](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.2...v1.14.3)

@@ -51,8 +51,12 @@ export class Identities extends APIResource {
    * Triggers a manual recheck of the identity's verification status against AWS SES.
    * Returns the identity with its updated status.
    */
-  verify(identityID: string, options?: RequestOptions): APIPromise<Identity> {
-    return this._client.post(path`/v1/email/identities/${identityID}/verify`, options);
+  verify(
+    identityID: string,
+    body: IdentityVerifyParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Identity> {
+    return this._client.post(path`/v1/email/identities/${identityID}/verify`, { body, ...options });
   }
 }
 
@@ -126,20 +130,43 @@ export namespace Identity {
   }
 }
 
-export interface IdentityCreateParams {
-  /**
-   * The type of identity to create. Use 'email' for a single address or 'domain' for
-   * an entire domain.
-   */
-  type: 'email' | 'domain';
+export type IdentityCreateParams = IdentityCreateParams.Variant0 | IdentityCreateParams.Variant1;
 
-  /**
-   * The email address or domain name to verify
-   */
-  value: string;
+export declare namespace IdentityCreateParams {
+  export interface Variant0 {
+    /**
+     * Create an email address identity
+     */
+    type: 'email';
+
+    /**
+     * The email address to verify
+     */
+    value: string;
+  }
+
+  export interface Variant1 {
+    /**
+     * Create a domain identity
+     */
+    type: 'domain';
+
+    /**
+     * The domain name to verify
+     */
+    value: string;
+  }
 }
 
 export interface IdentityListParams extends CursorIDPageParams {}
+
+export interface IdentityVerifyParams {
+  /**
+   * If true and the identity is an unverified email address, resend the verification
+   * email.
+   */
+  resend?: boolean;
+}
 
 export declare namespace Identities {
   export {
@@ -147,5 +174,6 @@ export declare namespace Identities {
     type IdentitiesCursorIDPage as IdentitiesCursorIDPage,
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
+    type IdentityVerifyParams as IdentityVerifyParams,
   };
 }
