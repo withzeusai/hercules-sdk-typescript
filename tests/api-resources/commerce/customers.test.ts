@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource customers', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.commerce.customers.create();
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -45,7 +45,7 @@ describe('resource customers', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.commerce.customers.update('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();
@@ -57,7 +57,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -81,7 +81,7 @@ describe('resource customers', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.commerce.customers.list();
     const rawResponse = await responsePromise.asResponse();
@@ -93,7 +93,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -117,7 +117,7 @@ describe('resource customers', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('billingPortal', async () => {
     const responsePromise = client.commerce.customers.billingPortal('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();
@@ -129,7 +129,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('billingPortal: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -141,7 +141,7 @@ describe('resource customers', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.commerce.customers.get('cus_1234567890');
     const rawResponse = await responsePromise.asResponse();

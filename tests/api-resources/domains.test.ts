@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource domains', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.domains.list();
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource domains', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(

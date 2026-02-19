@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource collections', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.content.collections.create({ api_id: 'nXI', name: 'name' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource collections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.content.collections.create({
       api_id: 'nXI',
@@ -54,7 +54,7 @@ describe('resource collections', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.content.collections.update('collection_id');
     const rawResponse = await responsePromise.asResponse();
@@ -66,7 +66,7 @@ describe('resource collections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -82,7 +82,7 @@ describe('resource collections', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.content.collections.list();
     const rawResponse = await responsePromise.asResponse();
@@ -94,7 +94,7 @@ describe('resource collections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -109,7 +109,7 @@ describe('resource collections', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('archive', async () => {
     const responsePromise = client.content.collections.archive('collection_id');
     const rawResponse = await responsePromise.asResponse();
@@ -121,7 +121,7 @@ describe('resource collections', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.content.collections.get('collection_id');
     const rawResponse = await responsePromise.asResponse();
