@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource commerce', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('cancel: only required params', async () => {
     const responsePromise = client.commerce.cancel({
       customer_id: 'cus_1234567890',
@@ -24,7 +24,7 @@ describe('resource commerce', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('cancel: required and optional params', async () => {
     const response = await client.commerce.cancel({
       customer_id: 'cus_1234567890',
@@ -33,7 +33,7 @@ describe('resource commerce', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('check: only required params', async () => {
     const responsePromise = client.commerce.check({
       customer_id: 'cus_1234567890',
@@ -48,7 +48,7 @@ describe('resource commerce', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('check: required and optional params', async () => {
     const response = await client.commerce.check({
       customer_id: 'cus_1234567890',
@@ -56,7 +56,7 @@ describe('resource commerce', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('checkout: only required params', async () => {
     const responsePromise = client.commerce.checkout({
       customer_id: 'cus_1234567890',
@@ -72,7 +72,7 @@ describe('resource commerce', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('checkout: required and optional params', async () => {
     const response = await client.commerce.checkout({
       customer_id: 'cus_1234567890',

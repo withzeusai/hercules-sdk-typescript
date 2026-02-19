@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource pushNotifications', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('enable', async () => {
     const responsePromise = client.pushNotifications.enable();
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource pushNotifications', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('identify: only required params', async () => {
     const responsePromise = client.pushNotifications.identify({ secret: 'x', userId: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -33,12 +33,12 @@ describe('resource pushNotifications', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('identify: required and optional params', async () => {
     const response = await client.pushNotifications.identify({ secret: 'x', userId: 'x' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('send: only required params', async () => {
     const responsePromise = client.pushNotifications.send({ title: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -50,7 +50,7 @@ describe('resource pushNotifications', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('send: required and optional params', async () => {
     const response = await client.pushNotifications.send({
       title: 'x',
@@ -64,7 +64,7 @@ describe('resource pushNotifications', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('subscribe: only required params', async () => {
     const responsePromise = client.pushNotifications.subscribe({
       subscription: {
@@ -82,7 +82,7 @@ describe('resource pushNotifications', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('subscribe: required and optional params', async () => {
     const response = await client.pushNotifications.subscribe({
       subscription: {
@@ -94,7 +94,7 @@ describe('resource pushNotifications', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('unsubscribe: only required params', async () => {
     const responsePromise = client.pushNotifications.unsubscribe({ secret: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -106,7 +106,7 @@ describe('resource pushNotifications', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('unsubscribe: required and optional params', async () => {
     const response = await client.pushNotifications.unsubscribe({ secret: 'x' });
   });

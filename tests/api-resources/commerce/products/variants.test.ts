@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource variants', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.commerce.products.variants.create('product_id', { name: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource variants', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.commerce.products.variants.create('product_id', {
       name: 'x',
@@ -41,7 +41,7 @@ describe('resource variants', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.commerce.products.variants.update('variant_id', {
       product_id: 'product_id',
@@ -55,7 +55,7 @@ describe('resource variants', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.commerce.products.variants.update('variant_id', {
       product_id: 'product_id',
@@ -73,7 +73,7 @@ describe('resource variants', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.commerce.products.variants.list('product_id');
     const rawResponse = await responsePromise.asResponse();
@@ -85,7 +85,7 @@ describe('resource variants', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -102,7 +102,7 @@ describe('resource variants', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get: only required params', async () => {
     const responsePromise = client.commerce.products.variants.get('variant_id', { product_id: 'product_id' });
     const rawResponse = await responsePromise.asResponse();
@@ -114,7 +114,7 @@ describe('resource variants', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get: required and optional params', async () => {
     const response = await client.commerce.products.variants.get('variant_id', { product_id: 'product_id' });
   });

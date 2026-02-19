@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource identities', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.email.identities.create({ type: 'email', value: 'dev@stainless.com' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,12 +21,12 @@ describe('resource identities', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.email.identities.create({ type: 'email', value: 'dev@stainless.com' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.email.identities.list();
     const rawResponse = await responsePromise.asResponse();
@@ -38,7 +38,7 @@ describe('resource identities', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -53,7 +53,7 @@ describe('resource identities', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.email.identities.delete('identity_id');
     const rawResponse = await responsePromise.asResponse();
@@ -65,7 +65,7 @@ describe('resource identities', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.email.identities.get('identity_id');
     const rawResponse = await responsePromise.asResponse();
@@ -77,7 +77,7 @@ describe('resource identities', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('verify', async () => {
     const responsePromise = client.email.identities.verify('identity_id');
     const rawResponse = await responsePromise.asResponse();
@@ -89,7 +89,7 @@ describe('resource identities', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('verify: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(

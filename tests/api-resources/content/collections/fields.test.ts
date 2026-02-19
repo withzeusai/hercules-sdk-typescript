@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource fields', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.content.collections.fields.create('collection_id', {
       api_id: 'nXI',
@@ -25,7 +25,7 @@ describe('resource fields', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.content.collections.fields.create('collection_id', {
       api_id: 'nXI',
@@ -50,7 +50,7 @@ describe('resource fields', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.content.collections.fields.update('field_id', {
       collection_id: 'collection_id',
@@ -64,7 +64,7 @@ describe('resource fields', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.content.collections.fields.update('field_id', {
       collection_id: 'collection_id',
@@ -87,7 +87,7 @@ describe('resource fields', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.content.collections.fields.delete('field_id', {
       collection_id: 'collection_id',
@@ -101,7 +101,7 @@ describe('resource fields', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.content.collections.fields.delete('field_id', {
       collection_id: 'collection_id',
