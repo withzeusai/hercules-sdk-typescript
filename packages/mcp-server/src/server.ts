@@ -55,15 +55,33 @@ export async function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let client = new Hercules({
-    ...{ apiVersion: readEnvOrError('HERCULES_API_VERSION') },
-    logger,
-    ...params.clientOptions,
-    defaultHeaders: {
-      ...params.clientOptions?.defaultHeaders,
-      'X-Stainless-MCP': 'true',
-    },
-  });
+  let _client: Hercules | undefined;
+  let _clientError: Error | undefined;
+  let _logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off' | undefined;
+
+  const getClient = (): Hercules => {
+    if (_clientError) throw _clientError;
+    if (!_client) {
+      try {
+        _client = new Hercules({
+          ...{ apiVersion: readEnvOrError('HERCULES_API_VERSION') },
+          logger,
+          ...params.clientOptions,
+          defaultHeaders: {
+            ...params.clientOptions?.defaultHeaders,
+            'X-Stainless-MCP': 'true',
+          },
+        });
+        if (_logLevel) {
+          _client = _client.withOptions({ logLevel: _logLevel });
+        }
+      } catch (e) {
+        _clientError = e instanceof Error ? e : new Error(String(e));
+        throw _clientError;
+      }
+    }
+    return _client;
+  };
 
   const providedTools = selectTools(params.mcpOptions);
   const toolMap = Object.fromEntries(providedTools.map((mcpTool) => [mcpTool.tool.name, mcpTool]));
@@ -81,6 +99,21 @@ export async function initMcpServer(params: {
       throw new Error(`Unknown tool: ${name}`);
     }
 
+    let client: Hercules;
+    try {
+      client = getClient();
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: `Failed to initialize client: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+        isError: true,
+      };
+    }
+
     return executeHandler({
       handler: mcpTool.handler,
       reqContext: {
@@ -93,23 +126,28 @@ export async function initMcpServer(params: {
 
   server.setRequestHandler(SetLevelRequestSchema, async (request) => {
     const { level } = request.params;
+    let logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off';
     switch (level) {
       case 'debug':
-        client = client.withOptions({ logLevel: 'debug' });
+        logLevel = 'debug';
         break;
       case 'info':
-        client = client.withOptions({ logLevel: 'info' });
+        logLevel = 'info';
         break;
       case 'notice':
       case 'warning':
-        client = client.withOptions({ logLevel: 'warn' });
+        logLevel = 'warn';
         break;
       case 'error':
-        client = client.withOptions({ logLevel: 'error' });
+        logLevel = 'error';
         break;
       default:
-        client = client.withOptions({ logLevel: 'off' });
+        logLevel = 'off';
         break;
+    }
+    _logLevel = logLevel;
+    if (_client) {
+      _client = _client.withOptions({ logLevel });
     }
     return {};
   });
