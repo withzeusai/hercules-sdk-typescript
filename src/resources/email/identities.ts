@@ -77,6 +77,11 @@ export interface Identity {
   created_at: string;
 
   /**
+   * Whether a custom MAIL FROM domain is enabled for SPF alignment
+   */
+  mail_from_enabled: boolean;
+
+  /**
    * The verification status of the identity
    */
   status: 'pending' | 'verified' | 'failed';
@@ -91,6 +96,12 @@ export interface Identity {
    * The email address or domain name
    */
   value: string;
+
+  /**
+   * The subdomain prefix used for the custom MAIL FROM domain (e.g. 'mail' for
+   * mail.yourdomain.com)
+   */
+  mail_from_subdomain?: string | null;
 
   /**
    * DNS records required for verification (only present for domain identities)
@@ -155,6 +166,18 @@ export declare namespace IdentityCreateParams {
      * The domain name to verify
      */
     value: string;
+
+    /**
+     * Enable a custom MAIL FROM domain for SPF alignment. When enabled, additional DNS
+     * records are required.
+     */
+    mail_from_enabled?: boolean;
+
+    /**
+     * The subdomain prefix for the custom MAIL FROM domain (e.g. 'mail' for
+     * mail.yourdomain.com). Defaults to 'mail'.
+     */
+    mail_from_subdomain?: string;
   }
 }
 
