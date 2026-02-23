@@ -60,7 +60,7 @@ $ yarn link @usehercules/sdk
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @usehercules/sdk
+$ pnpm link --global @usehercules/sdk
 ```
 
 ## Running tests
