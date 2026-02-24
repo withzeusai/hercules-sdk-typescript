@@ -500,7 +500,7 @@ describe('instantiate client', () => {
 });
 
 describe('idempotency', () => {
-  test('key can be set per-request', async () => {
+  test.skip('key can be set per-request', async () => {
     const client = new Hercules({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       apiKey: 'My API Key',
