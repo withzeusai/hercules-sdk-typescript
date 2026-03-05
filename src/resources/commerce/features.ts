@@ -33,11 +33,7 @@ export class Features extends APIResource {
    * );
    * ```
    */
-  update(
-    featureID: string,
-    body: FeatureUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Feature> {
+  update(featureID: string, body: FeatureUpdateParams, options?: RequestOptions): APIPromise<Feature> {
     return this._client.patch(path`/v1/commerce/features/${featureID}`, { body, ...options });
   }
 

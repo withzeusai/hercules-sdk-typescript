@@ -34,7 +34,7 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.content.entries.update('entry_id');
+    const responsePromise = client.content.entries.update('entry_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -42,22 +42,6 @@ describe('resource entries', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.entries.update(
-        'entry_id',
-        {
-          fields: { foo: 'bar' },
-          locale: 'locale',
-          version: -9007199254740991,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -138,7 +122,7 @@ describe('resource entries', () => {
 
   // Mock server tests are disabled
   test.skip('publish', async () => {
-    const responsePromise = client.content.entries.publish('entry_id');
+    const responsePromise = client.content.entries.publish('entry_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -146,18 +130,6 @@ describe('resource entries', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('publish: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.entries.publish(
-        'entry_id',
-        { scheduled_at: '2019-12-27T18:11:19.117Z' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

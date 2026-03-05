@@ -61,11 +61,7 @@ export class Products extends APIResource {
    * );
    * ```
    */
-  update(
-    productID: string,
-    body: ProductUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Product> {
+  update(productID: string, body: ProductUpdateParams, options?: RequestOptions): APIPromise<Product> {
     return this._client.patch(path`/v1/commerce/products/${productID}`, { body, ...options });
   }
 

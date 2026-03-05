@@ -21,11 +21,7 @@ export class Assets extends APIResource {
    * Updates asset metadata including URL, folder, title, description, and custom
    * metadata.
    */
-  update(
-    assetID: string,
-    body: AssetUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Asset> {
+  update(assetID: string, body: AssetUpdateParams, options?: RequestOptions): APIPromise<Asset> {
     return this._client.patch(path`/v1/content/assets/${assetID}`, { body, ...options });
   }
 

@@ -35,11 +35,7 @@ export class Coupons extends APIResource {
    * );
    * ```
    */
-  update(
-    couponID: string,
-    body: CouponUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Coupon> {
+  update(couponID: string, body: CouponUpdateParams, options?: RequestOptions): APIPromise<Coupon> {
     return this._client.patch(path`/v1/commerce/coupons/${couponID}`, { body, ...options });
   }
 

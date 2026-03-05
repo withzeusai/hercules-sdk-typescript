@@ -79,7 +79,7 @@ describe('resource identities', () => {
 
   // Mock server tests are disabled
   test.skip('verify', async () => {
-    const responsePromise = client.email.identities.verify('identity_id');
+    const responsePromise = client.email.identities.verify('identity_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -87,13 +87,5 @@ describe('resource identities', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('verify: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.email.identities.verify('identity_id', { resend: true }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 });

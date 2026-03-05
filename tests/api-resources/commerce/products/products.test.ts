@@ -61,7 +61,7 @@ describe('resource products', () => {
 
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.commerce.products.update('product_id');
+    const responsePromise = client.commerce.products.update('product_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -69,32 +69,6 @@ describe('resource products', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.products.update(
-        'product_id',
-        {
-          active: true,
-          description: 'description',
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'string' },
-          name: 'name',
-          subscription_group_id: 'subscription_group_id',
-          tags: ['string'],
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

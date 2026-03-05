@@ -51,11 +51,7 @@ export class Identities extends APIResource {
    * Triggers a manual recheck of the identity's verification status against AWS SES.
    * Returns the identity with its updated status.
    */
-  verify(
-    identityID: string,
-    body: IdentityVerifyParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Identity> {
+  verify(identityID: string, body: IdentityVerifyParams, options?: RequestOptions): APIPromise<Identity> {
     return this._client.post(path`/v1/email/identities/${identityID}/verify`, { body, ...options });
   }
 }
