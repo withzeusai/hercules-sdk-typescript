@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource customers', () => {
   // Mock server tests are disabled
   test.skip('create', async () => {
-    const responsePromise = client.commerce.customers.create();
+    const responsePromise = client.commerce.customers.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,35 +19,11 @@ describe('resource customers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.customers.create(
-        {
-          id: 'cus_1234567890',
-          address: {
-            city: 'city',
-            country: 'xx',
-            line1: 'line1',
-            line2: 'line2',
-            postal_code: 'postal_code',
-            state: 'state',
-          },
-          email: 'dev@stainless.com',
-          name: 'name',
-          phone: '+4699102',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.commerce.customers.update('cus_1234567890');
+    const responsePromise = client.commerce.customers.update('cus_1234567890', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -55,30 +31,6 @@ describe('resource customers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.customers.update(
-        'cus_1234567890',
-        {
-          address: {
-            city: 'city',
-            country: 'xx',
-            line1: 'line1',
-            line2: 'line2',
-            postal_code: 'postal_code',
-            state: 'state',
-          },
-          email: 'dev@stainless.com',
-          name: 'name',
-          phone: '+4699102',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -119,7 +71,7 @@ describe('resource customers', () => {
 
   // Mock server tests are disabled
   test.skip('billingPortal', async () => {
-    const responsePromise = client.commerce.customers.billingPortal('cus_1234567890');
+    const responsePromise = client.commerce.customers.billingPortal('cus_1234567890', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -127,18 +79,6 @@ describe('resource customers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('billingPortal: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.customers.billingPortal(
-        'cus_1234567890',
-        { return_url: 'https://example.com' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

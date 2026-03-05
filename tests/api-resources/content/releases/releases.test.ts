@@ -32,7 +32,7 @@ describe('resource releases', () => {
 
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.content.releases.update('release_id');
+    const responsePromise = client.content.releases.update('release_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,18 +40,6 @@ describe('resource releases', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.releases.update(
-        'release_id',
-        { description: 'description', name: 'name' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

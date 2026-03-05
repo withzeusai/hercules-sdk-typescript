@@ -26,7 +26,7 @@ export class Collections extends APIResource {
    */
   update(
     collectionID: string,
-    body: CollectionUpdateParams | null | undefined = {},
+    body: CollectionUpdateParams,
     options?: RequestOptions,
   ): APIPromise<Collection> {
     return this._client.patch(path`/v1/content/collections/${collectionID}`, { body, ...options });
