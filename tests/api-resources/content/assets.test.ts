@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource assets', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.content.assets.create({
       filename: 'filename',
@@ -25,7 +25,7 @@ describe('resource assets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.content.assets.create({
       filename: 'filename',
@@ -42,9 +42,9 @@ describe('resource assets', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.content.assets.update('asset_id');
+    const responsePromise = client.content.assets.update('asset_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,25 +54,7 @@ describe('resource assets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.assets.update(
-        'asset_id',
-        {
-          description: 'description',
-          folder: 'folder',
-          metadata: { foo: 'string' },
-          title: 'title',
-          url: 'url',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.content.assets.list();
     const rawResponse = await responsePromise.asResponse();
@@ -84,7 +66,7 @@ describe('resource assets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -109,7 +91,7 @@ describe('resource assets', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.content.assets.delete('asset_id');
     const rawResponse = await responsePromise.asResponse();
@@ -121,7 +103,7 @@ describe('resource assets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.content.assets.get('asset_id');
     const rawResponse = await responsePromise.asResponse();
@@ -133,7 +115,7 @@ describe('resource assets', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('publish', async () => {
     const responsePromise = client.content.assets.publish('asset_id');
     const rawResponse = await responsePromise.asResponse();

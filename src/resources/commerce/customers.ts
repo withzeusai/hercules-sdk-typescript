@@ -18,7 +18,7 @@ export class Customers extends APIResource {
    * const customer = await client.commerce.customers.create();
    * ```
    */
-  create(body: CustomerCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<Customer> {
+  create(body: CustomerCreateParams, options?: RequestOptions): APIPromise<Customer> {
     return this._client.post('/v1/commerce/customers', { body, ...options });
   }
 
@@ -33,11 +33,7 @@ export class Customers extends APIResource {
    * );
    * ```
    */
-  update(
-    customerID: string,
-    body: CustomerUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Customer> {
+  update(customerID: string, body: CustomerUpdateParams, options?: RequestOptions): APIPromise<Customer> {
     return this._client.patch(path`/v1/commerce/customers/${customerID}`, { body, ...options });
   }
 
@@ -75,7 +71,7 @@ export class Customers extends APIResource {
    */
   billingPortal(
     customerID: string,
-    body: CustomerBillingPortalParams | null | undefined = {},
+    body: CustomerBillingPortalParams,
     options?: RequestOptions,
   ): APIPromise<CustomerBillingPortalResponse> {
     return this._client.post(path`/v1/commerce/customers/${customerID}/billing_portal`, { body, ...options });

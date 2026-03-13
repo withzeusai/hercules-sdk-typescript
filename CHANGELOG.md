@@ -1,5 +1,94 @@
 # Changelog
 
+## 1.14.4 (2026-03-13)
+
+Full Changelog: [v1.14.3...v1.14.4](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.3...v1.14.4)
+
+### ⚠ BREAKING CHANGES
+
+* remove unused webhook params
+
+### Features
+
+* **api:** update api ([16de9ed](https://github.com/withzeusai/hercules-sdk-typescript/commit/16de9ed3a633d14eb162242be1f0019f99836351))
+* **api:** update api ([20dc25d](https://github.com/withzeusai/hercules-sdk-typescript/commit/20dc25db37573c8c8940335171a70276fb0216ec))
+* **api:** update api ([dae7c49](https://github.com/withzeusai/hercules-sdk-typescript/commit/dae7c49172396320e24dfbf6c628beb08ff52b02))
+* **api:** update api ([2a0bcb4](https://github.com/withzeusai/hercules-sdk-typescript/commit/2a0bcb4b3ed2b2b44d7d489ac9a2a816361f44a5))
+* **api:** update api ([8114c44](https://github.com/withzeusai/hercules-sdk-typescript/commit/8114c4419051b1dcbc366b1778ddc43642e00391))
+* **api:** update api ([16502bb](https://github.com/withzeusai/hercules-sdk-typescript/commit/16502bb525bc202748984434e1a31e9d3ac2bf22))
+* **mcp:** add an option to disable code tool ([4aa1d1b](https://github.com/withzeusai/hercules-sdk-typescript/commit/4aa1d1bf9b46837b54c6b65e64af58eb34e242a0))
+
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([bc885c5](https://github.com/withzeusai/hercules-sdk-typescript/commit/bc885c521b8891c21845d27c407d0d0615b4ddbe))
+* **docs/contributing:** correct pnpm link command ([56295cc](https://github.com/withzeusai/hercules-sdk-typescript/commit/56295cc99d9cd43a26e6a4ebb2d67f786bead3c1))
+* fix request delays for retrying to be more respectful of high requested delays ([b432d9a](https://github.com/withzeusai/hercules-sdk-typescript/commit/b432d9ad64054a0fbd8c15aaf21934d899af34fe))
+* **mcp:** initialize SDK lazily to avoid failing the connection on init errors ([89db70c](https://github.com/withzeusai/hercules-sdk-typescript/commit/89db70ca95481aca21de66a826215c6387d5e9b7))
+* **mcp:** update prompt ([de8af2e](https://github.com/withzeusai/hercules-sdk-typescript/commit/de8af2eaff3000724d088df7f32a677a29c44ac1))
+* remove unused webhook params ([57536f5](https://github.com/withzeusai/hercules-sdk-typescript/commit/57536f52d5c5aff9727c39a5b904e8f425ed4d1a))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([a6bf8bf](https://github.com/withzeusai/hercules-sdk-typescript/commit/a6bf8bf25ec64c100de6225e8e6282d55ef6e80c))
+* **internal/client:** fix form-urlencoded requests ([90dd45c](https://github.com/withzeusai/hercules-sdk-typescript/commit/90dd45cd5dba7d8d26c5838cceeb6c137239602b))
+* **internal:** allow setting x-stainless-api-key header on mcp server requests ([f1e71fb](https://github.com/withzeusai/hercules-sdk-typescript/commit/f1e71fb205f159b24911ba3ca9ef65bf52de69a2))
+* **internal:** cache fetch instruction calls in MCP server ([c91ac55](https://github.com/withzeusai/hercules-sdk-typescript/commit/c91ac555646c0125ef13067954cad6b408eb84b4))
+* **internal:** codegen related update ([4474469](https://github.com/withzeusai/hercules-sdk-typescript/commit/44744694ef22b822d07f232c7362defebc2f5886))
+* **internal:** codegen related update ([e26cbae](https://github.com/withzeusai/hercules-sdk-typescript/commit/e26cbae23c217857ab3bf1eee6913161cfa03d7e))
+* **internal:** codegen related update ([1297a01](https://github.com/withzeusai/hercules-sdk-typescript/commit/1297a01efb47eaf083c80d30c47bb0986d360393))
+* **internal:** codegen related update ([1d715d7](https://github.com/withzeusai/hercules-sdk-typescript/commit/1d715d7cb7b4393e865b23ce0a1c8953698aaaa1))
+* **internal:** codegen related update ([f9e6f33](https://github.com/withzeusai/hercules-sdk-typescript/commit/f9e6f3346606ac0a2e0dffed0f70d2762aea2164))
+* **internal:** codegen related update ([89e12d6](https://github.com/withzeusai/hercules-sdk-typescript/commit/89e12d68cc0f6336b9687354a5013a978287def1))
+* **internal:** codegen related update ([688ca52](https://github.com/withzeusai/hercules-sdk-typescript/commit/688ca521f3abfdc72a3283cbe7671e90bfb630c1))
+* **internal:** codegen related update ([eec02ac](https://github.com/withzeusai/hercules-sdk-typescript/commit/eec02ac7eb0f0e3544fe047738bd3c2b435c9d21))
+* **internal:** codegen related update ([4b3393a](https://github.com/withzeusai/hercules-sdk-typescript/commit/4b3393abf9a87d62150ab463ca5d224e7f7d2196))
+* **internal:** codegen related update ([440860e](https://github.com/withzeusai/hercules-sdk-typescript/commit/440860e813f8635dfdc3ce37052610ffd6dbc215))
+* **internal:** codegen related update ([56a7697](https://github.com/withzeusai/hercules-sdk-typescript/commit/56a7697322283639f7db7cd7313681628eab7973))
+* **internal:** codegen related update ([7edf6f4](https://github.com/withzeusai/hercules-sdk-typescript/commit/7edf6f4d2d090eb7d4fcf9d45b9ee7176c97a644))
+* **internal:** codegen related update ([1e711ed](https://github.com/withzeusai/hercules-sdk-typescript/commit/1e711ed5a538d747f44b1a822e35e72cf78467e8))
+* **internal:** codegen related update ([f42122b](https://github.com/withzeusai/hercules-sdk-typescript/commit/f42122b87dcf77e666b9f19581e6dfdaae9b13cd))
+* **internal:** codegen related update ([46693a4](https://github.com/withzeusai/hercules-sdk-typescript/commit/46693a4ba0f6668cab4e0bda287bb444a1f135ef))
+* **internal:** codegen related update ([2f997dc](https://github.com/withzeusai/hercules-sdk-typescript/commit/2f997dca957ee0f7185462c72770b8b759ccb0d5))
+* **internal:** codegen related update ([ae0b122](https://github.com/withzeusai/hercules-sdk-typescript/commit/ae0b1224cefb09eb25cb388ddf4e9b5094d27cef))
+* **internal:** codegen related update ([ce45cdb](https://github.com/withzeusai/hercules-sdk-typescript/commit/ce45cdb03a9059b6f99ca801578b0db73923fc37))
+* **internal:** codegen related update ([32b2186](https://github.com/withzeusai/hercules-sdk-typescript/commit/32b218616fad81e34dad0d22c292d17fac7dd3ac))
+* **internal:** codegen related update ([2e175d4](https://github.com/withzeusai/hercules-sdk-typescript/commit/2e175d4ed5640f3df60dea9f7abc40f23c19b760))
+* **internal:** codegen related update ([0de7d27](https://github.com/withzeusai/hercules-sdk-typescript/commit/0de7d27fc3249d1a853dd52ddfca916b307ff573))
+* **internal:** codegen related update ([552cc9d](https://github.com/withzeusai/hercules-sdk-typescript/commit/552cc9d4be2237ddeba6b48583db78be889dd632))
+* **internal:** codegen related update ([4362d1b](https://github.com/withzeusai/hercules-sdk-typescript/commit/4362d1bb4f0747aad045a34e294dc1843f08154f))
+* **internal:** codegen related update ([c7e9d51](https://github.com/withzeusai/hercules-sdk-typescript/commit/c7e9d51dcecdb7a62925feb8a5af52b572d896d3))
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([eb7da18](https://github.com/withzeusai/hercules-sdk-typescript/commit/eb7da189be68187b778823cafe59afde6903d61d))
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([a4afbee](https://github.com/withzeusai/hercules-sdk-typescript/commit/a4afbee1b4c6138673ccb616624e2393db9640d2))
+* **internal:** improve layout of generated MCP server files ([58a545f](https://github.com/withzeusai/hercules-sdk-typescript/commit/58a545fa3d24580952b90521596226affbff80be))
+* **internal:** improve reliability of MCP servers when using local code mode execution ([38d0b20](https://github.com/withzeusai/hercules-sdk-typescript/commit/38d0b203120bdab040ab2bd30594d7250ea0b6fe))
+* **internal:** make generated MCP servers compatible with Cloudflare worker environments ([39a839a](https://github.com/withzeusai/hercules-sdk-typescript/commit/39a839a980fc4d7c73f95499ff9f36b352821c07))
+* **internal:** make MCP code execution location configurable via a flag ([3b26514](https://github.com/withzeusai/hercules-sdk-typescript/commit/3b2651473aa10b81684cc7a0bc59f9ee4c13ff1b))
+* **internal:** move stringifyQuery implementation to internal function ([32d7ad8](https://github.com/withzeusai/hercules-sdk-typescript/commit/32d7ad8c342bc46b24c54af6a970af29932e18cf))
+* **internal:** remove mock server code ([e126d00](https://github.com/withzeusai/hercules-sdk-typescript/commit/e126d00b2f0648c53e2d98d1ec3ce93722bf9ca2))
+* **internal:** skip test requiring mock server ([8373787](https://github.com/withzeusai/hercules-sdk-typescript/commit/83737877b1a449e3781ec9b689f6c5d14a034c38))
+* **internal:** support x-stainless-mcp-client-envs header in MCP servers ([0175b5d](https://github.com/withzeusai/hercules-sdk-typescript/commit/0175b5d8f1178e1f802cab62211e2210ba8178d5))
+* **internal:** switch MCP servers to use pino for logging ([e54fe7d](https://github.com/withzeusai/hercules-sdk-typescript/commit/e54fe7d5d866ffd8d06b79342f126e663b835f24))
+* **internal:** update dependencies to address dependabot vulnerabilities ([5faedab](https://github.com/withzeusai/hercules-sdk-typescript/commit/5faedabed14de646b5c3785e91e290897e66fcb7))
+* **internal:** update lock file ([b95689e](https://github.com/withzeusai/hercules-sdk-typescript/commit/b95689ee79d7d9997c2b8a2c30fd36bad8e940f3))
+* **internal:** update lockfile ([37432d2](https://github.com/withzeusai/hercules-sdk-typescript/commit/37432d25250f85de4d8e4ba65945b1ffcbd85ed0))
+* **internal:** upgrade @modelcontextprotocol/sdk and hono ([ee454df](https://github.com/withzeusai/hercules-sdk-typescript/commit/ee454dff58fae9cb20d231aaa955cfb21ce5b4b2))
+* **internal:** upgrade pnpm version ([470067d](https://github.com/withzeusai/hercules-sdk-typescript/commit/470067d267a0d24e141eb96affe4a224ff44bd35))
+* **internal:** use x-stainless-mcp-client-envs header for MCP remote code tool calls ([0c71d97](https://github.com/withzeusai/hercules-sdk-typescript/commit/0c71d97eef7b2ceb339c61a99340fbf8010d9c46))
+* match http protocol with ws protocol instead of wss ([5ce4677](https://github.com/withzeusai/hercules-sdk-typescript/commit/5ce4677d949fe08dd6780f278470ff0667455f08))
+* **mcp-server:** improve instructions ([62432d1](https://github.com/withzeusai/hercules-sdk-typescript/commit/62432d121e3440cea5176ecdb5af308db7e9737a))
+* **mcp-server:** return access instructions for 404 without API key ([0eec16b](https://github.com/withzeusai/hercules-sdk-typescript/commit/0eec16bd49382e3377760903c65c59932f2622ba))
+* **mcp:** correctly update version in sync with sdk ([69aac27](https://github.com/withzeusai/hercules-sdk-typescript/commit/69aac27048b66a026bec30530c05792d1eb609c0))
+* **mcp:** forward STAINLESS_API_KEY to docs search endpoint ([f271b19](https://github.com/withzeusai/hercules-sdk-typescript/commit/f271b19075975c8bf9de87147dafcb29eec8f87b))
+* update mock server docs ([c131022](https://github.com/withzeusai/hercules-sdk-typescript/commit/c131022c4babe7f94da0f9cbbd1de50696811bce))
+* use proper capitalization for WebSockets ([ee004bf](https://github.com/withzeusai/hercules-sdk-typescript/commit/ee004bfea37887baa236fc6116f83f0bbfada1fc))
+
+
+### Refactors
+
+* update sdk ([cf9078f](https://github.com/withzeusai/hercules-sdk-typescript/commit/cf9078f0afb3471b1ecc6b8f92020caf8c00f984))
+
 ## 1.14.3 (2026-02-12)
 
 Full Changelog: [v1.14.2...v1.14.3](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.2...v1.14.3)

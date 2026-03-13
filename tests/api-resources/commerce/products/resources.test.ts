@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource resources', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.commerce.products.resources.list('product_id');
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource resources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -39,7 +39,7 @@ describe('resource resources', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('attach: only required params', async () => {
     const responsePromise = client.commerce.products.resources.attach('product_id', {
       resource_ids: ['string'],
@@ -53,14 +53,14 @@ describe('resource resources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('attach: required and optional params', async () => {
     const response = await client.commerce.products.resources.attach('product_id', {
       resource_ids: ['string'],
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('detach: only required params', async () => {
     const responsePromise = client.commerce.products.resources.detach('product_id', {
       resource_ids: ['string'],
@@ -74,7 +74,7 @@ describe('resource resources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('detach: required and optional params', async () => {
     const response = await client.commerce.products.resources.detach('product_id', {
       resource_ids: ['string'],
