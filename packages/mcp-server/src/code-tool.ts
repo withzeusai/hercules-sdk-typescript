@@ -16,7 +16,6 @@ import { getLogger } from './logger';
 import { SdkMethod } from './methods';
 import { ClientOptions, Hercules } from '@usehercules/sdk';
 import { McpCodeExecutionMode } from './options';
-import { ClientOptions } from '@usehercules/sdk';
 
 const prompt = `Runs JavaScript code to interact with the Hercules API.
 
