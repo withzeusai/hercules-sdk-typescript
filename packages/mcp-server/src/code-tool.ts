@@ -14,7 +14,7 @@ import { readEnv, readEnvOrError } from './util';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { getLogger } from './logger';
 import { SdkMethod } from './methods';
-import { ClientOptions, Hercules } from '@usehercules/sdk';
+import { ClientOptions } from '@usehercules/sdk';
 import { McpCodeExecutionMode } from './options';
 
 const prompt = `Runs JavaScript code to interact with the Hercules API.
