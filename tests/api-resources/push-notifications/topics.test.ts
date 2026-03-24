@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource topics', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: only required params', async () => {
     const responsePromise = client.pushNotifications.topics.list({ visitorId: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource topics', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.pushNotifications.topics.list({
       visitorId: 'x',
@@ -31,7 +31,7 @@ describe('resource topics', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('subscribe: only required params', async () => {
     const responsePromise = client.pushNotifications.topics.subscribe({ topics: ['x'], visitorId: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -43,12 +43,12 @@ describe('resource topics', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('subscribe: required and optional params', async () => {
     const response = await client.pushNotifications.topics.subscribe({ topics: ['x'], visitorId: 'x' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('unsubscribe: only required params', async () => {
     const responsePromise = client.pushNotifications.topics.unsubscribe({ topics: ['x'], visitorId: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -60,7 +60,7 @@ describe('resource topics', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('unsubscribe: required and optional params', async () => {
     const response = await client.pushNotifications.topics.unsubscribe({ topics: ['x'], visitorId: 'x' });
   });

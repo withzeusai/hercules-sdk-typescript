@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource entries', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.content.entries.create({ collection: 'collection' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource entries', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.content.entries.create({
       collection: 'collection',
@@ -32,9 +32,9 @@ describe('resource entries', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.content.entries.update('entry_id');
+    const responsePromise = client.content.entries.update('entry_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,23 +44,7 @@ describe('resource entries', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.entries.update(
-        'entry_id',
-        {
-          fields: { foo: 'bar' },
-          locale: 'locale',
-          version: -9007199254740991,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.content.entries.list();
     const rawResponse = await responsePromise.asResponse();
@@ -72,7 +56,7 @@ describe('resource entries', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -112,7 +96,7 @@ describe('resource entries', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('archive', async () => {
     const responsePromise = client.content.entries.archive('entry_id');
     const rawResponse = await responsePromise.asResponse();
@@ -124,7 +108,7 @@ describe('resource entries', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.content.entries.get('entry_id');
     const rawResponse = await responsePromise.asResponse();
@@ -136,9 +120,9 @@ describe('resource entries', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('publish', async () => {
-    const responsePromise = client.content.entries.publish('entry_id');
+    const responsePromise = client.content.entries.publish('entry_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -148,19 +132,7 @@ describe('resource entries', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('publish: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.entries.publish(
-        'entry_id',
-        { scheduled_at: '2019-12-27T18:11:19.117Z' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('unpublish', async () => {
     const responsePromise = client.content.entries.unpublish('entry_id');
     const rawResponse = await responsePromise.asResponse();

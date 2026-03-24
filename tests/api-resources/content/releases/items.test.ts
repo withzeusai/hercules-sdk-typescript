@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource items', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('add: only required params', async () => {
     const responsePromise = client.content.releases.items.add('release_id', {
       item_id: 'item_id',
@@ -24,7 +24,7 @@ describe('resource items', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('add: required and optional params', async () => {
     const response = await client.content.releases.items.add('release_id', {
       item_id: 'item_id',
@@ -33,7 +33,7 @@ describe('resource items', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('remove: only required params', async () => {
     const responsePromise = client.content.releases.items.remove('item_id', { release_id: 'release_id' });
     const rawResponse = await responsePromise.asResponse();
@@ -45,7 +45,7 @@ describe('resource items', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('remove: required and optional params', async () => {
     const response = await client.content.releases.items.remove('item_id', { release_id: 'release_id' });
   });

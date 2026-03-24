@@ -20,11 +20,7 @@ export class Entries extends APIResource {
    * fields are modified. Use the version parameter for optimistic locking to prevent
    * concurrent update conflicts.
    */
-  update(
-    entryID: string,
-    body: EntryUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Entry> {
+  update(entryID: string, body: EntryUpdateParams, options?: RequestOptions): APIPromise<Entry> {
     return this._client.patch(path`/v1/content/entries/${entryID}`, { body, ...options });
   }
 
@@ -61,11 +57,7 @@ export class Entries extends APIResource {
    * publishing for a future time. Publishing validates that all required fields have
    * values.
    */
-  publish(
-    entryID: string,
-    body: EntryPublishParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Entry> {
+  publish(entryID: string, body: EntryPublishParams, options?: RequestOptions): APIPromise<Entry> {
     return this._client.post(path`/v1/content/entries/${entryID}/publish`, { body, ...options });
   }
 

@@ -9,7 +9,7 @@ const client = new Hercules({
 });
 
 describe('resource features', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.commerce.features.create({ name: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource features', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.commerce.features.create({
       name: 'x',
@@ -31,9 +31,9 @@ describe('resource features', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.commerce.features.update('feature_id');
+    const responsePromise = client.commerce.features.update('feature_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -43,24 +43,7 @@ describe('resource features', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.features.update(
-        'feature_id',
-        {
-          active: true,
-          description: 'description',
-          metadata: { foo: 'string' },
-          name: 'x',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.commerce.features.list();
     const rawResponse = await responsePromise.asResponse();
@@ -72,7 +55,7 @@ describe('resource features', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -88,7 +71,7 @@ describe('resource features', () => {
     ).rejects.toThrow(Hercules.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.commerce.features.get('feature_id');
     const rawResponse = await responsePromise.asResponse();

@@ -23,11 +23,7 @@ export class Releases extends APIResource {
   /**
    * Updates a release name and description. Only draft releases can be updated.
    */
-  update(
-    releaseID: string,
-    body: ReleaseUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Release> {
+  update(releaseID: string, body: ReleaseUpdateParams, options?: RequestOptions): APIPromise<Release> {
     return this._client.patch(path`/v1/content/releases/${releaseID}`, { body, ...options });
   }
 

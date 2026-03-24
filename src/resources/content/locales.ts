@@ -20,11 +20,7 @@ export class Locales extends APIResource {
    * Updates a locale's configuration including name, fallback, default status, and
    * active status.
    */
-  update(
-    localeCode: string,
-    body: LocaleUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Locale> {
+  update(localeCode: string, body: LocaleUpdateParams, options?: RequestOptions): APIPromise<Locale> {
     return this._client.patch(path`/v1/content/locales/${localeCode}`, { body, ...options });
   }
 
