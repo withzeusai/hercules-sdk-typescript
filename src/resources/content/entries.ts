@@ -93,15 +93,10 @@ export interface Entry {
   created: string;
 
   /**
-   * Field values. For localized fields: { fieldApiId: { locale: value } }. For
-   * non-localized: { fieldApiId: value }
+   * Field values. Localization is field-level: localized fields use { fieldApiId: {
+   * locale: value } }, non-localized use { fieldApiId: value }.
    */
   fields: { [key: string]: unknown };
-
-  /**
-   * Primary locale for this entry
-   */
-  locale: string;
 
   /**
    * Publishing status: draft, published, or archived
@@ -157,15 +152,10 @@ export interface EntryCreateParams {
   id?: string;
 
   /**
-   * Field values. For localized fields: { fieldApiId: { locale: value } }. For
-   * non-localized: { fieldApiId: value }
+   * Field values. Localization is field-level: localized fields use { fieldApiId: {
+   * locale: value } }, non-localized use { fieldApiId: value }.
    */
   fields?: { [key: string]: unknown };
-
-  /**
-   * Primary locale for this entry
-   */
-  locale?: string;
 
   /**
    * Initial status (default: draft)
@@ -179,11 +169,6 @@ export interface EntryUpdateParams {
    * changed.
    */
   fields?: { [key: string]: unknown };
-
-  /**
-   * Primary locale
-   */
-  locale?: string;
 
   /**
    * Expected version for optimistic locking. Update fails if version mismatch.
@@ -206,11 +191,6 @@ export interface EntryListParams extends CursorIDPageParams {
    * Depth for populating reference fields (0-3)
    */
   include_depth?: number;
-
-  /**
-   * Filter by primary locale
-   */
-  locale?: string;
 
   /**
    * JSON-encoded sort order. Example: {"field":"publishedAt","direction":"desc"}
