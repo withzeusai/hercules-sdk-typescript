@@ -27,7 +27,6 @@ describe('resource entries', () => {
       collection: 'collection',
       id: 'ce_-K0---P3EA--',
       fields: { foo: 'bar' },
-      locale: 'locale',
       status: 'draft',
     });
   });
@@ -72,7 +71,6 @@ describe('resource entries', () => {
           ending_before: 'ending_before',
           include_depth: 0,
           limit: 1,
-          locale: 'locale',
           order_by: 'order_by',
           published: {
             gt: 0,
