@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.14.5 (2026-04-10)
+
+Full Changelog: [v1.14.4...v1.14.5](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.4...v1.14.5)
+
+### Features
+
+* **api:** update api ([ae364a6](https://github.com/withzeusai/hercules-sdk-typescript/commit/ae364a6e16beb5acd06adb0eb510a2c46f0d949f))
+
+
+### Bug Fixes
+
+* **internal:** gitignore generated `oidc` dir ([7fd7b6b](https://github.com/withzeusai/hercules-sdk-typescript/commit/7fd7b6b40a02e4c4fb50ab2e37cba2e4539c2bcc))
+
+
+### Chores
+
+* **ci:** escape input path in publish-npm workflow ([36d63e8](https://github.com/withzeusai/hercules-sdk-typescript/commit/36d63e8a1cbcf3a206eeb573e196bbffd111335f))
+* **ci:** skip lint on metadata-only changes ([b818be2](https://github.com/withzeusai/hercules-sdk-typescript/commit/b818be22859d26cede11e10bfda386101a70c8f8))
+* **internal:** codegen related update ([52435d1](https://github.com/withzeusai/hercules-sdk-typescript/commit/52435d18f784615b93696751e6075403407ec48f))
+* **internal:** fix MCP server import ordering ([ea7512d](https://github.com/withzeusai/hercules-sdk-typescript/commit/ea7512d1f45e98f2732bf009ecbb9b087251e6a2))
+* **internal:** improve local docs search for MCP servers ([29b044a](https://github.com/withzeusai/hercules-sdk-typescript/commit/29b044afe68c0229a91b4cd6393b3f14ff432d6d))
+* **internal:** improve local docs search for MCP servers ([12ca858](https://github.com/withzeusai/hercules-sdk-typescript/commit/12ca858d8256cf508417f08b4222ecd8e13a9463))
+* **internal:** show error causes in MCP servers when running in local mode ([39040ba](https://github.com/withzeusai/hercules-sdk-typescript/commit/39040ba0e66b7ddd8b8fd57e2a14eb5ab8beafb3))
+* **internal:** support custom-instructions-path flag in MCP servers ([a4059db](https://github.com/withzeusai/hercules-sdk-typescript/commit/a4059dbc6cf4e1bb892f6e146f6488d5ac45cfdc))
+* **internal:** support local docs search in MCP servers ([70d1b6e](https://github.com/withzeusai/hercules-sdk-typescript/commit/70d1b6ecdedff080dc9983d6d9fa188795c4d15e))
+* **internal:** support type annotations when running MCP in local execution mode ([31dcdcf](https://github.com/withzeusai/hercules-sdk-typescript/commit/31dcdcfc43918b2c3156463fbd97ba0071ec2589))
+* **mcp-server:** add support for session id, forward client info ([05f1f1f](https://github.com/withzeusai/hercules-sdk-typescript/commit/05f1f1f44214e1981cd941f092e0c4c6692911df))
+* **mcp-server:** increase local docs search result count from 5 to 10 ([4cdfb3f](https://github.com/withzeusai/hercules-sdk-typescript/commit/4cdfb3fe3fdcf6f7cb867bcba90fba380e9e90de))
+* **mcp-server:** log client info ([53b9362](https://github.com/withzeusai/hercules-sdk-typescript/commit/53b936242cfa64cada976ce9dadaf8db0d8647e0))
+
+
+### Build System
+
+* **deps:** bump @hono/node-server from 1.19.11 to 1.19.13 ([#32](https://github.com/withzeusai/hercules-sdk-typescript/issues/32)) ([4e79764](https://github.com/withzeusai/hercules-sdk-typescript/commit/4e7976496d05092d9f8b681f89c97fe0a1f9532b))
+* **deps:** bump hono from 4.12.5 to 4.12.12 ([#33](https://github.com/withzeusai/hercules-sdk-typescript/issues/33)) ([bfff542](https://github.com/withzeusai/hercules-sdk-typescript/commit/bfff542835c9c77c58c0592600ee1385e6834079))
+* **deps:** bump qs from 6.14.1 to 6.14.2 ([#29](https://github.com/withzeusai/hercules-sdk-typescript/issues/29)) ([c7153b4](https://github.com/withzeusai/hercules-sdk-typescript/commit/c7153b4364272848d2caf07017bcb98efe84de5d))
+
 ## 1.14.4 (2026-03-24)
 
 Full Changelog: [v1.14.3...v1.14.4](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.3...v1.14.4)
