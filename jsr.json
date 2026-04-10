@@ -1,6 +1,6 @@
 {
   "name": "@usehercules/sdk",
-  "version": "1.14.4",
+  "version": "1.14.5",
   "exports": "./index.ts",
   "publish": {
     "exclude": ["!."]
