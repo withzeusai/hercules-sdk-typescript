@@ -49,10 +49,7 @@ export class Customers extends APIResource {
    * }
    * ```
    */
-  list(
-    query: CustomerListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<CustomersCursorIDPage, Customer> {
+  list(query: CustomerListParams | null | undefined = {}, options?: RequestOptions): PagePromise<CustomersCursorIDPage, Customer> {
     return this._client.getAPIList('/v1/commerce/customers', CursorIDPage<Customer>, { query, ...options });
   }
 
@@ -69,11 +66,7 @@ export class Customers extends APIResource {
    *   );
    * ```
    */
-  billingPortal(
-    customerID: string,
-    body: CustomerBillingPortalParams,
-    options?: RequestOptions,
-  ): APIPromise<CustomerBillingPortalResponse> {
+  billingPortal(customerID: string, body: CustomerBillingPortalParams, options?: RequestOptions): APIPromise<CustomerBillingPortalResponse> {
     return this._client.post(path`/v1/commerce/customers/${customerID}/billing_portal`, { body, ...options });
   }
 
@@ -93,7 +86,7 @@ export class Customers extends APIResource {
   }
 }
 
-export type CustomersCursorIDPage = CursorIDPage<Customer>;
+export type CustomersCursorIDPage = CursorIDPage<Customer>
 
 /**
  * A billable customer. Represents the entity in your app that will be
@@ -332,6 +325,6 @@ export declare namespace Customers {
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
-    type CustomerBillingPortalParams as CustomerBillingPortalParams,
+    type CustomerBillingPortalParams as CustomerBillingPortalParams
   };
 }

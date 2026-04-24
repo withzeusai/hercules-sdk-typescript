@@ -5,7 +5,7 @@ import Hercules from '@usehercules/sdk';
 const client = new Hercules({
   apiKey: 'My API Key',
   apiVersion: '2025-12-09',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource entries', () => {
@@ -24,11 +24,11 @@ describe('resource entries', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.content.entries.create({
-      collection: 'collection',
-      id: 'ce_-K0---P3EA--',
-      fields: { foo: 'bar' },
-      status: 'draft',
-    });
+    collection: 'collection',
+    id: 'ce_-K0---P3EA--',
+    fields: { foo: 'bar' },
+    status: 'draft',
+  });
   });
 
   // Mock server tests are disabled
@@ -58,40 +58,37 @@ describe('resource entries', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.content.entries.list(
-        {
-          collection: 'collection',
-          created: {
-            gt: 0,
-            gte: 0,
-            lt: 0,
-            lte: 0,
-          },
-          ending_before: 'ending_before',
-          include_depth: 0,
-          limit: 1,
-          order_by: 'order_by',
-          published: {
-            gt: 0,
-            gte: 0,
-            lt: 0,
-            lte: 0,
-          },
-          query: 'query',
-          starting_after: 'starting_after',
-          status: 'draft',
-          updated: {
-            gt: 0,
-            gte: 0,
-            lt: 0,
-            lte: 0,
-          },
-          where: 'where',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
+    await expect(client.content.entries.list({
+    collection: 'collection',
+    created: {
+    gt: 0,
+    gte: 0,
+    lt: 0,
+    lte: 0,
+  },
+    ending_before: 'ending_before',
+    include_depth: 0,
+    limit: 1,
+    order_by: 'order_by',
+    published: {
+    gt: 0,
+    gte: 0,
+    lt: 0,
+    lte: 0,
+  },
+    query: 'query',
+    starting_after: 'starting_after',
+    status: 'draft',
+    updated: {
+    gt: 0,
+    gte: 0,
+    lt: 0,
+    lte: 0,
+  },
+    where: 'where',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

@@ -3,25 +3,9 @@
 import { APIResource } from '../../../core/resource';
 import * as CommerceAPI from '../commerce';
 import * as ResourcesAPI from './resources';
-import {
-  ResourceAttachParams,
-  ResourceAttachResponse,
-  ResourceDetachParams,
-  ResourceListParams,
-  ResourceListResponse,
-  ResourceListResponsesCursorIDPage,
-  Resources,
-} from './resources';
+import { ResourceAttachParams, ResourceAttachResponse, ResourceDetachParams, ResourceListParams, ResourceListResponse, ResourceListResponsesCursorIDPage, Resources } from './resources';
 import * as VariantsAPI from './variants';
-import {
-  Variant as VariantsAPIVariant,
-  VariantCreateParams,
-  VariantGetParams,
-  VariantListParams,
-  VariantUpdateParams,
-  Variants,
-  VariantsCursorIDPage,
-} from './variants';
+import { Variant as VariantsAPIVariant, VariantCreateParams, VariantGetParams, VariantListParams, VariantUpdateParams, Variants, VariantsCursorIDPage } from './variants';
 import { APIPromise } from '../../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../../core/pagination';
 import { RequestOptions } from '../../../internal/request-options';
@@ -78,10 +62,7 @@ export class Products extends APIResource {
    * }
    * ```
    */
-  list(
-    query: ProductListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<ProductsCursorIDPage, Product> {
+  list(query: ProductListParams | null | undefined = {}, options?: RequestOptions): PagePromise<ProductsCursorIDPage, Product> {
     return this._client.getAPIList('/v1/commerce/products', CursorIDPage<Product>, { query, ...options });
   }
 
@@ -101,7 +82,7 @@ export class Products extends APIResource {
   }
 }
 
-export type ProductsCursorIDPage = CursorIDPage<Product>;
+export type ProductsCursorIDPage = CursorIDPage<Product>
 
 /**
  * A product that customers can purchase. Products can be one-time purchases or
@@ -646,7 +627,7 @@ export declare namespace Products {
     type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
-    type ProductListParams as ProductListParams,
+    type ProductListParams as ProductListParams
   };
 
   export {
@@ -656,7 +637,7 @@ export declare namespace Products {
     type ResourceListResponsesCursorIDPage as ResourceListResponsesCursorIDPage,
     type ResourceListParams as ResourceListParams,
     type ResourceAttachParams as ResourceAttachParams,
-    type ResourceDetachParams as ResourceDetachParams,
+    type ResourceDetachParams as ResourceDetachParams
   };
 
   export {
@@ -666,6 +647,6 @@ export declare namespace Products {
     type VariantCreateParams as VariantCreateParams,
     type VariantUpdateParams as VariantUpdateParams,
     type VariantListParams as VariantListParams,
-    type VariantGetParams as VariantGetParams,
+    type VariantGetParams as VariantGetParams
   };
 }

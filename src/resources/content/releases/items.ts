@@ -20,11 +20,8 @@ export class Items extends APIResource {
    * Removes an item from a release. Only draft releases can have items removed.
    */
   remove(itemID: string, params: ItemRemoveParams, options?: RequestOptions): APIPromise<void> {
-    const { release_id } = params;
-    return this._client.delete(path`/v1/content/releases/${release_id}/items/${itemID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { release_id } = params
+    return this._client.delete(path`/v1/content/releases/${release_id}/items/${itemID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 }
 
@@ -53,5 +50,8 @@ export interface ItemRemoveParams {
 }
 
 export declare namespace Items {
-  export { type ItemAddParams as ItemAddParams, type ItemRemoveParams as ItemRemoveParams };
+  export {
+    type ItemAddParams as ItemAddParams,
+    type ItemRemoveParams as ItemRemoveParams
+  };
 }

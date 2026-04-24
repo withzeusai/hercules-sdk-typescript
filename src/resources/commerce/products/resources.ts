@@ -22,16 +22,8 @@ export class Resources extends APIResource {
    * }
    * ```
    */
-  list(
-    productID: string,
-    query: ResourceListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<ResourceListResponsesCursorIDPage, ResourceListResponse> {
-    return this._client.getAPIList(
-      path`/v1/commerce/products/${productID}/resources`,
-      CursorIDPage<ResourceListResponse>,
-      { query, ...options },
-    );
+  list(productID: string, query: ResourceListParams | null | undefined = {}, options?: RequestOptions): PagePromise<ResourceListResponsesCursorIDPage, ResourceListResponse> {
+    return this._client.getAPIList(path`/v1/commerce/products/${productID}/resources`, CursorIDPage<ResourceListResponse>, { query, ...options });
   }
 
   /**
@@ -48,11 +40,7 @@ export class Resources extends APIResource {
    *   );
    * ```
    */
-  attach(
-    productID: string,
-    body: ResourceAttachParams,
-    options?: RequestOptions,
-  ): APIPromise<ResourceAttachResponse> {
+  attach(productID: string, body: ResourceAttachParams, options?: RequestOptions): APIPromise<ResourceAttachResponse> {
     return this._client.post(path`/v1/commerce/products/${productID}/resources`, { body, ...options });
   }
 
@@ -69,15 +57,11 @@ export class Resources extends APIResource {
    * ```
    */
   detach(productID: string, body: ResourceDetachParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/commerce/products/${productID}/resources`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/v1/commerce/products/${productID}/resources`, { body, ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 }
 
-export type ResourceListResponsesCursorIDPage = CursorIDPage<ResourceListResponse>;
+export type ResourceListResponsesCursorIDPage = CursorIDPage<ResourceListResponse>
 
 /**
  * A resource that can be attached to products to grant access to customers.
@@ -221,6 +205,6 @@ export declare namespace Resources {
     type ResourceListResponsesCursorIDPage as ResourceListResponsesCursorIDPage,
     type ResourceListParams as ResourceListParams,
     type ResourceAttachParams as ResourceAttachParams,
-    type ResourceDetachParams as ResourceDetachParams,
+    type ResourceDetachParams as ResourceDetachParams
   };
 }

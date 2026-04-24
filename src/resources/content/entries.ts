@@ -29,10 +29,7 @@ export class Entries extends APIResource {
    * status, locale, and custom field queries. Use the 'where' parameter for
    * field-based filtering with operators like $eq, $contains, $gt, etc.
    */
-  list(
-    query: EntryListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<EntriesCursorIDPage, Entry> {
+  list(query: EntryListParams | null | undefined = {}, options?: RequestOptions): PagePromise<EntriesCursorIDPage, Entry> {
     return this._client.getAPIList('/v1/content/entries', CursorIDPage<Entry>, { query, ...options });
   }
 
@@ -70,7 +67,7 @@ export class Entries extends APIResource {
   }
 }
 
-export type EntriesCursorIDPage = CursorIDPage<Entry>;
+export type EntriesCursorIDPage = CursorIDPage<Entry>
 
 /**
  * A content entry containing field values based on its collection schema. Entries
@@ -314,6 +311,6 @@ export declare namespace Entries {
     type EntryCreateParams as EntryCreateParams,
     type EntryUpdateParams as EntryUpdateParams,
     type EntryListParams as EntryListParams,
-    type EntryPublishParams as EntryPublishParams,
+    type EntryPublishParams as EntryPublishParams
   };
 }

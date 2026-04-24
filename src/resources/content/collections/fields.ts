@@ -13,11 +13,7 @@ export class Fields extends APIResource {
    * entries. The collection must not be locked. Adding a field increments the
    * collection version.
    */
-  create(
-    collectionID: string,
-    body: FieldCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<CollectionsAPI.Field> {
+  create(collectionID: string, body: FieldCreateParams, options?: RequestOptions): APIPromise<CollectionsAPI.Field> {
     return this._client.post(path`/v1/content/collections/${collectionID}/fields`, { body, ...options });
   }
 
@@ -25,16 +21,9 @@ export class Fields extends APIResource {
    * Updates an existing field in a content collection. The field type cannot be
    * changed after creation. The collection must not be locked.
    */
-  update(
-    fieldID: string,
-    params: FieldUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<CollectionsAPI.Field> {
-    const { collection_id, ...body } = params;
-    return this._client.patch(path`/v1/content/collections/${collection_id}/fields/${fieldID}`, {
-      body,
-      ...options,
-    });
+  update(fieldID: string, params: FieldUpdateParams, options?: RequestOptions): APIPromise<CollectionsAPI.Field> {
+    const { collection_id, ...body } = params
+    return this._client.patch(path`/v1/content/collections/${collection_id}/fields/${fieldID}`, { body, ...options });
   }
 
   /**
@@ -42,11 +31,8 @@ export class Fields extends APIResource {
    * preserved but will no longer be validated. The collection must not be locked.
    */
   delete(fieldID: string, params: FieldDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { collection_id } = params;
-    return this._client.delete(path`/v1/content/collections/${collection_id}/fields/${fieldID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { collection_id } = params
+    return this._client.delete(path`/v1/content/collections/${collection_id}/fields/${fieldID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 }
 
@@ -64,18 +50,7 @@ export interface FieldCreateParams {
   /**
    * Field data type
    */
-  type:
-    | 'text'
-    | 'markdown'
-    | 'number'
-    | 'boolean'
-    | 'date'
-    | 'datetime'
-    | 'json'
-    | 'reference'
-    | 'asset'
-    | 'enum'
-    | 'array';
+  type: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
   /**
    * Optional custom ID for the field. Must start with 'cf\_'. If not provided, one
@@ -127,18 +102,7 @@ export namespace FieldCreateParams {
     /**
      * Type of items for array fields
      */
-    array_item_type?:
-      | 'text'
-      | 'markdown'
-      | 'number'
-      | 'boolean'
-      | 'date'
-      | 'datetime'
-      | 'json'
-      | 'reference'
-      | 'asset'
-      | 'enum'
-      | 'array';
+    array_item_type?: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
     /**
      * Default value for the field
@@ -227,18 +191,7 @@ export namespace FieldUpdateParams {
     /**
      * Type of items for array fields
      */
-    array_item_type?:
-      | 'text'
-      | 'markdown'
-      | 'number'
-      | 'boolean'
-      | 'date'
-      | 'datetime'
-      | 'json'
-      | 'reference'
-      | 'asset'
-      | 'enum'
-      | 'array';
+    array_item_type?: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
     /**
      * Default value for the field
@@ -283,6 +236,6 @@ export declare namespace Fields {
   export {
     type FieldCreateParams as FieldCreateParams,
     type FieldUpdateParams as FieldUpdateParams,
-    type FieldDeleteParams as FieldDeleteParams,
+    type FieldDeleteParams as FieldDeleteParams
   };
 }

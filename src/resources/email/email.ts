@@ -2,14 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as IdentitiesAPI from './identities';
-import {
-  Identities,
-  IdentitiesCursorIDPage,
-  Identity,
-  IdentityCreateParams,
-  IdentityListParams,
-  IdentityVerifyParams,
-} from './identities';
+import { Identities, IdentitiesCursorIDPage, Identity, IdentityCreateParams, IdentityListParams, IdentityVerifyParams } from './identities';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -26,10 +19,7 @@ export class EmailResource extends APIResource {
    * Retrieves a paginated list of sent emails. Returns email metadata including
    * delivery status.
    */
-  list(
-    query: EmailListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<EmailsCursorIDPage, Email> {
+  list(query: EmailListParams | null | undefined = {}, options?: RequestOptions): PagePromise<EmailsCursorIDPage, Email> {
     return this._client.getAPIList('/v1/email', CursorIDPage<Email>, { query, ...options });
   }
 
@@ -49,7 +39,7 @@ export class EmailResource extends APIResource {
   }
 }
 
-export type EmailsCursorIDPage = CursorIDPage<Email>;
+export type EmailsCursorIDPage = CursorIDPage<Email>
 
 /**
  * A file attachment
@@ -191,7 +181,8 @@ export interface EmailSendResponse {
   id: string;
 }
 
-export interface EmailListParams extends CursorIDPageParams {}
+export interface EmailListParams extends CursorIDPageParams {
+}
 
 export interface EmailSendParams {
   /**
@@ -278,7 +269,7 @@ export declare namespace EmailResource {
     type EmailSendResponse as EmailSendResponse,
     type EmailsCursorIDPage as EmailsCursorIDPage,
     type EmailListParams as EmailListParams,
-    type EmailSendParams as EmailSendParams,
+    type EmailSendParams as EmailSendParams
   };
 
   export {
@@ -287,6 +278,6 @@ export declare namespace EmailResource {
     type IdentitiesCursorIDPage as IdentitiesCursorIDPage,
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
-    type IdentityVerifyParams as IdentityVerifyParams,
+    type IdentityVerifyParams as IdentityVerifyParams
   };
 }

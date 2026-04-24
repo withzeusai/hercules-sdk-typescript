@@ -21,10 +21,7 @@ export class Identities extends APIResource {
    * Retrieves a paginated list of sender identities (email addresses and domains)
    * configured for this website.
    */
-  list(
-    query: IdentityListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<IdentitiesCursorIDPage, Identity> {
+  list(query: IdentityListParams | null | undefined = {}, options?: RequestOptions): PagePromise<IdentitiesCursorIDPage, Identity> {
     return this._client.getAPIList('/v1/email/identities', CursorIDPage<Identity>, { query, ...options });
   }
 
@@ -33,10 +30,7 @@ export class Identities extends APIResource {
    * address or domain after deletion.
    */
   delete(identityID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/email/identities/${identityID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/v1/email/identities/${identityID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -56,7 +50,7 @@ export class Identities extends APIResource {
   }
 }
 
-export type IdentitiesCursorIDPage = CursorIDPage<Identity>;
+export type IdentitiesCursorIDPage = CursorIDPage<Identity>
 
 /**
  * A verified sender identity (email address or domain) for sending emails
@@ -137,7 +131,7 @@ export namespace Identity {
   }
 }
 
-export type IdentityCreateParams = IdentityCreateParams.Variant0 | IdentityCreateParams.Variant1;
+export type IdentityCreateParams = IdentityCreateParams.Variant0 | IdentityCreateParams.Variant1
 
 export declare namespace IdentityCreateParams {
   export interface Variant0 {
@@ -177,7 +171,8 @@ export declare namespace IdentityCreateParams {
   }
 }
 
-export interface IdentityListParams extends CursorIDPageParams {}
+export interface IdentityListParams extends CursorIDPageParams {
+}
 
 export interface IdentityVerifyParams {
   /**
@@ -193,6 +188,6 @@ export declare namespace Identities {
     type IdentitiesCursorIDPage as IdentitiesCursorIDPage,
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
-    type IdentityVerifyParams as IdentityVerifyParams,
+    type IdentityVerifyParams as IdentityVerifyParams
   };
 }

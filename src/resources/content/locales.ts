@@ -28,10 +28,7 @@ export class Locales extends APIResource {
    * Retrieves a list of configured locales. Locales define the languages available
    * for content localization.
    */
-  list(
-    query: LocaleListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<LocalesCursorIDPage, Locale> {
+  list(query: LocaleListParams | null | undefined = {}, options?: RequestOptions): PagePromise<LocalesCursorIDPage, Locale> {
     return this._client.getAPIList('/v1/content/locales', CursorIDPage<Locale>, { query, ...options });
   }
 
@@ -40,10 +37,7 @@ export class Locales extends APIResource {
    * default first. Existing localized content is preserved.
    */
   delete(localeCode: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/content/locales/${localeCode}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/v1/content/locales/${localeCode}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -54,7 +48,7 @@ export class Locales extends APIResource {
   }
 }
 
-export type LocalesCursorIDPage = CursorIDPage<Locale>;
+export type LocalesCursorIDPage = CursorIDPage<Locale>
 
 /**
  * A locale configuration for content localization. Locales define supported
@@ -160,6 +154,6 @@ export declare namespace Locales {
     type LocalesCursorIDPage as LocalesCursorIDPage,
     type LocaleCreateParams as LocaleCreateParams,
     type LocaleUpdateParams as LocaleUpdateParams,
-    type LocaleListParams as LocaleListParams,
+    type LocaleListParams as LocaleListParams
   };
 }

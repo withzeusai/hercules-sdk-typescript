@@ -24,11 +24,7 @@ export class Collections extends APIResource {
    * Updates an existing content collection. Use this to modify the name,
    * description, or lock status. The api_id cannot be changed after creation.
    */
-  update(
-    collectionID: string,
-    body: CollectionUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<Collection> {
+  update(collectionID: string, body: CollectionUpdateParams, options?: RequestOptions): APIPromise<Collection> {
     return this._client.patch(path`/v1/content/collections/${collectionID}`, { body, ...options });
   }
 
@@ -36,14 +32,8 @@ export class Collections extends APIResource {
    * Retrieves a paginated list of content collections. Content collections define
    * the schema/structure for content entries.
    */
-  list(
-    query: CollectionListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<CollectionsCursorIDPage, Collection> {
-    return this._client.getAPIList('/v1/content/collections', CursorIDPage<Collection>, {
-      query,
-      ...options,
-    });
+  list(query: CollectionListParams | null | undefined = {}, options?: RequestOptions): PagePromise<CollectionsCursorIDPage, Collection> {
+    return this._client.getAPIList('/v1/content/collections', CursorIDPage<Collection>, { query, ...options });
   }
 
   /**
@@ -63,7 +53,7 @@ export class Collections extends APIResource {
   }
 }
 
-export type CollectionsCursorIDPage = CursorIDPage<Collection>;
+export type CollectionsCursorIDPage = CursorIDPage<Collection>
 
 /**
  * A content collection defines the schema/structure for content entries. Each
@@ -143,18 +133,7 @@ export interface Field {
   /**
    * Field data type
    */
-  type:
-    | 'text'
-    | 'markdown'
-    | 'number'
-    | 'boolean'
-    | 'date'
-    | 'datetime'
-    | 'json'
-    | 'reference'
-    | 'asset'
-    | 'enum'
-    | 'array';
+  type: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
   /**
    * Description of the field
@@ -200,18 +179,7 @@ export namespace Field {
     /**
      * Type of items for array fields
      */
-    array_item_type?:
-      | 'text'
-      | 'markdown'
-      | 'number'
-      | 'boolean'
-      | 'date'
-      | 'datetime'
-      | 'json'
-      | 'reference'
-      | 'asset'
-      | 'enum'
-      | 'array';
+    array_item_type?: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
     /**
      * Default value for the field
@@ -291,18 +259,7 @@ export namespace CollectionCreateParams {
     /**
      * Field data type
      */
-    type:
-      | 'text'
-      | 'markdown'
-      | 'number'
-      | 'boolean'
-      | 'date'
-      | 'datetime'
-      | 'json'
-      | 'reference'
-      | 'asset'
-      | 'enum'
-      | 'array';
+    type: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
     /**
      * Optional custom ID for the field. Must start with 'cf\_'. If not provided, one
@@ -354,18 +311,7 @@ export namespace CollectionCreateParams {
       /**
        * Type of items for array fields
        */
-      array_item_type?:
-        | 'text'
-        | 'markdown'
-        | 'number'
-        | 'boolean'
-        | 'date'
-        | 'datetime'
-        | 'json'
-        | 'reference'
-        | 'asset'
-        | 'enum'
-        | 'array';
+      array_item_type?: 'text' | 'markdown' | 'number' | 'boolean' | 'date' | 'datetime' | 'json' | 'reference' | 'asset' | 'enum' | 'array';
 
       /**
        * Default value for the field
@@ -417,7 +363,8 @@ export interface CollectionUpdateParams {
   name?: string;
 }
 
-export interface CollectionListParams extends CursorIDPageParams {}
+export interface CollectionListParams extends CursorIDPageParams {
+}
 
 Collections.Fields = Fields;
 
@@ -428,13 +375,13 @@ export declare namespace Collections {
     type CollectionsCursorIDPage as CollectionsCursorIDPage,
     type CollectionCreateParams as CollectionCreateParams,
     type CollectionUpdateParams as CollectionUpdateParams,
-    type CollectionListParams as CollectionListParams,
+    type CollectionListParams as CollectionListParams
   };
 
   export {
     Fields as Fields,
     type FieldCreateParams as FieldCreateParams,
     type FieldUpdateParams as FieldUpdateParams,
-    type FieldDeleteParams as FieldDeleteParams,
+    type FieldDeleteParams as FieldDeleteParams
   };
 }
