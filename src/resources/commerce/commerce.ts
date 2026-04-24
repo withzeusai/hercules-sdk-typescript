@@ -2,46 +2,13 @@
 
 import { APIResource } from '../../core/resource';
 import * as CouponsAPI from './coupons';
-import {
-  Coupon,
-  CouponCreateParams,
-  CouponListParams,
-  CouponUpdateParams,
-  Coupons,
-  CouponsCursorIDPage,
-} from './coupons';
+import { Coupon, CouponCreateParams, CouponListParams, CouponUpdateParams, Coupons, CouponsCursorIDPage } from './coupons';
 import * as CustomersAPI from './customers';
-import {
-  Customer,
-  CustomerAddress,
-  CustomerBillingPortalParams,
-  CustomerBillingPortalResponse,
-  CustomerCreateParams,
-  CustomerGetResponse,
-  CustomerListParams,
-  CustomerUpdateParams,
-  Customers,
-  CustomersCursorIDPage,
-} from './customers';
+import { Customer, CustomerAddress, CustomerBillingPortalParams, CustomerBillingPortalResponse, CustomerCreateParams, CustomerGetResponse, CustomerListParams, CustomerUpdateParams, Customers, CustomersCursorIDPage } from './customers';
 import * as FeaturesAPI from './features';
-import {
-  Feature,
-  FeatureCreateParams,
-  FeatureListParams,
-  FeatureUpdateParams,
-  Features,
-  FeaturesCursorIDPage,
-} from './features';
+import { Feature, FeatureCreateParams, FeatureListParams, FeatureUpdateParams, Features, FeaturesCursorIDPage } from './features';
 import * as ProductsAPI from './products/products';
-import {
-  Product,
-  ProductCreateParams,
-  ProductCreateResponse,
-  ProductListParams,
-  ProductUpdateParams,
-  Products,
-  ProductsCursorIDPage,
-} from './products/products';
+import { Product, ProductCreateParams, ProductCreateResponse, ProductListParams, ProductUpdateParams, Products, ProductsCursorIDPage } from './products/products';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -121,141 +88,7 @@ export class Commerce extends APIResource {
  * SLE, SOS, SRD, STD, SZL, THB, TJS, TOP, TRY, TTD, TWD, TZS, UAH, UGX, UYU, UZS,
  * VND, VUV, WST, XAF, XCD, XCG, XOF, XPF, YER, ZAR, ZMW.
  */
-export type Currency =
-  | 'USD'
-  | 'AED'
-  | 'AFN'
-  | 'ALL'
-  | 'AMD'
-  | 'ANG'
-  | 'AOA'
-  | 'ARS'
-  | 'AUD'
-  | 'AWG'
-  | 'AZN'
-  | 'BAM'
-  | 'BBD'
-  | 'BDT'
-  | 'BIF'
-  | 'BMD'
-  | 'BND'
-  | 'BOB'
-  | 'BRL'
-  | 'BSD'
-  | 'BWP'
-  | 'BYN'
-  | 'BZD'
-  | 'CAD'
-  | 'CDF'
-  | 'CHF'
-  | 'CLP'
-  | 'CNY'
-  | 'COP'
-  | 'CRC'
-  | 'CVE'
-  | 'CZK'
-  | 'DJF'
-  | 'DKK'
-  | 'DOP'
-  | 'DZD'
-  | 'EGP'
-  | 'ETB'
-  | 'EUR'
-  | 'FJD'
-  | 'FKP'
-  | 'GBP'
-  | 'GEL'
-  | 'GIP'
-  | 'GMD'
-  | 'GNF'
-  | 'GTQ'
-  | 'GYD'
-  | 'HKD'
-  | 'HNL'
-  | 'HTG'
-  | 'HUF'
-  | 'IDR'
-  | 'ILS'
-  | 'INR'
-  | 'ISK'
-  | 'JMD'
-  | 'JPY'
-  | 'KES'
-  | 'KGS'
-  | 'KHR'
-  | 'KMF'
-  | 'KRW'
-  | 'KYD'
-  | 'KZT'
-  | 'LAK'
-  | 'LBP'
-  | 'LKR'
-  | 'LRD'
-  | 'LSL'
-  | 'MAD'
-  | 'MDL'
-  | 'MGA'
-  | 'MKD'
-  | 'MMK'
-  | 'MNT'
-  | 'MOP'
-  | 'MUR'
-  | 'MVR'
-  | 'MWK'
-  | 'MXN'
-  | 'MYR'
-  | 'MZN'
-  | 'NAD'
-  | 'NGN'
-  | 'NIO'
-  | 'NOK'
-  | 'NPR'
-  | 'NZD'
-  | 'PAB'
-  | 'PEN'
-  | 'PGK'
-  | 'PHP'
-  | 'PKR'
-  | 'PLN'
-  | 'PYG'
-  | 'QAR'
-  | 'RON'
-  | 'RSD'
-  | 'RUB'
-  | 'RWF'
-  | 'SAR'
-  | 'SBD'
-  | 'SCR'
-  | 'SEK'
-  | 'SGD'
-  | 'SHP'
-  | 'SLE'
-  | 'SOS'
-  | 'SRD'
-  | 'STD'
-  | 'SZL'
-  | 'THB'
-  | 'TJS'
-  | 'TOP'
-  | 'TRY'
-  | 'TTD'
-  | 'TWD'
-  | 'TZS'
-  | 'UAH'
-  | 'UGX'
-  | 'UYU'
-  | 'UZS'
-  | 'VND'
-  | 'VUV'
-  | 'WST'
-  | 'XAF'
-  | 'XCD'
-  | 'XCG'
-  | 'XOF'
-  | 'XPF'
-  | 'YER'
-  | 'ZAR'
-  | 'ZMW';
+export type Currency = 'USD' | 'AED' | 'AFN' | 'ALL' | 'AMD' | 'ANG' | 'AOA' | 'ARS' | 'AUD' | 'AWG' | 'AZN' | 'BAM' | 'BBD' | 'BDT' | 'BIF' | 'BMD' | 'BND' | 'BOB' | 'BRL' | 'BSD' | 'BWP' | 'BYN' | 'BZD' | 'CAD' | 'CDF' | 'CHF' | 'CLP' | 'CNY' | 'COP' | 'CRC' | 'CVE' | 'CZK' | 'DJF' | 'DKK' | 'DOP' | 'DZD' | 'EGP' | 'ETB' | 'EUR' | 'FJD' | 'FKP' | 'GBP' | 'GEL' | 'GIP' | 'GMD' | 'GNF' | 'GTQ' | 'GYD' | 'HKD' | 'HNL' | 'HTG' | 'HUF' | 'IDR' | 'ILS' | 'INR' | 'ISK' | 'JMD' | 'JPY' | 'KES' | 'KGS' | 'KHR' | 'KMF' | 'KRW' | 'KYD' | 'KZT' | 'LAK' | 'LBP' | 'LKR' | 'LRD' | 'LSL' | 'MAD' | 'MDL' | 'MGA' | 'MKD' | 'MMK' | 'MNT' | 'MOP' | 'MUR' | 'MVR' | 'MWK' | 'MXN' | 'MYR' | 'MZN' | 'NAD' | 'NGN' | 'NIO' | 'NOK' | 'NPR' | 'NZD' | 'PAB' | 'PEN' | 'PGK' | 'PHP' | 'PKR' | 'PLN' | 'PYG' | 'QAR' | 'RON' | 'RSD' | 'RUB' | 'RWF' | 'SAR' | 'SBD' | 'SCR' | 'SEK' | 'SGD' | 'SHP' | 'SLE' | 'SOS' | 'SRD' | 'STD' | 'SZL' | 'THB' | 'TJS' | 'TOP' | 'TRY' | 'TTD' | 'TWD' | 'TZS' | 'UAH' | 'UGX' | 'UYU' | 'UZS' | 'VND' | 'VUV' | 'WST' | 'XAF' | 'XCD' | 'XCG' | 'XOF' | 'XPF' | 'YER' | 'ZAR' | 'ZMW'
 
 /**
  * Cancel subscription response
@@ -467,7 +300,7 @@ export declare namespace Commerce {
     type CommerceCheckoutResponse as CommerceCheckoutResponse,
     type CommerceCancelParams as CommerceCancelParams,
     type CommerceCheckParams as CommerceCheckParams,
-    type CommerceCheckoutParams as CommerceCheckoutParams,
+    type CommerceCheckoutParams as CommerceCheckoutParams
   };
 
   export {
@@ -480,7 +313,7 @@ export declare namespace Commerce {
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
-    type CustomerBillingPortalParams as CustomerBillingPortalParams,
+    type CustomerBillingPortalParams as CustomerBillingPortalParams
   };
 
   export {
@@ -490,7 +323,7 @@ export declare namespace Commerce {
     type ProductsCursorIDPage as ProductsCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
-    type ProductListParams as ProductListParams,
+    type ProductListParams as ProductListParams
   };
 
   export {
@@ -499,7 +332,7 @@ export declare namespace Commerce {
     type CouponsCursorIDPage as CouponsCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
-    type CouponListParams as CouponListParams,
+    type CouponListParams as CouponListParams
   };
 
   export {
@@ -508,6 +341,6 @@ export declare namespace Commerce {
     type FeaturesCursorIDPage as FeaturesCursorIDPage,
     type FeatureCreateParams as FeatureCreateParams,
     type FeatureUpdateParams as FeatureUpdateParams,
-    type FeatureListParams as FeatureListParams,
+    type FeatureListParams as FeatureListParams
   };
 }

@@ -9,14 +9,8 @@ export class Topics extends APIResource {
   /**
    * Lists topics a visitor is subscribed to.
    */
-  list(
-    query: TopicListParams,
-    options?: RequestOptions,
-  ): PagePromise<TopicListResponsesCursorIDPage, TopicListResponse> {
-    return this._client.getAPIList('/v1/push-notifications/topics', CursorIDPage<TopicListResponse>, {
-      query,
-      ...options,
-    });
+  list(query: TopicListParams, options?: RequestOptions): PagePromise<TopicListResponsesCursorIDPage, TopicListResponse> {
+    return this._client.getAPIList('/v1/push-notifications/topics', CursorIDPage<TopicListResponse>, { query, ...options });
   }
 
   /**
@@ -35,7 +29,7 @@ export class Topics extends APIResource {
   }
 }
 
-export type TopicListResponsesCursorIDPage = CursorIDPage<TopicListResponse>;
+export type TopicListResponsesCursorIDPage = CursorIDPage<TopicListResponse>
 
 /**
  * A topic subscription for a visitor.
@@ -111,6 +105,6 @@ export declare namespace Topics {
     type TopicListResponsesCursorIDPage as TopicListResponsesCursorIDPage,
     type TopicListParams as TopicListParams,
     type TopicSubscribeParams as TopicSubscribeParams,
-    type TopicUnsubscribeParams as TopicUnsubscribeParams,
+    type TopicUnsubscribeParams as TopicUnsubscribeParams
   };
 }

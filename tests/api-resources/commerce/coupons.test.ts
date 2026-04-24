@@ -5,7 +5,7 @@ import Hercules from '@usehercules/sdk';
 const client = new Hercules({
   apiKey: 'My API Key',
   apiVersion: '2025-12-09',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource coupons', () => {
@@ -24,17 +24,17 @@ describe('resource coupons', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.commerce.coupons.create({
-      code: 'LAUNCH20',
-      id: 'coupon_1234567890',
-      amount_off: 1,
-      currency: 'USD',
-      duration: 'once',
-      duration_in_months: 1,
-      max_redemptions: 1,
-      name: 'name',
-      percent_off: 1,
-      redeem_by: '2019-12-27T18:11:19.117Z',
-    });
+    code: 'LAUNCH20',
+    id: 'coupon_1234567890',
+    amount_off: 1,
+    currency: 'USD',
+    duration: 'once',
+    duration_in_months: 1,
+    max_redemptions: 1,
+    name: 'name',
+    percent_off: 1,
+    redeem_by: '2019-12-27T18:11:19.117Z',
+  });
   });
 
   // Mock server tests are disabled
@@ -64,17 +64,14 @@ describe('resource coupons', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.coupons.list(
-        {
-          active: true,
-          ending_before: 'ending_before',
-          limit: 1,
-          starting_after: 'starting_after',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
+    await expect(client.commerce.coupons.list({
+    active: true,
+    ending_before: 'ending_before',
+    limit: 1,
+    starting_after: 'starting_after',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

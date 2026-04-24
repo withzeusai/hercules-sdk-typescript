@@ -31,10 +31,7 @@ export class Releases extends APIResource {
    * Retrieves a paginated list of releases. Releases group entries and assets for
    * atomic publishing.
    */
-  list(
-    query: ReleaseListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<ReleasesCursorIDPage, Release> {
+  list(query: ReleaseListParams | null | undefined = {}, options?: RequestOptions): PagePromise<ReleasesCursorIDPage, Release> {
     return this._client.getAPIList('/v1/content/releases', CursorIDPage<Release>, { query, ...options });
   }
 
@@ -42,10 +39,7 @@ export class Releases extends APIResource {
    * Deletes a draft release. Published releases cannot be deleted.
    */
   delete(releaseID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/content/releases/${releaseID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/v1/content/releases/${releaseID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -72,7 +66,7 @@ export class Releases extends APIResource {
   }
 }
 
-export type ReleasesCursorIDPage = CursorIDPage<Release>;
+export type ReleasesCursorIDPage = CursorIDPage<Release>
 
 /**
  * A release groups multiple entries and assets to be published atomically.
@@ -209,8 +203,12 @@ export declare namespace Releases {
     type ReleaseCreateParams as ReleaseCreateParams,
     type ReleaseUpdateParams as ReleaseUpdateParams,
     type ReleaseListParams as ReleaseListParams,
-    type ReleaseScheduleParams as ReleaseScheduleParams,
+    type ReleaseScheduleParams as ReleaseScheduleParams
   };
 
-  export { Items as Items, type ItemAddParams as ItemAddParams, type ItemRemoveParams as ItemRemoveParams };
+  export {
+    Items as Items,
+    type ItemAddParams as ItemAddParams,
+    type ItemRemoveParams as ItemRemoveParams
+  };
 }

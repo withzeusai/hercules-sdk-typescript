@@ -5,7 +5,7 @@ import Hercules from '@usehercules/sdk';
 const client = new Hercules({
   apiKey: 'My API Key',
   apiVersion: '2025-12-09',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource products', () => {
@@ -24,39 +24,33 @@ describe('resource products', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.commerce.products.create({
-      name: 'x',
-      variants: [
-        {
-          name: 'x',
-          id: 'var_1234567890',
-          currency: 'USD',
-          description: 'description',
-          is_default: true,
-          media: [
-            {
-              cdn_file_id: 'cdn_file_id',
-              type: 'image',
-              display_order: 0,
-            },
-          ],
-          metadata: { foo: 'string' },
-          recurring: { interval: 'day', interval_count: 1 },
-          unit_amount: 0,
-        },
-      ],
-      id: 'prod_1234567890',
-      description: 'x',
-      media: [
-        {
-          cdn_file_id: 'cdn_file_id',
-          type: 'image',
-          display_order: 0,
-        },
-      ],
-      metadata: { foo: 'string' },
-      subscription_group_id: 'subscription_group_id',
-      tags: ['string'],
-    });
+    name: 'x',
+    variants: [{
+    name: 'x',
+    id: 'var_1234567890',
+    currency: 'USD',
+    description: 'description',
+    is_default: true,
+    media: [{
+    cdn_file_id: 'cdn_file_id',
+    type: 'image',
+    display_order: 0,
+  }],
+    metadata: { foo: 'string' },
+    recurring: { interval: 'day', interval_count: 1 },
+    unit_amount: 0,
+  }],
+    id: 'prod_1234567890',
+    description: 'x',
+    media: [{
+    cdn_file_id: 'cdn_file_id',
+    type: 'image',
+    display_order: 0,
+  }],
+    metadata: { foo: 'string' },
+    subscription_group_id: 'subscription_group_id',
+    tags: ['string'],
+  });
   });
 
   // Mock server tests are disabled
@@ -86,17 +80,14 @@ describe('resource products', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.commerce.products.list(
-        {
-          active: true,
-          ending_before: 'ending_before',
-          limit: 1,
-          starting_after: 'starting_after',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
+    await expect(client.commerce.products.list({
+    active: true,
+    ending_before: 'ending_before',
+    limit: 1,
+    starting_after: 'starting_after',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled

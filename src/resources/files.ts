@@ -17,10 +17,7 @@ export class Files extends APIResource {
    * Retrieves a paginated list of files uploaded to the website. Supports filtering
    * by MIME type, folder path, creation date, and filename search.
    */
-  list(
-    query: FileListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<FilesCursorIDPage, File> {
+  list(query: FileListParams | null | undefined = {}, options?: RequestOptions): PagePromise<FilesCursorIDPage, File> {
     return this._client.getAPIList('/v1/files', CursorIDPage<File>, { query, ...options });
   }
 
@@ -32,7 +29,7 @@ export class Files extends APIResource {
   }
 }
 
-export type FilesCursorIDPage = CursorIDPage<File>;
+export type FilesCursorIDPage = CursorIDPage<File>
 
 /**
  * A file uploaded to CDN storage, linked to a website.
@@ -165,6 +162,6 @@ export declare namespace Files {
     type File as File,
     type Upload as Upload,
     type FilesCursorIDPage as FilesCursorIDPage,
-    type FileListParams as FileListParams,
+    type FileListParams as FileListParams
   };
 }

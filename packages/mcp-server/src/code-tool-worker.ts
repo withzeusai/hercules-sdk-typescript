@@ -59,8 +59,8 @@ function getTSDiagnostics(code: string): string[] {
   const codeWithImport = [
     'import { Hercules } from "@usehercules/sdk";',
     functionSource.type === 'declaration' ?
-      `async function run(${functionSource.client}: Hercules)`
-    : `const run: (${functionSource.client}: Hercules) => Promise<unknown> =`,
+      `async function run(${functionSource.client}: Hercules)` :
+      `const run: (${functionSource.client}: Hercules) => Promise<unknown> =`,
     functionSource.code,
   ].join('\n');
   const sourcePath = path.resolve('code.ts');
@@ -108,87 +108,87 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
-    'client.commerce.cancel',
-    'client.commerce.check',
-    'client.commerce.checkout',
-    'client.commerce.customers.billingPortal',
-    'client.commerce.customers.create',
-    'client.commerce.customers.get',
-    'client.commerce.customers.list',
-    'client.commerce.customers.update',
-    'client.commerce.products.create',
-    'client.commerce.products.get',
-    'client.commerce.products.list',
-    'client.commerce.products.update',
-    'client.commerce.products.resources.attach',
-    'client.commerce.products.resources.detach',
-    'client.commerce.products.resources.list',
-    'client.commerce.products.variants.create',
-    'client.commerce.products.variants.get',
-    'client.commerce.products.variants.list',
-    'client.commerce.products.variants.update',
-    'client.commerce.coupons.create',
-    'client.commerce.coupons.get',
-    'client.commerce.coupons.list',
-    'client.commerce.coupons.update',
-    'client.commerce.features.create',
-    'client.commerce.features.get',
-    'client.commerce.features.list',
-    'client.commerce.features.update',
-    'client.content.collections.archive',
-    'client.content.collections.create',
-    'client.content.collections.get',
-    'client.content.collections.list',
-    'client.content.collections.update',
-    'client.content.collections.fields.create',
-    'client.content.collections.fields.delete',
-    'client.content.collections.fields.update',
-    'client.content.entries.archive',
-    'client.content.entries.create',
-    'client.content.entries.get',
-    'client.content.entries.list',
-    'client.content.entries.publish',
-    'client.content.entries.unpublish',
-    'client.content.entries.update',
-    'client.content.assets.create',
-    'client.content.assets.delete',
-    'client.content.assets.get',
-    'client.content.assets.list',
-    'client.content.assets.publish',
-    'client.content.assets.update',
-    'client.content.locales.create',
-    'client.content.locales.delete',
-    'client.content.locales.get',
-    'client.content.locales.list',
-    'client.content.locales.update',
-    'client.content.releases.create',
-    'client.content.releases.delete',
-    'client.content.releases.get',
-    'client.content.releases.list',
-    'client.content.releases.publish',
-    'client.content.releases.schedule',
-    'client.content.releases.update',
-    'client.content.releases.items.add',
-    'client.content.releases.items.remove',
-    'client.domains.list',
-    'client.email.get',
-    'client.email.list',
-    'client.email.send',
-    'client.email.identities.create',
-    'client.email.identities.delete',
-    'client.email.identities.get',
-    'client.email.identities.list',
-    'client.email.identities.verify',
-    'client.files.get',
-    'client.files.list',
-    'client.pushNotifications.enable',
-    'client.pushNotifications.identify',
-    'client.pushNotifications.send',
-    'client.pushNotifications.subscribe',
-    'client.pushNotifications.unsubscribe',
-    'client.pushNotifications.topics.list',
-    'client.pushNotifications.topics.subscribe',
-    'client.pushNotifications.topics.unsubscribe',
+    "client.commerce.cancel",
+    "client.commerce.check",
+    "client.commerce.checkout",
+    "client.commerce.customers.billingPortal",
+    "client.commerce.customers.create",
+    "client.commerce.customers.get",
+    "client.commerce.customers.list",
+    "client.commerce.customers.update",
+    "client.commerce.products.create",
+    "client.commerce.products.get",
+    "client.commerce.products.list",
+    "client.commerce.products.update",
+    "client.commerce.products.resources.attach",
+    "client.commerce.products.resources.detach",
+    "client.commerce.products.resources.list",
+    "client.commerce.products.variants.create",
+    "client.commerce.products.variants.get",
+    "client.commerce.products.variants.list",
+    "client.commerce.products.variants.update",
+    "client.commerce.coupons.create",
+    "client.commerce.coupons.get",
+    "client.commerce.coupons.list",
+    "client.commerce.coupons.update",
+    "client.commerce.features.create",
+    "client.commerce.features.get",
+    "client.commerce.features.list",
+    "client.commerce.features.update",
+    "client.content.collections.archive",
+    "client.content.collections.create",
+    "client.content.collections.get",
+    "client.content.collections.list",
+    "client.content.collections.update",
+    "client.content.collections.fields.create",
+    "client.content.collections.fields.delete",
+    "client.content.collections.fields.update",
+    "client.content.entries.archive",
+    "client.content.entries.create",
+    "client.content.entries.get",
+    "client.content.entries.list",
+    "client.content.entries.publish",
+    "client.content.entries.unpublish",
+    "client.content.entries.update",
+    "client.content.assets.create",
+    "client.content.assets.delete",
+    "client.content.assets.get",
+    "client.content.assets.list",
+    "client.content.assets.publish",
+    "client.content.assets.update",
+    "client.content.locales.create",
+    "client.content.locales.delete",
+    "client.content.locales.get",
+    "client.content.locales.list",
+    "client.content.locales.update",
+    "client.content.releases.create",
+    "client.content.releases.delete",
+    "client.content.releases.get",
+    "client.content.releases.list",
+    "client.content.releases.publish",
+    "client.content.releases.schedule",
+    "client.content.releases.update",
+    "client.content.releases.items.add",
+    "client.content.releases.items.remove",
+    "client.domains.list",
+    "client.email.get",
+    "client.email.list",
+    "client.email.send",
+    "client.email.identities.create",
+    "client.email.identities.delete",
+    "client.email.identities.get",
+    "client.email.identities.list",
+    "client.email.identities.verify",
+    "client.files.get",
+    "client.files.list",
+    "client.pushNotifications.enable",
+    "client.pushNotifications.identify",
+    "client.pushNotifications.send",
+    "client.pushNotifications.subscribe",
+    "client.pushNotifications.unsubscribe",
+    "client.pushNotifications.topics.list",
+    "client.pushNotifications.topics.subscribe",
+    "client.pushNotifications.topics.unsubscribe"
   ],
   { threshold: 1, shouldSort: true },
 );
@@ -271,12 +271,7 @@ function parseError(code: string, error: unknown): string | undefined {
     // Deno uses V8; the first "<anonymous>:LINE:COLUMN" is the top of stack.
     const lineNumber = error.stack?.match(/<anonymous>:([0-9]+):[0-9]+/)?.[1];
     // -1 for the zero-based indexing
-    const line =
-      lineNumber &&
-      code
-        .split('\n')
-        .at(parseInt(lineNumber, 10) - 1)
-        ?.trim();
+    const line = lineNumber && code.split('\n').at(parseInt(lineNumber, 10) - 1)?.trim();
     return line ? `${message}\n  at line ${lineNumber}\n    ${line}` : message;
   } catch {
     return message;
@@ -288,9 +283,8 @@ const fetch = async (req: Request): Promise<Response> => {
 
   const runFunctionSource = code ? getRunFunctionSource(code) : null;
   if (!runFunctionSource) {
-    const message =
-      code ?
-        'The code is missing a top-level `run` function.'
+    const message = code
+      ? 'The code is missing a top-level `run` function.'
       : 'The code argument is missing. Provide one containing a top-level `run` function.';
     return Response.json(
       {
@@ -335,7 +329,7 @@ const fetch = async (req: Request): Promise<Response> => {
   try {
     let run_ = async (client: any) => {};
     run_ = (await tseval(`${code}\nexport default run;`)).default;
-    const result = await run_(makeSdkProxy(client, { path: ['client'] }));
+    const result = await run_(makeSdkProxy(client, { path: ["client"] }));
     return Response.json({
       is_error: false,
       result,
