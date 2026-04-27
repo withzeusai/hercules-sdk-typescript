@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.14.6 (2026-04-27)
+
+Full Changelog: [v1.14.5...v1.14.6](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.5...v1.14.6)
+
+### Chores
+
+* **formatter:** run prettier and eslint separately ([544ea30](https://github.com/withzeusai/hercules-sdk-typescript/commit/544ea30fd057faa2fc1426b9b14f79137d704304))
+* **internal:** codegen related update ([f3c54de](https://github.com/withzeusai/hercules-sdk-typescript/commit/f3c54def71225b4a4b867d444491a5c2c47b88dd))
+* **internal:** more robust bootstrap script ([4563dc6](https://github.com/withzeusai/hercules-sdk-typescript/commit/4563dc684ddc1f1029c7847f9bb745d98f2227c0))
+* restructure docs search code ([79decf3](https://github.com/withzeusai/hercules-sdk-typescript/commit/79decf382669526a7ab8fcbeb8b715ea6d83cd37))
+
 ## 1.14.5 (2026-04-10)
 
 Full Changelog: [v1.14.4...v1.14.5](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.4...v1.14.5)

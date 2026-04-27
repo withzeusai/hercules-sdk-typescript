@@ -29,7 +29,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'usehercules_sdk_api',
-      version: '1.14.5',
+      version: '1.14.6',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
@@ -86,9 +86,9 @@ export async function initMcpServer(params: {
           logger,
           ...params.clientOptions,
           defaultHeaders: {
-            ...params.clientOptions?.defaultHeaders,
-            'X-Stainless-MCP': 'true',
-          },
+                  ...params.clientOptions?.defaultHeaders,
+                  'X-Stainless-MCP': 'true',
+                },
         });
         if (_logLevel) {
           _client = _client.withOptions({ logLevel: _logLevel });
