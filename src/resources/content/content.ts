@@ -2,15 +2,54 @@
 
 import { APIResource } from '../../core/resource';
 import * as AssetsAPI from './assets';
-import { Asset, AssetCreateParams, AssetListParams, AssetUpdateParams, Assets, AssetsCursorIDPage } from './assets';
+import {
+  Asset,
+  AssetCreateParams,
+  AssetListParams,
+  AssetUpdateParams,
+  Assets,
+  AssetsCursorIDPage,
+} from './assets';
 import * as EntriesAPI from './entries';
-import { Entries, EntriesCursorIDPage, Entry, EntryCreateParams, EntryListParams, EntryPublishParams, EntryUpdateParams } from './entries';
+import {
+  Entries,
+  EntriesCursorIDPage,
+  Entry,
+  EntryCreateParams,
+  EntryListParams,
+  EntryPublishParams,
+  EntryUpdateParams,
+} from './entries';
 import * as LocalesAPI from './locales';
-import { Locale, LocaleCreateParams, LocaleListParams, LocaleUpdateParams, Locales, LocalesCursorIDPage } from './locales';
+import {
+  Locale,
+  LocaleCreateParams,
+  LocaleListParams,
+  LocaleUpdateParams,
+  Locales,
+  LocalesCursorIDPage,
+} from './locales';
 import * as CollectionsAPI from './collections/collections';
-import { Collection, CollectionCreateParams, CollectionListParams, CollectionUpdateParams, Collections, CollectionsCursorIDPage, Field } from './collections/collections';
+import {
+  Collection,
+  CollectionCreateParams,
+  CollectionListParams,
+  CollectionUpdateParams,
+  Collections,
+  CollectionsCursorIDPage,
+  Field,
+} from './collections/collections';
 import * as ReleasesAPI from './releases/releases';
-import { Release, ReleaseCreateParams, ReleaseItem, ReleaseListParams, ReleaseScheduleParams, ReleaseUpdateParams, Releases, ReleasesCursorIDPage } from './releases/releases';
+import {
+  Release,
+  ReleaseCreateParams,
+  ReleaseItem,
+  ReleaseListParams,
+  ReleaseScheduleParams,
+  ReleaseUpdateParams,
+  Releases,
+  ReleasesCursorIDPage,
+} from './releases/releases';
 
 /**
  * Content APIs are currently in beta.
@@ -37,7 +76,7 @@ export declare namespace Content {
     type CollectionsCursorIDPage as CollectionsCursorIDPage,
     type CollectionCreateParams as CollectionCreateParams,
     type CollectionUpdateParams as CollectionUpdateParams,
-    type CollectionListParams as CollectionListParams
+    type CollectionListParams as CollectionListParams,
   };
 
   export {
@@ -47,7 +86,7 @@ export declare namespace Content {
     type EntryCreateParams as EntryCreateParams,
     type EntryUpdateParams as EntryUpdateParams,
     type EntryListParams as EntryListParams,
-    type EntryPublishParams as EntryPublishParams
+    type EntryPublishParams as EntryPublishParams,
   };
 
   export {
@@ -56,7 +95,7 @@ export declare namespace Content {
     type AssetsCursorIDPage as AssetsCursorIDPage,
     type AssetCreateParams as AssetCreateParams,
     type AssetUpdateParams as AssetUpdateParams,
-    type AssetListParams as AssetListParams
+    type AssetListParams as AssetListParams,
   };
 
   export {
@@ -65,7 +104,7 @@ export declare namespace Content {
     type LocalesCursorIDPage as LocalesCursorIDPage,
     type LocaleCreateParams as LocaleCreateParams,
     type LocaleUpdateParams as LocaleUpdateParams,
-    type LocaleListParams as LocaleListParams
+    type LocaleListParams as LocaleListParams,
   };
 
   export {
@@ -76,6 +115,6 @@ export declare namespace Content {
     type ReleaseCreateParams as ReleaseCreateParams,
     type ReleaseUpdateParams as ReleaseUpdateParams,
     type ReleaseListParams as ReleaseListParams,
-    type ReleaseScheduleParams as ReleaseScheduleParams
+    type ReleaseScheduleParams as ReleaseScheduleParams,
   };
 }

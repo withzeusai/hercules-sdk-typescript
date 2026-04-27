@@ -40,8 +40,11 @@ export class Variants extends APIResource {
    * ```
    */
   update(variantID: string, params: VariantUpdateParams, options?: RequestOptions): APIPromise<Variant> {
-    const { product_id, ...body } = params
-    return this._client.patch(path`/v1/commerce/products/${product_id}/variants/${variantID}`, { body, ...options });
+    const { product_id, ...body } = params;
+    return this._client.patch(path`/v1/commerce/products/${product_id}/variants/${variantID}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -58,8 +61,15 @@ export class Variants extends APIResource {
    * }
    * ```
    */
-  list(productID: string, query: VariantListParams | null | undefined = {}, options?: RequestOptions): PagePromise<VariantsCursorIDPage, Variant> {
-    return this._client.getAPIList(path`/v1/commerce/products/${productID}/variants`, CursorIDPage<Variant>, { query, ...options });
+  list(
+    productID: string,
+    query: VariantListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<VariantsCursorIDPage, Variant> {
+    return this._client.getAPIList(path`/v1/commerce/products/${productID}/variants`, CursorIDPage<Variant>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -75,12 +85,12 @@ export class Variants extends APIResource {
    * ```
    */
   get(variantID: string, params: VariantGetParams, options?: RequestOptions): APIPromise<Variant> {
-    const { product_id } = params
+    const { product_id } = params;
     return this._client.get(path`/v1/commerce/products/${product_id}/variants/${variantID}`, options);
   }
 }
 
-export type VariantsCursorIDPage = CursorIDPage<Variant>
+export type VariantsCursorIDPage = CursorIDPage<Variant>;
 
 /**
  * A product variant representing a specific tier or configuration. Each variant
@@ -372,6 +382,6 @@ export declare namespace Variants {
     type VariantCreateParams as VariantCreateParams,
     type VariantUpdateParams as VariantUpdateParams,
     type VariantListParams as VariantListParams,
-    type VariantGetParams as VariantGetParams
+    type VariantGetParams as VariantGetParams,
   };
 }

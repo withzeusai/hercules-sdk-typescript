@@ -51,7 +51,10 @@ export class Coupons extends APIResource {
    * }
    * ```
    */
-  list(query: CouponListParams | null | undefined = {}, options?: RequestOptions): PagePromise<CouponsCursorIDPage, Coupon> {
+  list(
+    query: CouponListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<CouponsCursorIDPage, Coupon> {
     return this._client.getAPIList('/v1/commerce/coupons', CursorIDPage<Coupon>, { query, ...options });
   }
 
@@ -71,7 +74,7 @@ export class Coupons extends APIResource {
   }
 }
 
-export type CouponsCursorIDPage = CursorIDPage<Coupon>
+export type CouponsCursorIDPage = CursorIDPage<Coupon>;
 
 /**
  * A discount coupon that customers can apply during checkout using a promo code
@@ -235,6 +238,6 @@ export declare namespace Coupons {
     type CouponsCursorIDPage as CouponsCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponUpdateParams as CouponUpdateParams,
-    type CouponListParams as CouponListParams
+    type CouponListParams as CouponListParams,
   };
 }

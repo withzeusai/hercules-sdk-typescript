@@ -13,12 +13,15 @@ export class Domains extends APIResource {
    * Retrieves a paginated list of custom domains linked to the website, including
    * Cloudflare verification and SSL status.
    */
-  list(query: DomainListParams | null | undefined = {}, options?: RequestOptions): PagePromise<DomainsCursorIDPage, Domain> {
+  list(
+    query: DomainListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<DomainsCursorIDPage, Domain> {
     return this._client.getAPIList('/v1/domains', CursorIDPage<Domain>, { query, ...options });
   }
 }
 
-export type DomainsCursorIDPage = CursorIDPage<Domain>
+export type DomainsCursorIDPage = CursorIDPage<Domain>;
 
 /**
  * A custom domain linked to a website.
@@ -60,13 +63,12 @@ export interface Domain {
   status?: string;
 }
 
-export interface DomainListParams extends CursorIDPageParams {
-}
+export interface DomainListParams extends CursorIDPageParams {}
 
 export declare namespace Domains {
   export {
     type Domain as Domain,
     type DomainsCursorIDPage as DomainsCursorIDPage,
-    type DomainListParams as DomainListParams
+    type DomainListParams as DomainListParams,
   };
 }
