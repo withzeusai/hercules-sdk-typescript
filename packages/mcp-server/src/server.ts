@@ -29,7 +29,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'usehercules_sdk_api',
-      version: '1.14.5',
+      version: '1.14.6',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
