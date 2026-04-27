@@ -29,7 +29,10 @@ export class Assets extends APIResource {
    * Retrieves a paginated list of content assets (images, videos, documents, etc.).
    * Supports filtering by status, MIME type, folder, and search.
    */
-  list(query: AssetListParams | null | undefined = {}, options?: RequestOptions): PagePromise<AssetsCursorIDPage, Asset> {
+  list(
+    query: AssetListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<AssetsCursorIDPage, Asset> {
     return this._client.getAPIList('/v1/content/assets', CursorIDPage<Asset>, { query, ...options });
   }
 
@@ -38,7 +41,10 @@ export class Assets extends APIResource {
    * referencing this asset will have broken references.
    */
   delete(assetID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/content/assets/${assetID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+    return this._client.delete(path`/v1/content/assets/${assetID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -56,7 +62,7 @@ export class Assets extends APIResource {
   }
 }
 
-export type AssetsCursorIDPage = CursorIDPage<Asset>
+export type AssetsCursorIDPage = CursorIDPage<Asset>;
 
 /**
  * A media asset (image, video, document, etc.) that can be referenced by content
@@ -284,6 +290,6 @@ export declare namespace Assets {
     type AssetsCursorIDPage as AssetsCursorIDPage,
     type AssetCreateParams as AssetCreateParams,
     type AssetUpdateParams as AssetUpdateParams,
-    type AssetListParams as AssetListParams
+    type AssetListParams as AssetListParams,
   };
 }

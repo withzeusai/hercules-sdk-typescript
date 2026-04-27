@@ -2,7 +2,16 @@
 
 import { APIResource } from '../../core/resource';
 import * as TopicsAPI from './topics';
-import { TopicListParams, TopicListResponse, TopicListResponsesCursorIDPage, TopicSubscribeParams, TopicSubscribeResponse, TopicUnsubscribeParams, TopicUnsubscribeResponse, Topics } from './topics';
+import {
+  TopicListParams,
+  TopicListResponse,
+  TopicListResponsesCursorIDPage,
+  TopicSubscribeParams,
+  TopicSubscribeResponse,
+  TopicUnsubscribeParams,
+  TopicUnsubscribeResponse,
+  Topics,
+} from './topics';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -22,7 +31,10 @@ export class PushNotifications extends APIResource {
    * Updates a subscription's visitorId to the provided userId. Call after sign-in to
    * link the subscription to the authenticated user's account.
    */
-  identify(body: PushNotificationIdentifyParams, options?: RequestOptions): APIPromise<PushNotificationIdentifyResponse> {
+  identify(
+    body: PushNotificationIdentifyParams,
+    options?: RequestOptions,
+  ): APIPromise<PushNotificationIdentifyResponse> {
     return this._client.post('/v1/push-notifications/identify', { body, ...options });
   }
 
@@ -40,14 +52,20 @@ export class PushNotifications extends APIResource {
    * userId or generate a UUID for anonymous users. Upserts by endpoint to handle
    * re-subscriptions. Returns a secret for subscription ownership.
    */
-  subscribe(body: PushNotificationSubscribeParams, options?: RequestOptions): APIPromise<PushNotificationSubscribeResponse> {
+  subscribe(
+    body: PushNotificationSubscribeParams,
+    options?: RequestOptions,
+  ): APIPromise<PushNotificationSubscribeResponse> {
     return this._client.post('/v1/push-notifications/subscribe', { body, ...options });
   }
 
   /**
    * Removes a push subscription by secret.
    */
-  unsubscribe(body: PushNotificationUnsubscribeParams, options?: RequestOptions): APIPromise<PushNotificationUnsubscribeResponse> {
+  unsubscribe(
+    body: PushNotificationUnsubscribeParams,
+    options?: RequestOptions,
+  ): APIPromise<PushNotificationUnsubscribeResponse> {
     return this._client.post('/v1/push-notifications/unsubscribe', { body, ...options });
   }
 }
@@ -233,7 +251,7 @@ export declare namespace PushNotifications {
     type PushNotificationIdentifyParams as PushNotificationIdentifyParams,
     type PushNotificationSendParams as PushNotificationSendParams,
     type PushNotificationSubscribeParams as PushNotificationSubscribeParams,
-    type PushNotificationUnsubscribeParams as PushNotificationUnsubscribeParams
+    type PushNotificationUnsubscribeParams as PushNotificationUnsubscribeParams,
   };
 
   export {
@@ -244,6 +262,6 @@ export declare namespace PushNotifications {
     type TopicListResponsesCursorIDPage as TopicListResponsesCursorIDPage,
     type TopicListParams as TopicListParams,
     type TopicSubscribeParams as TopicSubscribeParams,
-    type TopicUnsubscribeParams as TopicUnsubscribeParams
+    type TopicUnsubscribeParams as TopicUnsubscribeParams,
   };
 }

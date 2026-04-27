@@ -49,7 +49,10 @@ export class Features extends APIResource {
    * }
    * ```
    */
-  list(query: FeatureListParams | null | undefined = {}, options?: RequestOptions): PagePromise<FeaturesCursorIDPage, Feature> {
+  list(
+    query: FeatureListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<FeaturesCursorIDPage, Feature> {
     return this._client.getAPIList('/v1/commerce/features', CursorIDPage<Feature>, { query, ...options });
   }
 
@@ -68,7 +71,7 @@ export class Features extends APIResource {
   }
 }
 
-export type FeaturesCursorIDPage = CursorIDPage<Feature>
+export type FeaturesCursorIDPage = CursorIDPage<Feature>;
 
 /**
  * A feature that can be attached to multiple products. Features represent
@@ -164,6 +167,6 @@ export declare namespace Features {
     type FeaturesCursorIDPage as FeaturesCursorIDPage,
     type FeatureCreateParams as FeatureCreateParams,
     type FeatureUpdateParams as FeatureUpdateParams,
-    type FeatureListParams as FeatureListParams
+    type FeatureListParams as FeatureListParams,
   };
 }

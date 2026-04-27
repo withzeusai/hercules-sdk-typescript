@@ -10,9 +10,7 @@ const config: JestConfigWithTsJest = {
     '^@usehercules/mcp$': '<rootDir>/src/index.ts',
     '^@usehercules/mcp/(.*)$': '<rootDir>/src/$1',
   },
-  modulePathIgnorePatterns: [
-    '<rootDir>/dist/',
-  ],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],
 };
 
