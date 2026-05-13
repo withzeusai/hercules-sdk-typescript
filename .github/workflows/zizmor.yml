@@ -28,18 +28,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install zizmor
-        run: pipx install zizmor==1.24.1
-
-      - name: Run zizmor
-        env:
-          # Lets zizmor query the GitHub API for impostor-commit detection.
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: zizmor --format sarif --min-severity low . > zizmor.sarif
-
-      - name: Upload SARIF to code scanning
-        if: always()
-        uses: github/codeql-action/upload-sarif@7fd177fa680c9881b53cdab4d346d32574c9f7f4 # v3.35.4
+      - uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
         with:
-          sarif_file: zizmor.sarif
-          category: zizmor
+          min-severity: low
