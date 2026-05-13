@@ -65,5 +65,8 @@ fi
 # Install OIDC compatible npm version
 npm install --prefix ../oidc/ npm@11.6.2
 
-# Publish with the appropriate tag
-pnpm publish --npm-path "$(cd ../ && pwd)/oidc/node_modules/.bin/npm" --no-git-checks --tag "$TAG"
+# Publish with the appropriate tag.
+# `--provenance` attaches a Sigstore-backed npm provenance attestation that
+# ties the published tarball to this workflow run; it requires the workflow
+# to grant `id-token: write`.
+pnpm publish --npm-path "$(cd ../ && pwd)/oidc/node_modules/.bin/npm" --no-git-checks --provenance --tag "$TAG"
