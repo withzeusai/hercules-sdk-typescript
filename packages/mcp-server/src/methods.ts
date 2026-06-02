@@ -11,6 +11,102 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
+    clientCallName: 'client.accessControl.scopes.create',
+    fullyQualifiedName: 'accessControl.scopes.create',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/scopes/create',
+  },
+  {
+    clientCallName: 'client.accessControl.scopes.archive',
+    fullyQualifiedName: 'accessControl.scopes.archive',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/scopes/archive',
+  },
+  {
+    clientCallName: 'client.accessControl.scopes.setDefaultRole',
+    fullyQualifiedName: 'accessControl.scopes.setDefaultRole',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/scopes/set-default-role',
+  },
+  {
+    clientCallName: 'client.accessControl.invitations.create',
+    fullyQualifiedName: 'accessControl.invitations.create',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/invitations/create',
+  },
+  {
+    clientCallName: 'client.accessControl.invitations.accept',
+    fullyQualifiedName: 'accessControl.invitations.accept',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/invitations/accept',
+  },
+  {
+    clientCallName: 'client.accessControl.invitations.revoke',
+    fullyQualifiedName: 'accessControl.invitations.revoke',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/invitations/revoke',
+  },
+  {
+    clientCallName: 'client.accessControl.roles.assign',
+    fullyQualifiedName: 'accessControl.roles.assign',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/roles/assign',
+  },
+  {
+    clientCallName: 'client.accessControl.roles.createOrgCustom',
+    fullyQualifiedName: 'accessControl.roles.createOrgCustom',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/roles/create-org-custom',
+  },
+  {
+    clientCallName: 'client.accessControl.roles.remove',
+    fullyQualifiedName: 'accessControl.roles.remove',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/roles/remove',
+  },
+  {
+    clientCallName: 'client.accessControl.roles.updatePermissions',
+    fullyQualifiedName: 'accessControl.roles.updatePermissions',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/roles/update-permissions',
+  },
+  {
+    clientCallName: 'client.accessControl.userExceptions.set',
+    fullyQualifiedName: 'accessControl.userExceptions.set',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/user-exceptions/set',
+  },
+  {
+    clientCallName: 'client.accessControl.resourceGrants.create',
+    fullyQualifiedName: 'accessControl.resourceGrants.create',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/resource-grants/create',
+  },
+  {
+    clientCallName: 'client.accessControl.resourceGrants.revoke',
+    fullyQualifiedName: 'accessControl.resourceGrants.revoke',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/resource-grants/revoke',
+  },
+  {
+    clientCallName: 'client.accessControl.resourceRules.set',
+    fullyQualifiedName: 'accessControl.resourceRules.set',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/resource-rules/set',
+  },
+  {
+    clientCallName: 'client.accessControl.expiries.set',
+    fullyQualifiedName: 'accessControl.expiries.set',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/expiries/set',
+  },
+  {
+    clientCallName: 'client.accessControl.roleOverrides.set',
+    fullyQualifiedName: 'accessControl.roleOverrides.set',
+    httpMethod: 'post',
+    httpPath: '/v1/access-control/role-overrides/set',
+  },
+  {
     clientCallName: 'client.commerce.cancel',
     fullyQualifiedName: 'commerce.cancel',
     httpMethod: 'post',

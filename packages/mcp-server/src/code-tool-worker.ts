@@ -108,6 +108,22 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
+    'client.accessControl.scopes.archive',
+    'client.accessControl.scopes.create',
+    'client.accessControl.scopes.setDefaultRole',
+    'client.accessControl.invitations.accept',
+    'client.accessControl.invitations.create',
+    'client.accessControl.invitations.revoke',
+    'client.accessControl.roles.assign',
+    'client.accessControl.roles.createOrgCustom',
+    'client.accessControl.roles.remove',
+    'client.accessControl.roles.updatePermissions',
+    'client.accessControl.userExceptions.set',
+    'client.accessControl.resourceGrants.create',
+    'client.accessControl.resourceGrants.revoke',
+    'client.accessControl.resourceRules.set',
+    'client.accessControl.expiries.set',
+    'client.accessControl.roleOverrides.set',
     'client.commerce.cancel',
     'client.commerce.check',
     'client.commerce.checkout',

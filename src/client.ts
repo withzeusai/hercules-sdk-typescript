@@ -21,6 +21,7 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
+import { AccessControl } from './resources/access-control/access-control';
 import {
   Commerce,
   CommerceCancelParams,
@@ -806,6 +807,13 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   /**
+   * Manage Access Control for a website: scopes (organizations), invitations,
+   * roles and role assignments, permission grants, resource rules, grant
+   * expiries, and per-user permission exceptions. Requires an API key with the
+   * access_control_admin scope.
+   */
+  accessControl: API.AccessControl = new API.AccessControl(this);
+  /**
    * Commerce APIs are currently in beta.
    */
   commerce: API.Commerce = new API.Commerce(this);
@@ -833,6 +841,7 @@ export class Hercules {
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
+Hercules.AccessControl = AccessControl;
 Hercules.Commerce = Commerce;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
@@ -845,6 +854,8 @@ export declare namespace Hercules {
 
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
+
+  export { AccessControl as AccessControl };
 
   export {
     Commerce as Commerce,

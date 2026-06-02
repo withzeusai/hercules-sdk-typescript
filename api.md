@@ -1,3 +1,101 @@
+# AccessControl
+
+## Scopes
+
+Types:
+
+- <code><a href="./src/resources/access-control/scopes.ts">ScopeCreateResponse</a></code>
+- <code><a href="./src/resources/access-control/scopes.ts">ScopeArchiveResponse</a></code>
+- <code><a href="./src/resources/access-control/scopes.ts">ScopeSetDefaultRoleResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/scopes/create">client.accessControl.scopes.<a href="./src/resources/access-control/scopes.ts">create</a>({ ...params }) -> ScopeCreateResponse</code>
+- <code title="post /v1/access-control/scopes/archive">client.accessControl.scopes.<a href="./src/resources/access-control/scopes.ts">archive</a>({ ...params }) -> ScopeArchiveResponse</code>
+- <code title="post /v1/access-control/scopes/set-default-role">client.accessControl.scopes.<a href="./src/resources/access-control/scopes.ts">setDefaultRole</a>({ ...params }) -> ScopeSetDefaultRoleResponse</code>
+
+## Invitations
+
+Types:
+
+- <code><a href="./src/resources/access-control/invitations.ts">InvitationCreateResponse</a></code>
+- <code><a href="./src/resources/access-control/invitations.ts">InvitationAcceptResponse</a></code>
+- <code><a href="./src/resources/access-control/invitations.ts">InvitationRevokeResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/invitations/create">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">create</a>({ ...params }) -> InvitationCreateResponse</code>
+- <code title="post /v1/access-control/invitations/accept">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">accept</a>({ ...params }) -> InvitationAcceptResponse</code>
+- <code title="post /v1/access-control/invitations/revoke">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">revoke</a>({ ...params }) -> InvitationRevokeResponse</code>
+
+## Roles
+
+Types:
+
+- <code><a href="./src/resources/access-control/roles.ts">RoleAssignResponse</a></code>
+- <code><a href="./src/resources/access-control/roles.ts">RoleCreateOrgCustomResponse</a></code>
+- <code><a href="./src/resources/access-control/roles.ts">RoleRemoveResponse</a></code>
+- <code><a href="./src/resources/access-control/roles.ts">RoleUpdatePermissionsResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/roles/assign">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">assign</a>({ ...params }) -> RoleAssignResponse</code>
+- <code title="post /v1/access-control/roles/create-org-custom">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">createOrgCustom</a>({ ...params }) -> RoleCreateOrgCustomResponse</code>
+- <code title="post /v1/access-control/roles/remove">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">remove</a>({ ...params }) -> RoleRemoveResponse</code>
+- <code title="post /v1/access-control/roles/update-permissions">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">updatePermissions</a>({ ...params }) -> RoleUpdatePermissionsResponse</code>
+
+## UserExceptions
+
+Types:
+
+- <code><a href="./src/resources/access-control/user-exceptions.ts">UserExceptionSetResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/user-exceptions/set">client.accessControl.userExceptions.<a href="./src/resources/access-control/user-exceptions.ts">set</a>({ ...params }) -> UserExceptionSetResponse</code>
+
+## ResourceGrants
+
+Types:
+
+- <code><a href="./src/resources/access-control/resource-grants.ts">ResourceGrantCreateResponse</a></code>
+- <code><a href="./src/resources/access-control/resource-grants.ts">ResourceGrantRevokeResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/resource-grants/create">client.accessControl.resourceGrants.<a href="./src/resources/access-control/resource-grants.ts">create</a>({ ...params }) -> ResourceGrantCreateResponse</code>
+- <code title="post /v1/access-control/resource-grants/revoke">client.accessControl.resourceGrants.<a href="./src/resources/access-control/resource-grants.ts">revoke</a>({ ...params }) -> ResourceGrantRevokeResponse</code>
+
+## ResourceRules
+
+Types:
+
+- <code><a href="./src/resources/access-control/resource-rules.ts">ResourceRuleSetResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/resource-rules/set">client.accessControl.resourceRules.<a href="./src/resources/access-control/resource-rules.ts">set</a>({ ...params }) -> ResourceRuleSetResponse</code>
+
+## Expiries
+
+Types:
+
+- <code><a href="./src/resources/access-control/expiries.ts">ExpirySetResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/expiries/set">client.accessControl.expiries.<a href="./src/resources/access-control/expiries.ts">set</a>({ ...params }) -> ExpirySetResponse</code>
+
+## RoleOverrides
+
+Types:
+
+- <code><a href="./src/resources/access-control/role-overrides.ts">RoleOverrideSetResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/access-control/role-overrides/set">client.accessControl.roleOverrides.<a href="./src/resources/access-control/role-overrides.ts">set</a>({ ...params }) -> RoleOverrideSetResponse</code>
+
 # Commerce
 
 Types:

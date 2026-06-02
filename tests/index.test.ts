@@ -506,10 +506,7 @@ describe('idempotency', () => {
       apiKey: 'My API Key',
       apiVersion: '2025-12-09',
     });
-    await client.commerce.cancel(
-      { customer_id: 'cus_1234567890', subscription_id: 'sub_1234567890' },
-      { idempotencyKey: 'my-idempotency-key' },
-    );
+    await client.accessControl.scopes.create({ name: 'x' }, { idempotencyKey: 'my-idempotency-key' });
   });
 });
 
