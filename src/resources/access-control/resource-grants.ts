@@ -49,6 +49,8 @@ export interface ResourceGrantRevokeResponse {
 }
 
 export interface ResourceGrantCreateParams {
+  actor_mode: 'service' | 'app_user';
+
   resource_id: string;
 
   resource_type: string;
@@ -56,6 +58,8 @@ export interface ResourceGrantCreateParams {
   expires_at?: string | null;
 
   hercules_auth_user_id?: string;
+
+  id_token?: string;
 
   permission_key?: string;
 
@@ -67,9 +71,13 @@ export interface ResourceGrantCreateParams {
 }
 
 export interface ResourceGrantRevokeParams {
+  actor_mode: 'service' | 'app_user';
+
   grant_id: string;
 
   scope_id: string;
+
+  id_token?: string;
 }
 
 export declare namespace ResourceGrants {

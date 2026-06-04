@@ -77,9 +77,9 @@ export interface ScopeCreateParams {
 
   account_entry_mode?: 'open' | 'allowlisted_only';
 
-  actor_hercules_auth_user_id?: string;
-
   default_role_key?: string;
+
+  owner_hercules_auth_user_id?: string;
 }
 
 export interface ScopeArchiveParams {
@@ -87,7 +87,11 @@ export interface ScopeArchiveParams {
 }
 
 export interface ScopeSetDefaultRoleParams {
+  actor_mode: 'service' | 'app_user';
+
   scope_id: string;
+
+  id_token?: string;
 
   role_id?: string;
 

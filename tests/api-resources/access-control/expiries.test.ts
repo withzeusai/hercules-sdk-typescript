@@ -12,6 +12,7 @@ describe('resource expiries', () => {
   // Mock server tests are disabled
   test.skip('set: only required params', async () => {
     const responsePromise = client.accessControl.expiries.set({
+      actor_mode: 'service',
       expires_at: '2019-12-27T18:11:19.117Z',
       grant_id: 'x',
       scope_id: 'x',
@@ -28,9 +29,11 @@ describe('resource expiries', () => {
   // Mock server tests are disabled
   test.skip('set: required and optional params', async () => {
     const response = await client.accessControl.expiries.set({
+      actor_mode: 'service',
       expires_at: '2019-12-27T18:11:19.117Z',
       grant_id: 'x',
       scope_id: 'x',
+      id_token: 'x',
     });
   });
 });

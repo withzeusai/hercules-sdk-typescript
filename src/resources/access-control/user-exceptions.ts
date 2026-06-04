@@ -28,11 +28,15 @@ export interface UserExceptionSetResponse {
 }
 
 export interface UserExceptionSetParams {
+  actor_mode: 'service' | 'app_user';
+
   allow?: Array<string>;
 
   deny?: Array<string>;
 
   hercules_auth_user_id?: string;
+
+  id_token?: string;
 
   principal_id?: string;
 

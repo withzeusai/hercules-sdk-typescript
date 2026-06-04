@@ -97,7 +97,11 @@ export interface RoleUpdatePermissionsResponse {
 }
 
 export interface RoleAssignParams {
+  actor_mode: 'service' | 'app_user';
+
   hercules_auth_user_id?: string;
+
+  id_token?: string;
 
   principal_id?: string;
 
@@ -109,11 +113,15 @@ export interface RoleAssignParams {
 }
 
 export interface RoleCreateOrgCustomParams {
+  actor_mode: 'service' | 'app_user';
+
   name: string;
 
   scope_id: string;
 
   description?: string;
+
+  id_token?: string;
 
   key?: string;
 
@@ -121,7 +129,11 @@ export interface RoleCreateOrgCustomParams {
 }
 
 export interface RoleRemoveParams {
+  actor_mode: 'service' | 'app_user';
+
   hercules_auth_user_id?: string;
+
+  id_token?: string;
 
   principal_id?: string;
 
@@ -133,7 +145,11 @@ export interface RoleRemoveParams {
 }
 
 export interface RoleUpdatePermissionsParams {
+  actor_mode: 'service' | 'app_user';
+
   permission_keys: Array<string>;
+
+  id_token?: string;
 
   role_id?: string;
 

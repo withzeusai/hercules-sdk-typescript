@@ -10,8 +10,8 @@ const client = new Hercules({
 
 describe('resource userExceptions', () => {
   // Mock server tests are disabled
-  test.skip('set', async () => {
-    const responsePromise = client.accessControl.userExceptions.set({});
+  test.skip('set: only required params', async () => {
+    const responsePromise = client.accessControl.userExceptions.set({ actor_mode: 'service' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,5 +19,18 @@ describe('resource userExceptions', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('set: required and optional params', async () => {
+    const response = await client.accessControl.userExceptions.set({
+      actor_mode: 'service',
+      allow: ['x'],
+      deny: ['x'],
+      hercules_auth_user_id: 'x',
+      id_token: 'x',
+      principal_id: 'x',
+      scope_id: 'x',
+    });
   });
 });

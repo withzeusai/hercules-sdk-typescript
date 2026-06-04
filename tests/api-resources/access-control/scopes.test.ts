@@ -26,8 +26,8 @@ describe('resource scopes', () => {
     const response = await client.accessControl.scopes.create({
       name: 'x',
       account_entry_mode: 'open',
-      actor_hercules_auth_user_id: 'x',
       default_role_key: 'x',
+      owner_hercules_auth_user_id: 'x',
     });
   });
 
@@ -50,7 +50,10 @@ describe('resource scopes', () => {
 
   // Mock server tests are disabled
   test.skip('setDefaultRole: only required params', async () => {
-    const responsePromise = client.accessControl.scopes.setDefaultRole({ scope_id: 'x' });
+    const responsePromise = client.accessControl.scopes.setDefaultRole({
+      actor_mode: 'service',
+      scope_id: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -63,7 +66,9 @@ describe('resource scopes', () => {
   // Mock server tests are disabled
   test.skip('setDefaultRole: required and optional params', async () => {
     const response = await client.accessControl.scopes.setDefaultRole({
+      actor_mode: 'service',
       scope_id: 'x',
+      id_token: 'x',
       role_id: 'x',
       role_key: 'x',
     });

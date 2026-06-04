@@ -28,11 +28,15 @@ export interface ExpirySetResponse {
 }
 
 export interface ExpirySetParams {
+  actor_mode: 'service' | 'app_user';
+
   expires_at: string | null;
 
   grant_id: string;
 
   scope_id: string;
+
+  id_token?: string;
 }
 
 export declare namespace Expiries {

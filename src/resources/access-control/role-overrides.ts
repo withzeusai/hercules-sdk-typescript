@@ -28,6 +28,8 @@ export interface RoleOverrideSetResponse {
 }
 
 export interface RoleOverrideSetParams {
+  actor_mode: 'service' | 'app_user';
+
   role_key: string;
 
   scope_id: string;
@@ -35,6 +37,8 @@ export interface RoleOverrideSetParams {
   allow?: Array<string>;
 
   deny?: Array<string>;
+
+  id_token?: string;
 }
 
 export declare namespace RoleOverrides {
