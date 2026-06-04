@@ -11,7 +11,11 @@ const client = new Hercules({
 describe('resource roleOverrides', () => {
   // Mock server tests are disabled
   test.skip('set: only required params', async () => {
-    const responsePromise = client.accessControl.roleOverrides.set({ role_key: 'x', scope_id: 'x' });
+    const responsePromise = client.accessControl.roleOverrides.set({
+      actor_mode: 'service',
+      role_key: 'x',
+      scope_id: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,10 +28,12 @@ describe('resource roleOverrides', () => {
   // Mock server tests are disabled
   test.skip('set: required and optional params', async () => {
     const response = await client.accessControl.roleOverrides.set({
+      actor_mode: 'service',
       role_key: 'x',
       scope_id: 'x',
       allow: ['x'],
       deny: ['x'],
+      id_token: 'x',
     });
   });
 });

@@ -70,11 +70,15 @@ export interface InvitationRevokeResponse {
 }
 
 export interface InvitationCreateParams {
+  actor_mode: 'service' | 'app_user';
+
   email: string;
 
   scope_id: string;
 
   expires_in_days?: number;
+
+  id_token?: string;
 
   role_ids?: Array<string>;
 
@@ -88,9 +92,13 @@ export interface InvitationAcceptParams {
 }
 
 export interface InvitationRevokeParams {
+  actor_mode: 'service' | 'app_user';
+
   invitation_id: string;
 
   scope_id: string;
+
+  id_token?: string;
 }
 
 export declare namespace Invitations {

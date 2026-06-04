@@ -10,8 +10,8 @@ const client = new Hercules({
 
 describe('resource roles', () => {
   // Mock server tests are disabled
-  test.skip('assign', async () => {
-    const responsePromise = client.accessControl.roles.assign({});
+  test.skip('assign: only required params', async () => {
+    const responsePromise = client.accessControl.roles.assign({ actor_mode: 'service' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,8 +22,25 @@ describe('resource roles', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('assign: required and optional params', async () => {
+    const response = await client.accessControl.roles.assign({
+      actor_mode: 'service',
+      hercules_auth_user_id: 'x',
+      id_token: 'x',
+      principal_id: 'x',
+      role_id: 'x',
+      role_key: 'x',
+      scope_id: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('createOrgCustom: only required params', async () => {
-    const responsePromise = client.accessControl.roles.createOrgCustom({ name: 'x', scope_id: 'x' });
+    const responsePromise = client.accessControl.roles.createOrgCustom({
+      actor_mode: 'service',
+      name: 'x',
+      scope_id: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -36,17 +53,19 @@ describe('resource roles', () => {
   // Mock server tests are disabled
   test.skip('createOrgCustom: required and optional params', async () => {
     const response = await client.accessControl.roles.createOrgCustom({
+      actor_mode: 'service',
       name: 'x',
       scope_id: 'x',
       description: 'description',
+      id_token: 'x',
       key: 'x',
       permission_keys: ['x'],
     });
   });
 
   // Mock server tests are disabled
-  test.skip('remove', async () => {
-    const responsePromise = client.accessControl.roles.remove({});
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.accessControl.roles.remove({ actor_mode: 'service' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,8 +76,24 @@ describe('resource roles', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.accessControl.roles.remove({
+      actor_mode: 'service',
+      hercules_auth_user_id: 'x',
+      id_token: 'x',
+      principal_id: 'x',
+      role_id: 'x',
+      role_key: 'x',
+      scope_id: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('updatePermissions: only required params', async () => {
-    const responsePromise = client.accessControl.roles.updatePermissions({ permission_keys: ['x'] });
+    const responsePromise = client.accessControl.roles.updatePermissions({
+      actor_mode: 'service',
+      permission_keys: ['x'],
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -71,7 +106,9 @@ describe('resource roles', () => {
   // Mock server tests are disabled
   test.skip('updatePermissions: required and optional params', async () => {
     const response = await client.accessControl.roles.updatePermissions({
+      actor_mode: 'service',
       permission_keys: ['x'],
+      id_token: 'x',
       role_id: 'x',
       role_key: 'x',
       scope_id: 'x',

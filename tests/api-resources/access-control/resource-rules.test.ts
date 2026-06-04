@@ -12,6 +12,7 @@ describe('resource resourceRules', () => {
   // Mock server tests are disabled
   test.skip('set: only required params', async () => {
     const responsePromise = client.accessControl.resourceRules.set({
+      actor_mode: 'service',
       effect: 'allow',
       permission_key: 'x',
       resource_type: 'x',
@@ -31,6 +32,7 @@ describe('resource resourceRules', () => {
   // Mock server tests are disabled
   test.skip('set: required and optional params', async () => {
     const response = await client.accessControl.resourceRules.set({
+      actor_mode: 'service',
       effect: 'allow',
       permission_key: 'x',
       resource_type: 'x',
@@ -38,6 +40,7 @@ describe('resource resourceRules', () => {
       subject: { principal_id: 'x', type: 'principal' },
       target: { mode: 'all' },
       expires_at: '2019-12-27T18:11:19.117Z',
+      id_token: 'x',
     });
   });
 });

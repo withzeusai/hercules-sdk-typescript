@@ -28,6 +28,8 @@ export interface ResourceRuleSetResponse {
 }
 
 export interface ResourceRuleSetParams {
+  actor_mode: 'service' | 'app_user';
+
   effect: 'allow' | 'deny';
 
   permission_key: string;
@@ -41,6 +43,8 @@ export interface ResourceRuleSetParams {
   target: ResourceRuleSetParams.Mode | ResourceRuleSetParams.UnionMember1;
 
   expires_at?: string | null;
+
+  id_token?: string;
 }
 
 export namespace ResourceRuleSetParams {
