@@ -31,6 +31,7 @@ describe('resource resourceGrants', () => {
       actor_mode: 'service',
       resource_id: 'x',
       resource_type: 'x',
+      applies_to: 'self',
       expires_at: '2019-12-27T18:11:19.117Z',
       hercules_auth_user_id: 'x',
       id_token: 'x',
