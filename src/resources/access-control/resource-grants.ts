@@ -55,6 +55,8 @@ export interface ResourceGrantCreateParams {
 
   resource_type: string;
 
+  applies_to?: 'self' | 'self_and_descendants';
+
   expires_at?: string | null;
 
   hercules_auth_user_id?: string;

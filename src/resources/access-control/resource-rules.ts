@@ -42,6 +42,8 @@ export interface ResourceRuleSetParams {
 
   target: ResourceRuleSetParams.Mode | ResourceRuleSetParams.UnionMember1;
 
+  applies_to?: 'self' | 'self_and_descendants';
+
   expires_at?: string | null;
 
   id_token?: string;

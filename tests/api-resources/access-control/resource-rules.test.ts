@@ -39,6 +39,7 @@ describe('resource resourceRules', () => {
       scope_id: 'x',
       subject: { principal_id: 'x', type: 'principal' },
       target: { mode: 'all' },
+      applies_to: 'self',
       expires_at: '2019-12-27T18:11:19.117Z',
       id_token: 'x',
     });
