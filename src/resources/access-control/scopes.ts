@@ -75,7 +75,7 @@ export interface ScopeSetDefaultRoleResponse {
 export interface ScopeCreateParams {
   name: string;
 
-  account_entry_mode?: 'open' | 'allowlisted_only';
+  account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
   default_role_key?: string;
 

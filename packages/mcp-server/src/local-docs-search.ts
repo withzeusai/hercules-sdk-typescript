@@ -60,14 +60,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.accessControl.scopes.create',
     params: [
       'name: string;',
-      "account_entry_mode?: 'open' | 'allowlisted_only';",
+      "account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';",
       'default_role_key?: string;',
       'owner_hercules_auth_user_id?: string;',
     ],
     response:
       '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## create\n\n`client.accessControl.scopes.create(name: string, account_entry_mode?: 'open' | 'allowlisted_only', default_role_key?: string, owner_hercules_auth_user_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/create`\n\nCreates an org scope for a website.\n\n### Parameters\n\n- `name: string`\n\n- `account_entry_mode?: 'open' | 'allowlisted_only'`\n\n- `default_role_key?: string`\n\n- `owner_hercules_auth_user_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst scope = await client.accessControl.scopes.create({ name: 'x' });\n\nconsole.log(scope);\n```",
+      "## create\n\n`client.accessControl.scopes.create(name: string, account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role_key?: string, owner_hercules_auth_user_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/create`\n\nCreates an org scope for a website.\n\n### Parameters\n\n- `name: string`\n\n- `account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n\n- `default_role_key?: string`\n\n- `owner_hercules_auth_user_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst scope = await client.accessControl.scopes.create({ name: 'x' });\n\nconsole.log(scope);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.scopes.create',
