@@ -156,6 +156,12 @@ export interface EmailGetResponse {
   bcc?: Array<string> | null;
 
   /**
+   * Human-readable reason from the most recent bounce or complaint event, when the
+   * email bounced or was marked as spam. Null otherwise.
+   */
+  bounce_reason?: string | null;
+
+  /**
    * Carbon copy recipients
    */
   cc?: Array<string> | null;
