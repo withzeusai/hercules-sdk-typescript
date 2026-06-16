@@ -27,7 +27,7 @@
     "fix": "./scripts/format"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.4",
+    "@arethetypeswrong/cli": "^0.18.3",
     "@swc/core": "^1.15.41",
     "@swc/jest": "^0.2.39",
     "@types/jest": "^29.5.14",
