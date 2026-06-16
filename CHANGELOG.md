@@ -1,5 +1,46 @@
 # Changelog
 
+## 1.15.0 (2026-06-16)
+
+Full Changelog: [v1.14.5...v1.15.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.5...v1.15.0)
+
+### Features
+
+* **api:** update api ([1472eb8](https://github.com/withzeusai/hercules-sdk-typescript/commit/1472eb8484a5f4f3145050ea8f564af7bf40362a))
+* **api:** update api ([64c8bca](https://github.com/withzeusai/hercules-sdk-typescript/commit/64c8bca910f2590ea5a5f025b4e22bad380bb134))
+* **api:** update api ([d3111ac](https://github.com/withzeusai/hercules-sdk-typescript/commit/d3111aca3ee0a9d700c19f818674472645db56db))
+* **api:** update api ([b5f47f3](https://github.com/withzeusai/hercules-sdk-typescript/commit/b5f47f38574b66232f3a07e62aa3b7c51945f7f7))
+* **api:** update api ([b802933](https://github.com/withzeusai/hercules-sdk-typescript/commit/b80293329de140abfbf0a6da3aa196f9dc4a141a))
+* **api:** update api ([fbf0a84](https://github.com/withzeusai/hercules-sdk-typescript/commit/fbf0a84e39458f36be7686ea7bdc50d0325c2aed))
+* **api:** update api ([23f34f1](https://github.com/withzeusai/hercules-sdk-typescript/commit/23f34f16e047775da3cf3c2aa39a2c2fbb670b77))
+* support setting headers via env ([c634682](https://github.com/withzeusai/hercules-sdk-typescript/commit/c634682a4d6c0595a45316aaec5984bdef37b9d1))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([c7d4ef2](https://github.com/withzeusai/hercules-sdk-typescript/commit/c7d4ef25e8b7b513b4c5aa4e1ab1923cb33ecb51))
+* **lint:** upgrade attw to 0.18.3 to fix tarball gunzip crash ([6e9b54c](https://github.com/withzeusai/hercules-sdk-typescript/commit/6e9b54ca47cc4712432fd09f97aa0d95d6ff25f3))
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([97b783b](https://github.com/withzeusai/hercules-sdk-typescript/commit/97b783b9df888dad71ed7b0c2f386866d1f74b1c))
+
+
+### Chores
+
+* avoid formatting file that gets changed during releases ([a36bf78](https://github.com/withzeusai/hercules-sdk-typescript/commit/a36bf78b49df8f9358d271078fc63f67df1621c9))
+* avoid formatting jsr.json which gets rewritten during releases ([9377fba](https://github.com/withzeusai/hercules-sdk-typescript/commit/9377fba2e1ac352cd586ab0b0854f22497172c05))
+* **format:** run eslint and prettier separately ([a327f54](https://github.com/withzeusai/hercules-sdk-typescript/commit/a327f549a324e96d7debce32ba5c9d7168803d88))
+* **formatter:** run prettier and eslint separately ([544ea30](https://github.com/withzeusai/hercules-sdk-typescript/commit/544ea30fd057faa2fc1426b9b14f79137d704304))
+* **internal:** codegen related update ([f3c54de](https://github.com/withzeusai/hercules-sdk-typescript/commit/f3c54def71225b4a4b867d444491a5c2c47b88dd))
+* **internal:** more robust bootstrap script ([4563dc6](https://github.com/withzeusai/hercules-sdk-typescript/commit/4563dc684ddc1f1029c7847f9bb745d98f2227c0))
+* redact api-key headers in debug logs ([70e2d42](https://github.com/withzeusai/hercules-sdk-typescript/commit/70e2d427b5d5532b2ae552432fd56cb957400eb1))
+* restructure docs search code ([79decf3](https://github.com/withzeusai/hercules-sdk-typescript/commit/79decf382669526a7ab8fcbeb8b715ea6d83cd37))
+* **tests:** remove redundant File import ([fcfad52](https://github.com/withzeusai/hercules-sdk-typescript/commit/fcfad520aa4b307dcecc5d74382d05f00acd95ac))
+
+
+### Build System
+
+* **deps:** bump hono from 4.12.12 to 4.12.21 ([#40](https://github.com/withzeusai/hercules-sdk-typescript/issues/40)) ([312ebe1](https://github.com/withzeusai/hercules-sdk-typescript/commit/312ebe1507920674c615139c26994e7797f6ef97))
+* **deps:** bump qs from 6.14.2 to 6.15.2 ([#39](https://github.com/withzeusai/hercules-sdk-typescript/issues/39)) ([ee72342](https://github.com/withzeusai/hercules-sdk-typescript/commit/ee723425e0a16b04864df47539ed537b2199dcaa))
+
 ## 1.14.5 (2026-04-10)
 
 Full Changelog: [v1.14.4...v1.14.5](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.4...v1.14.5)
