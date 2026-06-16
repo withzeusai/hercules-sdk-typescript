@@ -8,12 +8,12 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource invitations', () => {
+describe('resource groups', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.create({
+    const responsePromise = client.accessControl.groups.create({
       actor_mode: 'service',
-      email: 'dev@stainless.com',
+      name: 'x',
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -27,97 +27,42 @@ describe('resource invitations', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.accessControl.invitations.create({
+    const response = await client.accessControl.groups.create({
       actor_mode: 'service',
-      email: 'dev@stainless.com',
-      scope_id: 'x',
-      expires_in_days: 1,
-      id_token: 'x',
-      role_ids: ['x'],
-      role_keys: ['x'],
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('accept: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('accept: required and optional params', async () => {
-    const response = await client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });
-  });
-
-  // Mock server tests are disabled
-  test.skip('createResource: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.createResource({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      resource_id: 'x',
-      resource_type: 'x',
-      scope_id: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('createResource: required and optional params', async () => {
-    const response = await client.accessControl.invitations.createResource({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      resource_id: 'x',
-      resource_type: 'x',
-      scope_id: 'x',
-      applies_to: 'self',
-      expires_in_days: 1,
-      id_token: 'x',
-      permission_key: 'x',
-      role_key: 'x',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('listResource: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.listResource({
-      actor_mode: 'service',
-      scope_id: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('listResource: required and optional params', async () => {
-    const response = await client.accessControl.invitations.listResource({
-      actor_mode: 'service',
+      name: 'x',
       scope_id: 'x',
       id_token: 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('revoke: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.revoke({
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.accessControl.groups.list({ actor_mode: 'service', scope_id: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: required and optional params', async () => {
+    const response = await client.accessControl.groups.list({
       actor_mode: 'service',
-      invitation_id: 'x',
+      scope_id: 'x',
+      id_token: 'x',
+      include_archived: true,
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('addMember: only required params', async () => {
+    const responsePromise = client.accessControl.groups.addMember({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      member_principal_id: 'x',
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -130,10 +75,93 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('revoke: required and optional params', async () => {
-    const response = await client.accessControl.invitations.revoke({
+  test.skip('addMember: required and optional params', async () => {
+    const response = await client.accessControl.groups.addMember({
       actor_mode: 'service',
-      invitation_id: 'x',
+      group_principal_id: 'x',
+      member_principal_id: 'x',
+      scope_id: 'x',
+      id_token: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.accessControl.groups.archive({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      scope_id: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.accessControl.groups.archive({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      scope_id: 'x',
+      id_token: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('removeMember: only required params', async () => {
+    const responsePromise = client.accessControl.groups.removeMember({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      member_principal_id: 'x',
+      scope_id: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('removeMember: required and optional params', async () => {
+    const response = await client.accessControl.groups.removeMember({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      member_principal_id: 'x',
+      scope_id: 'x',
+      id_token: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('rename: only required params', async () => {
+    const responsePromise = client.accessControl.groups.rename({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      name: 'x',
+      scope_id: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('rename: required and optional params', async () => {
+    const response = await client.accessControl.groups.rename({
+      actor_mode: 'service',
+      group_principal_id: 'x',
+      name: 'x',
       scope_id: 'x',
       id_token: 'x',
     });

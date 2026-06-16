@@ -1,6 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { AccessControl } from './access-control/access-control';
+export {
+  AccessControl,
+  type AccessControlEntryResponse,
+  type AccessControlEntryParams,
+} from './access-control/access-control';
 export {
   Commerce,
   type Currency,
