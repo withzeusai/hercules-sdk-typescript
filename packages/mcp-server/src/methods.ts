@@ -269,6 +269,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/commerce/features/{feature_id}',
   },
   {
+    clientCallName: 'client.connectors.credentials',
+    fullyQualifiedName: 'connectors.credentials',
+    httpMethod: 'get',
+    httpPath: '/v1/connectors/{slug}/credentials',
+  },
+  {
     clientCallName: 'client.content.collections.create',
     fullyQualifiedName: 'content.collections.create',
     httpMethod: 'post',

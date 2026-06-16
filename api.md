@@ -194,6 +194,16 @@ Methods:
 - <code title="get /v1/commerce/features">client.commerce.features.<a href="./src/resources/commerce/features.ts">list</a>({ ...params }) -> FeaturesCursorIDPage</code>
 - <code title="get /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">get</a>(featureID) -> Feature</code>
 
+# Connectors
+
+Types:
+
+- <code><a href="./src/resources/connectors.ts">ConnectorCredentialsResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/connectors/{slug}/credentials">client.connectors.<a href="./src/resources/connectors.ts">credentials</a>(slug, { ...params }) -> ConnectorCredentialsResponse</code>
+
 # Content
 
 ## Collections
