@@ -10,6 +10,29 @@ const client = new Hercules({
 
 describe('resource roleOverrides', () => {
   // Mock server tests are disabled
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.accessControl.roleOverrides.get({ actor_mode: 'service' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: required and optional params', async () => {
+    const response = await client.accessControl.roleOverrides.get({
+      actor_mode: 'service',
+      id_token: 'x',
+      role_id: 'x',
+      role_key: 'x',
+      scope_id: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('set: only required params', async () => {
     const responsePromise = client.accessControl.roleOverrides.set({
       actor_mode: 'service',

@@ -22,7 +22,11 @@ import { APIPromise } from './core/api-promise';
 import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
-import { AccessControl } from './resources/access-control/access-control';
+import {
+  AccessControl,
+  AccessControlEntryParams,
+  AccessControlEntryResponse,
+} from './resources/access-control/access-control';
 import {
   Commerce,
   CommerceCancelParams,
@@ -862,7 +866,11 @@ export declare namespace Hercules {
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
-  export { AccessControl as AccessControl };
+  export {
+    AccessControl as AccessControl,
+    type AccessControlEntryResponse as AccessControlEntryResponse,
+    type AccessControlEntryParams as AccessControlEntryParams,
+  };
 
   export {
     Commerce as Commerce,

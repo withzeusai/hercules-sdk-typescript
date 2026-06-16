@@ -8,12 +8,12 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource invitations', () => {
+describe('resource members', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.create({
+  test.skip('add: only required params', async () => {
+    const responsePromise = client.accessControl.members.add({
       actor_mode: 'service',
-      email: 'dev@stainless.com',
+      hercules_auth_user_id: 'x',
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -26,73 +26,22 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.accessControl.invitations.create({
+  test.skip('add: required and optional params', async () => {
+    const response = await client.accessControl.members.add({
       actor_mode: 'service',
-      email: 'dev@stainless.com',
+      hercules_auth_user_id: 'x',
       scope_id: 'x',
-      expires_in_days: 1,
       id_token: 'x',
-      role_ids: ['x'],
-      role_keys: ['x'],
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('accept: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('accept: required and optional params', async () => {
-    const response = await client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });
-  });
-
-  // Mock server tests are disabled
-  test.skip('createResource: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.createResource({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      resource_id: 'x',
-      resource_type: 'x',
-      scope_id: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('createResource: required and optional params', async () => {
-    const response = await client.accessControl.invitations.createResource({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      resource_id: 'x',
-      resource_type: 'x',
-      scope_id: 'x',
-      applies_to: 'self',
-      expires_in_days: 1,
-      id_token: 'x',
-      permission_key: 'x',
+      role_id: 'x',
       role_key: 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('listResource: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.listResource({
+  test.skip('approve: only required params', async () => {
+    const responsePromise = client.accessControl.members.approve({
       actor_mode: 'service',
+      principal_id: 'x',
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -105,19 +54,20 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listResource: required and optional params', async () => {
-    const response = await client.accessControl.invitations.listResource({
+  test.skip('approve: required and optional params', async () => {
+    const response = await client.accessControl.members.approve({
       actor_mode: 'service',
+      principal_id: 'x',
       scope_id: 'x',
       id_token: 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('revoke: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.revoke({
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.accessControl.members.remove({
       actor_mode: 'service',
-      invitation_id: 'x',
+      principal_id: 'x',
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -130,11 +80,39 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('revoke: required and optional params', async () => {
-    const response = await client.accessControl.invitations.revoke({
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.accessControl.members.remove({
       actor_mode: 'service',
-      invitation_id: 'x',
+      principal_id: 'x',
       scope_id: 'x',
+      id_token: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('setStatus: only required params', async () => {
+    const responsePromise = client.accessControl.members.setStatus({
+      actor_mode: 'service',
+      principal_id: 'x',
+      scope_id: 'x',
+      status: 'active',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('setStatus: required and optional params', async () => {
+    const response = await client.accessControl.members.setStatus({
+      actor_mode: 'service',
+      principal_id: 'x',
+      scope_id: 'x',
+      status: 'active',
       id_token: 'x',
     });
   });

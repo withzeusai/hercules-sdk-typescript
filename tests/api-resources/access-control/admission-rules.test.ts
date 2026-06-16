@@ -8,16 +8,13 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource resourceRules', () => {
+describe('resource admissionRules', () => {
   // Mock server tests are disabled
-  test.skip('replace: only required params', async () => {
-    const responsePromise = client.accessControl.resourceRules.replace({
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.accessControl.admissionRules.archive({
       actor_mode: 'service',
-      resource_type: 'x',
-      rules: [{ effect: 'allow', permission_key: 'x' }],
+      rule_id: 'x',
       scope_id: 'x',
-      subject: { principal_id: 'x', type: 'principal' },
-      target: { mode: 'all' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -29,35 +26,23 @@ describe('resource resourceRules', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('replace: required and optional params', async () => {
-    const response = await client.accessControl.resourceRules.replace({
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.accessControl.admissionRules.archive({
       actor_mode: 'service',
-      resource_type: 'x',
-      rules: [
-        {
-          effect: 'allow',
-          permission_key: 'x',
-          expires_at: '2019-12-27T18:11:19.117Z',
-        },
-      ],
+      rule_id: 'x',
       scope_id: 'x',
-      subject: { principal_id: 'x', type: 'principal' },
-      target: { mode: 'all' },
-      applies_to: 'self',
       id_token: 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('set: only required params', async () => {
-    const responsePromise = client.accessControl.resourceRules.set({
+  test.skip('upsert: only required params', async () => {
+    const responsePromise = client.accessControl.admissionRules.upsert({
       actor_mode: 'service',
       effect: 'allow',
-      permission_key: 'x',
-      resource_type: 'x',
       scope_id: 'x',
-      subject: { principal_id: 'x', type: 'principal' },
-      target: { mode: 'all' },
+      subject_type: 'email',
+      subject_value: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -69,18 +54,15 @@ describe('resource resourceRules', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('set: required and optional params', async () => {
-    const response = await client.accessControl.resourceRules.set({
+  test.skip('upsert: required and optional params', async () => {
+    const response = await client.accessControl.admissionRules.upsert({
       actor_mode: 'service',
       effect: 'allow',
-      permission_key: 'x',
-      resource_type: 'x',
       scope_id: 'x',
-      subject: { principal_id: 'x', type: 'principal' },
-      target: { mode: 'all' },
-      applies_to: 'self',
-      expires_at: '2019-12-27T18:11:19.117Z',
+      subject_type: 'email',
+      subject_value: 'x',
       id_token: 'x',
+      reason: 'reason',
     });
   });
 });

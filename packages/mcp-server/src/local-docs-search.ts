@@ -51,6 +51,32 @@ type SearchResult = {
 
 const EMBEDDED_METHODS: MethodEntry[] = [
   {
+    name: 'entry',
+    endpoint: '/v1/access-control/entry',
+    httpMethod: 'post',
+    summary: 'Enter Deployment',
+    description:
+      "Evaluates account entry for the signed-in app user and ensures their principal in the API key's deployment.",
+    stainlessPath: '(resource) access_control > (method) entry',
+    qualified: 'client.accessControl.entry',
+    params: ['id_token: string;', "actor_mode?: 'service' | 'app_user';"],
+    response:
+      "{ allowed: boolean; changed: boolean; reason: string; state_version: number; principal_id?: string; status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; }",
+    markdown:
+      "## entry\n\n`client.accessControl.entry(id_token: string, actor_mode?: 'service' | 'app_user'): { allowed: boolean; changed: boolean; reason: string; state_version: number; principal_id?: string; status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; }`\n\n**post** `/v1/access-control/entry`\n\nEvaluates account entry for the signed-in app user and ensures their principal in the API key's deployment.\n\n### Parameters\n\n- `id_token: string`\n  Signed Hercules Auth ID token for the app user entering the deployment.\n\n- `actor_mode?: 'service' | 'app_user'`\n  Optional explicit actor mode. Entry supports app_user only; service is rejected.\n\n### Returns\n\n- `{ allowed: boolean; changed: boolean; reason: string; state_version: number; principal_id?: string; status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; }`\n  Admission decision and principal state for a deployment entry request.\n\n  - `allowed: boolean`\n  - `changed: boolean`\n  - `reason: string`\n  - `state_version: number`\n  - `principal_id?: string`\n  - `status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.entry({ id_token: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.entry',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.entry({ id_token: 'x' });\n\nconsole.log(response.principal_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/entry \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "id_token": "x"\n        }\'',
+      },
+    },
+  },
+  {
     name: 'create',
     endpoint: '/v1/access-control/scopes/create',
     httpMethod: 'post',
@@ -67,7 +93,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## create\n\n`client.accessControl.scopes.create(name: string, account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role_key?: string, owner_hercules_auth_user_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/create`\n\nCreates an org scope for a website.\n\n### Parameters\n\n- `name: string`\n\n- `account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n\n- `default_role_key?: string`\n\n- `owner_hercules_auth_user_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst scope = await client.accessControl.scopes.create({ name: 'x' });\n\nconsole.log(scope);\n```",
+      "## create\n\n`client.accessControl.scopes.create(name: string, account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role_key?: string, owner_hercules_auth_user_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/create`\n\nCreates an org scope for a website.\n\n### Parameters\n\n- `name: string`\n  Human-readable organization or scope name.\n\n- `account_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  Initial admission policy. Defaults to open when omitted.\n\n- `default_role_key?: string`\n  Role key assigned automatically to new members. Defaults to the deployment's member role.\n\n- `owner_hercules_auth_user_id?: string`\n  Hercules Auth user ID to bootstrap as the scope's initial Owner.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Common result envelope for Access Control writes.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst scope = await client.accessControl.scopes.create({ name: 'x' });\n\nconsole.log(scope);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.scopes.create',
@@ -92,7 +118,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## archive\n\n`client.accessControl.scopes.archive(scope_id: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/archive`\n\nArchives an org scope for a website.\n\n### Parameters\n\n- `scope_id: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.scopes.archive({ scope_id: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.accessControl.scopes.archive(scope_id: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/archive`\n\nArchives an org scope for a website.\n\n### Parameters\n\n- `scope_id: string`\n  Organization scope ID to archive.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Common result envelope for Access Control writes.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.scopes.archive({ scope_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.scopes.archive',
@@ -121,9 +147,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'role_key?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; default_role_id: string; previous_default_role_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## set_default_role\n\n`client.accessControl.scopes.setDefaultRole(actor_mode: 'service' | 'app_user', scope_id: string, id_token?: string, role_id?: string, role_key?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/set-default-role`\n\nSets the role assigned automatically to future members of a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `scope_id: string`\n\n- `id_token?: string`\n\n- `role_id?: string`\n\n- `role_key?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.scopes.setDefaultRole({ actor_mode: 'service', scope_id: 'x' });\n\nconsole.log(response);\n```",
+      "## set_default_role\n\n`client.accessControl.scopes.setDefaultRole(actor_mode: 'service' | 'app_user', scope_id: string, id_token?: string, role_id?: string, role_key?: string): { access_scope_id: string; default_role_id: string; previous_default_role_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/scopes/set-default-role`\n\nSets the role assigned automatically to future members of a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `scope_id: string`\n  Scope whose automatic member role will change.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `role_id?: string`\n  ID of the new default role.\n\n- `role_key?: string`\n  Key of the new default role.\n\n### Returns\n\n- `{ access_scope_id: string; default_role_id: string; previous_default_role_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of changing a scope's default role.\n\n  - `access_scope_id: string`\n  - `default_role_id: string`\n  - `previous_default_role_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.scopes.setDefaultRole({ actor_mode: 'service', scope_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.scopes.setDefaultRole',
@@ -154,9 +180,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'role_keys?: string[];',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ token: string; accept_url: string; access_scope_id: string; email: string; expires_at: string; invitation_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }',
     markdown:
-      "## create\n\n`client.accessControl.invitations.create(actor_mode: 'service' | 'app_user', email: string, scope_id: string, expires_in_days?: number, id_token?: string, role_ids?: string[], role_keys?: string[]): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/invitations/create`\n\nCreates an invitation link for an org scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `email: string`\n\n- `scope_id: string`\n\n- `expires_in_days?: number`\n\n- `id_token?: string`\n\n- `role_ids?: string[]`\n\n- `role_keys?: string[]`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst invitation = await client.accessControl.invitations.create({\n  actor_mode: 'service',\n  email: 'dev@stainless.com',\n  scope_id: 'x',\n});\n\nconsole.log(invitation);\n```",
+      "## create\n\n`client.accessControl.invitations.create(actor_mode: 'service' | 'app_user', email: string, scope_id: string, expires_in_days?: number, id_token?: string, role_ids?: string[], role_keys?: string[]): { token: string; accept_url: string; access_scope_id: string; email: string; expires_at: string; invitation_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }`\n\n**post** `/v1/access-control/invitations/create`\n\nCreates an invitation link for an org scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `email: string`\n  Email address of the invited user.\n\n- `scope_id: string`\n  Organization scope the recipient is invited to join.\n\n- `expires_in_days?: number`\n  Invitation lifetime in days.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `role_ids?: string[]`\n  Role IDs to assign on acceptance. Use either role_ids or role_keys.\n\n- `role_keys?: string[]`\n  Role keys to assign on acceptance. Use either role_keys or role_ids.\n\n### Returns\n\n- `{ token: string; accept_url: string; access_scope_id: string; email: string; expires_at: string; invitation_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }`\n  Created scope or resource invitation, including its one-time acceptance secret.\n\n  - `token: string`\n  - `accept_url: string`\n  - `access_scope_id: string`\n  - `email: string`\n  - `expires_at: string`\n  - `invitation_id: string`\n  - `projection_ids: string[]`\n  - `role_ids: string[]`\n  - `source_version: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst invitation = await client.accessControl.invitations.create({\n  actor_mode: 'service',\n  email: 'dev@stainless.com',\n  scope_id: 'x',\n});\n\nconsole.log(invitation);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.invitations.create',
@@ -179,9 +205,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.accessControl.invitations.accept',
     params: ['token: string;', 'id_token: string;'],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; invitation_id: string; principal_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## accept\n\n`client.accessControl.invitations.accept(token: string, id_token: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/invitations/accept`\n\nAccepts an invitation for the signed-in app user.\n\n### Parameters\n\n- `token: string`\n\n- `id_token: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });\n\nconsole.log(response);\n```",
+      "## accept\n\n`client.accessControl.invitations.accept(token: string, id_token: string): { access_scope_id: string; invitation_id: string; principal_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/invitations/accept`\n\nAccepts an invitation for the signed-in app user.\n\n### Parameters\n\n- `token: string`\n  Secret invitation token received by the invitee.\n\n- `id_token: string`\n  Signed Hercules Auth ID token for the user accepting the invitation.\n\n### Returns\n\n- `{ access_scope_id: string; invitation_id: string; principal_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of accepting a scope or resource invitation.\n\n  - `access_scope_id: string`\n  - `invitation_id: string`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `role_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.invitations.accept',
@@ -209,9 +235,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'id_token?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; invitation_id: string; projection_ids: string[]; revoked: boolean; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## revoke\n\n`client.accessControl.invitations.revoke(actor_mode: 'service' | 'app_user', invitation_id: string, scope_id: string, id_token?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/invitations/revoke`\n\nRevokes a pending org invitation.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `invitation_id: string`\n\n- `scope_id: string`\n\n- `id_token?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.invitations.revoke({\n  actor_mode: 'service',\n  invitation_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+      "## revoke\n\n`client.accessControl.invitations.revoke(actor_mode: 'service' | 'app_user', invitation_id: string, scope_id: string, id_token?: string): { access_scope_id: string; invitation_id: string; projection_ids: string[]; revoked: boolean; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/invitations/revoke`\n\nRevokes a pending org invitation.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `invitation_id: string`\n  Pending invitation ID to revoke.\n\n- `scope_id: string`\n  Scope containing the invitation.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; invitation_id: string; projection_ids: string[]; revoked: boolean; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of revoking a pending invitation.\n\n  - `access_scope_id: string`\n  - `invitation_id: string`\n  - `projection_ids: string[]`\n  - `revoked: boolean`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.invitations.revoke({\n  actor_mode: 'service',\n  invitation_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.invitations.revoke',
@@ -221,6 +247,98 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/invitations/revoke \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "invitation_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'create_resource',
+    endpoint: '/v1/access-control/invitations/create-resource',
+    httpMethod: 'post',
+    summary: 'Create Resource Invitation',
+    description: 'Creates an invitation that confers a single grant on one exact resource on accept.',
+    stainlessPath: '(resource) access_control.invitations > (method) create_resource',
+    qualified: 'client.accessControl.invitations.createResource',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'email: string;',
+      'resource_id: string;',
+      'resource_type: string;',
+      'scope_id: string;',
+      "applies_to?: 'self' | 'self_and_descendants';",
+      'expires_in_days?: number;',
+      'id_token?: string;',
+      'permission_key?: string;',
+      'role_key?: string;',
+    ],
+    response:
+      '{ token: string; accept_url: string; access_scope_id: string; email: string; expires_at: string; invitation_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }',
+    markdown:
+      "## create_resource\n\n`client.accessControl.invitations.createResource(actor_mode: 'service' | 'app_user', email: string, resource_id: string, resource_type: string, scope_id: string, applies_to?: 'self' | 'self_and_descendants', expires_in_days?: number, id_token?: string, permission_key?: string, role_key?: string): { token: string; accept_url: string; access_scope_id: string; email: string; expires_at: string; invitation_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }`\n\n**post** `/v1/access-control/invitations/create-resource`\n\nCreates an invitation that confers a single grant on one exact resource on accept.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `email: string`\n  Email address of the invited user.\n\n- `resource_id: string`\n  Application resource ID the invitation grants access to.\n\n- `resource_type: string`\n  Canonical type of the invited resource.\n\n- `scope_id: string`\n  Scope containing the invited resource.\n\n- `applies_to?: 'self' | 'self_and_descendants'`\n  Whether the access entry applies only to this resource or also to descendants authorized through it.\n\n- `expires_in_days?: number`\n  Invitation lifetime in days.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `permission_key?: string`\n  Single permission conferred on acceptance.\n\n- `role_key?: string`\n  Resource role conferred on acceptance.\n\n### Returns\n\n- `{ token: string; accept_url: string; access_scope_id: string; email: string; expires_at: string; invitation_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }`\n  Created scope or resource invitation, including its one-time acceptance secret.\n\n  - `token: string`\n  - `accept_url: string`\n  - `access_scope_id: string`\n  - `email: string`\n  - `expires_at: string`\n  - `invitation_id: string`\n  - `projection_ids: string[]`\n  - `role_ids: string[]`\n  - `source_version: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.invitations.createResource({\n  actor_mode: 'service',\n  email: 'dev@stainless.com',\n  resource_id: 'x',\n  resource_type: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.invitations.createResource',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.invitations.createResource({\n  actor_mode: 'service',\n  email: 'dev@stainless.com',\n  resource_id: 'x',\n  resource_type: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/invitations/create-resource \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "email": "dev@stainless.com",\n          "resource_id": "x",\n          "resource_type": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list_resource',
+    endpoint: '/v1/access-control/invitations/list-resource',
+    httpMethod: 'post',
+    summary: 'List Resource Invitations',
+    description: 'Lists the pending, unexpired resource invitations in an organization scope.',
+    stainlessPath: '(resource) access_control.invitations > (method) list_resource',
+    qualified: 'client.accessControl.invitations.listResource',
+    params: ["actor_mode: 'service' | 'app_user';", 'scope_id: string;', 'id_token?: string;'],
+    response:
+      "{ access_scope_id: string; invitations: { applies_to: 'self' | 'self_and_descendants'; conferral_type: 'role' | 'permission'; created_at: string; email: string; expires_at: string; invitation_id: string; permission_id: string; resource_id: string; resource_type: string; role_id: string; updated_at: string; }[]; }",
+    markdown:
+      "## list_resource\n\n`client.accessControl.invitations.listResource(actor_mode: 'service' | 'app_user', scope_id: string, id_token?: string): { access_scope_id: string; invitations: object[]; }`\n\n**post** `/v1/access-control/invitations/list-resource`\n\nLists the pending, unexpired resource invitations in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `scope_id: string`\n  Scope whose pending resource invitations are returned.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; invitations: { applies_to: 'self' | 'self_and_descendants'; conferral_type: 'role' | 'permission'; created_at: string; email: string; expires_at: string; invitation_id: string; permission_id: string; resource_id: string; resource_type: string; role_id: string; updated_at: string; }[]; }`\n  Pending resource invitations in one organization scope.\n\n  - `access_scope_id: string`\n  - `invitations: { applies_to: 'self' | 'self_and_descendants'; conferral_type: 'role' | 'permission'; created_at: string; email: string; expires_at: string; invitation_id: string; permission_id: string; resource_id: string; resource_type: string; role_id: string; updated_at: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.invitations.listResource({ actor_mode: 'service', scope_id: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.invitations.listResource',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.invitations.listResource({\n  actor_mode: 'service',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/invitations/list-resource \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list_grantable',
+    endpoint: '/v1/access-control/roles/list-grantable',
+    httpMethod: 'post',
+    summary: 'List Grantable Roles',
+    description: 'Lists roles the current actor may assign at an exact scope or resource target.',
+    stainlessPath: '(resource) access_control.roles > (method) list_grantable',
+    qualified: 'client.accessControl.roles.listGrantable',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'scope_id: string;',
+      "subject_type: 'user' | 'group';",
+      "target: { type: 'scope'; } | { resource_id: string; resource_type: string; type: 'resource'; applies_to?: 'self' | 'self_and_descendants'; };",
+      'id_token?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; roles: { role_id: string; role_key: string; role_kind: 'system' | 'custom'; role_name: string; shared: boolean; }[]; }",
+    markdown:
+      "## list_grantable\n\n`client.accessControl.roles.listGrantable(actor_mode: 'service' | 'app_user', scope_id: string, subject_type: 'user' | 'group', target: { type: 'scope'; } | { resource_id: string; resource_type: string; type: 'resource'; applies_to?: 'self' | 'self_and_descendants'; }, id_token?: string): { access_scope_id: string; roles: object[]; }`\n\n**post** `/v1/access-control/roles/list-grantable`\n\nLists roles the current actor may assign at an exact scope or resource target.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `scope_id: string`\n  Scope in which the role would be assigned.\n\n- `subject_type: 'user' | 'group'`\n  Recipient kind the role picker will assign to.\n\n- `target: { type: 'scope'; } | { resource_id: string; resource_type: string; type: 'resource'; applies_to?: 'self' | 'self_and_descendants'; }`\n  Exact scope or resource target for the proposed role assignment.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; roles: { role_id: string; role_key: string; role_kind: 'system' | 'custom'; role_name: string; shared: boolean; }[]; }`\n  Roles the actor may grant to the requested recipient at the exact target.\n\n  - `access_scope_id: string`\n  - `roles: { role_id: string; role_key: string; role_kind: 'system' | 'custom'; role_name: string; shared: boolean; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.listGrantable({\n  actor_mode: 'service',\n  scope_id: 'x',\n  subject_type: 'user',\n  target: { type: 'scope' },\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.roles.listGrantable',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.roles.listGrantable({\n  actor_mode: 'service',\n  scope_id: 'x',\n  subject_type: 'user',\n  target: { type: 'scope' },\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/roles/list-grantable \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "scope_id": "x",\n          "subject_type": "user",\n          "target": {\n            "type": "scope"\n          }\n        }\'',
       },
     },
   },
@@ -244,7 +362,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## assign\n\n`client.accessControl.roles.assign(actor_mode: 'service' | 'app_user', hercules_auth_user_id?: string, id_token?: string, principal_id?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/assign`\n\nAssigns a role to a user principal in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `hercules_auth_user_id?: string`\n\n- `id_token?: string`\n\n- `principal_id?: string`\n\n- `role_id?: string`\n\n- `role_key?: string`\n\n- `scope_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.assign({ actor_mode: 'service' });\n\nconsole.log(response);\n```",
+      "## assign\n\n`client.accessControl.roles.assign(actor_mode: 'service' | 'app_user', hercules_auth_user_id?: string, id_token?: string, principal_id?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/assign`\n\nAssigns a role to a user principal in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `hercules_auth_user_id?: string`\n  Hercules Auth user ID used to resolve the user's principal in this scope.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `principal_id?: string`\n  Existing Access Control principal ID.\n\n- `role_id?: string`\n  Existing Access Control role ID.\n\n- `role_key?: string`\n  Stable role key from the deployment catalog.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Common result envelope for Access Control writes.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.assign({ actor_mode: 'service' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.roles.assign',
@@ -277,7 +395,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## remove\n\n`client.accessControl.roles.remove(actor_mode: 'service' | 'app_user', hercules_auth_user_id?: string, id_token?: string, principal_id?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/remove`\n\nRemoves a role from a user principal in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `hercules_auth_user_id?: string`\n\n- `id_token?: string`\n\n- `principal_id?: string`\n\n- `role_id?: string`\n\n- `role_key?: string`\n\n- `scope_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.accessControl.roles.remove({ actor_mode: 'service' });\n\nconsole.log(role);\n```",
+      "## remove\n\n`client.accessControl.roles.remove(actor_mode: 'service' | 'app_user', hercules_auth_user_id?: string, id_token?: string, principal_id?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/remove`\n\nRemoves a role from a user principal in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `hercules_auth_user_id?: string`\n  Hercules Auth user ID used to resolve the user's principal in this scope.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `principal_id?: string`\n  Existing Access Control principal ID.\n\n- `role_id?: string`\n  Existing Access Control role ID.\n\n- `role_key?: string`\n  Stable role key from the deployment catalog.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Common result envelope for Access Control writes.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.accessControl.roles.remove({ actor_mode: 'service' });\n\nconsole.log(role);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.roles.remove',
@@ -287,6 +405,38 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/roles/remove \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'replace',
+    endpoint: '/v1/access-control/roles/replace',
+    httpMethod: 'post',
+    summary: 'Replace Member Roles',
+    description: "Replaces one existing member's complete set of direct roles in a scope.",
+    stainlessPath: '(resource) access_control.roles > (method) replace',
+    qualified: 'client.accessControl.roles.replace',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'role_keys: string[];',
+      'scope_id: string;',
+      'hercules_auth_user_id?: string;',
+      'id_token?: string;',
+      'principal_id?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; changed: boolean; principal_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }',
+    markdown:
+      "## replace\n\n`client.accessControl.roles.replace(actor_mode: 'service' | 'app_user', role_keys: string[], scope_id: string, hercules_auth_user_id?: string, id_token?: string, principal_id?: string): { access_scope_id: string; changed: boolean; principal_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }`\n\n**post** `/v1/access-control/roles/replace`\n\nReplaces one existing member's complete set of direct roles in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `role_keys: string[]`\n  Complete desired set of direct role keys for the member.\n\n- `scope_id: string`\n  Scope containing the member whose roles will be replaced.\n\n- `hercules_auth_user_id?: string`\n  Hercules Auth user ID used to resolve the user's principal in this scope.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `principal_id?: string`\n  Existing Access Control principal ID.\n\n### Returns\n\n- `{ access_scope_id: string; changed: boolean; principal_id: string; projection_ids: string[]; role_ids: string[]; source_version: number; }`\n  Result of replacing a member's complete direct role set.\n\n  - `access_scope_id: string`\n  - `changed: boolean`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `role_ids: string[]`\n  - `source_version: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.replace({\n  actor_mode: 'service',\n  role_keys: ['x'],\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.roles.replace',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.roles.replace({\n  actor_mode: 'service',\n  role_keys: ['x'],\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/roles/replace \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "role_keys": [\n            "x"\n          ],\n          "scope_id": "x"\n        }\'',
       },
     },
   },
@@ -308,9 +458,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'permission_keys?: string[];',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; granted_permission_keys: string[]; projection_ids: string[]; role_id: string; role_key: string; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## create_org_custom\n\n`client.accessControl.roles.createOrgCustom(actor_mode: 'service' | 'app_user', name: string, scope_id: string, description?: string, id_token?: string, key?: string, permission_keys?: string[]): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/create-org-custom`\n\nCreates an org-scoped custom role with an exact permission set.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `name: string`\n\n- `scope_id: string`\n\n- `description?: string`\n\n- `id_token?: string`\n\n- `key?: string`\n\n- `permission_keys?: string[]`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.createOrgCustom({\n  actor_mode: 'service',\n  name: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+      "## create_org_custom\n\n`client.accessControl.roles.createOrgCustom(actor_mode: 'service' | 'app_user', name: string, scope_id: string, description?: string, id_token?: string, key?: string, permission_keys?: string[]): { access_scope_id: string; granted_permission_keys: string[]; projection_ids: string[]; role_id: string; role_key: string; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/create-org-custom`\n\nCreates an org-scoped custom role with an exact permission set.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `name: string`\n  Human-readable role name.\n\n- `scope_id: string`\n  Organization scope that will own the custom role.\n\n- `description?: string`\n  Optional role description.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `key?: string`\n  Optional stable key for the custom role.\n\n- `permission_keys?: string[]`\n  Complete base permission set for the new role.\n\n### Returns\n\n- `{ access_scope_id: string; granted_permission_keys: string[]; projection_ids: string[]; role_id: string; role_key: string; source_version: number; changed?: boolean; created?: boolean; }`\n  Created organization-owned custom role and its permission set.\n\n  - `access_scope_id: string`\n  - `granted_permission_keys: string[]`\n  - `projection_ids: string[]`\n  - `role_id: string`\n  - `role_key: string`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.createOrgCustom({\n  actor_mode: 'service',\n  name: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.roles.createOrgCustom',
@@ -340,9 +490,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'scope_id?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; permission_keys: string[]; projection_ids: string[]; role_id: string; role_key: string; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## update_permissions\n\n`client.accessControl.roles.updatePermissions(actor_mode: 'service' | 'app_user', permission_keys: string[], id_token?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/update-permissions`\n\nReplaces a role's permission set with the provided permission keys.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `permission_keys: string[]`\n\n- `id_token?: string`\n\n- `role_id?: string`\n\n- `role_key?: string`\n\n- `scope_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.updatePermissions({ actor_mode: 'service', permission_keys: ['x'] });\n\nconsole.log(response);\n```",
+      "## update_permissions\n\n`client.accessControl.roles.updatePermissions(actor_mode: 'service' | 'app_user', permission_keys: string[], id_token?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; permission_keys: string[]; projection_ids: string[]; role_id: string; role_key: string; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/roles/update-permissions`\n\nReplaces a role's permission set with the provided permission keys.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `permission_keys: string[]`\n  Complete desired base permission set for the role.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `role_id?: string`\n  Existing Access Control role ID.\n\n- `role_key?: string`\n  Stable role key from the deployment catalog.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; permission_keys: string[]; projection_ids: string[]; role_id: string; role_key: string; source_version: number; changed?: boolean; created?: boolean; }`\n  Updated role and its final base permission set.\n\n  - `access_scope_id: string`\n  - `permission_keys: string[]`\n  - `projection_ids: string[]`\n  - `role_id: string`\n  - `role_key: string`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roles.updatePermissions({ actor_mode: 'service', permission_keys: ['x'] });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.roles.updatePermissions',
@@ -352,6 +502,37 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/roles/update-permissions \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "permission_keys": [\n            "x"\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'get',
+    endpoint: '/v1/access-control/user-exceptions/get',
+    httpMethod: 'post',
+    summary: 'Get User Exceptions',
+    description: 'Returns the raw per-user permission exceptions for a principal in a scope.',
+    stainlessPath: '(resource) access_control.user_exceptions > (method) get',
+    qualified: 'client.accessControl.userExceptions.get',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'hercules_auth_user_id?: string;',
+      'id_token?: string;',
+      'principal_id?: string;',
+      'scope_id?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; exceptions: { effect: 'allow' | 'deny'; expires_at: string; permission_id: string; permission_key: string; }[]; principal_id: string; }",
+    markdown:
+      "## get\n\n`client.accessControl.userExceptions.get(actor_mode: 'service' | 'app_user', hercules_auth_user_id?: string, id_token?: string, principal_id?: string, scope_id?: string): { access_scope_id: string; exceptions: object[]; principal_id: string; }`\n\n**post** `/v1/access-control/user-exceptions/get`\n\nReturns the raw per-user permission exceptions for a principal in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `hercules_auth_user_id?: string`\n  Hercules Auth user ID used to resolve the user's principal in this scope.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `principal_id?: string`\n  Existing Access Control principal ID.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; exceptions: { effect: 'allow' | 'deny'; expires_at: string; permission_id: string; permission_key: string; }[]; principal_id: string; }`\n  Raw direct permission exceptions for one user in one scope.\n\n  - `access_scope_id: string`\n  - `exceptions: { effect: 'allow' | 'deny'; expires_at: string; permission_id: string; permission_key: string; }[]`\n  - `principal_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst userException = await client.accessControl.userExceptions.get({ actor_mode: 'service' });\n\nconsole.log(userException);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.userExceptions.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst userException = await client.accessControl.userExceptions.get({ actor_mode: 'service' });\n\nconsole.log(userException.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/user-exceptions/get \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service"\n        }\'',
       },
     },
   },
@@ -373,9 +554,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'scope_id?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## set\n\n`client.accessControl.userExceptions.set(actor_mode: 'service' | 'app_user', allow?: string[], deny?: string[], hercules_auth_user_id?: string, id_token?: string, principal_id?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/user-exceptions/set`\n\nReplaces a user's direct allow and deny permission exceptions in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `allow?: string[]`\n\n- `deny?: string[]`\n\n- `hercules_auth_user_id?: string`\n\n- `id_token?: string`\n\n- `principal_id?: string`\n\n- `scope_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.userExceptions.set({ actor_mode: 'service' });\n\nconsole.log(response);\n```",
+      "## set\n\n`client.accessControl.userExceptions.set(actor_mode: 'service' | 'app_user', allow?: string[], deny?: string[], hercules_auth_user_id?: string, id_token?: string, principal_id?: string, scope_id?: string): { access_scope_id: string; principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/user-exceptions/set`\n\nReplaces a user's direct allow and deny permission exceptions in a scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `allow?: string[]`\n  Complete desired set of direct user allows.\n\n- `deny?: string[]`\n  Complete desired set of direct user denies.\n\n- `hercules_auth_user_id?: string`\n  Hercules Auth user ID used to resolve the user's principal in this scope.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `principal_id?: string`\n  Existing Access Control principal ID.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one user principal.\n\n  - `access_scope_id: string`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.userExceptions.set({ actor_mode: 'service' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.userExceptions.set',
@@ -410,9 +591,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'scope_id?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## create\n\n`client.accessControl.resourceGrants.create(actor_mode: 'service' | 'app_user', resource_id: string, resource_type: string, applies_to?: 'self' | 'self_and_descendants', expires_at?: string, hercules_auth_user_id?: string, id_token?: string, permission_key?: string, principal_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-grants/create`\n\nGrants a role or permission on one resource.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `resource_id: string`\n\n- `resource_type: string`\n\n- `applies_to?: 'self' | 'self_and_descendants'`\n\n- `expires_at?: string`\n\n- `hercules_auth_user_id?: string`\n\n- `id_token?: string`\n\n- `permission_key?: string`\n\n- `principal_id?: string`\n\n- `role_key?: string`\n\n- `scope_id?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst resourceGrant = await client.accessControl.resourceGrants.create({\n  actor_mode: 'service',\n  resource_id: 'x',\n  resource_type: 'x',\n});\n\nconsole.log(resourceGrant);\n```",
+      "## create\n\n`client.accessControl.resourceGrants.create(actor_mode: 'service' | 'app_user', resource_id: string, resource_type: string, applies_to?: 'self' | 'self_and_descendants', expires_at?: string, hercules_auth_user_id?: string, id_token?: string, permission_key?: string, principal_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-grants/create`\n\nGrants a role or permission on one resource.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `resource_id: string`\n  Exact application resource ID receiving the grant.\n\n- `resource_type: string`\n  Canonical type of the target resource.\n\n- `applies_to?: 'self' | 'self_and_descendants'`\n  Whether the access entry applies only to this resource or also to descendants authorized through it.\n\n- `expires_at?: string`\n  Optional ISO 8601 expiry. Null or omission creates a non-expiring grant.\n\n- `hercules_auth_user_id?: string`\n  Hercules Auth user ID used to resolve the user's principal in this scope.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `permission_key?: string`\n  Single permission granted on the resource.\n\n- `principal_id?: string`\n  Existing Access Control principal ID.\n\n- `role_key?: string`\n  Role granted on the resource.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one grant.\n\n  - `access_scope_id: string`\n  - `grant_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst resourceGrant = await client.accessControl.resourceGrants.create({\n  actor_mode: 'service',\n  resource_id: 'x',\n  resource_type: 'x',\n});\n\nconsole.log(resourceGrant);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.resourceGrants.create',
@@ -422,6 +603,39 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/resource-grants/create \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "resource_id": "x",\n          "resource_type": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'replace',
+    endpoint: '/v1/access-control/resource-grants/replace',
+    httpMethod: 'post',
+    summary: 'Replace Resource Grants',
+    description:
+      'Replaces the complete direct role and permission allow grants on one exact resource for explicitly listed existing subjects.',
+    stainlessPath: '(resource) access_control.resource_grants > (method) replace',
+    qualified: 'client.accessControl.resourceGrants.replace',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'resource_id: string;',
+      'resource_type: string;',
+      'scope_id: string;',
+      "subjects: { grants: { applies_to?: 'self' | 'self_and_descendants'; expires_at?: string; permission_key?: string; role_key?: string; }[]; hercules_auth_user_id?: string; principal_id?: string; }[];",
+      'id_token?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; changed: boolean; projection_ids: string[]; resource_id: string; resource_type: string; source_version: number; subjects: { grants: { applies_to: 'self' | 'self_and_descendants'; expires_at: string; grant_id: string; permission_id: string; role_id: string; }[]; principal_id: string; }[]; }",
+    markdown:
+      "## replace\n\n`client.accessControl.resourceGrants.replace(actor_mode: 'service' | 'app_user', resource_id: string, resource_type: string, scope_id: string, subjects: { grants: { applies_to?: 'self' | 'self_and_descendants'; expires_at?: string; permission_key?: string; role_key?: string; }[]; hercules_auth_user_id?: string; principal_id?: string; }[], id_token?: string): { access_scope_id: string; changed: boolean; projection_ids: string[]; resource_id: string; resource_type: string; source_version: number; subjects: object[]; }`\n\n**post** `/v1/access-control/resource-grants/replace`\n\nReplaces the complete direct role and permission allow grants on one exact resource for explicitly listed existing subjects.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `resource_id: string`\n  Exact application resource ID being managed.\n\n- `resource_type: string`\n  Canonical type of the target resource.\n\n- `scope_id: string`\n  Scope containing the target resource and recipients.\n\n- `subjects: { grants: { applies_to?: 'self' | 'self_and_descendants'; expires_at?: string; permission_key?: string; role_key?: string; }[]; hercules_auth_user_id?: string; principal_id?: string; }[]`\n  Principals whose grants on this resource will be replaced.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; changed: boolean; projection_ids: string[]; resource_id: string; resource_type: string; source_version: number; subjects: { grants: { applies_to: 'self' | 'self_and_descendants'; expires_at: string; grant_id: string; permission_id: string; role_id: string; }[]; principal_id: string; }[]; }`\n  Result of atomically replacing grants on one resource.\n\n  - `access_scope_id: string`\n  - `changed: boolean`\n  - `projection_ids: string[]`\n  - `resource_id: string`\n  - `resource_type: string`\n  - `source_version: number`\n  - `subjects: { grants: { applies_to: 'self' | 'self_and_descendants'; expires_at: string; grant_id: string; permission_id: string; role_id: string; }[]; principal_id: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.resourceGrants.replace({\n  actor_mode: 'service',\n  resource_id: 'x',\n  resource_type: 'x',\n  scope_id: 'x',\n  subjects: [{ grants: [{}] }],\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.resourceGrants.replace',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.resourceGrants.replace({\n  actor_mode: 'service',\n  resource_id: 'x',\n  resource_type: 'x',\n  scope_id: 'x',\n  subjects: [{ grants: [{}] }],\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/resource-grants/replace \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "resource_id": "x",\n          "resource_type": "x",\n          "scope_id": "x",\n          "subjects": [\n            {\n              "grants": [\n                {}\n              ]\n            }\n          ]\n        }\'',
       },
     },
   },
@@ -440,9 +654,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'id_token?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## revoke\n\n`client.accessControl.resourceGrants.revoke(actor_mode: 'service' | 'app_user', grant_id: string, scope_id: string, id_token?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-grants/revoke`\n\nRevokes an existing resource grant.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `grant_id: string`\n\n- `scope_id: string`\n\n- `id_token?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.resourceGrants.revoke({\n  actor_mode: 'service',\n  grant_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+      "## revoke\n\n`client.accessControl.resourceGrants.revoke(actor_mode: 'service' | 'app_user', grant_id: string, scope_id: string, id_token?: string): { access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-grants/revoke`\n\nRevokes an existing resource grant.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `grant_id: string`\n  Resource grant ID to revoke.\n\n- `scope_id: string`\n  Scope containing the resource grant.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one grant.\n\n  - `access_scope_id: string`\n  - `grant_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.resourceGrants.revoke({\n  actor_mode: 'service',\n  grant_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.resourceGrants.revoke',
@@ -476,9 +690,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'id_token?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## set\n\n`client.accessControl.resourceRules.set(actor_mode: 'service' | 'app_user', effect: 'allow' | 'deny', permission_key: string, resource_type: string, scope_id: string, subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; }, target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; }, applies_to?: 'self' | 'self_and_descendants', expires_at?: string, id_token?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-rules/set`\n\nAllows or denies one permission on all or one resource for a user or role.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `effect: 'allow' | 'deny'`\n\n- `permission_key: string`\n\n- `resource_type: string`\n\n- `scope_id: string`\n\n- `subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; }`\n\n- `target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; }`\n\n- `applies_to?: 'self' | 'self_and_descendants'`\n\n- `expires_at?: string`\n\n- `id_token?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.resourceRules.set({\n  actor_mode: 'service',\n  effect: 'allow',\n  permission_key: 'x',\n  resource_type: 'x',\n  scope_id: 'x',\n  subject: { principal_id: 'x', type: 'principal' },\n  target: { mode: 'all' },\n});\n\nconsole.log(response);\n```",
+      "## set\n\n`client.accessControl.resourceRules.set(actor_mode: 'service' | 'app_user', effect: 'allow' | 'deny', permission_key: string, resource_type: string, scope_id: string, subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; }, target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; }, applies_to?: 'self' | 'self_and_descendants', expires_at?: string, id_token?: string): { access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-rules/set`\n\nAllows or denies one permission on all or one resource for a user or role.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `effect: 'allow' | 'deny'`\n  Whether the rule allows or denies the permission.\n\n- `permission_key: string`\n  Permission key explicitly allowed or denied.\n\n- `resource_type: string`\n  Canonical resource type governed by the rule.\n\n- `scope_id: string`\n  Scope in which the resource permission rule applies.\n\n- `subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; }`\n  Principal or role affected by the rule.\n\n- `target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; }`\n  All resources of the type or one exact resource.\n\n- `applies_to?: 'self' | 'self_and_descendants'`\n  Whether the access entry applies only to this resource or also to descendants authorized through it.\n\n- `expires_at?: string`\n  Optional ISO 8601 expiry for the rule.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one grant.\n\n  - `access_scope_id: string`\n  - `grant_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.resourceRules.set({\n  actor_mode: 'service',\n  effect: 'allow',\n  permission_key: 'x',\n  resource_type: 'x',\n  scope_id: 'x',\n  subject: { principal_id: 'x', type: 'principal' },\n  target: { mode: 'all' },\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.resourceRules.set',
@@ -488,6 +702,41 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/resource-rules/set \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "effect": "allow",\n          "permission_key": "x",\n          "resource_type": "x",\n          "scope_id": "x",\n          "subject": {\n            "principal_id": "x",\n            "type": "principal"\n          },\n          "target": {\n            "mode": "all"\n          }\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'replace',
+    endpoint: '/v1/access-control/resource-rules/replace',
+    httpMethod: 'post',
+    summary: 'Replace Resource Permission Rules',
+    description:
+      'Atomically sets or clears multiple permission rules on all or one resource for a user or role.',
+    stainlessPath: '(resource) access_control.resource_rules > (method) replace',
+    qualified: 'client.accessControl.resourceRules.replace',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'resource_type: string;',
+      "rules: { effect: 'allow' | 'deny' | 'clear'; permission_key: string; expires_at?: string; }[];",
+      'scope_id: string;',
+      "subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; };",
+      "target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; };",
+      "applies_to?: 'self' | 'self_and_descendants';",
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## replace\n\n`client.accessControl.resourceRules.replace(actor_mode: 'service' | 'app_user', resource_type: string, rules: { effect: 'allow' | 'deny' | 'clear'; permission_key: string; expires_at?: string; }[], scope_id: string, subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; }, target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; }, applies_to?: 'self' | 'self_and_descendants', id_token?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/resource-rules/replace`\n\nAtomically sets or clears multiple permission rules on all or one resource for a user or role.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `resource_type: string`\n  Canonical resource type governed by the rules.\n\n- `rules: { effect: 'allow' | 'deny' | 'clear'; permission_key: string; expires_at?: string; }[]`\n  Complete rule changes to apply at this subject and resource target.\n\n- `scope_id: string`\n  Scope in which the resource permission rules apply.\n\n- `subject: { principal_id: string; type: 'principal'; } | { role_key: string; type: 'role'; }`\n  Principal or role affected by the replacement.\n\n- `target: { mode: 'all'; } | { mode: 'specific'; resource_id: string; }`\n  All resources of the type or one exact resource.\n\n- `applies_to?: 'self' | 'self_and_descendants'`\n  Whether the access entry applies only to this resource or also to descendants authorized through it.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Common result envelope for Access Control writes.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.resourceRules.replace({\n  actor_mode: 'service',\n  resource_type: 'x',\n  rules: [{ effect: 'allow', permission_key: 'x' }],\n  scope_id: 'x',\n  subject: { principal_id: 'x', type: 'principal' },\n  target: { mode: 'all' },\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.resourceRules.replace',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.resourceRules.replace({\n  actor_mode: 'service',\n  resource_type: 'x',\n  rules: [{ effect: 'allow', permission_key: 'x' }],\n  scope_id: 'x',\n  subject: { principal_id: 'x', type: 'principal' },\n  target: { mode: 'all' },\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/resource-rules/replace \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "resource_type": "x",\n          "rules": [\n            {\n              "effect": "allow",\n              "permission_key": "x"\n            }\n          ],\n          "scope_id": "x",\n          "subject": {\n            "principal_id": "x",\n            "type": "principal"\n          },\n          "target": {\n            "mode": "all"\n          }\n        }\'',
       },
     },
   },
@@ -507,9 +756,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'id_token?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; expires_at: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## set\n\n`client.accessControl.expiries.set(actor_mode: 'service' | 'app_user', expires_at: string, grant_id: string, scope_id: string, id_token?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/expiries/set`\n\nSets or clears the expiry for an existing access grant.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `expires_at: string`\n\n- `grant_id: string`\n\n- `scope_id: string`\n\n- `id_token?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.expiries.set({\n  actor_mode: 'service',\n  expires_at: '2019-12-27T18:11:19.117Z',\n  grant_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+      "## set\n\n`client.accessControl.expiries.set(actor_mode: 'service' | 'app_user', expires_at: string, grant_id: string, scope_id: string, id_token?: string): { access_scope_id: string; expires_at: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/expiries/set`\n\nSets or clears the expiry for an existing access grant.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `expires_at: string`\n  New ISO 8601 expiry, or null to make the grant non-expiring.\n\n- `grant_id: string`\n  Role, permission, or resource grant ID to update.\n\n- `scope_id: string`\n  Scope containing the grant.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; expires_at: string; grant_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of setting or clearing a grant expiry.\n\n  - `access_scope_id: string`\n  - `expires_at: string`\n  - `grant_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.expiries.set({\n  actor_mode: 'service',\n  expires_at: '2019-12-27T18:11:19.117Z',\n  grant_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.expiries.set',
@@ -519,6 +768,37 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/expiries/set \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "expires_at": "2019-12-27T18:11:19.117Z",\n          "grant_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'get',
+    endpoint: '/v1/access-control/role-overrides/get',
+    httpMethod: 'post',
+    summary: 'Get Role Overrides',
+    description: 'Returns the raw per-scope permission overrides for a role.',
+    stainlessPath: '(resource) access_control.role_overrides > (method) get',
+    qualified: 'client.accessControl.roleOverrides.get',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'id_token?: string;',
+      'role_id?: string;',
+      'role_key?: string;',
+      'scope_id?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; overrides: { effect: 'allow' | 'deny'; permission_id: string; permission_key: string; }[]; role_id: string; }",
+    markdown:
+      "## get\n\n`client.accessControl.roleOverrides.get(actor_mode: 'service' | 'app_user', id_token?: string, role_id?: string, role_key?: string, scope_id?: string): { access_scope_id: string; overrides: object[]; role_id: string; }`\n\n**post** `/v1/access-control/role-overrides/get`\n\nReturns the raw per-scope permission overrides for a role.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `role_id?: string`\n  Existing Access Control role ID.\n\n- `role_key?: string`\n  Stable role key from the deployment catalog.\n\n- `scope_id?: string`\n  Access scope ID. Omit only when the operation supports the deployment's default scope.\n\n### Returns\n\n- `{ access_scope_id: string; overrides: { effect: 'allow' | 'deny'; permission_id: string; permission_key: string; }[]; role_id: string; }`\n  Raw permission overrides for one reusable role in one scope.\n\n  - `access_scope_id: string`\n  - `overrides: { effect: 'allow' | 'deny'; permission_id: string; permission_key: string; }[]`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst roleOverride = await client.accessControl.roleOverrides.get({ actor_mode: 'service' });\n\nconsole.log(roleOverride);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.roleOverrides.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst roleOverride = await client.accessControl.roleOverrides.get({ actor_mode: 'service' });\n\nconsole.log(roleOverride.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/role-overrides/get \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service"\n        }\'',
       },
     },
   },
@@ -539,9 +819,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'id_token?: string;',
     ],
     response:
-      '{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+      '{ access_scope_id: string; projection_ids: string[]; role_id: string; source_version: number; changed?: boolean; created?: boolean; }',
     markdown:
-      "## set\n\n`client.accessControl.roleOverrides.set(actor_mode: 'service' | 'app_user', role_key: string, scope_id: string, allow?: string[], deny?: string[], id_token?: string): { access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/role-overrides/set`\n\nReplaces an org-specific override for an app role.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n\n- `role_key: string`\n\n- `scope_id: string`\n\n- `allow?: string[]`\n\n- `deny?: string[]`\n\n- `id_token?: string`\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roleOverrides.set({\n  actor_mode: 'service',\n  role_key: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+      "## set\n\n`client.accessControl.roleOverrides.set(actor_mode: 'service' | 'app_user', role_key: string, scope_id: string, allow?: string[], deny?: string[], id_token?: string): { access_scope_id: string; projection_ids: string[]; role_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/role-overrides/set`\n\nReplaces an org-specific override for an app role.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `role_key: string`\n  Reusable role key to override in this scope.\n\n- `scope_id: string`\n  Scope in which the reusable role is overridden.\n\n- `allow?: string[]`\n  Complete desired set of scope-specific role allows.\n\n- `deny?: string[]`\n  Complete desired set of scope-specific role denies.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; role_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one role.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `role_id: string`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.roleOverrides.set({\n  actor_mode: 'service',\n  role_key: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accessControl.roleOverrides.set',
@@ -551,6 +831,406 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/access-control/role-overrides/set \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "role_key": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'add',
+    endpoint: '/v1/access-control/members/add',
+    httpMethod: 'post',
+    summary: 'Add Member',
+    description: 'Adds an app user to an organization scope, or restores a removed or suspended member.',
+    stainlessPath: '(resource) access_control.members > (method) add',
+    qualified: 'client.accessControl.members.add',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'hercules_auth_user_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+      'role_id?: string;',
+      'role_key?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; principal_id: string; projection_ids: string[]; role_id: string; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## add\n\n`client.accessControl.members.add(actor_mode: 'service' | 'app_user', hercules_auth_user_id: string, scope_id: string, id_token?: string, role_id?: string, role_key?: string): { access_scope_id: string; principal_id: string; projection_ids: string[]; role_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/members/add`\n\nAdds an app user to an organization scope, or restores a removed or suspended member.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `hercules_auth_user_id: string`\n  Hercules Auth user ID to add or restore.\n\n- `scope_id: string`\n  Organization scope the user will join or rejoin.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `role_id?: string`\n  Existing Access Control role ID.\n\n- `role_key?: string`\n  Stable role key from the deployment catalog.\n\n### Returns\n\n- `{ access_scope_id: string; principal_id: string; projection_ids: string[]; role_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of adding or restoring an organization member.\n\n  - `access_scope_id: string`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `role_id: string`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.members.add({\n  actor_mode: 'service',\n  hercules_auth_user_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.members.add',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.members.add({\n  actor_mode: 'service',\n  hercules_auth_user_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/members/add \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "hercules_auth_user_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'remove',
+    endpoint: '/v1/access-control/members/remove',
+    httpMethod: 'post',
+    summary: 'Remove Member',
+    description: 'Evicts a member principal from an organization scope.',
+    stainlessPath: '(resource) access_control.members > (method) remove',
+    qualified: 'client.accessControl.members.remove',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'principal_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## remove\n\n`client.accessControl.members.remove(actor_mode: 'service' | 'app_user', principal_id: string, scope_id: string, id_token?: string): { access_scope_id: string; principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/members/remove`\n\nEvicts a member principal from an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `principal_id: string`\n  Active member principal ID to remove.\n\n- `scope_id: string`\n  Organization scope the member will leave.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one user principal.\n\n  - `access_scope_id: string`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.accessControl.members.remove({\n  actor_mode: 'service',\n  principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(member);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.members.remove',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst member = await client.accessControl.members.remove({\n  actor_mode: 'service',\n  principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(member.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/members/remove \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "principal_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'set_status',
+    endpoint: '/v1/access-control/members/status',
+    httpMethod: 'post',
+    summary: 'Set Member Status',
+    description: 'Suspends or unsuspends a member principal in an organization scope.',
+    stainlessPath: '(resource) access_control.members > (method) set_status',
+    qualified: 'client.accessControl.members.setStatus',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'principal_id: string;',
+      'scope_id: string;',
+      "status: 'active' | 'suspended';",
+      'id_token?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; principal_id: string; projection_ids: string[]; source_version: number; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; changed?: boolean; created?: boolean; }",
+    markdown:
+      "## set_status\n\n`client.accessControl.members.setStatus(actor_mode: 'service' | 'app_user', principal_id: string, scope_id: string, status: 'active' | 'suspended', id_token?: string): { access_scope_id: string; previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; principal_id: string; projection_ids: string[]; source_version: number; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/members/status`\n\nSuspends or unsuspends a member principal in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `principal_id: string`\n  Member principal ID whose status will change.\n\n- `scope_id: string`\n  Organization scope containing the member.\n\n- `status: 'active' | 'suspended'`\n  Manual member status: active to restore access or suspended to revoke it.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; principal_id: string; projection_ids: string[]; source_version: number; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; changed?: boolean; created?: boolean; }`\n  Result of suspending or reactivating an organization member.\n\n  - `access_scope_id: string`\n  - `previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.members.setStatus({\n  actor_mode: 'service',\n  principal_id: 'x',\n  scope_id: 'x',\n  status: 'active',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.members.setStatus',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.members.setStatus({\n  actor_mode: 'service',\n  principal_id: 'x',\n  scope_id: 'x',\n  status: 'active',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/members/status \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "principal_id": "x",\n          "scope_id": "x",\n          "status": "active"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'approve',
+    endpoint: '/v1/access-control/members/approve',
+    httpMethod: 'post',
+    summary: 'Approve Member',
+    description: 'Approves a pending member, admitting them into an organization scope.',
+    stainlessPath: '(resource) access_control.members > (method) approve',
+    qualified: 'client.accessControl.members.approve',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'principal_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; principal_id: string; projection_ids: string[]; role_id: string; rule_id: string; source_version: number; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; changed?: boolean; created?: boolean; }",
+    markdown:
+      "## approve\n\n`client.accessControl.members.approve(actor_mode: 'service' | 'app_user', principal_id: string, scope_id: string, id_token?: string): { access_scope_id: string; previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; principal_id: string; projection_ids: string[]; role_id: string; rule_id: string; source_version: number; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/members/approve`\n\nApproves a pending member, admitting them into an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `principal_id: string`\n  Pending member principal ID to approve.\n\n- `scope_id: string`\n  Organization scope awaiting member approval.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; principal_id: string; projection_ids: string[]; role_id: string; rule_id: string; source_version: number; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; changed?: boolean; created?: boolean; }`\n  Result of approving a pending organization member.\n\n  - `access_scope_id: string`\n  - `previous_status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'`\n  - `principal_id: string`\n  - `projection_ids: string[]`\n  - `role_id: string`\n  - `rule_id: string`\n  - `source_version: number`\n  - `status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.members.approve({\n  actor_mode: 'service',\n  principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.members.approve',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.members.approve({\n  actor_mode: 'service',\n  principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/members/approve \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "principal_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'upsert',
+    endpoint: '/v1/access-control/admission-rules/upsert',
+    httpMethod: 'post',
+    summary: 'Upsert Admission Rule',
+    description: 'Adds or updates an allow or deny admission rule for an email or domain.',
+    stainlessPath: '(resource) access_control.admission_rules > (method) upsert',
+    qualified: 'client.accessControl.admissionRules.upsert',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      "effect: 'allow' | 'deny';",
+      'scope_id: string;',
+      "subject_type: 'email' | 'domain';",
+      'subject_value: string;',
+      'id_token?: string;',
+      'reason?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; projection_ids: string[]; reconciled_principal_ids: string[]; rule_id: string; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## upsert\n\n`client.accessControl.admissionRules.upsert(actor_mode: 'service' | 'app_user', effect: 'allow' | 'deny', scope_id: string, subject_type: 'email' | 'domain', subject_value: string, id_token?: string, reason?: string): { access_scope_id: string; projection_ids: string[]; reconciled_principal_ids: string[]; rule_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/admission-rules/upsert`\n\nAdds or updates an allow or deny admission rule for an email or domain.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `effect: 'allow' | 'deny'`\n  Whether matching users are allowed or denied.\n\n- `scope_id: string`\n  Organization scope governed by the admission rule.\n\n- `subject_type: 'email' | 'domain'`\n  Whether the rule matches one exact email or an email domain.\n\n- `subject_value: string`\n  Normalized email address or domain matched by the rule.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `reason?: string`\n  Optional administrative reason for the rule.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; reconciled_principal_ids: string[]; rule_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n  Admission rule write result and affected principals.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `reconciled_principal_ids: string[]`\n  - `rule_id: string`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.admissionRules.upsert({\n  actor_mode: 'service',\n  effect: 'allow',\n  scope_id: 'x',\n  subject_type: 'email',\n  subject_value: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.admissionRules.upsert',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.admissionRules.upsert({\n  actor_mode: 'service',\n  effect: 'allow',\n  scope_id: 'x',\n  subject_type: 'email',\n  subject_value: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/admission-rules/upsert \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "effect": "allow",\n          "scope_id": "x",\n          "subject_type": "email",\n          "subject_value": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'archive',
+    endpoint: '/v1/access-control/admission-rules/archive',
+    httpMethod: 'post',
+    summary: 'Archive Admission Rule',
+    description: 'Retires an existing admission rule in an organization scope.',
+    stainlessPath: '(resource) access_control.admission_rules > (method) archive',
+    qualified: 'client.accessControl.admissionRules.archive',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'rule_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; projection_ids: string[]; reconciled_principal_ids: string[]; rule_id: string; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## archive\n\n`client.accessControl.admissionRules.archive(actor_mode: 'service' | 'app_user', rule_id: string, scope_id: string, id_token?: string): { access_scope_id: string; projection_ids: string[]; reconciled_principal_ids: string[]; rule_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/admission-rules/archive`\n\nRetires an existing admission rule in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `rule_id: string`\n  Admission rule ID to archive.\n\n- `scope_id: string`\n  Organization scope containing the admission rule.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; projection_ids: string[]; reconciled_principal_ids: string[]; rule_id: string; source_version: number; changed?: boolean; created?: boolean; }`\n  Admission rule write result and affected principals.\n\n  - `access_scope_id: string`\n  - `projection_ids: string[]`\n  - `reconciled_principal_ids: string[]`\n  - `rule_id: string`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.admissionRules.archive({\n  actor_mode: 'service',\n  rule_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.admissionRules.archive',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.admissionRules.archive({\n  actor_mode: 'service',\n  rule_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/admission-rules/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "rule_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'set',
+    endpoint: '/v1/access-control/entry-mode/set',
+    httpMethod: 'post',
+    summary: 'Set Account Entry Mode',
+    description:
+      "Sets a scope's account entry mode: open, allowlisted-only, invite-only, or approval-required.",
+    stainlessPath: '(resource) access_control.entry_mode > (method) set',
+    qualified: 'client.accessControl.entryMode.set',
+    params: [
+      "account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';",
+      "actor_mode: 'service' | 'app_user';",
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      "{ access_scope_id: string; account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; previous_account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; projection_ids: string[]; reconciled_principal_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }",
+    markdown:
+      "## set\n\n`client.accessControl.entryMode.set(account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', actor_mode: 'service' | 'app_user', scope_id: string, id_token?: string): { access_scope_id: string; account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; previous_account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; projection_ids: string[]; reconciled_principal_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/entry-mode/set`\n\nSets a scope's account entry mode: open, allowlisted-only, invite-only, or approval-required.\n\n### Parameters\n\n- `account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  Admission policy for the scope: open access, allowlist-only access, invitation-only access, or approval-required access.\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `scope_id: string`\n  Scope whose admission policy will change.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; previous_account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; projection_ids: string[]; reconciled_principal_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of changing a scope's account entry mode.\n\n  - `access_scope_id: string`\n  - `account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  - `previous_account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  - `projection_ids: string[]`\n  - `reconciled_principal_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.entryMode.set({\n  account_entry_mode: 'open',\n  actor_mode: 'service',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.entryMode.set',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.entryMode.set({\n  account_entry_mode: 'open',\n  actor_mode: 'service',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/entry-mode/set \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "account_entry_mode": "open",\n          "actor_mode": "service",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/access-control/groups/create',
+    httpMethod: 'post',
+    summary: 'Create Group',
+    description: 'Creates a group principal in an organization scope.',
+    stainlessPath: '(resource) access_control.groups > (method) create',
+    qualified: 'client.accessControl.groups.create',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'name: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## create\n\n`client.accessControl.groups.create(actor_mode: 'service' | 'app_user', name: string, scope_id: string, id_token?: string): { access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/groups/create`\n\nCreates a group principal in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `name: string`\n  Human-readable group name.\n\n- `scope_id: string`\n  Organization scope that will own the group.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one group principal.\n\n  - `access_scope_id: string`\n  - `group_principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.accessControl.groups.create({\n  actor_mode: 'service',\n  name: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(group);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.groups.create',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst group = await client.accessControl.groups.create({\n  actor_mode: 'service',\n  name: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(group.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/groups/create \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "name": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'rename',
+    endpoint: '/v1/access-control/groups/rename',
+    httpMethod: 'post',
+    summary: 'Rename Group',
+    description: 'Renames a group principal in an organization scope.',
+    stainlessPath: '(resource) access_control.groups > (method) rename',
+    qualified: 'client.accessControl.groups.rename',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'group_principal_id: string;',
+      'name: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## rename\n\n`client.accessControl.groups.rename(actor_mode: 'service' | 'app_user', group_principal_id: string, name: string, scope_id: string, id_token?: string): { access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/groups/rename`\n\nRenames a group principal in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `group_principal_id: string`\n  Group principal ID to rename.\n\n- `name: string`\n  New human-readable group name.\n\n- `scope_id: string`\n  Organization scope containing the group.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one group principal.\n\n  - `access_scope_id: string`\n  - `group_principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.groups.rename({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  name: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.groups.rename',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.groups.rename({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  name: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/groups/rename \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "group_principal_id": "x",\n          "name": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'archive',
+    endpoint: '/v1/access-control/groups/archive',
+    httpMethod: 'post',
+    summary: 'Archive Group',
+    description: 'Archives a group principal in an organization scope.',
+    stainlessPath: '(resource) access_control.groups > (method) archive',
+    qualified: 'client.accessControl.groups.archive',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'group_principal_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## archive\n\n`client.accessControl.groups.archive(actor_mode: 'service' | 'app_user', group_principal_id: string, scope_id: string, id_token?: string): { access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/groups/archive`\n\nArchives a group principal in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `group_principal_id: string`\n  Group principal ID to archive.\n\n- `scope_id: string`\n  Organization scope containing the group.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; group_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Access Control write result for one group principal.\n\n  - `access_scope_id: string`\n  - `group_principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.groups.archive({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.groups.archive',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.groups.archive({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/groups/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "group_principal_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/access-control/groups/list',
+    httpMethod: 'post',
+    summary: 'List Groups',
+    description: 'Lists the group principals in an organization scope with member counts.',
+    stainlessPath: '(resource) access_control.groups > (method) list',
+    qualified: 'client.accessControl.groups.list',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'scope_id: string;',
+      'id_token?: string;',
+      'include_archived?: boolean;',
+    ],
+    response:
+      '{ access_scope_id: string; groups: { archived: boolean; archived_at: string; created_at: string; group_principal_id: string; member_count: number; name: string; updated_at: string; }[]; }',
+    markdown:
+      "## list\n\n`client.accessControl.groups.list(actor_mode: 'service' | 'app_user', scope_id: string, id_token?: string, include_archived?: boolean): { access_scope_id: string; groups: object[]; }`\n\n**post** `/v1/access-control/groups/list`\n\nLists the group principals in an organization scope with member counts.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `scope_id: string`\n  Organization scope whose groups are returned.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n- `include_archived?: boolean`\n  Whether archived groups are included. Defaults to false.\n\n### Returns\n\n- `{ access_scope_id: string; groups: { archived: boolean; archived_at: string; created_at: string; group_principal_id: string; member_count: number; name: string; updated_at: string; }[]; }`\n  Group principals in one organization scope.\n\n  - `access_scope_id: string`\n  - `groups: { archived: boolean; archived_at: string; created_at: string; group_principal_id: string; member_count: number; name: string; updated_at: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst groups = await client.accessControl.groups.list({ actor_mode: 'service', scope_id: 'x' });\n\nconsole.log(groups);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.groups.list',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst groups = await client.accessControl.groups.list({ actor_mode: 'service', scope_id: 'x' });\n\nconsole.log(groups.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/groups/list \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'add_member',
+    endpoint: '/v1/access-control/groups/members/add',
+    httpMethod: 'post',
+    summary: 'Add Group Member',
+    description: 'Adds a user principal to a group in an organization scope.',
+    stainlessPath: '(resource) access_control.groups > (method) add_member',
+    qualified: 'client.accessControl.groups.addMember',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'group_principal_id: string;',
+      'member_principal_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; group_principal_id: string; member_principal_id: string; membership_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## add_member\n\n`client.accessControl.groups.addMember(actor_mode: 'service' | 'app_user', group_principal_id: string, member_principal_id: string, scope_id: string, id_token?: string): { access_scope_id: string; group_principal_id: string; member_principal_id: string; membership_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/groups/members/add`\n\nAdds a user principal to a group in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `group_principal_id: string`\n  Group principal receiving the member.\n\n- `member_principal_id: string`\n  User principal to add to the group.\n\n- `scope_id: string`\n  Organization scope containing both principals.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; group_principal_id: string; member_principal_id: string; membership_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of adding a user principal to a group.\n\n  - `access_scope_id: string`\n  - `group_principal_id: string`\n  - `member_principal_id: string`\n  - `membership_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.groups.addMember({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  member_principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.groups.addMember',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.groups.addMember({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  member_principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/groups/members/add \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "group_principal_id": "x",\n          "member_principal_id": "x",\n          "scope_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'remove_member',
+    endpoint: '/v1/access-control/groups/members/remove',
+    httpMethod: 'post',
+    summary: 'Remove Group Member',
+    description: 'Removes a user principal from a group in an organization scope.',
+    stainlessPath: '(resource) access_control.groups > (method) remove_member',
+    qualified: 'client.accessControl.groups.removeMember',
+    params: [
+      "actor_mode: 'service' | 'app_user';",
+      'group_principal_id: string;',
+      'member_principal_id: string;',
+      'scope_id: string;',
+      'id_token?: string;',
+    ],
+    response:
+      '{ access_scope_id: string; group_principal_id: string; member_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }',
+    markdown:
+      "## remove_member\n\n`client.accessControl.groups.removeMember(actor_mode: 'service' | 'app_user', group_principal_id: string, member_principal_id: string, scope_id: string, id_token?: string): { access_scope_id: string; group_principal_id: string; member_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n\n**post** `/v1/access-control/groups/members/remove`\n\nRemoves a user principal from a group in an organization scope.\n\n### Parameters\n\n- `actor_mode: 'service' | 'app_user'`\n  Authority used for the operation. Use service for trusted backend administration or app_user for an end-user action authorized by Access Control.\n\n- `group_principal_id: string`\n  Group principal losing the member.\n\n- `member_principal_id: string`\n  User principal to remove from the group.\n\n- `scope_id: string`\n  Organization scope containing both principals.\n\n- `id_token?: string`\n  Signed Hercules Auth ID token for actor_mode app_user. Omit this field for actor_mode service.\n\n### Returns\n\n- `{ access_scope_id: string; group_principal_id: string; member_principal_id: string; projection_ids: string[]; source_version: number; changed?: boolean; created?: boolean; }`\n  Result of removing a user principal from a group.\n\n  - `access_scope_id: string`\n  - `group_principal_id: string`\n  - `member_principal_id: string`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `changed?: boolean`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.accessControl.groups.removeMember({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  member_principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accessControl.groups.removeMember',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.accessControl.groups.removeMember({\n  actor_mode: 'service',\n  group_principal_id: 'x',\n  member_principal_id: 'x',\n  scope_id: 'x',\n});\n\nconsole.log(response.access_scope_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/access-control/groups/members/remove \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_mode": "service",\n          "group_principal_id": "x",\n          "member_principal_id": "x",\n          "scope_id": "x"\n        }\'',
       },
     },
   },
