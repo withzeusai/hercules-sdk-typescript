@@ -19,8 +19,14 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
+import {
+  AccessControl,
+  AccessControlEntryParams,
+  AccessControlEntryResponse,
+} from './resources/access-control/access-control';
 import {
   Commerce,
   CommerceCancelParams,
@@ -205,6 +211,18 @@ export class Hercules {
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
+
+    const customHeadersEnv = readEnv('HERCULES_CUSTOM_HEADERS');
+    if (customHeadersEnv) {
+      const parsed: Record<string, string> = {};
+      for (const line of customHeadersEnv.split('\n')) {
+        const colon = line.indexOf(':');
+        if (colon >= 0) {
+          parsed[line.substring(0, colon).trim()] = line.substring(colon + 1).trim();
+        }
+      }
+      options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
+    }
 
     this._options = options;
     this.idempotencyHeader = 'Idempotency-Key';
@@ -729,11 +747,19 @@ export class Hercules {
     return () => controller.abort();
   }
 
-  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
+  private buildBody({ options }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
+    const { body, headers: rawHeaders } = options;
     if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -794,9 +820,23 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   /**
+   * Manage Access Control for a website: scopes (organizations), invitations,
+   * roles and role assignments, permission grants, resource rules, grant
+   * expiries, and per-user permission exceptions. Requires an API key with the
+   * access_control_admin scope.
+   */
+  accessControl: API.AccessControl = new API.AccessControl(this);
+  /**
    * Commerce APIs are currently in beta.
    */
   commerce: API.Commerce = new API.Commerce(this);
+  /**
+   * Pull fresh credentials for SDK-delivery app connectors installed on the
+   * calling deployment. Requires a deployment-bound API key. When several
+   * connections of one connector cover the deployment, pass connection_id to
+   * select one.
+   */
+  connectors: API.Connectors = new API.Connectors(this);
   /**
    * Content APIs are currently in beta.
    */
@@ -821,7 +861,9 @@ export class Hercules {
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
+Hercules.AccessControl = AccessControl;
 Hercules.Commerce = Commerce;
+Hercules.Connectors = Connectors;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
 Hercules.EmailResource = EmailResource;
@@ -835,6 +877,12 @@ export declare namespace Hercules {
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
   export {
+    AccessControl as AccessControl,
+    type AccessControlEntryResponse as AccessControlEntryResponse,
+    type AccessControlEntryParams as AccessControlEntryParams,
+  };
+
+  export {
     Commerce as Commerce,
     type Currency as Currency,
     type CommerceCancelResponse as CommerceCancelResponse,
@@ -843,6 +891,12 @@ export declare namespace Hercules {
     type CommerceCancelParams as CommerceCancelParams,
     type CommerceCheckParams as CommerceCheckParams,
     type CommerceCheckoutParams as CommerceCheckoutParams,
+  };
+
+  export {
+    Connectors as Connectors,
+    type ConnectorCredentialsResponse as ConnectorCredentialsResponse,
+    type ConnectorCredentialsParams as ConnectorCredentialsParams,
   };
 
   export { Content as Content };

@@ -1,6 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  AccessControl,
+  type AccessControlEntryResponse,
+  type AccessControlEntryParams,
+} from './access-control/access-control';
+export {
   Commerce,
   type Currency,
   type CommerceCancelResponse,
@@ -10,6 +15,7 @@ export {
   type CommerceCheckParams,
   type CommerceCheckoutParams,
 } from './commerce/commerce';
+export { Connectors, type ConnectorCredentialsResponse, type ConnectorCredentialsParams } from './connectors';
 export { Content } from './content/content';
 export { Domains, type Domain, type DomainListParams, type DomainsCursorIDPage } from './domains';
 export {

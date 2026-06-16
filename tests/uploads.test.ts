@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from '@usehercules/sdk/internal/to-file';
 import { toFile } from '@usehercules/sdk/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
@@ -69,7 +68,7 @@ describe('toFile', () => {
     const result = await toFile(input);
     const file: File = result;
     const blob: Blob = result;
-    void file, blob;
+    (void file, blob);
   });
 });
 

@@ -1,5 +1,14 @@
 const fs = require('fs');
-const problems = Object.values(JSON.parse(fs.readFileSync('.attw.json', 'utf-8')).problems)
+const raw = fs.readFileSync('.attw.json', 'utf-8').trim();
+if (!raw) {
+  // attw exited non-zero and wrote nothing (the `|| true` in scripts/lint swallows its
+  // crash), so there is no report to parse. Surface that instead of a cryptic JSON error.
+  fs.unlinkSync('.attw.json');
+  process.stderr.write('attw produced no output; it likely crashed. Re-run `attw --pack dist` to see why.\n');
+  process.exitCode = 1;
+  return;
+}
+const problems = Object.values(JSON.parse(raw).problems)
   .flat()
   .filter(
     (problem) =>
