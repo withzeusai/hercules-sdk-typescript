@@ -19,6 +19,7 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import { AccessControl } from './resources/access-control/access-control';
@@ -816,6 +817,13 @@ export class Hercules {
    */
   commerce: API.Commerce = new API.Commerce(this);
   /**
+   * Pull fresh credentials for SDK-delivery app connectors installed on the
+   * calling deployment. Requires a deployment-bound API key. When several
+   * connections of one connector cover the deployment, pass connection_id to
+   * select one.
+   */
+  connectors: API.Connectors = new API.Connectors(this);
+  /**
    * Content APIs are currently in beta.
    */
   content: API.Content = new API.Content(this);
@@ -841,6 +849,7 @@ export class Hercules {
 
 Hercules.AccessControl = AccessControl;
 Hercules.Commerce = Commerce;
+Hercules.Connectors = Connectors;
 Hercules.Content = Content;
 Hercules.Domains = Domains;
 Hercules.EmailResource = EmailResource;
@@ -864,6 +873,12 @@ export declare namespace Hercules {
     type CommerceCancelParams as CommerceCancelParams,
     type CommerceCheckParams as CommerceCheckParams,
     type CommerceCheckoutParams as CommerceCheckoutParams,
+  };
+
+  export {
+    Connectors as Connectors,
+    type ConnectorCredentialsResponse as ConnectorCredentialsResponse,
+    type ConnectorCredentialsParams as ConnectorCredentialsParams,
   };
 
   export { Content as Content };

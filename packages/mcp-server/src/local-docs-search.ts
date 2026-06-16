@@ -1351,6 +1351,32 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'credentials',
+    endpoint: '/v1/connectors/{slug}/credentials',
+    httpMethod: 'get',
+    summary: 'Get Connector Credentials',
+    description:
+      "Returns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one.",
+    stainlessPath: '(resource) connectors > (method) credentials',
+    qualified: 'client.connectors.credentials',
+    params: ['slug: string;', 'connection_id?: string;'],
+    response:
+      "{ auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }",
+    markdown:
+      "## credentials\n\n`client.connectors.credentials(slug: string, connection_id?: string): { auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }`\n\n**get** `/v1/connectors/{slug}/credentials`\n\nReturns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one.\n\n### Parameters\n\n- `slug: string`\n\n- `connection_id?: string`\n  ID of the connection (the linked credential) to read. When omitted, resolves the connection installed for the calling deployment. When set, the calling deployment must be linked to exactly this connection — unlinking it in the dashboard invalidates the ID.\n\n### Returns\n\n- `{ auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }`\n\n  - `auth_type: 'api_key' | 'oauth'`\n  - `connection_id: string`\n  - `delivery_mode: 'sdk'`\n  - `expires_at: string`\n  - `secrets: object`\n  - `slug: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.connectors.credentials('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connectors.credentials',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connectors.credentials('x');\n\nconsole.log(response.connection_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/connectors/$SLUG/credentials \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/v1/content/collections',
     httpMethod: 'get',
