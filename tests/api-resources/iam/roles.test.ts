@@ -8,14 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource invitations', () => {
+describe('resource roles', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.create({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      scope_id: 'x',
-    });
+  test.skip('assign: only required params', async () => {
+    const responsePromise = client.iam.roles.assign({ actor_mode: 'service' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,73 +22,23 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.accessControl.invitations.create({
+  test.skip('assign: required and optional params', async () => {
+    const response = await client.iam.roles.assign({
       actor_mode: 'service',
-      email: 'dev@stainless.com',
-      scope_id: 'x',
-      expires_in_days: 1,
+      hercules_auth_user_id: 'x',
       id_token: 'x',
-      role_ids: ['x'],
-      role_keys: ['x'],
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('accept: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('accept: required and optional params', async () => {
-    const response = await client.accessControl.invitations.accept({ token: 'x', id_token: 'x' });
-  });
-
-  // Mock server tests are disabled
-  test.skip('createResource: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.createResource({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      resource_id: 'x',
-      resource_type: 'x',
-      scope_id: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('createResource: required and optional params', async () => {
-    const response = await client.accessControl.invitations.createResource({
-      actor_mode: 'service',
-      email: 'dev@stainless.com',
-      resource_id: 'x',
-      resource_type: 'x',
-      scope_id: 'x',
-      applies_to: 'self',
-      expires_in_days: 1,
-      id_token: 'x',
-      permission_key: 'x',
+      principal_id: 'x',
+      role_id: 'x',
       role_key: 'x',
+      scope_id: 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('listResource: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.listResource({
+  test.skip('createOrgCustom: only required params', async () => {
+    const responsePromise = client.iam.roles.createOrgCustom({
       actor_mode: 'service',
+      name: 'x',
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -105,19 +51,76 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listResource: required and optional params', async () => {
-    const response = await client.accessControl.invitations.listResource({
+  test.skip('createOrgCustom: required and optional params', async () => {
+    const response = await client.iam.roles.createOrgCustom({
+      actor_mode: 'service',
+      name: 'x',
+      scope_id: 'x',
+      description: 'description',
+      id_token: 'x',
+      key: 'x',
+      permission_keys: ['x'],
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listGrantable: only required params', async () => {
+    const responsePromise = client.iam.roles.listGrantable({
       actor_mode: 'service',
       scope_id: 'x',
+      subject_type: 'user',
+      target: { type: 'scope' },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listGrantable: required and optional params', async () => {
+    const response = await client.iam.roles.listGrantable({
+      actor_mode: 'service',
+      scope_id: 'x',
+      subject_type: 'user',
+      target: { type: 'scope' },
       id_token: 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('revoke: only required params', async () => {
-    const responsePromise = client.accessControl.invitations.revoke({
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.iam.roles.remove({ actor_mode: 'service' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.iam.roles.remove({
       actor_mode: 'service',
-      invitation_id: 'x',
+      hercules_auth_user_id: 'x',
+      id_token: 'x',
+      principal_id: 'x',
+      role_id: 'x',
+      role_key: 'x',
+      scope_id: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('replace: only required params', async () => {
+    const responsePromise = client.iam.roles.replace({
+      actor_mode: 'service',
+      role_keys: ['x'],
       scope_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -130,12 +133,41 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('revoke: required and optional params', async () => {
-    const response = await client.accessControl.invitations.revoke({
+  test.skip('replace: required and optional params', async () => {
+    const response = await client.iam.roles.replace({
       actor_mode: 'service',
-      invitation_id: 'x',
+      role_keys: ['x'],
       scope_id: 'x',
+      hercules_auth_user_id: 'x',
       id_token: 'x',
+      principal_id: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('updatePermissions: only required params', async () => {
+    const responsePromise = client.iam.roles.updatePermissions({
+      actor_mode: 'service',
+      permission_keys: ['x'],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updatePermissions: required and optional params', async () => {
+    const response = await client.iam.roles.updatePermissions({
+      actor_mode: 'service',
+      permission_keys: ['x'],
+      id_token: 'x',
+      role_id: 'x',
+      role_key: 'x',
+      scope_id: 'x',
     });
   });
 });

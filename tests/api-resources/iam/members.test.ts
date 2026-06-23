@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource members', () => {
   // Mock server tests are disabled
   test.skip('add: only required params', async () => {
-    const responsePromise = client.accessControl.members.add({
+    const responsePromise = client.iam.members.add({
       actor_mode: 'service',
       hercules_auth_user_id: 'x',
       scope_id: 'x',
@@ -27,7 +27,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('add: required and optional params', async () => {
-    const response = await client.accessControl.members.add({
+    const response = await client.iam.members.add({
       actor_mode: 'service',
       hercules_auth_user_id: 'x',
       scope_id: 'x',
@@ -39,7 +39,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('approve: only required params', async () => {
-    const responsePromise = client.accessControl.members.approve({
+    const responsePromise = client.iam.members.approve({
       actor_mode: 'service',
       principal_id: 'x',
       scope_id: 'x',
@@ -55,7 +55,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('approve: required and optional params', async () => {
-    const response = await client.accessControl.members.approve({
+    const response = await client.iam.members.approve({
       actor_mode: 'service',
       principal_id: 'x',
       scope_id: 'x',
@@ -65,7 +65,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('remove: only required params', async () => {
-    const responsePromise = client.accessControl.members.remove({
+    const responsePromise = client.iam.members.remove({
       actor_mode: 'service',
       principal_id: 'x',
       scope_id: 'x',
@@ -81,7 +81,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('remove: required and optional params', async () => {
-    const response = await client.accessControl.members.remove({
+    const response = await client.iam.members.remove({
       actor_mode: 'service',
       principal_id: 'x',
       scope_id: 'x',
@@ -91,7 +91,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('setStatus: only required params', async () => {
-    const responsePromise = client.accessControl.members.setStatus({
+    const responsePromise = client.iam.members.setStatus({
       actor_mode: 'service',
       principal_id: 'x',
       scope_id: 'x',
@@ -108,7 +108,7 @@ describe('resource members', () => {
 
   // Mock server tests are disabled
   test.skip('setStatus: required and optional params', async () => {
-    const response = await client.accessControl.members.setStatus({
+    const response = await client.iam.members.setStatus({
       actor_mode: 'service',
       principal_id: 'x',
       scope_id: 'x',

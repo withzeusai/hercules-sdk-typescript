@@ -1,182 +1,182 @@
-# AccessControl
+# Iam
 
 Types:
 
-- <code><a href="./src/resources/access-control/access-control.ts">AccessControlEntryResponse</a></code>
+- <code><a href="./src/resources/iam/iam.ts">IamEntryResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/entry">client.accessControl.<a href="./src/resources/access-control/access-control.ts">entry</a>({ ...params }) -> AccessControlEntryResponse</code>
+- <code title="post /v1/iam/entry">client.iam.<a href="./src/resources/iam/iam.ts">entry</a>({ ...params }) -> IamEntryResponse</code>
 
 ## Scopes
 
 Types:
 
-- <code><a href="./src/resources/access-control/scopes.ts">ScopeCreateResponse</a></code>
-- <code><a href="./src/resources/access-control/scopes.ts">ScopeArchiveResponse</a></code>
-- <code><a href="./src/resources/access-control/scopes.ts">ScopeSetDefaultRoleResponse</a></code>
+- <code><a href="./src/resources/iam/scopes.ts">ScopeCreateResponse</a></code>
+- <code><a href="./src/resources/iam/scopes.ts">ScopeArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/scopes.ts">ScopeSetDefaultRoleResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/scopes/create">client.accessControl.scopes.<a href="./src/resources/access-control/scopes.ts">create</a>({ ...params }) -> ScopeCreateResponse</code>
-- <code title="post /v1/access-control/scopes/archive">client.accessControl.scopes.<a href="./src/resources/access-control/scopes.ts">archive</a>({ ...params }) -> ScopeArchiveResponse</code>
-- <code title="post /v1/access-control/scopes/set-default-role">client.accessControl.scopes.<a href="./src/resources/access-control/scopes.ts">setDefaultRole</a>({ ...params }) -> ScopeSetDefaultRoleResponse</code>
+- <code title="post /v1/iam/scopes/create">client.iam.scopes.<a href="./src/resources/iam/scopes.ts">create</a>({ ...params }) -> ScopeCreateResponse</code>
+- <code title="post /v1/iam/scopes/archive">client.iam.scopes.<a href="./src/resources/iam/scopes.ts">archive</a>({ ...params }) -> ScopeArchiveResponse</code>
+- <code title="post /v1/iam/scopes/set-default-role">client.iam.scopes.<a href="./src/resources/iam/scopes.ts">setDefaultRole</a>({ ...params }) -> ScopeSetDefaultRoleResponse</code>
 
 ## Invitations
 
 Types:
 
-- <code><a href="./src/resources/access-control/invitations.ts">InvitationCreateResponse</a></code>
-- <code><a href="./src/resources/access-control/invitations.ts">InvitationAcceptResponse</a></code>
-- <code><a href="./src/resources/access-control/invitations.ts">InvitationCreateResourceResponse</a></code>
-- <code><a href="./src/resources/access-control/invitations.ts">InvitationListResourceResponse</a></code>
-- <code><a href="./src/resources/access-control/invitations.ts">InvitationRevokeResponse</a></code>
+- <code><a href="./src/resources/iam/invitations.ts">InvitationCreateResponse</a></code>
+- <code><a href="./src/resources/iam/invitations.ts">InvitationAcceptResponse</a></code>
+- <code><a href="./src/resources/iam/invitations.ts">InvitationCreateResourceResponse</a></code>
+- <code><a href="./src/resources/iam/invitations.ts">InvitationListResourceResponse</a></code>
+- <code><a href="./src/resources/iam/invitations.ts">InvitationRevokeResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/invitations/create">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">create</a>({ ...params }) -> InvitationCreateResponse</code>
-- <code title="post /v1/access-control/invitations/accept">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">accept</a>({ ...params }) -> InvitationAcceptResponse</code>
-- <code title="post /v1/access-control/invitations/create-resource">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">createResource</a>({ ...params }) -> InvitationCreateResourceResponse</code>
-- <code title="post /v1/access-control/invitations/list-resource">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">listResource</a>({ ...params }) -> InvitationListResourceResponse</code>
-- <code title="post /v1/access-control/invitations/revoke">client.accessControl.invitations.<a href="./src/resources/access-control/invitations.ts">revoke</a>({ ...params }) -> InvitationRevokeResponse</code>
+- <code title="post /v1/iam/invitations/create">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">create</a>({ ...params }) -> InvitationCreateResponse</code>
+- <code title="post /v1/iam/invitations/accept">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">accept</a>({ ...params }) -> InvitationAcceptResponse</code>
+- <code title="post /v1/iam/invitations/create-resource">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">createResource</a>({ ...params }) -> InvitationCreateResourceResponse</code>
+- <code title="post /v1/iam/invitations/list-resource">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">listResource</a>({ ...params }) -> InvitationListResourceResponse</code>
+- <code title="post /v1/iam/invitations/revoke">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">revoke</a>({ ...params }) -> InvitationRevokeResponse</code>
 
 ## Roles
 
 Types:
 
-- <code><a href="./src/resources/access-control/roles.ts">RoleAssignResponse</a></code>
-- <code><a href="./src/resources/access-control/roles.ts">RoleCreateOrgCustomResponse</a></code>
-- <code><a href="./src/resources/access-control/roles.ts">RoleListGrantableResponse</a></code>
-- <code><a href="./src/resources/access-control/roles.ts">RoleRemoveResponse</a></code>
-- <code><a href="./src/resources/access-control/roles.ts">RoleReplaceResponse</a></code>
-- <code><a href="./src/resources/access-control/roles.ts">RoleUpdatePermissionsResponse</a></code>
+- <code><a href="./src/resources/iam/roles.ts">RoleAssignResponse</a></code>
+- <code><a href="./src/resources/iam/roles.ts">RoleCreateOrgCustomResponse</a></code>
+- <code><a href="./src/resources/iam/roles.ts">RoleListGrantableResponse</a></code>
+- <code><a href="./src/resources/iam/roles.ts">RoleRemoveResponse</a></code>
+- <code><a href="./src/resources/iam/roles.ts">RoleReplaceResponse</a></code>
+- <code><a href="./src/resources/iam/roles.ts">RoleUpdatePermissionsResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/roles/assign">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">assign</a>({ ...params }) -> RoleAssignResponse</code>
-- <code title="post /v1/access-control/roles/create-org-custom">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">createOrgCustom</a>({ ...params }) -> RoleCreateOrgCustomResponse</code>
-- <code title="post /v1/access-control/roles/list-grantable">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">listGrantable</a>({ ...params }) -> RoleListGrantableResponse</code>
-- <code title="post /v1/access-control/roles/remove">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">remove</a>({ ...params }) -> RoleRemoveResponse</code>
-- <code title="post /v1/access-control/roles/replace">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">replace</a>({ ...params }) -> RoleReplaceResponse</code>
-- <code title="post /v1/access-control/roles/update-permissions">client.accessControl.roles.<a href="./src/resources/access-control/roles.ts">updatePermissions</a>({ ...params }) -> RoleUpdatePermissionsResponse</code>
+- <code title="post /v1/iam/roles/assign">client.iam.roles.<a href="./src/resources/iam/roles.ts">assign</a>({ ...params }) -> RoleAssignResponse</code>
+- <code title="post /v1/iam/roles/create-org-custom">client.iam.roles.<a href="./src/resources/iam/roles.ts">createOrgCustom</a>({ ...params }) -> RoleCreateOrgCustomResponse</code>
+- <code title="post /v1/iam/roles/list-grantable">client.iam.roles.<a href="./src/resources/iam/roles.ts">listGrantable</a>({ ...params }) -> RoleListGrantableResponse</code>
+- <code title="post /v1/iam/roles/remove">client.iam.roles.<a href="./src/resources/iam/roles.ts">remove</a>({ ...params }) -> RoleRemoveResponse</code>
+- <code title="post /v1/iam/roles/replace">client.iam.roles.<a href="./src/resources/iam/roles.ts">replace</a>({ ...params }) -> RoleReplaceResponse</code>
+- <code title="post /v1/iam/roles/update-permissions">client.iam.roles.<a href="./src/resources/iam/roles.ts">updatePermissions</a>({ ...params }) -> RoleUpdatePermissionsResponse</code>
 
 ## UserExceptions
 
 Types:
 
-- <code><a href="./src/resources/access-control/user-exceptions.ts">UserExceptionGetResponse</a></code>
-- <code><a href="./src/resources/access-control/user-exceptions.ts">UserExceptionSetResponse</a></code>
+- <code><a href="./src/resources/iam/user-exceptions.ts">UserExceptionGetResponse</a></code>
+- <code><a href="./src/resources/iam/user-exceptions.ts">UserExceptionSetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/user-exceptions/get">client.accessControl.userExceptions.<a href="./src/resources/access-control/user-exceptions.ts">get</a>({ ...params }) -> UserExceptionGetResponse</code>
-- <code title="post /v1/access-control/user-exceptions/set">client.accessControl.userExceptions.<a href="./src/resources/access-control/user-exceptions.ts">set</a>({ ...params }) -> UserExceptionSetResponse</code>
+- <code title="post /v1/iam/user-exceptions/get">client.iam.userExceptions.<a href="./src/resources/iam/user-exceptions.ts">get</a>({ ...params }) -> UserExceptionGetResponse</code>
+- <code title="post /v1/iam/user-exceptions/set">client.iam.userExceptions.<a href="./src/resources/iam/user-exceptions.ts">set</a>({ ...params }) -> UserExceptionSetResponse</code>
 
 ## ResourceGrants
 
 Types:
 
-- <code><a href="./src/resources/access-control/resource-grants.ts">ResourceGrantCreateResponse</a></code>
-- <code><a href="./src/resources/access-control/resource-grants.ts">ResourceGrantReplaceResponse</a></code>
-- <code><a href="./src/resources/access-control/resource-grants.ts">ResourceGrantRevokeResponse</a></code>
+- <code><a href="./src/resources/iam/resource-grants.ts">ResourceGrantCreateResponse</a></code>
+- <code><a href="./src/resources/iam/resource-grants.ts">ResourceGrantReplaceResponse</a></code>
+- <code><a href="./src/resources/iam/resource-grants.ts">ResourceGrantRevokeResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/resource-grants/create">client.accessControl.resourceGrants.<a href="./src/resources/access-control/resource-grants.ts">create</a>({ ...params }) -> ResourceGrantCreateResponse</code>
-- <code title="post /v1/access-control/resource-grants/replace">client.accessControl.resourceGrants.<a href="./src/resources/access-control/resource-grants.ts">replace</a>({ ...params }) -> ResourceGrantReplaceResponse</code>
-- <code title="post /v1/access-control/resource-grants/revoke">client.accessControl.resourceGrants.<a href="./src/resources/access-control/resource-grants.ts">revoke</a>({ ...params }) -> ResourceGrantRevokeResponse</code>
+- <code title="post /v1/iam/resource-grants/create">client.iam.resourceGrants.<a href="./src/resources/iam/resource-grants.ts">create</a>({ ...params }) -> ResourceGrantCreateResponse</code>
+- <code title="post /v1/iam/resource-grants/replace">client.iam.resourceGrants.<a href="./src/resources/iam/resource-grants.ts">replace</a>({ ...params }) -> ResourceGrantReplaceResponse</code>
+- <code title="post /v1/iam/resource-grants/revoke">client.iam.resourceGrants.<a href="./src/resources/iam/resource-grants.ts">revoke</a>({ ...params }) -> ResourceGrantRevokeResponse</code>
 
 ## ResourceRules
 
 Types:
 
-- <code><a href="./src/resources/access-control/resource-rules.ts">ResourceRuleReplaceResponse</a></code>
-- <code><a href="./src/resources/access-control/resource-rules.ts">ResourceRuleSetResponse</a></code>
+- <code><a href="./src/resources/iam/resource-rules.ts">ResourceRuleReplaceResponse</a></code>
+- <code><a href="./src/resources/iam/resource-rules.ts">ResourceRuleSetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/resource-rules/replace">client.accessControl.resourceRules.<a href="./src/resources/access-control/resource-rules.ts">replace</a>({ ...params }) -> ResourceRuleReplaceResponse</code>
-- <code title="post /v1/access-control/resource-rules/set">client.accessControl.resourceRules.<a href="./src/resources/access-control/resource-rules.ts">set</a>({ ...params }) -> ResourceRuleSetResponse</code>
+- <code title="post /v1/iam/resource-rules/replace">client.iam.resourceRules.<a href="./src/resources/iam/resource-rules.ts">replace</a>({ ...params }) -> ResourceRuleReplaceResponse</code>
+- <code title="post /v1/iam/resource-rules/set">client.iam.resourceRules.<a href="./src/resources/iam/resource-rules.ts">set</a>({ ...params }) -> ResourceRuleSetResponse</code>
 
 ## Expiries
 
 Types:
 
-- <code><a href="./src/resources/access-control/expiries.ts">ExpirySetResponse</a></code>
+- <code><a href="./src/resources/iam/expiries.ts">ExpirySetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/expiries/set">client.accessControl.expiries.<a href="./src/resources/access-control/expiries.ts">set</a>({ ...params }) -> ExpirySetResponse</code>
+- <code title="post /v1/iam/expiries/set">client.iam.expiries.<a href="./src/resources/iam/expiries.ts">set</a>({ ...params }) -> ExpirySetResponse</code>
 
 ## RoleOverrides
 
 Types:
 
-- <code><a href="./src/resources/access-control/role-overrides.ts">RoleOverrideGetResponse</a></code>
-- <code><a href="./src/resources/access-control/role-overrides.ts">RoleOverrideSetResponse</a></code>
+- <code><a href="./src/resources/iam/role-overrides.ts">RoleOverrideGetResponse</a></code>
+- <code><a href="./src/resources/iam/role-overrides.ts">RoleOverrideSetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/role-overrides/get">client.accessControl.roleOverrides.<a href="./src/resources/access-control/role-overrides.ts">get</a>({ ...params }) -> RoleOverrideGetResponse</code>
-- <code title="post /v1/access-control/role-overrides/set">client.accessControl.roleOverrides.<a href="./src/resources/access-control/role-overrides.ts">set</a>({ ...params }) -> RoleOverrideSetResponse</code>
+- <code title="post /v1/iam/role-overrides/get">client.iam.roleOverrides.<a href="./src/resources/iam/role-overrides.ts">get</a>({ ...params }) -> RoleOverrideGetResponse</code>
+- <code title="post /v1/iam/role-overrides/set">client.iam.roleOverrides.<a href="./src/resources/iam/role-overrides.ts">set</a>({ ...params }) -> RoleOverrideSetResponse</code>
 
 ## Members
 
 Types:
 
-- <code><a href="./src/resources/access-control/members.ts">MemberAddResponse</a></code>
-- <code><a href="./src/resources/access-control/members.ts">MemberApproveResponse</a></code>
-- <code><a href="./src/resources/access-control/members.ts">MemberRemoveResponse</a></code>
-- <code><a href="./src/resources/access-control/members.ts">MemberSetStatusResponse</a></code>
+- <code><a href="./src/resources/iam/members.ts">MemberAddResponse</a></code>
+- <code><a href="./src/resources/iam/members.ts">MemberApproveResponse</a></code>
+- <code><a href="./src/resources/iam/members.ts">MemberRemoveResponse</a></code>
+- <code><a href="./src/resources/iam/members.ts">MemberSetStatusResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/members/add">client.accessControl.members.<a href="./src/resources/access-control/members.ts">add</a>({ ...params }) -> MemberAddResponse</code>
-- <code title="post /v1/access-control/members/approve">client.accessControl.members.<a href="./src/resources/access-control/members.ts">approve</a>({ ...params }) -> MemberApproveResponse</code>
-- <code title="post /v1/access-control/members/remove">client.accessControl.members.<a href="./src/resources/access-control/members.ts">remove</a>({ ...params }) -> MemberRemoveResponse</code>
-- <code title="post /v1/access-control/members/status">client.accessControl.members.<a href="./src/resources/access-control/members.ts">setStatus</a>({ ...params }) -> MemberSetStatusResponse</code>
+- <code title="post /v1/iam/members/add">client.iam.members.<a href="./src/resources/iam/members.ts">add</a>({ ...params }) -> MemberAddResponse</code>
+- <code title="post /v1/iam/members/approve">client.iam.members.<a href="./src/resources/iam/members.ts">approve</a>({ ...params }) -> MemberApproveResponse</code>
+- <code title="post /v1/iam/members/remove">client.iam.members.<a href="./src/resources/iam/members.ts">remove</a>({ ...params }) -> MemberRemoveResponse</code>
+- <code title="post /v1/iam/members/status">client.iam.members.<a href="./src/resources/iam/members.ts">setStatus</a>({ ...params }) -> MemberSetStatusResponse</code>
 
 ## AdmissionRules
 
 Types:
 
-- <code><a href="./src/resources/access-control/admission-rules.ts">AdmissionRuleArchiveResponse</a></code>
-- <code><a href="./src/resources/access-control/admission-rules.ts">AdmissionRuleUpsertResponse</a></code>
+- <code><a href="./src/resources/iam/admission-rules.ts">AdmissionRuleArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/admission-rules.ts">AdmissionRuleUpsertResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/admission-rules/archive">client.accessControl.admissionRules.<a href="./src/resources/access-control/admission-rules.ts">archive</a>({ ...params }) -> AdmissionRuleArchiveResponse</code>
-- <code title="post /v1/access-control/admission-rules/upsert">client.accessControl.admissionRules.<a href="./src/resources/access-control/admission-rules.ts">upsert</a>({ ...params }) -> AdmissionRuleUpsertResponse</code>
+- <code title="post /v1/iam/admission-rules/archive">client.iam.admissionRules.<a href="./src/resources/iam/admission-rules.ts">archive</a>({ ...params }) -> AdmissionRuleArchiveResponse</code>
+- <code title="post /v1/iam/admission-rules/upsert">client.iam.admissionRules.<a href="./src/resources/iam/admission-rules.ts">upsert</a>({ ...params }) -> AdmissionRuleUpsertResponse</code>
 
 ## EntryMode
 
 Types:
 
-- <code><a href="./src/resources/access-control/entry-mode.ts">EntryModeSetResponse</a></code>
+- <code><a href="./src/resources/iam/entry-mode.ts">EntryModeSetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/entry-mode/set">client.accessControl.entryMode.<a href="./src/resources/access-control/entry-mode.ts">set</a>({ ...params }) -> EntryModeSetResponse</code>
+- <code title="post /v1/iam/entry-mode/set">client.iam.entryMode.<a href="./src/resources/iam/entry-mode.ts">set</a>({ ...params }) -> EntryModeSetResponse</code>
 
 ## Groups
 
 Types:
 
-- <code><a href="./src/resources/access-control/groups.ts">GroupCreateResponse</a></code>
-- <code><a href="./src/resources/access-control/groups.ts">GroupListResponse</a></code>
-- <code><a href="./src/resources/access-control/groups.ts">GroupAddMemberResponse</a></code>
-- <code><a href="./src/resources/access-control/groups.ts">GroupArchiveResponse</a></code>
-- <code><a href="./src/resources/access-control/groups.ts">GroupRemoveMemberResponse</a></code>
-- <code><a href="./src/resources/access-control/groups.ts">GroupRenameResponse</a></code>
+- <code><a href="./src/resources/iam/groups.ts">GroupCreateResponse</a></code>
+- <code><a href="./src/resources/iam/groups.ts">GroupListResponse</a></code>
+- <code><a href="./src/resources/iam/groups.ts">GroupAddMemberResponse</a></code>
+- <code><a href="./src/resources/iam/groups.ts">GroupArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/groups.ts">GroupRemoveMemberResponse</a></code>
+- <code><a href="./src/resources/iam/groups.ts">GroupRenameResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/access-control/groups/create">client.accessControl.groups.<a href="./src/resources/access-control/groups.ts">create</a>({ ...params }) -> GroupCreateResponse</code>
-- <code title="post /v1/access-control/groups/list">client.accessControl.groups.<a href="./src/resources/access-control/groups.ts">list</a>({ ...params }) -> GroupListResponse</code>
-- <code title="post /v1/access-control/groups/members/add">client.accessControl.groups.<a href="./src/resources/access-control/groups.ts">addMember</a>({ ...params }) -> GroupAddMemberResponse</code>
-- <code title="post /v1/access-control/groups/archive">client.accessControl.groups.<a href="./src/resources/access-control/groups.ts">archive</a>({ ...params }) -> GroupArchiveResponse</code>
-- <code title="post /v1/access-control/groups/members/remove">client.accessControl.groups.<a href="./src/resources/access-control/groups.ts">removeMember</a>({ ...params }) -> GroupRemoveMemberResponse</code>
-- <code title="post /v1/access-control/groups/rename">client.accessControl.groups.<a href="./src/resources/access-control/groups.ts">rename</a>({ ...params }) -> GroupRenameResponse</code>
+- <code title="post /v1/iam/groups/create">client.iam.groups.<a href="./src/resources/iam/groups.ts">create</a>({ ...params }) -> GroupCreateResponse</code>
+- <code title="post /v1/iam/groups/list">client.iam.groups.<a href="./src/resources/iam/groups.ts">list</a>({ ...params }) -> GroupListResponse</code>
+- <code title="post /v1/iam/groups/members/add">client.iam.groups.<a href="./src/resources/iam/groups.ts">addMember</a>({ ...params }) -> GroupAddMemberResponse</code>
+- <code title="post /v1/iam/groups/archive">client.iam.groups.<a href="./src/resources/iam/groups.ts">archive</a>({ ...params }) -> GroupArchiveResponse</code>
+- <code title="post /v1/iam/groups/members/remove">client.iam.groups.<a href="./src/resources/iam/groups.ts">removeMember</a>({ ...params }) -> GroupRemoveMemberResponse</code>
+- <code title="post /v1/iam/groups/rename">client.iam.groups.<a href="./src/resources/iam/groups.ts">rename</a>({ ...params }) -> GroupRenameResponse</code>
 
 # Commerce
 

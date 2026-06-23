@@ -8,10 +8,10 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource roleOverrides', () => {
+describe('resource userExceptions', () => {
   // Mock server tests are disabled
   test.skip('get: only required params', async () => {
-    const responsePromise = client.accessControl.roleOverrides.get({ actor_mode: 'service' });
+    const responsePromise = client.iam.userExceptions.get({ actor_mode: 'service' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,22 +23,18 @@ describe('resource roleOverrides', () => {
 
   // Mock server tests are disabled
   test.skip('get: required and optional params', async () => {
-    const response = await client.accessControl.roleOverrides.get({
+    const response = await client.iam.userExceptions.get({
       actor_mode: 'service',
+      hercules_auth_user_id: 'x',
       id_token: 'x',
-      role_id: 'x',
-      role_key: 'x',
+      principal_id: 'x',
       scope_id: 'x',
     });
   });
 
   // Mock server tests are disabled
   test.skip('set: only required params', async () => {
-    const responsePromise = client.accessControl.roleOverrides.set({
-      actor_mode: 'service',
-      role_key: 'x',
-      scope_id: 'x',
-    });
+    const responsePromise = client.iam.userExceptions.set({ actor_mode: 'service' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -50,13 +46,14 @@ describe('resource roleOverrides', () => {
 
   // Mock server tests are disabled
   test.skip('set: required and optional params', async () => {
-    const response = await client.accessControl.roleOverrides.set({
+    const response = await client.iam.userExceptions.set({
       actor_mode: 'service',
-      role_key: 'x',
-      scope_id: 'x',
       allow: ['x'],
       deny: ['x'],
+      hercules_auth_user_id: 'x',
       id_token: 'x',
+      principal_id: 'x',
+      scope_id: 'x',
     });
   });
 });

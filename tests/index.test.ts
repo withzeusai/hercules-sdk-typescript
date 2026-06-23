@@ -506,7 +506,7 @@ describe('idempotency', () => {
       apiKey: 'My API Key',
       apiVersion: '2025-12-09',
     });
-    await client.accessControl.entry({ id_token: 'x' }, { idempotencyKey: 'my-idempotency-key' });
+    await client.iam.entry({ id_token: 'x' }, { idempotencyKey: 'my-idempotency-key' });
   });
 });
 
