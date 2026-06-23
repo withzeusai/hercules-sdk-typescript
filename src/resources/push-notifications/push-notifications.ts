@@ -181,6 +181,19 @@ export interface PushNotificationSendParams {
   topics?: Array<string>;
 
   /**
+   * Time to live in seconds. How long the push service retains the notification if
+   * the device is offline before discarding it. Defaults to 2419200 (four weeks).
+   */
+  ttl?: number;
+
+  /**
+   * Delivery urgency. Use 'high' for time-sensitive notifications so push services
+   * wake dozing devices immediately instead of holding the message until the device
+   * next wakes. Defaults to 'normal'.
+   */
+  urgency?: 'very-low' | 'low' | 'normal' | 'high';
+
+  /**
    * Visitor IDs to send to. Combined with topics as a union.
    */
   visitorIds?: Array<string>;

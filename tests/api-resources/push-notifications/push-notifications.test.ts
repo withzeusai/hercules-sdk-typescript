@@ -60,6 +60,8 @@ describe('resource pushNotifications', () => {
       icon: 'https://example.com',
       image: 'https://example.com',
       topics: ['string'],
+      ttl: 0,
+      urgency: 'very-low',
       visitorIds: ['string'],
     });
   });
