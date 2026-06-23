@@ -9,14 +9,14 @@ export class RoleOverrides extends APIResource {
    * Returns the raw per-scope permission overrides for a role.
    */
   get(body: RoleOverrideGetParams, options?: RequestOptions): APIPromise<RoleOverrideGetResponse> {
-    return this._client.post('/v1/access-control/role-overrides/get', { body, ...options });
+    return this._client.post('/v1/iam/role-overrides/get', { body, ...options });
   }
 
   /**
    * Replaces an org-specific override for an app role.
    */
   set(body: RoleOverrideSetParams, options?: RequestOptions): APIPromise<RoleOverrideSetResponse> {
-    return this._client.post('/v1/access-control/role-overrides/set', { body, ...options });
+    return this._client.post('/v1/iam/role-overrides/set', { body, ...options });
   }
 }
 
@@ -63,7 +63,7 @@ export namespace RoleOverrideGetResponse {
 }
 
 /**
- * Access Control write result for one role.
+ * IAM write result for one role.
  */
 export interface RoleOverrideSetResponse {
   /**
@@ -72,7 +72,7 @@ export interface RoleOverrideSetResponse {
   access_scope_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -87,7 +87,7 @@ export interface RoleOverrideSetResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -100,7 +100,7 @@ export interface RoleOverrideSetResponse {
 export interface RoleOverrideGetParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -111,7 +111,7 @@ export interface RoleOverrideGetParams {
   id_token?: string;
 
   /**
-   * Existing Access Control role ID.
+   * Existing IAM role ID.
    */
   role_id?: string;
 
@@ -130,7 +130,7 @@ export interface RoleOverrideGetParams {
 export interface RoleOverrideSetParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

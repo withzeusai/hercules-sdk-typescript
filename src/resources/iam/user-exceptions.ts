@@ -9,14 +9,14 @@ export class UserExceptions extends APIResource {
    * Returns the raw per-user permission exceptions for a principal in a scope.
    */
   get(body: UserExceptionGetParams, options?: RequestOptions): APIPromise<UserExceptionGetResponse> {
-    return this._client.post('/v1/access-control/user-exceptions/get', { body, ...options });
+    return this._client.post('/v1/iam/user-exceptions/get', { body, ...options });
   }
 
   /**
    * Replaces a user's direct allow and deny permission exceptions in a scope.
    */
   set(body: UserExceptionSetParams, options?: RequestOptions): APIPromise<UserExceptionSetResponse> {
-    return this._client.post('/v1/access-control/user-exceptions/set', { body, ...options });
+    return this._client.post('/v1/iam/user-exceptions/set', { body, ...options });
   }
 }
 
@@ -68,7 +68,7 @@ export namespace UserExceptionGetResponse {
 }
 
 /**
- * Access Control write result for one user principal.
+ * IAM write result for one user principal.
  */
 export interface UserExceptionSetResponse {
   /**
@@ -82,7 +82,7 @@ export interface UserExceptionSetResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -92,7 +92,7 @@ export interface UserExceptionSetResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -105,7 +105,7 @@ export interface UserExceptionSetResponse {
 export interface UserExceptionGetParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -121,7 +121,7 @@ export interface UserExceptionGetParams {
   id_token?: string;
 
   /**
-   * Existing Access Control principal ID.
+   * Existing IAM principal ID.
    */
   principal_id?: string;
 
@@ -135,7 +135,7 @@ export interface UserExceptionGetParams {
 export interface UserExceptionSetParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -161,7 +161,7 @@ export interface UserExceptionSetParams {
   id_token?: string;
 
   /**
-   * Existing Access Control principal ID.
+   * Existing IAM principal ID.
    */
   principal_id?: string;
 

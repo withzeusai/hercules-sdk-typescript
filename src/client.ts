@@ -23,11 +23,6 @@ import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } 
 import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
-  AccessControl,
-  AccessControlEntryParams,
-  AccessControlEntryResponse,
-} from './resources/access-control/access-control';
-import {
   Commerce,
   CommerceCancelParams,
   CommerceCancelResponse,
@@ -48,6 +43,7 @@ import {
   EmailSendResponse,
   EmailsCursorIDPage,
 } from './resources/email/email';
+import { Iam, IamEntryParams, IamEntryResponse } from './resources/iam/iam';
 import {
   PushNotificationEnableResponse,
   PushNotificationIdentifyParams,
@@ -818,12 +814,12 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   /**
-   * Manage Access Control for a website: scopes (organizations), invitations,
+   * Manage IAM for a website: scopes (organizations), invitations,
    * roles and role assignments, permission grants, resource rules, grant
    * expiries, and per-user permission exceptions. Requires an API key with the
-   * access_control_admin scope.
+   * iam:admin scope.
    */
-  accessControl: API.AccessControl = new API.AccessControl(this);
+  iam: API.Iam = new API.Iam(this);
   /**
    * Commerce APIs are currently in beta.
    */
@@ -859,7 +855,7 @@ export class Hercules {
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
-Hercules.AccessControl = AccessControl;
+Hercules.Iam = Iam;
 Hercules.Commerce = Commerce;
 Hercules.Connectors = Connectors;
 Hercules.Content = Content;
@@ -874,11 +870,7 @@ export declare namespace Hercules {
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
-  export {
-    AccessControl as AccessControl,
-    type AccessControlEntryResponse as AccessControlEntryResponse,
-    type AccessControlEntryParams as AccessControlEntryParams,
-  };
+  export { Iam as Iam, type IamEntryResponse as IamEntryResponse, type IamEntryParams as IamEntryParams };
 
   export {
     Commerce as Commerce,

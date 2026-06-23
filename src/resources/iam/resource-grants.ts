@@ -9,7 +9,7 @@ export class ResourceGrants extends APIResource {
    * Grants a role or permission on one resource.
    */
   create(body: ResourceGrantCreateParams, options?: RequestOptions): APIPromise<ResourceGrantCreateResponse> {
-    return this._client.post('/v1/access-control/resource-grants/create', { body, ...options });
+    return this._client.post('/v1/iam/resource-grants/create', { body, ...options });
   }
 
   /**
@@ -20,19 +20,19 @@ export class ResourceGrants extends APIResource {
     body: ResourceGrantReplaceParams,
     options?: RequestOptions,
   ): APIPromise<ResourceGrantReplaceResponse> {
-    return this._client.post('/v1/access-control/resource-grants/replace', { body, ...options });
+    return this._client.post('/v1/iam/resource-grants/replace', { body, ...options });
   }
 
   /**
    * Revokes an existing resource grant.
    */
   revoke(body: ResourceGrantRevokeParams, options?: RequestOptions): APIPromise<ResourceGrantRevokeResponse> {
-    return this._client.post('/v1/access-control/resource-grants/revoke', { body, ...options });
+    return this._client.post('/v1/iam/resource-grants/revoke', { body, ...options });
   }
 }
 
 /**
- * Access Control write result for one grant.
+ * IAM write result for one grant.
  */
 export interface ResourceGrantCreateResponse {
   /**
@@ -46,7 +46,7 @@ export interface ResourceGrantCreateResponse {
   grant_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -56,7 +56,7 @@ export interface ResourceGrantCreateResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -81,7 +81,7 @@ export interface ResourceGrantReplaceResponse {
   changed: boolean;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -143,12 +143,12 @@ export namespace ResourceGrantReplaceResponse {
       grant_id: string;
 
       /**
-       * Hercules Access Control identifier.
+       * Hercules IAM identifier.
        */
       permission_id: string | null;
 
       /**
-       * Hercules Access Control identifier.
+       * Hercules IAM identifier.
        */
       role_id: string | null;
     }
@@ -156,7 +156,7 @@ export namespace ResourceGrantReplaceResponse {
 }
 
 /**
- * Access Control write result for one grant.
+ * IAM write result for one grant.
  */
 export interface ResourceGrantRevokeResponse {
   /**
@@ -170,7 +170,7 @@ export interface ResourceGrantRevokeResponse {
   grant_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -180,7 +180,7 @@ export interface ResourceGrantRevokeResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -193,7 +193,7 @@ export interface ResourceGrantRevokeResponse {
 export interface ResourceGrantCreateParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -235,7 +235,7 @@ export interface ResourceGrantCreateParams {
   permission_key?: string;
 
   /**
-   * Existing Access Control principal ID.
+   * Existing IAM principal ID.
    */
   principal_id?: string;
 
@@ -254,7 +254,7 @@ export interface ResourceGrantCreateParams {
 export interface ResourceGrantReplaceParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -301,7 +301,7 @@ export namespace ResourceGrantReplaceParams {
     hercules_auth_user_id?: string;
 
     /**
-     * Existing Access Control principal ID.
+     * Existing IAM principal ID.
      */
     principal_id?: string;
   }
@@ -338,7 +338,7 @@ export namespace ResourceGrantReplaceParams {
 export interface ResourceGrantRevokeParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

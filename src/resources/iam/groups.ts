@@ -9,28 +9,28 @@ export class Groups extends APIResource {
    * Creates a group principal in an organization scope.
    */
   create(body: GroupCreateParams, options?: RequestOptions): APIPromise<GroupCreateResponse> {
-    return this._client.post('/v1/access-control/groups/create', { body, ...options });
+    return this._client.post('/v1/iam/groups/create', { body, ...options });
   }
 
   /**
    * Lists the group principals in an organization scope with member counts.
    */
   list(body: GroupListParams, options?: RequestOptions): APIPromise<GroupListResponse> {
-    return this._client.post('/v1/access-control/groups/list', { body, ...options });
+    return this._client.post('/v1/iam/groups/list', { body, ...options });
   }
 
   /**
    * Adds a user principal to a group in an organization scope.
    */
   addMember(body: GroupAddMemberParams, options?: RequestOptions): APIPromise<GroupAddMemberResponse> {
-    return this._client.post('/v1/access-control/groups/members/add', { body, ...options });
+    return this._client.post('/v1/iam/groups/members/add', { body, ...options });
   }
 
   /**
    * Archives a group principal in an organization scope.
    */
   archive(body: GroupArchiveParams, options?: RequestOptions): APIPromise<GroupArchiveResponse> {
-    return this._client.post('/v1/access-control/groups/archive', { body, ...options });
+    return this._client.post('/v1/iam/groups/archive', { body, ...options });
   }
 
   /**
@@ -40,19 +40,19 @@ export class Groups extends APIResource {
     body: GroupRemoveMemberParams,
     options?: RequestOptions,
   ): APIPromise<GroupRemoveMemberResponse> {
-    return this._client.post('/v1/access-control/groups/members/remove', { body, ...options });
+    return this._client.post('/v1/iam/groups/members/remove', { body, ...options });
   }
 
   /**
    * Renames a group principal in an organization scope.
    */
   rename(body: GroupRenameParams, options?: RequestOptions): APIPromise<GroupRenameResponse> {
-    return this._client.post('/v1/access-control/groups/rename', { body, ...options });
+    return this._client.post('/v1/iam/groups/rename', { body, ...options });
   }
 }
 
 /**
- * Access Control write result for one group principal.
+ * IAM write result for one group principal.
  */
 export interface GroupCreateResponse {
   /**
@@ -66,7 +66,7 @@ export interface GroupCreateResponse {
   group_principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -76,7 +76,7 @@ export interface GroupCreateResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -168,7 +168,7 @@ export interface GroupAddMemberResponse {
   membership_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -178,7 +178,7 @@ export interface GroupAddMemberResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -189,7 +189,7 @@ export interface GroupAddMemberResponse {
 }
 
 /**
- * Access Control write result for one group principal.
+ * IAM write result for one group principal.
  */
 export interface GroupArchiveResponse {
   /**
@@ -203,7 +203,7 @@ export interface GroupArchiveResponse {
   group_principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -213,7 +213,7 @@ export interface GroupArchiveResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -243,7 +243,7 @@ export interface GroupRemoveMemberResponse {
   member_principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -253,7 +253,7 @@ export interface GroupRemoveMemberResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -264,7 +264,7 @@ export interface GroupRemoveMemberResponse {
 }
 
 /**
- * Access Control write result for one group principal.
+ * IAM write result for one group principal.
  */
 export interface GroupRenameResponse {
   /**
@@ -278,7 +278,7 @@ export interface GroupRenameResponse {
   group_principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -288,7 +288,7 @@ export interface GroupRenameResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -301,7 +301,7 @@ export interface GroupRenameResponse {
 export interface GroupCreateParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -325,7 +325,7 @@ export interface GroupCreateParams {
 export interface GroupListParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -349,7 +349,7 @@ export interface GroupListParams {
 export interface GroupAddMemberParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -378,7 +378,7 @@ export interface GroupAddMemberParams {
 export interface GroupArchiveParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -402,7 +402,7 @@ export interface GroupArchiveParams {
 export interface GroupRemoveMemberParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -431,7 +431,7 @@ export interface GroupRemoveMemberParams {
 export interface GroupRenameParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource groups', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.accessControl.groups.create({
+    const responsePromise = client.iam.groups.create({
       actor_mode: 'service',
       name: 'x',
       scope_id: 'x',
@@ -27,7 +27,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.accessControl.groups.create({
+    const response = await client.iam.groups.create({
       actor_mode: 'service',
       name: 'x',
       scope_id: 'x',
@@ -37,7 +37,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.accessControl.groups.list({ actor_mode: 'service', scope_id: 'x' });
+    const responsePromise = client.iam.groups.list({ actor_mode: 'service', scope_id: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,7 +49,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.accessControl.groups.list({
+    const response = await client.iam.groups.list({
       actor_mode: 'service',
       scope_id: 'x',
       id_token: 'x',
@@ -59,7 +59,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('addMember: only required params', async () => {
-    const responsePromise = client.accessControl.groups.addMember({
+    const responsePromise = client.iam.groups.addMember({
       actor_mode: 'service',
       group_principal_id: 'x',
       member_principal_id: 'x',
@@ -76,7 +76,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('addMember: required and optional params', async () => {
-    const response = await client.accessControl.groups.addMember({
+    const response = await client.iam.groups.addMember({
       actor_mode: 'service',
       group_principal_id: 'x',
       member_principal_id: 'x',
@@ -87,7 +87,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.accessControl.groups.archive({
+    const responsePromise = client.iam.groups.archive({
       actor_mode: 'service',
       group_principal_id: 'x',
       scope_id: 'x',
@@ -103,7 +103,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.accessControl.groups.archive({
+    const response = await client.iam.groups.archive({
       actor_mode: 'service',
       group_principal_id: 'x',
       scope_id: 'x',
@@ -113,7 +113,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('removeMember: only required params', async () => {
-    const responsePromise = client.accessControl.groups.removeMember({
+    const responsePromise = client.iam.groups.removeMember({
       actor_mode: 'service',
       group_principal_id: 'x',
       member_principal_id: 'x',
@@ -130,7 +130,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('removeMember: required and optional params', async () => {
-    const response = await client.accessControl.groups.removeMember({
+    const response = await client.iam.groups.removeMember({
       actor_mode: 'service',
       group_principal_id: 'x',
       member_principal_id: 'x',
@@ -141,7 +141,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('rename: only required params', async () => {
-    const responsePromise = client.accessControl.groups.rename({
+    const responsePromise = client.iam.groups.rename({
       actor_mode: 'service',
       group_principal_id: 'x',
       name: 'x',
@@ -158,7 +158,7 @@ describe('resource groups', () => {
 
   // Mock server tests are disabled
   test.skip('rename: required and optional params', async () => {
-    const response = await client.accessControl.groups.rename({
+    const response = await client.iam.groups.rename({
       actor_mode: 'service',
       group_principal_id: 'x',
       name: 'x',

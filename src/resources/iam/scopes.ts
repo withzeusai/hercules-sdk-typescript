@@ -9,14 +9,14 @@ export class Scopes extends APIResource {
    * Creates an org scope for a website.
    */
   create(body: ScopeCreateParams, options?: RequestOptions): APIPromise<ScopeCreateResponse> {
-    return this._client.post('/v1/access-control/scopes/create', { body, ...options });
+    return this._client.post('/v1/iam/scopes/create', { body, ...options });
   }
 
   /**
    * Archives an org scope for a website.
    */
   archive(body: ScopeArchiveParams, options?: RequestOptions): APIPromise<ScopeArchiveResponse> {
-    return this._client.post('/v1/access-control/scopes/archive', { body, ...options });
+    return this._client.post('/v1/iam/scopes/archive', { body, ...options });
   }
 
   /**
@@ -26,12 +26,12 @@ export class Scopes extends APIResource {
     body: ScopeSetDefaultRoleParams,
     options?: RequestOptions,
   ): APIPromise<ScopeSetDefaultRoleResponse> {
-    return this._client.post('/v1/access-control/scopes/set-default-role', { body, ...options });
+    return this._client.post('/v1/iam/scopes/set-default-role', { body, ...options });
   }
 }
 
 /**
- * Common result envelope for Access Control writes.
+ * Common result envelope for IAM writes.
  */
 export interface ScopeCreateResponse {
   /**
@@ -40,7 +40,7 @@ export interface ScopeCreateResponse {
   access_scope_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -50,7 +50,7 @@ export interface ScopeCreateResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -63,7 +63,7 @@ export interface ScopeCreateResponse {
 }
 
 /**
- * Common result envelope for Access Control writes.
+ * Common result envelope for IAM writes.
  */
 export interface ScopeArchiveResponse {
   /**
@@ -72,7 +72,7 @@ export interface ScopeArchiveResponse {
   access_scope_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -82,7 +82,7 @@ export interface ScopeArchiveResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -109,12 +109,12 @@ export interface ScopeSetDefaultRoleResponse {
   default_role_id: string;
 
   /**
-   * Hercules Access Control identifier.
+   * Hercules IAM identifier.
    */
   previous_default_role_id: string | null;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -124,7 +124,7 @@ export interface ScopeSetDefaultRoleResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -167,7 +167,7 @@ export interface ScopeArchiveParams {
 export interface ScopeSetDefaultRoleParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
