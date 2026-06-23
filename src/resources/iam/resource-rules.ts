@@ -13,19 +13,19 @@ export class ResourceRules extends APIResource {
     body: ResourceRuleReplaceParams,
     options?: RequestOptions,
   ): APIPromise<ResourceRuleReplaceResponse> {
-    return this._client.post('/v1/access-control/resource-rules/replace', { body, ...options });
+    return this._client.post('/v1/iam/resource-rules/replace', { body, ...options });
   }
 
   /**
    * Allows or denies one permission on all or one resource for a user or role.
    */
   set(body: ResourceRuleSetParams, options?: RequestOptions): APIPromise<ResourceRuleSetResponse> {
-    return this._client.post('/v1/access-control/resource-rules/set', { body, ...options });
+    return this._client.post('/v1/iam/resource-rules/set', { body, ...options });
   }
 }
 
 /**
- * Common result envelope for Access Control writes.
+ * Common result envelope for IAM writes.
  */
 export interface ResourceRuleReplaceResponse {
   /**
@@ -34,7 +34,7 @@ export interface ResourceRuleReplaceResponse {
   access_scope_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -44,7 +44,7 @@ export interface ResourceRuleReplaceResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -57,7 +57,7 @@ export interface ResourceRuleReplaceResponse {
 }
 
 /**
- * Access Control write result for one grant.
+ * IAM write result for one grant.
  */
 export interface ResourceRuleSetResponse {
   /**
@@ -71,7 +71,7 @@ export interface ResourceRuleSetResponse {
   grant_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -81,7 +81,7 @@ export interface ResourceRuleSetResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -94,7 +94,7 @@ export interface ResourceRuleSetResponse {
 export interface ResourceRuleReplaceParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -204,7 +204,7 @@ export namespace ResourceRuleReplaceParams {
 export interface ResourceRuleSetParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

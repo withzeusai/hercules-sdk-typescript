@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.15.1 (2026-06-23)
+
+Full Changelog: [v1.15.0...v1.15.1](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.15.0...v1.15.1)
+
+### Features
+
+* **api:** update api ([a3de63d](https://github.com/withzeusai/hercules-sdk-typescript/commit/a3de63d6667f296424c15c191de5203f9d20071c))
+* **api:** update api ([b0487bb](https://github.com/withzeusai/hercules-sdk-typescript/commit/b0487bbbda9422c0c855b294c9269a12a73c67bf))
+
 ## 1.15.0 (2026-06-16)
 
 Full Changelog: [v1.14.5...v1.15.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.14.5...v1.15.0)

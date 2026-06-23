@@ -10,7 +10,7 @@ export class EntryMode extends APIResource {
    * approval-required.
    */
   set(body: EntryModeSetParams, options?: RequestOptions): APIPromise<EntryModeSetResponse> {
-    return this._client.post('/v1/access-control/entry-mode/set', { body, ...options });
+    return this._client.post('/v1/iam/entry-mode/set', { body, ...options });
   }
 }
 
@@ -34,7 +34,7 @@ export interface EntryModeSetResponse {
   previous_account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -49,7 +49,7 @@ export interface EntryModeSetResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -68,7 +68,7 @@ export interface EntryModeSetParams {
 
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

@@ -1,11 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
-  AccessControl,
-  type AccessControlEntryResponse,
-  type AccessControlEntryParams,
-} from './access-control/access-control';
-export {
   Commerce,
   type Currency,
   type CommerceCancelResponse,
@@ -29,6 +24,7 @@ export {
   type EmailsCursorIDPage,
 } from './email/email';
 export { Files, type File, type Upload, type FileListParams, type FilesCursorIDPage } from './files';
+export { Iam, type IamEntryResponse, type IamEntryParams } from './iam/iam';
 export {
   PushNotifications,
   type PushNotificationEnableResponse,

@@ -119,12 +119,12 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
 /**
- * Manage Access Control for a website: scopes (organizations), invitations,
+ * Manage IAM for a website: scopes (organizations), invitations,
  * roles and role assignments, permission grants, resource rules, grant
  * expiries, and per-user permission exceptions. Requires an API key with the
- * access_control_admin scope.
+ * iam:admin scope.
  */
-export class AccessControl extends APIResource {
+export class Iam extends APIResource {
   scopes: ScopesAPI.Scopes = new ScopesAPI.Scopes(this._client);
   invitations: InvitationsAPI.Invitations = new InvitationsAPI.Invitations(this._client);
   roles: RolesAPI.Roles = new RolesAPI.Roles(this._client);
@@ -142,15 +142,15 @@ export class AccessControl extends APIResource {
    * Evaluates account entry for the signed-in app user and ensures their principal
    * in the API key's deployment.
    */
-  entry(body: AccessControlEntryParams, options?: RequestOptions): APIPromise<AccessControlEntryResponse> {
-    return this._client.post('/v1/access-control/entry', { body, ...options });
+  entry(body: IamEntryParams, options?: RequestOptions): APIPromise<IamEntryResponse> {
+    return this._client.post('/v1/iam/entry', { body, ...options });
   }
 }
 
 /**
  * Admission decision and principal state for a deployment entry request.
  */
-export interface AccessControlEntryResponse {
+export interface IamEntryResponse {
   /**
    * Whether the signed-in user may enter this deployment.
    */
@@ -167,7 +167,7 @@ export interface AccessControlEntryResponse {
   reason: string;
 
   /**
-   * Current Access Control source version for this deployment.
+   * Current IAM source version for this deployment.
    */
   state_version: number;
 
@@ -182,7 +182,7 @@ export interface AccessControlEntryResponse {
   status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
 }
 
-export interface AccessControlEntryParams {
+export interface IamEntryParams {
   /**
    * Signed Hercules Auth ID token for the app user entering the deployment.
    */
@@ -194,24 +194,21 @@ export interface AccessControlEntryParams {
   actor_mode?: 'service' | 'app_user';
 }
 
-AccessControl.Scopes = Scopes;
-AccessControl.Invitations = Invitations;
-AccessControl.Roles = Roles;
-AccessControl.UserExceptions = UserExceptions;
-AccessControl.ResourceGrants = ResourceGrants;
-AccessControl.ResourceRules = ResourceRules;
-AccessControl.Expiries = Expiries;
-AccessControl.RoleOverrides = RoleOverrides;
-AccessControl.Members = Members;
-AccessControl.AdmissionRules = AdmissionRules;
-AccessControl.EntryMode = EntryMode;
-AccessControl.Groups = Groups;
+Iam.Scopes = Scopes;
+Iam.Invitations = Invitations;
+Iam.Roles = Roles;
+Iam.UserExceptions = UserExceptions;
+Iam.ResourceGrants = ResourceGrants;
+Iam.ResourceRules = ResourceRules;
+Iam.Expiries = Expiries;
+Iam.RoleOverrides = RoleOverrides;
+Iam.Members = Members;
+Iam.AdmissionRules = AdmissionRules;
+Iam.EntryMode = EntryMode;
+Iam.Groups = Groups;
 
-export declare namespace AccessControl {
-  export {
-    type AccessControlEntryResponse as AccessControlEntryResponse,
-    type AccessControlEntryParams as AccessControlEntryParams,
-  };
+export declare namespace Iam {
+  export { type IamEntryResponse as IamEntryResponse, type IamEntryParams as IamEntryParams };
 
   export {
     Scopes as Scopes,

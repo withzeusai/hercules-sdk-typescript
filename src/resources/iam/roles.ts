@@ -9,7 +9,7 @@ export class Roles extends APIResource {
    * Assigns a role to a user principal in a scope.
    */
   assign(body: RoleAssignParams, options?: RequestOptions): APIPromise<RoleAssignResponse> {
-    return this._client.post('/v1/access-control/roles/assign', { body, ...options });
+    return this._client.post('/v1/iam/roles/assign', { body, ...options });
   }
 
   /**
@@ -19,7 +19,7 @@ export class Roles extends APIResource {
     body: RoleCreateOrgCustomParams,
     options?: RequestOptions,
   ): APIPromise<RoleCreateOrgCustomResponse> {
-    return this._client.post('/v1/access-control/roles/create-org-custom', { body, ...options });
+    return this._client.post('/v1/iam/roles/create-org-custom', { body, ...options });
   }
 
   /**
@@ -29,21 +29,21 @@ export class Roles extends APIResource {
     body: RoleListGrantableParams,
     options?: RequestOptions,
   ): APIPromise<RoleListGrantableResponse> {
-    return this._client.post('/v1/access-control/roles/list-grantable', { body, ...options });
+    return this._client.post('/v1/iam/roles/list-grantable', { body, ...options });
   }
 
   /**
    * Removes a role from a user principal in a scope.
    */
   remove(body: RoleRemoveParams, options?: RequestOptions): APIPromise<RoleRemoveResponse> {
-    return this._client.post('/v1/access-control/roles/remove', { body, ...options });
+    return this._client.post('/v1/iam/roles/remove', { body, ...options });
   }
 
   /**
    * Replaces one existing member's complete set of direct roles in a scope.
    */
   replace(body: RoleReplaceParams, options?: RequestOptions): APIPromise<RoleReplaceResponse> {
-    return this._client.post('/v1/access-control/roles/replace', { body, ...options });
+    return this._client.post('/v1/iam/roles/replace', { body, ...options });
   }
 
   /**
@@ -53,12 +53,12 @@ export class Roles extends APIResource {
     body: RoleUpdatePermissionsParams,
     options?: RequestOptions,
   ): APIPromise<RoleUpdatePermissionsResponse> {
-    return this._client.post('/v1/access-control/roles/update-permissions', { body, ...options });
+    return this._client.post('/v1/iam/roles/update-permissions', { body, ...options });
   }
 }
 
 /**
- * Common result envelope for Access Control writes.
+ * Common result envelope for IAM writes.
  */
 export interface RoleAssignResponse {
   /**
@@ -67,7 +67,7 @@ export interface RoleAssignResponse {
   access_scope_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -77,7 +77,7 @@ export interface RoleAssignResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -104,7 +104,7 @@ export interface RoleCreateOrgCustomResponse {
   granted_permission_keys: Array<string>;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -124,7 +124,7 @@ export interface RoleCreateOrgCustomResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -182,7 +182,7 @@ export namespace RoleListGrantableResponse {
 }
 
 /**
- * Common result envelope for Access Control writes.
+ * Common result envelope for IAM writes.
  */
 export interface RoleRemoveResponse {
   /**
@@ -191,7 +191,7 @@ export interface RoleRemoveResponse {
   access_scope_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -201,7 +201,7 @@ export interface RoleRemoveResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -233,7 +233,7 @@ export interface RoleReplaceResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -263,7 +263,7 @@ export interface RoleUpdatePermissionsResponse {
   permission_keys: Array<string>;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -283,7 +283,7 @@ export interface RoleUpdatePermissionsResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -296,7 +296,7 @@ export interface RoleUpdatePermissionsResponse {
 export interface RoleAssignParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -312,12 +312,12 @@ export interface RoleAssignParams {
   id_token?: string;
 
   /**
-   * Existing Access Control principal ID.
+   * Existing IAM principal ID.
    */
   principal_id?: string;
 
   /**
-   * Existing Access Control role ID.
+   * Existing IAM role ID.
    */
   role_id?: string;
 
@@ -336,7 +336,7 @@ export interface RoleAssignParams {
 export interface RoleCreateOrgCustomParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -375,7 +375,7 @@ export interface RoleCreateOrgCustomParams {
 export interface RoleListGrantableParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -436,7 +436,7 @@ export namespace RoleListGrantableParams {
 export interface RoleRemoveParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -452,12 +452,12 @@ export interface RoleRemoveParams {
   id_token?: string;
 
   /**
-   * Existing Access Control principal ID.
+   * Existing IAM principal ID.
    */
   principal_id?: string;
 
   /**
-   * Existing Access Control role ID.
+   * Existing IAM role ID.
    */
   role_id?: string;
 
@@ -476,7 +476,7 @@ export interface RoleRemoveParams {
 export interface RoleReplaceParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -502,7 +502,7 @@ export interface RoleReplaceParams {
   id_token?: string;
 
   /**
-   * Existing Access Control principal ID.
+   * Existing IAM principal ID.
    */
   principal_id?: string;
 }
@@ -510,7 +510,7 @@ export interface RoleReplaceParams {
 export interface RoleUpdatePermissionsParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -526,7 +526,7 @@ export interface RoleUpdatePermissionsParams {
   id_token?: string;
 
   /**
-   * Existing Access Control role ID.
+   * Existing IAM role ID.
    */
   role_id?: string;
 

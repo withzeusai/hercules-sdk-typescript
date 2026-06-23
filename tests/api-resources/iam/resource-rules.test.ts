@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource resourceRules', () => {
   // Mock server tests are disabled
   test.skip('replace: only required params', async () => {
-    const responsePromise = client.accessControl.resourceRules.replace({
+    const responsePromise = client.iam.resourceRules.replace({
       actor_mode: 'service',
       resource_type: 'x',
       rules: [{ effect: 'allow', permission_key: 'x' }],
@@ -30,7 +30,7 @@ describe('resource resourceRules', () => {
 
   // Mock server tests are disabled
   test.skip('replace: required and optional params', async () => {
-    const response = await client.accessControl.resourceRules.replace({
+    const response = await client.iam.resourceRules.replace({
       actor_mode: 'service',
       resource_type: 'x',
       rules: [
@@ -50,7 +50,7 @@ describe('resource resourceRules', () => {
 
   // Mock server tests are disabled
   test.skip('set: only required params', async () => {
-    const responsePromise = client.accessControl.resourceRules.set({
+    const responsePromise = client.iam.resourceRules.set({
       actor_mode: 'service',
       effect: 'allow',
       permission_key: 'x',
@@ -70,7 +70,7 @@ describe('resource resourceRules', () => {
 
   // Mock server tests are disabled
   test.skip('set: required and optional params', async () => {
-    const response = await client.accessControl.resourceRules.set({
+    const response = await client.iam.resourceRules.set({
       actor_mode: 'service',
       effect: 'allow',
       permission_key: 'x',

@@ -9,14 +9,14 @@ export class Invitations extends APIResource {
    * Creates an invitation link for an org scope.
    */
   create(body: InvitationCreateParams, options?: RequestOptions): APIPromise<InvitationCreateResponse> {
-    return this._client.post('/v1/access-control/invitations/create', { body, ...options });
+    return this._client.post('/v1/iam/invitations/create', { body, ...options });
   }
 
   /**
    * Accepts an invitation for the signed-in app user.
    */
   accept(body: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
-    return this._client.post('/v1/access-control/invitations/accept', { body, ...options });
+    return this._client.post('/v1/iam/invitations/accept', { body, ...options });
   }
 
   /**
@@ -27,7 +27,7 @@ export class Invitations extends APIResource {
     body: InvitationCreateResourceParams,
     options?: RequestOptions,
   ): APIPromise<InvitationCreateResourceResponse> {
-    return this._client.post('/v1/access-control/invitations/create-resource', { body, ...options });
+    return this._client.post('/v1/iam/invitations/create-resource', { body, ...options });
   }
 
   /**
@@ -37,14 +37,14 @@ export class Invitations extends APIResource {
     body: InvitationListResourceParams,
     options?: RequestOptions,
   ): APIPromise<InvitationListResourceResponse> {
-    return this._client.post('/v1/access-control/invitations/list-resource', { body, ...options });
+    return this._client.post('/v1/iam/invitations/list-resource', { body, ...options });
   }
 
   /**
    * Revokes a pending org invitation.
    */
   revoke(body: InvitationRevokeParams, options?: RequestOptions): APIPromise<InvitationRevokeResponse> {
-    return this._client.post('/v1/access-control/invitations/revoke', { body, ...options });
+    return this._client.post('/v1/iam/invitations/revoke', { body, ...options });
   }
 }
 
@@ -83,7 +83,7 @@ export interface InvitationCreateResponse {
   invitation_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this invitation.
+   * Deployments whose IAM mirrors must receive this invitation.
    */
   projection_ids: Array<string>;
 
@@ -118,7 +118,7 @@ export interface InvitationAcceptResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -133,7 +133,7 @@ export interface InvitationAcceptResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -178,7 +178,7 @@ export interface InvitationCreateResourceResponse {
   invitation_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this invitation.
+   * Deployments whose IAM mirrors must receive this invitation.
    */
   projection_ids: Array<string>;
 
@@ -244,7 +244,7 @@ export namespace InvitationListResourceResponse {
     invitation_id: string;
 
     /**
-     * Hercules Access Control identifier.
+     * Hercules IAM identifier.
      */
     permission_id: string | null;
 
@@ -259,7 +259,7 @@ export namespace InvitationListResourceResponse {
     resource_type: string;
 
     /**
-     * Hercules Access Control identifier.
+     * Hercules IAM identifier.
      */
     role_id: string | null;
 
@@ -285,7 +285,7 @@ export interface InvitationRevokeResponse {
   invitation_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -300,7 +300,7 @@ export interface InvitationRevokeResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -313,7 +313,7 @@ export interface InvitationRevokeResponse {
 export interface InvitationCreateParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -364,7 +364,7 @@ export interface InvitationAcceptParams {
 export interface InvitationCreateResourceParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -419,7 +419,7 @@ export interface InvitationCreateResourceParams {
 export interface InvitationListResourceParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -438,7 +438,7 @@ export interface InvitationListResourceParams {
 export interface InvitationRevokeParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

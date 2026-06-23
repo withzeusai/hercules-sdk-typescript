@@ -10,28 +10,28 @@ export class Members extends APIResource {
    * member.
    */
   add(body: MemberAddParams, options?: RequestOptions): APIPromise<MemberAddResponse> {
-    return this._client.post('/v1/access-control/members/add', { body, ...options });
+    return this._client.post('/v1/iam/members/add', { body, ...options });
   }
 
   /**
    * Approves a pending member, admitting them into an organization scope.
    */
   approve(body: MemberApproveParams, options?: RequestOptions): APIPromise<MemberApproveResponse> {
-    return this._client.post('/v1/access-control/members/approve', { body, ...options });
+    return this._client.post('/v1/iam/members/approve', { body, ...options });
   }
 
   /**
    * Evicts a member principal from an organization scope.
    */
   remove(body: MemberRemoveParams, options?: RequestOptions): APIPromise<MemberRemoveResponse> {
-    return this._client.post('/v1/access-control/members/remove', { body, ...options });
+    return this._client.post('/v1/iam/members/remove', { body, ...options });
   }
 
   /**
    * Suspends or unsuspends a member principal in an organization scope.
    */
   setStatus(body: MemberSetStatusParams, options?: RequestOptions): APIPromise<MemberSetStatusResponse> {
-    return this._client.post('/v1/access-control/members/status', { body, ...options });
+    return this._client.post('/v1/iam/members/status', { body, ...options });
   }
 }
 
@@ -50,7 +50,7 @@ export interface MemberAddResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -65,7 +65,7 @@ export interface MemberAddResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -95,17 +95,17 @@ export interface MemberApproveResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
   /**
-   * Hercules Access Control identifier.
+   * Hercules IAM identifier.
    */
   role_id: string | null;
 
   /**
-   * Hercules Access Control identifier.
+   * Hercules IAM identifier.
    */
   rule_id: string | null;
 
@@ -120,7 +120,7 @@ export interface MemberApproveResponse {
   status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -131,7 +131,7 @@ export interface MemberApproveResponse {
 }
 
 /**
- * Access Control write result for one user principal.
+ * IAM write result for one user principal.
  */
 export interface MemberRemoveResponse {
   /**
@@ -145,7 +145,7 @@ export interface MemberRemoveResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -155,7 +155,7 @@ export interface MemberRemoveResponse {
   source_version: number;
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -185,7 +185,7 @@ export interface MemberSetStatusResponse {
   principal_id: string;
 
   /**
-   * Deployments whose Access Control mirrors must receive this change.
+   * Deployments whose IAM mirrors must receive this change.
    */
   projection_ids: Array<string>;
 
@@ -200,7 +200,7 @@ export interface MemberSetStatusResponse {
   status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
 
   /**
-   * Whether persisted Access Control state changed.
+   * Whether persisted IAM state changed.
    */
   changed?: boolean;
 
@@ -213,7 +213,7 @@ export interface MemberSetStatusResponse {
 export interface MemberAddParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -234,7 +234,7 @@ export interface MemberAddParams {
   id_token?: string;
 
   /**
-   * Existing Access Control role ID.
+   * Existing IAM role ID.
    */
   role_id?: string;
 
@@ -247,7 +247,7 @@ export interface MemberAddParams {
 export interface MemberApproveParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -271,7 +271,7 @@ export interface MemberApproveParams {
 export interface MemberRemoveParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 
@@ -295,7 +295,7 @@ export interface MemberRemoveParams {
 export interface MemberSetStatusParams {
   /**
    * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by Access Control.
+   * or app_user for an end-user action authorized by IAM.
    */
   actor_mode: 'service' | 'app_user';
 

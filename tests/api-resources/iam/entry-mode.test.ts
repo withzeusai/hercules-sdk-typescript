@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource entryMode', () => {
   // Mock server tests are disabled
   test.skip('set: only required params', async () => {
-    const responsePromise = client.accessControl.entryMode.set({
+    const responsePromise = client.iam.entryMode.set({
       account_entry_mode: 'open',
       actor_mode: 'service',
       scope_id: 'x',
@@ -27,7 +27,7 @@ describe('resource entryMode', () => {
 
   // Mock server tests are disabled
   test.skip('set: required and optional params', async () => {
-    const response = await client.accessControl.entryMode.set({
+    const response = await client.iam.entryMode.set({
       account_entry_mode: 'open',
       actor_mode: 'service',
       scope_id: 'x',

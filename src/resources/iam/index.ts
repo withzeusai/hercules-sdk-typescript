@@ -1,11 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
-  AccessControl,
-  type AccessControlEntryResponse,
-  type AccessControlEntryParams,
-} from './access-control';
-export {
   AdmissionRules,
   type AdmissionRuleArchiveResponse,
   type AdmissionRuleUpsertResponse,
@@ -29,6 +24,7 @@ export {
   type GroupRemoveMemberParams,
   type GroupRenameParams,
 } from './groups';
+export { Iam, type IamEntryResponse, type IamEntryParams } from './iam';
 export {
   Invitations,
   type InvitationCreateResponse,
