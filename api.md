@@ -1,182 +1,178 @@
 # Iam
 
-Types:
-
-- <code><a href="./src/resources/iam/iam.ts">IamEntryResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/iam/entry">client.iam.<a href="./src/resources/iam/iam.ts">entry</a>({ ...params }) -> IamEntryResponse</code>
-
-## Scopes
-
-Types:
-
-- <code><a href="./src/resources/iam/scopes.ts">ScopeCreateResponse</a></code>
-- <code><a href="./src/resources/iam/scopes.ts">ScopeArchiveResponse</a></code>
-- <code><a href="./src/resources/iam/scopes.ts">ScopeSetDefaultRoleResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/iam/scopes/create">client.iam.scopes.<a href="./src/resources/iam/scopes.ts">create</a>({ ...params }) -> ScopeCreateResponse</code>
-- <code title="post /v1/iam/scopes/archive">client.iam.scopes.<a href="./src/resources/iam/scopes.ts">archive</a>({ ...params }) -> ScopeArchiveResponse</code>
-- <code title="post /v1/iam/scopes/set-default-role">client.iam.scopes.<a href="./src/resources/iam/scopes.ts">setDefaultRole</a>({ ...params }) -> ScopeSetDefaultRoleResponse</code>
-
 ## Invitations
 
 Types:
 
-- <code><a href="./src/resources/iam/invitations.ts">InvitationCreateResponse</a></code>
 - <code><a href="./src/resources/iam/invitations.ts">InvitationAcceptResponse</a></code>
-- <code><a href="./src/resources/iam/invitations.ts">InvitationCreateResourceResponse</a></code>
-- <code><a href="./src/resources/iam/invitations.ts">InvitationListResourceResponse</a></code>
-- <code><a href="./src/resources/iam/invitations.ts">InvitationRevokeResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/invitations/create">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">create</a>({ ...params }) -> InvitationCreateResponse</code>
 - <code title="post /v1/iam/invitations/accept">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">accept</a>({ ...params }) -> InvitationAcceptResponse</code>
-- <code title="post /v1/iam/invitations/create-resource">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">createResource</a>({ ...params }) -> InvitationCreateResourceResponse</code>
-- <code title="post /v1/iam/invitations/list-resource">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">listResource</a>({ ...params }) -> InvitationListResourceResponse</code>
-- <code title="post /v1/iam/invitations/revoke">client.iam.invitations.<a href="./src/resources/iam/invitations.ts">revoke</a>({ ...params }) -> InvitationRevokeResponse</code>
 
-## Roles
+## Tenants
 
 Types:
 
-- <code><a href="./src/resources/iam/roles.ts">RoleAssignResponse</a></code>
-- <code><a href="./src/resources/iam/roles.ts">RoleCreateOrgCustomResponse</a></code>
-- <code><a href="./src/resources/iam/roles.ts">RoleListGrantableResponse</a></code>
-- <code><a href="./src/resources/iam/roles.ts">RoleRemoveResponse</a></code>
-- <code><a href="./src/resources/iam/roles.ts">RoleReplaceResponse</a></code>
-- <code><a href="./src/resources/iam/roles.ts">RoleUpdatePermissionsResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantEvaluateEntryResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/roles/assign">client.iam.roles.<a href="./src/resources/iam/roles.ts">assign</a>({ ...params }) -> RoleAssignResponse</code>
-- <code title="post /v1/iam/roles/create-org-custom">client.iam.roles.<a href="./src/resources/iam/roles.ts">createOrgCustom</a>({ ...params }) -> RoleCreateOrgCustomResponse</code>
-- <code title="post /v1/iam/roles/list-grantable">client.iam.roles.<a href="./src/resources/iam/roles.ts">listGrantable</a>({ ...params }) -> RoleListGrantableResponse</code>
-- <code title="post /v1/iam/roles/remove">client.iam.roles.<a href="./src/resources/iam/roles.ts">remove</a>({ ...params }) -> RoleRemoveResponse</code>
-- <code title="post /v1/iam/roles/replace">client.iam.roles.<a href="./src/resources/iam/roles.ts">replace</a>({ ...params }) -> RoleReplaceResponse</code>
-- <code title="post /v1/iam/roles/update-permissions">client.iam.roles.<a href="./src/resources/iam/roles.ts">updatePermissions</a>({ ...params }) -> RoleUpdatePermissionsResponse</code>
+- <code title="post /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">create</a>({ ...params }) -> TenantCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">update</a>(tenantID, { ...params }) -> TenantUpdateResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/entry">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">evaluateEntry</a>(tenantID, { ...params }) -> TenantEvaluateEntryResponse</code>
 
-## UserExceptions
+### Grants
 
 Types:
 
-- <code><a href="./src/resources/iam/user-exceptions.ts">UserExceptionGetResponse</a></code>
-- <code><a href="./src/resources/iam/user-exceptions.ts">UserExceptionSetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/grants.ts">GrantUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/grants.ts">GrantDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/user-exceptions/get">client.iam.userExceptions.<a href="./src/resources/iam/user-exceptions.ts">get</a>({ ...params }) -> UserExceptionGetResponse</code>
-- <code title="post /v1/iam/user-exceptions/set">client.iam.userExceptions.<a href="./src/resources/iam/user-exceptions.ts">set</a>({ ...params }) -> UserExceptionSetResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/grants/{grant_id}">client.iam.tenants.grants.<a href="./src/resources/iam/tenants/grants.ts">update</a>(grantID, { ...params }) -> GrantUpdateResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/grants/{grant_id}">client.iam.tenants.grants.<a href="./src/resources/iam/tenants/grants.ts">delete</a>(grantID, { ...params }) -> GrantDeleteResponse</code>
 
-## ResourceGrants
+### Users
 
 Types:
 
-- <code><a href="./src/resources/iam/resource-grants.ts">ResourceGrantCreateResponse</a></code>
-- <code><a href="./src/resources/iam/resource-grants.ts">ResourceGrantReplaceResponse</a></code>
-- <code><a href="./src/resources/iam/resource-grants.ts">ResourceGrantRevokeResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/users.ts">UserCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/users.ts">UserUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/users.ts">UserListPermissionOverridesResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/users.ts">UserRemoveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/users.ts">UserReplacePermissionOverridesResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/users.ts">UserReplaceRolesResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/resource-grants/create">client.iam.resourceGrants.<a href="./src/resources/iam/resource-grants.ts">create</a>({ ...params }) -> ResourceGrantCreateResponse</code>
-- <code title="post /v1/iam/resource-grants/replace">client.iam.resourceGrants.<a href="./src/resources/iam/resource-grants.ts">replace</a>({ ...params }) -> ResourceGrantReplaceResponse</code>
-- <code title="post /v1/iam/resource-grants/revoke">client.iam.resourceGrants.<a href="./src/resources/iam/resource-grants.ts">revoke</a>({ ...params }) -> ResourceGrantRevokeResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/users">client.iam.tenants.users.<a href="./src/resources/iam/tenants/users.ts">create</a>(tenantID, { ...params }) -> UserCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/users/{user_id}">client.iam.tenants.users.<a href="./src/resources/iam/tenants/users.ts">update</a>(userID, { ...params }) -> UserUpdateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/users/{user_id}/permission-overrides">client.iam.tenants.users.<a href="./src/resources/iam/tenants/users.ts">listPermissionOverrides</a>(userID, { ...params }) -> UserListPermissionOverridesResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/users/{user_id}">client.iam.tenants.users.<a href="./src/resources/iam/tenants/users.ts">remove</a>(userID, { ...params }) -> UserRemoveResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/users/{user_id}/permission-overrides">client.iam.tenants.users.<a href="./src/resources/iam/tenants/users.ts">replacePermissionOverrides</a>(userID, { ...params }) -> UserReplacePermissionOverridesResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/users/{user_id}/roles">client.iam.tenants.users.<a href="./src/resources/iam/tenants/users.ts">replaceRoles</a>(userID, { ...params }) -> UserReplaceRolesResponse</code>
 
-## ResourceRules
+### Groups
 
 Types:
 
-- <code><a href="./src/resources/iam/resource-rules.ts">ResourceRuleReplaceResponse</a></code>
-- <code><a href="./src/resources/iam/resource-rules.ts">ResourceRuleSetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupListPermissionOverridesResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupReplacePermissionOverridesResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupReplaceRolesResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/resource-rules/replace">client.iam.resourceRules.<a href="./src/resources/iam/resource-rules.ts">replace</a>({ ...params }) -> ResourceRuleReplaceResponse</code>
-- <code title="post /v1/iam/resource-rules/set">client.iam.resourceRules.<a href="./src/resources/iam/resource-rules.ts">set</a>({ ...params }) -> ResourceRuleSetResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/groups">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">create</a>(tenantID, { ...params }) -> GroupCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">update</a>(groupID, { ...params }) -> GroupUpdateResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">archive</a>(groupID, { ...params }) -> GroupArchiveResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/groups/{group_id}/permission-overrides">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">listPermissionOverrides</a>(groupID, { ...params }) -> GroupListPermissionOverridesResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/groups/{group_id}/permission-overrides">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">replacePermissionOverrides</a>(groupID, { ...params }) -> GroupReplacePermissionOverridesResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/groups/{group_id}/roles">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">replaceRoles</a>(groupID, { ...params }) -> GroupReplaceRolesResponse</code>
 
-## Expiries
+#### Members
 
 Types:
 
-- <code><a href="./src/resources/iam/expiries.ts">ExpirySetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/members.ts">MemberAddResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/members.ts">MemberRemoveResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/expiries/set">client.iam.expiries.<a href="./src/resources/iam/expiries.ts">set</a>({ ...params }) -> ExpirySetResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{user_id}">client.iam.tenants.groups.members.<a href="./src/resources/iam/tenants/groups/members.ts">add</a>(userID, { ...params }) -> MemberAddResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{user_id}">client.iam.tenants.groups.members.<a href="./src/resources/iam/tenants/groups/members.ts">remove</a>(userID, { ...params }) -> MemberRemoveResponse</code>
 
-## RoleOverrides
+### Roles
 
 Types:
 
-- <code><a href="./src/resources/iam/role-overrides.ts">RoleOverrideGetResponse</a></code>
-- <code><a href="./src/resources/iam/role-overrides.ts">RoleOverrideSetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleEvaluateGrantabilityResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleListPermissionOverridesResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleReplacePermissionOverridesResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/role-overrides/get">client.iam.roleOverrides.<a href="./src/resources/iam/role-overrides.ts">get</a>({ ...params }) -> RoleOverrideGetResponse</code>
-- <code title="post /v1/iam/role-overrides/set">client.iam.roleOverrides.<a href="./src/resources/iam/role-overrides.ts">set</a>({ ...params }) -> RoleOverrideSetResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/roles">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">create</a>(tenantID, { ...params }) -> RoleCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">update</a>(roleID, { ...params }) -> RoleUpdateResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">archive</a>(roleID, { ...params }) -> RoleArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/roles/evaluate-grantability">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">evaluateGrantability</a>(tenantID, { ...params }) -> RoleEvaluateGrantabilityResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/roles/{role_id}/permission-overrides">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">listPermissionOverrides</a>(roleID, { ...params }) -> RoleListPermissionOverridesResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/roles/{role_id}/permission-overrides">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">replacePermissionOverrides</a>(roleID, { ...params }) -> RoleReplacePermissionOverridesResponse</code>
 
-## Members
+### AdmissionRules
 
 Types:
 
-- <code><a href="./src/resources/iam/members.ts">MemberAddResponse</a></code>
-- <code><a href="./src/resources/iam/members.ts">MemberApproveResponse</a></code>
-- <code><a href="./src/resources/iam/members.ts">MemberRemoveResponse</a></code>
-- <code><a href="./src/resources/iam/members.ts">MemberSetStatusResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleArchiveResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/members/add">client.iam.members.<a href="./src/resources/iam/members.ts">add</a>({ ...params }) -> MemberAddResponse</code>
-- <code title="post /v1/iam/members/approve">client.iam.members.<a href="./src/resources/iam/members.ts">approve</a>({ ...params }) -> MemberApproveResponse</code>
-- <code title="post /v1/iam/members/remove">client.iam.members.<a href="./src/resources/iam/members.ts">remove</a>({ ...params }) -> MemberRemoveResponse</code>
-- <code title="post /v1/iam/members/status">client.iam.members.<a href="./src/resources/iam/members.ts">setStatus</a>({ ...params }) -> MemberSetStatusResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/admission-rules">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">create</a>(tenantID, { ...params }) -> AdmissionRuleCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/admission-rules/{rule_id}">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">update</a>(ruleID, { ...params }) -> AdmissionRuleUpdateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/admission-rules">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">list</a>(tenantID, { ...params }) -> AdmissionRuleListResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/admission-rules/{rule_id}">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">archive</a>(ruleID, { ...params }) -> AdmissionRuleArchiveResponse</code>
 
-## AdmissionRules
+### AuditEvents
 
 Types:
 
-- <code><a href="./src/resources/iam/admission-rules.ts">AdmissionRuleArchiveResponse</a></code>
-- <code><a href="./src/resources/iam/admission-rules.ts">AdmissionRuleUpsertResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/audit-events.ts">AuditEventListResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/admission-rules/archive">client.iam.admissionRules.<a href="./src/resources/iam/admission-rules.ts">archive</a>({ ...params }) -> AdmissionRuleArchiveResponse</code>
-- <code title="post /v1/iam/admission-rules/upsert">client.iam.admissionRules.<a href="./src/resources/iam/admission-rules.ts">upsert</a>({ ...params }) -> AdmissionRuleUpsertResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/audit-events">client.iam.tenants.auditEvents.<a href="./src/resources/iam/tenants/audit-events.ts">list</a>(tenantID, { ...params }) -> AuditEventListResponse</code>
 
-## EntryMode
+### Invitations
 
 Types:
 
-- <code><a href="./src/resources/iam/entry-mode.ts">EntryModeSetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationRevokeResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/entry-mode/set">client.iam.entryMode.<a href="./src/resources/iam/entry-mode.ts">set</a>({ ...params }) -> EntryModeSetResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">create</a>(tenantID, { ...params }) -> InvitationCreateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">list</a>(tenantID, { ...params }) -> InvitationListResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/invitations/{invitation_id}">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">revoke</a>(invitationID, { ...params }) -> InvitationRevokeResponse</code>
 
-## Groups
+### Resources
+
+#### Grants
 
 Types:
 
-- <code><a href="./src/resources/iam/groups.ts">GroupCreateResponse</a></code>
-- <code><a href="./src/resources/iam/groups.ts">GroupListResponse</a></code>
-- <code><a href="./src/resources/iam/groups.ts">GroupAddMemberResponse</a></code>
-- <code><a href="./src/resources/iam/groups.ts">GroupArchiveResponse</a></code>
-- <code><a href="./src/resources/iam/groups.ts">GroupRemoveMemberResponse</a></code>
-- <code><a href="./src/resources/iam/groups.ts">GroupRenameResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/resources/grants.ts">GrantCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/resources/grants.ts">GrantReplaceResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/groups/create">client.iam.groups.<a href="./src/resources/iam/groups.ts">create</a>({ ...params }) -> GroupCreateResponse</code>
-- <code title="post /v1/iam/groups/list">client.iam.groups.<a href="./src/resources/iam/groups.ts">list</a>({ ...params }) -> GroupListResponse</code>
-- <code title="post /v1/iam/groups/members/add">client.iam.groups.<a href="./src/resources/iam/groups.ts">addMember</a>({ ...params }) -> GroupAddMemberResponse</code>
-- <code title="post /v1/iam/groups/archive">client.iam.groups.<a href="./src/resources/iam/groups.ts">archive</a>({ ...params }) -> GroupArchiveResponse</code>
-- <code title="post /v1/iam/groups/members/remove">client.iam.groups.<a href="./src/resources/iam/groups.ts">removeMember</a>({ ...params }) -> GroupRemoveMemberResponse</code>
-- <code title="post /v1/iam/groups/rename">client.iam.groups.<a href="./src/resources/iam/groups.ts">rename</a>({ ...params }) -> GroupRenameResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/resources/{resource_type}/{resource_id}/grants">client.iam.tenants.resources.grants.<a href="./src/resources/iam/tenants/resources/grants.ts">create</a>(resourceID, { ...params }) -> GrantCreateResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/resources/{resource_type}/{resource_id}/grants">client.iam.tenants.resources.grants.<a href="./src/resources/iam/tenants/resources/grants.ts">replace</a>(resourceID, { ...params }) -> GrantReplaceResponse</code>
+
+#### PermissionOverrides
+
+Types:
+
+- <code><a href="./src/resources/iam/tenants/resources/permission-overrides.ts">PermissionOverrideReplaceResponse</a></code>
+
+Methods:
+
+- <code title="put /v1/iam/tenants/{tenant_id}/resource-permission-overrides">client.iam.tenants.resources.permissionOverrides.<a href="./src/resources/iam/tenants/resources/permission-overrides.ts">replace</a>(tenantID, { ...params }) -> PermissionOverrideReplaceResponse</code>
 
 # Commerce
 

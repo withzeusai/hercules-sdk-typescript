@@ -2,110 +2,51 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 
 export class Invitations extends APIResource {
   /**
-   * Creates an invitation link for an org scope.
+   * Accepts a tenant or resource invitation for the signed-in user.
    */
-  create(body: InvitationCreateParams, options?: RequestOptions): APIPromise<InvitationCreateResponse> {
-    return this._client.post('/v1/iam/invitations/create', { body, ...options });
-  }
-
-  /**
-   * Accepts an invitation for the signed-in app user.
-   */
-  accept(body: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
-    return this._client.post('/v1/iam/invitations/accept', { body, ...options });
-  }
-
-  /**
-   * Creates an invitation that confers a single grant on one exact resource on
-   * accept.
-   */
-  createResource(
-    body: InvitationCreateResourceParams,
-    options?: RequestOptions,
-  ): APIPromise<InvitationCreateResourceResponse> {
-    return this._client.post('/v1/iam/invitations/create-resource', { body, ...options });
-  }
-
-  /**
-   * Lists the pending, unexpired resource invitations in an organization scope.
-   */
-  listResource(
-    body: InvitationListResourceParams,
-    options?: RequestOptions,
-  ): APIPromise<InvitationListResourceResponse> {
-    return this._client.post('/v1/iam/invitations/list-resource', { body, ...options });
-  }
-
-  /**
-   * Revokes a pending org invitation.
-   */
-  revoke(body: InvitationRevokeParams, options?: RequestOptions): APIPromise<InvitationRevokeResponse> {
-    return this._client.post('/v1/iam/invitations/revoke', { body, ...options });
+  accept(params: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
+    const {
+      'X-Hercules-IAM-Actor': xHerculesIamActor,
+      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
+      ...body
+    } = params;
+    return this._client.post('/v1/iam/invitations/accept', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
+          'X-Hercules-User-ID-Token': xHerculesUserIDToken,
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
 /**
- * Created scope or resource invitation, including its one-time acceptance secret.
- */
-export interface InvitationCreateResponse {
-  /**
-   * Secret invitation token. Send it only to the intended invitee.
-   */
-  token: string;
-
-  /**
-   * Hosted URL where the invitee can accept the invitation.
-   */
-  accept_url: string;
-
-  /**
-   * Scope the invitation belongs to.
-   */
-  access_scope_id: string;
-
-  /**
-   * Email address of the invitee.
-   */
-  email: string;
-
-  /**
-   * Invitation expiry timestamp.
-   */
-  expires_at: string;
-
-  /**
-   * Created invitation ID.
-   */
-  invitation_id: string;
-
-  /**
-   * Deployments whose IAM mirrors must receive this invitation.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * Roles attached to the invitation.
-   */
-  role_ids: Array<string>;
-
-  /**
-   * New deployment source version.
-   */
-  source_version: number;
-}
-
-/**
- * Result of accepting a scope or resource invitation.
+ * Accepted tenant or resource invitation.
  */
 export interface InvitationAcceptResponse {
   /**
-   * Scope changed by the operation.
+   * Whether persisted IAM state changed.
    */
-  access_scope_id: string;
+  changed: boolean;
+
+  /**
+   * Resulting grants assigned by the invitation.
+   */
+  grants: Array<
+    | InvitationAcceptResponse.UnionMember0
+    | InvitationAcceptResponse.UnionMember1
+    | InvitationAcceptResponse.UnionMember2
+    | InvitationAcceptResponse.UnionMember3
+  >;
 
   /**
    * Accepted invitation ID.
@@ -113,363 +54,176 @@ export interface InvitationAcceptResponse {
   invitation_id: string;
 
   /**
-   * Invitee's principal ID in the target scope.
-   */
-  principal_id: string;
-
-  /**
-   * Deployments whose IAM mirrors must receive this change.
+   * Projection IDs scheduled to receive the updated IAM state.
    */
   projection_ids: Array<string>;
 
   /**
-   * Roles assigned when the invitation was accepted.
-   */
-  role_ids: Array<string>;
-
-  /**
-   * New deployment source version after the operation.
+   * IAM source version after the operation.
    */
   source_version: number;
 
   /**
-   * Whether persisted IAM state changed.
+   * Tenant changed by the operation.
    */
-  changed?: boolean;
-
-  /**
-   * Whether the operation created a new entity.
-   */
-  created?: boolean;
+  tenant_id: string;
 }
 
-/**
- * Created scope or resource invitation, including its one-time acceptance secret.
- */
-export interface InvitationCreateResourceResponse {
+export namespace InvitationAcceptResponse {
   /**
-   * Secret invitation token. Send it only to the intended invitee.
+   * One persisted direct role grant.
    */
-  token: string;
-
-  /**
-   * Hosted URL where the invitee can accept the invitation.
-   */
-  accept_url: string;
-
-  /**
-   * Scope the invitation belongs to.
-   */
-  access_scope_id: string;
-
-  /**
-   * Email address of the invitee.
-   */
-  email: string;
-
-  /**
-   * Invitation expiry timestamp.
-   */
-  expires_at: string;
-
-  /**
-   * Created invitation ID.
-   */
-  invitation_id: string;
-
-  /**
-   * Deployments whose IAM mirrors must receive this invitation.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * Roles attached to the invitation.
-   */
-  role_ids: Array<string>;
-
-  /**
-   * New deployment source version.
-   */
-  source_version: number;
-}
-
-/**
- * Pending resource invitations in one organization scope.
- */
-export interface InvitationListResourceResponse {
-  /**
-   * Scope whose resource invitations were listed.
-   */
-  access_scope_id: string;
-
-  /**
-   * Pending, unexpired resource invitations in the scope.
-   */
-  invitations: Array<InvitationListResourceResponse.Invitation>;
-}
-
-export namespace InvitationListResourceResponse {
-  /**
-   * Pending resource invitation without its secret bearer token.
-   */
-  export interface Invitation {
+  export interface UnionMember0 {
     /**
-     * Resource applicability conferred by the invitation.
+     * Grant expiry, or null for a permanent grant.
      */
-    applies_to: 'self' | 'self_and_descendants';
+    expires_at: string | null;
 
     /**
-     * Whether acceptance grants a role or one permission.
+     * Persisted IAM grant ID.
      */
-    conferral_type: 'role' | 'permission' | null;
+    grant_id: string;
 
     /**
-     * Invitation creation timestamp.
+     * IAM role granted by this binding.
      */
-    created_at: string;
+    role_id: string;
 
     /**
-     * Email address of the invitee.
+     * Identifies a role grant.
      */
-    email: string;
-
-    /**
-     * Invitation expiry timestamp.
-     */
-    expires_at: string;
-
-    /**
-     * Resource invitation ID.
-     */
-    invitation_id: string;
-
-    /**
-     * Hercules IAM identifier.
-     */
-    permission_id: string | null;
-
-    /**
-     * Exact application resource ID being shared.
-     */
-    resource_id: string;
-
-    /**
-     * Canonical type of the invited resource.
-     */
-    resource_type: string;
-
-    /**
-     * Hercules IAM identifier.
-     */
-    role_id: string | null;
-
-    /**
-     * Invitation last-updated timestamp.
-     */
-    updated_at: string;
+    type: 'role';
   }
-}
-
-/**
- * Result of revoking a pending invitation.
- */
-export interface InvitationRevokeResponse {
-  /**
-   * Scope changed by the operation.
-   */
-  access_scope_id: string;
 
   /**
-   * Invitation ID targeted for revocation.
+   * One persisted direct permission grant.
    */
-  invitation_id: string;
+  export interface UnionMember1 {
+    /**
+     * Whether the permission is allowed or denied.
+     */
+    effect: 'allow' | 'deny';
+
+    /**
+     * Grant expiry, or null for a permanent grant.
+     */
+    expires_at: string | null;
+
+    /**
+     * Persisted IAM grant ID.
+     */
+    grant_id: string;
+
+    /**
+     * IAM permission granted or denied by this binding.
+     */
+    permission_id: string;
+
+    /**
+     * Stable IAM permission key.
+     */
+    permission_key: string;
+
+    /**
+     * Identifies a direct permission grant.
+     */
+    type: 'permission';
+  }
 
   /**
-   * Deployments whose IAM mirrors must receive this change.
+   * One persisted resource role grant.
    */
-  projection_ids: Array<string>;
+  export interface UnionMember2 {
+    /**
+     * Grant expiry, or null for a permanent grant.
+     */
+    expires_at: string | null;
+
+    /**
+     * Persisted IAM grant ID.
+     */
+    grant_id: string;
+
+    /**
+     * IAM role granted by this binding.
+     */
+    role_id: string;
+
+    /**
+     * Identifies a role grant.
+     */
+    type: 'role';
+
+    /**
+     * Whether the access entry applies only to this resource or also to descendants
+     * authorized through it.
+     */
+    applies_to?: 'self' | 'self_and_descendants';
+  }
 
   /**
-   * Whether a pending invitation was revoked.
+   * One persisted resource permission grant.
    */
-  revoked: boolean;
+  export interface UnionMember3 {
+    /**
+     * Whether the permission is allowed or denied.
+     */
+    effect: 'allow' | 'deny';
 
-  /**
-   * New deployment source version after the operation.
-   */
-  source_version: number;
+    /**
+     * Grant expiry, or null for a permanent grant.
+     */
+    expires_at: string | null;
 
-  /**
-   * Whether persisted IAM state changed.
-   */
-  changed?: boolean;
+    /**
+     * Persisted IAM grant ID.
+     */
+    grant_id: string;
 
-  /**
-   * Whether the operation created a new entity.
-   */
-  created?: boolean;
-}
+    /**
+     * IAM permission granted or denied by this binding.
+     */
+    permission_id: string;
 
-export interface InvitationCreateParams {
-  /**
-   * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by IAM.
-   */
-  actor_mode: 'service' | 'app_user';
+    /**
+     * Stable IAM permission key.
+     */
+    permission_key: string;
 
-  /**
-   * Email address of the invited user.
-   */
-  email: string;
+    /**
+     * Identifies a direct permission grant.
+     */
+    type: 'permission';
 
-  /**
-   * Organization scope the recipient is invited to join.
-   */
-  scope_id: string;
-
-  /**
-   * Invitation lifetime in days.
-   */
-  expires_in_days?: number;
-
-  /**
-   * Signed Hercules Auth ID token for actor_mode app_user. Omit this field for
-   * actor_mode service.
-   */
-  id_token?: string;
-
-  /**
-   * Role IDs to assign on acceptance. Use either role_ids or role_keys.
-   */
-  role_ids?: Array<string>;
-
-  /**
-   * Role keys to assign on acceptance. Use either role_keys or role_ids.
-   */
-  role_keys?: Array<string>;
+    /**
+     * Whether the access entry applies only to this resource or also to descendants
+     * authorized through it.
+     */
+    applies_to?: 'self' | 'self_and_descendants';
+  }
 }
 
 export interface InvitationAcceptParams {
   /**
-   * Secret invitation token received by the invitee.
+   * Body param: Secret invitation token.
    */
   token: string;
 
   /**
-   * Signed Hercules Auth ID token for the user accepting the invitation.
+   * Header param: Must be user for this signed-in user operation.
    */
-  id_token: string;
-}
-
-export interface InvitationCreateResourceParams {
-  /**
-   * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by IAM.
-   */
-  actor_mode: 'service' | 'app_user';
+  'X-Hercules-IAM-Actor': 'user';
 
   /**
-   * Email address of the invited user.
+   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
+   * service.
    */
-  email: string;
-
-  /**
-   * Application resource ID the invitation grants access to.
-   */
-  resource_id: string;
-
-  /**
-   * Canonical type of the invited resource.
-   */
-  resource_type: string;
-
-  /**
-   * Scope containing the invited resource.
-   */
-  scope_id: string;
-
-  /**
-   * Whether the access entry applies only to this resource or also to descendants
-   * authorized through it.
-   */
-  applies_to?: 'self' | 'self_and_descendants';
-
-  /**
-   * Invitation lifetime in days.
-   */
-  expires_in_days?: number;
-
-  /**
-   * Signed Hercules Auth ID token for actor_mode app_user. Omit this field for
-   * actor_mode service.
-   */
-  id_token?: string;
-
-  /**
-   * Single permission conferred on acceptance.
-   */
-  permission_key?: string;
-
-  /**
-   * Resource role conferred on acceptance.
-   */
-  role_key?: string;
-}
-
-export interface InvitationListResourceParams {
-  /**
-   * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by IAM.
-   */
-  actor_mode: 'service' | 'app_user';
-
-  /**
-   * Scope whose pending resource invitations are returned.
-   */
-  scope_id: string;
-
-  /**
-   * Signed Hercules Auth ID token for actor_mode app_user. Omit this field for
-   * actor_mode service.
-   */
-  id_token?: string;
-}
-
-export interface InvitationRevokeParams {
-  /**
-   * Authority used for the operation. Use service for trusted backend administration
-   * or app_user for an end-user action authorized by IAM.
-   */
-  actor_mode: 'service' | 'app_user';
-
-  /**
-   * Pending invitation ID to revoke.
-   */
-  invitation_id: string;
-
-  /**
-   * Scope containing the invitation.
-   */
-  scope_id: string;
-
-  /**
-   * Signed Hercules Auth ID token for actor_mode app_user. Omit this field for
-   * actor_mode service.
-   */
-  id_token?: string;
+  'X-Hercules-User-ID-Token': string;
 }
 
 export declare namespace Invitations {
   export {
-    type InvitationCreateResponse as InvitationCreateResponse,
     type InvitationAcceptResponse as InvitationAcceptResponse,
-    type InvitationCreateResourceResponse as InvitationCreateResourceResponse,
-    type InvitationListResourceResponse as InvitationListResourceResponse,
-    type InvitationRevokeResponse as InvitationRevokeResponse,
-    type InvitationCreateParams as InvitationCreateParams,
     type InvitationAcceptParams as InvitationAcceptParams,
-    type InvitationCreateResourceParams as InvitationCreateResourceParams,
-    type InvitationListResourceParams as InvitationListResourceParams,
-    type InvitationRevokeParams as InvitationRevokeParams,
   };
 }

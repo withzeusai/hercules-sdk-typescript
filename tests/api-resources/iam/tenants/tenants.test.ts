@@ -8,13 +8,13 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource members', () => {
+describe('resource tenants', () => {
   // Mock server tests are disabled
-  test.skip('add: only required params', async () => {
-    const responsePromise = client.iam.members.add({
-      actor_mode: 'service',
-      hercules_auth_user_id: 'x',
-      scope_id: 'x',
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.iam.tenants.create({
+      name: 'x',
+      owner_user_id: 'x',
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -26,23 +26,21 @@ describe('resource members', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('add: required and optional params', async () => {
-    const response = await client.iam.members.add({
-      actor_mode: 'service',
-      hercules_auth_user_id: 'x',
-      scope_id: 'x',
-      id_token: 'x',
-      role_id: 'x',
-      role_key: 'x',
+  test.skip('create: required and optional params', async () => {
+    const response = await client.iam.tenants.create({
+      name: 'x',
+      owner_user_id: 'x',
+      'X-Hercules-IAM-Actor': 'service',
+      default_role: { id: 'x' },
+      entry_mode: 'open',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('approve: only required params', async () => {
-    const responsePromise = client.iam.members.approve({
-      actor_mode: 'service',
-      principal_id: 'x',
-      scope_id: 'x',
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.iam.tenants.update('tenant_id', {
+      name: 'x',
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -54,21 +52,38 @@ describe('resource members', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('approve: required and optional params', async () => {
-    const response = await client.iam.members.approve({
-      actor_mode: 'service',
-      principal_id: 'x',
-      scope_id: 'x',
-      id_token: 'x',
+  test.skip('update: required and optional params', async () => {
+    const response = await client.iam.tenants.update('tenant_id', {
+      name: 'x',
+      'X-Hercules-IAM-Actor': 'service',
+      default_role: { id: 'x' },
+      entry_mode: 'open',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('remove: only required params', async () => {
-    const responsePromise = client.iam.members.remove({
-      actor_mode: 'service',
-      principal_id: 'x',
-      scope_id: 'x',
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.iam.tenants.archive('tenant_id', { 'X-Hercules-IAM-Actor': 'service' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.iam.tenants.archive('tenant_id', { 'X-Hercules-IAM-Actor': 'service' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('evaluateEntry: only required params', async () => {
+    const responsePromise = client.iam.tenants.evaluateEntry('tenant_id', {
+      'X-Hercules-IAM-Actor': 'user',
+      'X-Hercules-User-ID-Token': 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -80,40 +95,10 @@ describe('resource members', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('remove: required and optional params', async () => {
-    const response = await client.iam.members.remove({
-      actor_mode: 'service',
-      principal_id: 'x',
-      scope_id: 'x',
-      id_token: 'x',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('setStatus: only required params', async () => {
-    const responsePromise = client.iam.members.setStatus({
-      actor_mode: 'service',
-      principal_id: 'x',
-      scope_id: 'x',
-      status: 'active',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('setStatus: required and optional params', async () => {
-    const response = await client.iam.members.setStatus({
-      actor_mode: 'service',
-      principal_id: 'x',
-      scope_id: 'x',
-      status: 'active',
-      id_token: 'x',
+  test.skip('evaluateEntry: required and optional params', async () => {
+    const response = await client.iam.tenants.evaluateEntry('tenant_id', {
+      'X-Hercules-IAM-Actor': 'user',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 });

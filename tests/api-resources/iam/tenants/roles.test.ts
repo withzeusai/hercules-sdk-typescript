@@ -10,66 +10,91 @@ const client = new Hercules({
 
 describe('resource roles', () => {
   // Mock server tests are disabled
-  test.skip('assign: only required params', async () => {
-    const responsePromise = client.iam.roles.assign({ actor_mode: 'service' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('assign: required and optional params', async () => {
-    const response = await client.iam.roles.assign({
-      actor_mode: 'service',
-      hercules_auth_user_id: 'x',
-      id_token: 'x',
-      principal_id: 'x',
-      role_id: 'x',
-      role_key: 'x',
-      scope_id: 'x',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('createOrgCustom: only required params', async () => {
-    const responsePromise = client.iam.roles.createOrgCustom({
-      actor_mode: 'service',
-      name: 'x',
-      scope_id: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('createOrgCustom: required and optional params', async () => {
-    const response = await client.iam.roles.createOrgCustom({
-      actor_mode: 'service',
-      name: 'x',
-      scope_id: 'x',
-      description: 'description',
-      id_token: 'x',
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.iam.tenants.roles.create('tenant_id', {
       key: 'x',
+      name: 'x',
+      'X-Hercules-IAM-Actor': 'service',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('create: required and optional params', async () => {
+    const response = await client.iam.tenants.roles.create('tenant_id', {
+      key: 'x',
+      name: 'x',
+      'X-Hercules-IAM-Actor': 'service',
+      description: 'description',
       permission_keys: ['x'],
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('listGrantable: only required params', async () => {
-    const responsePromise = client.iam.roles.listGrantable({
-      actor_mode: 'service',
-      scope_id: 'x',
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.iam.tenants.roles.update('role_id', {
+      tenant_id: 'tenant_id',
+      name: 'x',
+      'X-Hercules-IAM-Actor': 'service',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.iam.tenants.roles.update('role_id', {
+      tenant_id: 'tenant_id',
+      name: 'x',
+      'X-Hercules-IAM-Actor': 'service',
+      description: 'description',
+      permission_keys: ['x'],
+      'X-Hercules-User-ID-Token': 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: only required params', async () => {
+    const responsePromise = client.iam.tenants.roles.archive('role_id', {
+      tenant_id: 'tenant_id',
+      'X-Hercules-IAM-Actor': 'service',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('archive: required and optional params', async () => {
+    const response = await client.iam.tenants.roles.archive('role_id', {
+      tenant_id: 'tenant_id',
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('evaluateGrantability: only required params', async () => {
+    const responsePromise = client.iam.tenants.roles.evaluateGrantability('tenant_id', {
       subject_type: 'user',
-      target: { type: 'scope' },
+      target: { type: 'tenant' },
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -81,47 +106,20 @@ describe('resource roles', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listGrantable: required and optional params', async () => {
-    const response = await client.iam.roles.listGrantable({
-      actor_mode: 'service',
-      scope_id: 'x',
+  test.skip('evaluateGrantability: required and optional params', async () => {
+    const response = await client.iam.tenants.roles.evaluateGrantability('tenant_id', {
       subject_type: 'user',
-      target: { type: 'scope' },
-      id_token: 'x',
+      target: { type: 'tenant' },
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('remove: only required params', async () => {
-    const responsePromise = client.iam.roles.remove({ actor_mode: 'service' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('remove: required and optional params', async () => {
-    const response = await client.iam.roles.remove({
-      actor_mode: 'service',
-      hercules_auth_user_id: 'x',
-      id_token: 'x',
-      principal_id: 'x',
-      role_id: 'x',
-      role_key: 'x',
-      scope_id: 'x',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('replace: only required params', async () => {
-    const responsePromise = client.iam.roles.replace({
-      actor_mode: 'service',
-      role_keys: ['x'],
-      scope_id: 'x',
+  test.skip('listPermissionOverrides: only required params', async () => {
+    const responsePromise = client.iam.tenants.roles.listPermissionOverrides('role_id', {
+      tenant_id: 'tenant_id',
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -133,22 +131,20 @@ describe('resource roles', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('replace: required and optional params', async () => {
-    const response = await client.iam.roles.replace({
-      actor_mode: 'service',
-      role_keys: ['x'],
-      scope_id: 'x',
-      hercules_auth_user_id: 'x',
-      id_token: 'x',
-      principal_id: 'x',
+  test.skip('listPermissionOverrides: required and optional params', async () => {
+    const response = await client.iam.tenants.roles.listPermissionOverrides('role_id', {
+      tenant_id: 'tenant_id',
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('updatePermissions: only required params', async () => {
-    const responsePromise = client.iam.roles.updatePermissions({
-      actor_mode: 'service',
-      permission_keys: ['x'],
+  test.skip('replacePermissionOverrides: only required params', async () => {
+    const responsePromise = client.iam.tenants.roles.replacePermissionOverrides('role_id', {
+      tenant_id: 'tenant_id',
+      overrides: [{ effect: 'allow', permission_key: 'x' }],
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -160,14 +156,12 @@ describe('resource roles', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('updatePermissions: required and optional params', async () => {
-    const response = await client.iam.roles.updatePermissions({
-      actor_mode: 'service',
-      permission_keys: ['x'],
-      id_token: 'x',
-      role_id: 'x',
-      role_key: 'x',
-      scope_id: 'x',
+  test.skip('replacePermissionOverrides: required and optional params', async () => {
+    const response = await client.iam.tenants.roles.replacePermissionOverrides('role_id', {
+      tenant_id: 'tenant_id',
+      overrides: [{ effect: 'allow', permission_key: 'x' }],
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 });
