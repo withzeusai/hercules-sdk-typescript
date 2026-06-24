@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../core/resource';
 import { APIPromise } from '../../../core/api-promise';
-import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
@@ -12,27 +11,10 @@ export class AdmissionRules extends APIResource {
    */
   create(
     tenantID: string,
-    params: AdmissionRuleCreateParams,
+    body: AdmissionRuleCreateParams,
     options?: RequestOptions,
   ): APIPromise<AdmissionRuleCreateResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/admission-rules`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/admission-rules`, { body, ...options });
   }
 
   /**
@@ -43,24 +25,10 @@ export class AdmissionRules extends APIResource {
     params: AdmissionRuleUpdateParams,
     options?: RequestOptions,
   ): APIPromise<AdmissionRuleUpdateResponse> {
-    const {
-      tenant_id,
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
+    const { tenant_id, ...body } = params;
     return this._client.patch(path`/v1/iam/tenants/${tenant_id}/admission-rules/${ruleID}`, {
       body,
       ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
     });
   }
 
@@ -69,27 +37,10 @@ export class AdmissionRules extends APIResource {
    */
   list(
     tenantID: string,
-    params: AdmissionRuleListParams,
+    query: AdmissionRuleListParams,
     options?: RequestOptions,
   ): APIPromise<AdmissionRuleListResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...query
-    } = params;
-    return this._client.get(path`/v1/iam/tenants/${tenantID}/admission-rules`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    return this._client.get(path`/v1/iam/tenants/${tenantID}/admission-rules`, { query, ...options });
   }
 
   /**
@@ -100,22 +51,25 @@ export class AdmissionRules extends APIResource {
     params: AdmissionRuleArchiveParams,
     options?: RequestOptions,
   ): APIPromise<AdmissionRuleArchiveResponse> {
-    const {
-      tenant_id,
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-    } = params;
+    const { tenant_id, user_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/admission-rules/${ruleID}`, {
+      query: { user_token_identifier },
       ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
+    });
+  }
+
+  /**
+   * Unarchives one tenant admission rule.
+   */
+  unarchive(
+    ruleID: string,
+    params: AdmissionRuleUnarchiveParams,
+    options?: RequestOptions,
+  ): APIPromise<AdmissionRuleUnarchiveResponse> {
+    const { tenant_id, ...body } = params;
+    return this._client.post(path`/v1/iam/tenants/${tenant_id}/admission-rules/${ruleID}/unarchive`, {
+      body,
+      ...options,
     });
   }
 }
@@ -233,11 +187,11 @@ export namespace AdmissionRuleListResponse {
     /**
      * Email or domain matched by the rule.
      */
-    subject: AdmissionRule.UnionMember0 | AdmissionRule.UnionMember1;
+    subject: AdmissionRule.IamAdmissionRuleEmailSubject | AdmissionRule.IamAdmissionRuleDomainSubject;
   }
 
   export namespace AdmissionRule {
-    export interface UnionMember0 {
+    export interface IamAdmissionRuleEmailSubject {
       /**
        * Match one exact email address.
        */
@@ -249,7 +203,7 @@ export namespace AdmissionRuleListResponse {
       value: string;
     }
 
-    export interface UnionMember1 {
+    export interface IamAdmissionRuleDomainSubject {
       /**
        * Match every address in one email domain.
        */
@@ -293,36 +247,62 @@ export interface AdmissionRuleArchiveResponse {
   tenant_id: string;
 }
 
+/**
+ * Result of changing a tenant admission rule.
+ */
+export interface AdmissionRuleUnarchiveResponse {
+  /**
+   * Whether persisted IAM state changed.
+   */
+  changed: boolean;
+
+  /**
+   * Projection IDs scheduled to receive the updated IAM state.
+   */
+  projection_ids: Array<string>;
+
+  /**
+   * Admission rule changed by the operation.
+   */
+  rule_id: string;
+
+  /**
+   * IAM source version after the operation.
+   */
+  source_version: number;
+
+  /**
+   * Tenant changed by the operation.
+   */
+  tenant_id: string;
+}
+
 export interface AdmissionRuleCreateParams {
   /**
-   * Body param: Whether matching users are allowed or denied.
+   * Whether matching users are allowed or denied.
    */
   effect: 'allow' | 'deny';
 
   /**
-   * Body param: Email or domain matched by the rule.
+   * Email or domain matched by the rule.
    */
-  subject: AdmissionRuleCreateParams.UnionMember0 | AdmissionRuleCreateParams.UnionMember1;
+  subject:
+    | AdmissionRuleCreateParams.IamAdmissionRuleEmailSubject
+    | AdmissionRuleCreateParams.IamAdmissionRuleDomainSubject;
 
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
+  user_token_identifier: string | null;
 
   /**
-   * Body param: Optional administrative reason.
+   * Optional administrative reason.
    */
   reason?: string | null;
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
 }
 
 export namespace AdmissionRuleCreateParams {
-  export interface UnionMember0 {
+  export interface IamAdmissionRuleEmailSubject {
     /**
      * Match one exact email address.
      */
@@ -334,7 +314,7 @@ export namespace AdmissionRuleCreateParams {
     value: string;
   }
 
-  export interface UnionMember1 {
+  export interface IamAdmissionRuleDomainSubject {
     /**
      * Match every address in one email domain.
      */
@@ -354,58 +334,46 @@ export interface AdmissionRuleUpdateParams {
   tenant_id: string;
 
   /**
+   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   */
+  user_token_identifier: string | null;
+
+  /**
    * Body param: New administrative reason, or null to clear it.
    */
-  reason: string | null;
-
-  /**
-   * Header param: Authority used for this operation: service or user.
-   */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
+  reason?: string | null;
 }
 
 export interface AdmissionRuleListParams {
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
+  user_token_identifier: string | null;
 
   /**
-   * Query param: Whether to return archived rules.
+   * Whether to return archived rules.
    */
-  archived?: 'true' | 'false';
+  archived?: boolean;
 
   /**
-   * Query param: Opaque cursor returned by the previous page.
+   * Opaque cursor returned by the previous page.
    */
   cursor?: string;
 
   /**
-   * Query param: Filter by rule effect.
+   * Filter by rule effect.
    */
   effect?: 'allow' | 'deny';
 
   /**
-   * Query param: Maximum number of records to return.
+   * Maximum number of records to return.
    */
   limit?: number;
 
   /**
-   * Query param: Filter by subject type.
+   * Filter by subject type.
    */
   subject_type?: 'email' | 'domain';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
 }
 
 export interface AdmissionRuleArchiveParams {
@@ -415,15 +383,22 @@ export interface AdmissionRuleArchiveParams {
   tenant_id: string;
 
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Query param: Convex identity tokenIdentifier asserted by the trusted app
+   * backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
+  user_token_identifier: string | null;
+}
+
+export interface AdmissionRuleUnarchiveParams {
+  /**
+   * Path param
+   */
+  tenant_id: string;
 
   /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
+   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  'X-Hercules-User-ID-Token'?: string;
+  user_token_identifier: string | null;
 }
 
 export declare namespace AdmissionRules {
@@ -432,9 +407,11 @@ export declare namespace AdmissionRules {
     type AdmissionRuleUpdateResponse as AdmissionRuleUpdateResponse,
     type AdmissionRuleListResponse as AdmissionRuleListResponse,
     type AdmissionRuleArchiveResponse as AdmissionRuleArchiveResponse,
+    type AdmissionRuleUnarchiveResponse as AdmissionRuleUnarchiveResponse,
     type AdmissionRuleCreateParams as AdmissionRuleCreateParams,
     type AdmissionRuleUpdateParams as AdmissionRuleUpdateParams,
     type AdmissionRuleListParams as AdmissionRuleListParams,
     type AdmissionRuleArchiveParams as AdmissionRuleArchiveParams,
+    type AdmissionRuleUnarchiveParams as AdmissionRuleUnarchiveParams,
   };
 }

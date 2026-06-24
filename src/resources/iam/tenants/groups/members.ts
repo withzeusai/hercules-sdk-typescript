@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../../core/resource';
 import { APIPromise } from '../../../../core/api-promise';
-import { buildHeaders } from '../../../../internal/headers';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
 
@@ -11,23 +10,10 @@ export class Members extends APIResource {
    * Adds one tenant user as a member of a group.
    */
   add(userID: string, params: MemberAddParams, options?: RequestOptions): APIPromise<MemberAddResponse> {
-    const {
-      tenant_id,
-      group_id,
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-    } = params;
+    const { tenant_id, group_id, ...body } = params;
     return this._client.put(path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/members/${userID}`, {
+      body,
       ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
     });
   }
 
@@ -39,23 +25,10 @@ export class Members extends APIResource {
     params: MemberRemoveParams,
     options?: RequestOptions,
   ): APIPromise<MemberRemoveResponse> {
-    const {
-      tenant_id,
-      group_id,
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-    } = params;
+    const { tenant_id, group_id, user_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/members/${userID}`, {
+      query: { user_token_identifier },
       ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
     });
   }
 }
@@ -147,15 +120,9 @@ export interface MemberAddParams {
   group_id: string;
 
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
+  user_token_identifier: string | null;
 }
 
 export interface MemberRemoveParams {
@@ -170,15 +137,10 @@ export interface MemberRemoveParams {
   group_id: string;
 
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Query param: Convex identity tokenIdentifier asserted by the trusted app
+   * backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
+  user_token_identifier: string | null;
 }
 
 export declare namespace Members {

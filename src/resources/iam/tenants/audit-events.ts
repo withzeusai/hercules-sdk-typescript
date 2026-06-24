@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../core/resource';
 import { APIPromise } from '../../../core/api-promise';
-import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
@@ -12,27 +11,10 @@ export class AuditEvents extends APIResource {
    */
   list(
     tenantID: string,
-    params: AuditEventListParams,
+    query: AuditEventListParams,
     options?: RequestOptions,
   ): APIPromise<AuditEventListResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...query
-    } = params;
-    return this._client.get(path`/v1/iam/tenants/${tenantID}/audit-events`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    return this._client.get(path`/v1/iam/tenants/${tenantID}/audit-events`, { query, ...options });
   }
 }
 
@@ -92,11 +74,6 @@ export namespace AuditEventListResponse {
     metadata: { [key: string]: unknown } | null;
 
     /**
-     * Audit operation outcome.
-     */
-    outcome: 'success' | 'denied' | 'failure';
-
-    /**
      * Stable reason code when one was recorded.
      */
     reason_code: string | null;
@@ -110,6 +87,11 @@ export namespace AuditEventListResponse {
      * IAM source version after the operation.
      */
     source_version: number | null;
+
+    /**
+     * Audit operation status.
+     */
+    status: 'success' | 'denied' | 'failure';
 
     /**
      * Entity affected by the audit event.
@@ -217,70 +199,64 @@ export namespace AuditEventListResponse {
 
 export interface AuditEventListParams {
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
+  user_token_identifier: string | null;
 
   /**
-   * Query param: Filter by exact audit action.
+   * Filter by exact audit action.
    */
   action?: string;
 
   /**
-   * Query param: Filter by public actor type.
+   * Filter by public actor type.
    */
   actor_type?: 'system' | 'platform_user' | 'user' | 'agent' | 'service';
 
   /**
-   * Query param: Filter by service API key ID.
+   * Filter by service API key ID.
    */
   api_key_id?: string;
 
   /**
-   * Query param: Opaque cursor returned by the previous page.
+   * Opaque cursor returned by the previous page.
    */
   cursor?: string;
 
   /**
-   * Query param: Maximum number of records to return.
+   * Return events at or before this timestamp.
+   */
+  end_time?: string;
+
+  /**
+   * Maximum number of records to return.
    */
   limit?: number;
 
   /**
-   * Query param: Filter by outcome.
+   * Return events at or after this timestamp.
    */
-  outcome?: 'success' | 'denied' | 'failure';
+  start_time?: string;
 
   /**
-   * Query param: Return events at or after this timestamp.
+   * Filter by status.
    */
-  since?: string;
+  status?: 'success' | 'denied' | 'failure';
 
   /**
-   * Query param: Filter by target ID.
+   * Filter by target ID.
    */
   target_id?: string;
 
   /**
-   * Query param: Filter by target type.
+   * Filter by target type.
    */
   target_type?: string;
 
   /**
-   * Query param: Return events at or before this timestamp.
-   */
-  until?: string;
-
-  /**
-   * Query param: Filter by Hercules Auth user ID.
+   * Filter by Hercules Auth user ID.
    */
   user_id?: string;
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
 }
 
 export declare namespace AuditEvents {

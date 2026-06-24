@@ -2,13 +2,12 @@
 
 import { APIResource } from '../../../core/resource';
 import { APIPromise } from '../../../core/api-promise';
-import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 export class Grants extends APIResource {
   /**
-   * Updates or clears expiry on one role assignment, user permission override, or
+   * Updates or clears expiry on one role grant, user permission override, or
    * resource grant.
    */
   update(
@@ -16,52 +15,22 @@ export class Grants extends APIResource {
     params: GrantUpdateParams,
     options?: RequestOptions,
   ): APIPromise<GrantUpdateResponse> {
-    const {
-      tenant_id,
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
-    return this._client.patch(path`/v1/iam/tenants/${tenant_id}/grants/${grantID}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { tenant_id, ...body } = params;
+    return this._client.patch(path`/v1/iam/tenants/${tenant_id}/grants/${grantID}`, { body, ...options });
   }
 
   /**
-   * Deletes one role assignment, user permission override, or resource grant by
-   * grant ID.
+   * Deletes one role grant, user permission override, or resource grant by grant ID.
    */
   delete(
     grantID: string,
     params: GrantDeleteParams,
     options?: RequestOptions,
   ): APIPromise<GrantDeleteResponse> {
-    const {
-      tenant_id,
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-    } = params;
+    const { tenant_id, user_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/grants/${grantID}`, {
+      query: { user_token_identifier },
       ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
     });
   }
 }
@@ -76,11 +45,11 @@ export interface GrantUpdateResponse {
   changed: boolean;
 
   /**
-   * Updated tenant or resource IAM grant.
+   * One persisted tenant or resource role or permission grant.
    */
   grant:
-    | GrantUpdateResponse.IamRoleGrantResult
-    | GrantUpdateResponse.IamPermissionGrantResult
+    | GrantUpdateResponse.IamTenantRoleGrantResult
+    | GrantUpdateResponse.IamTenantPermissionGrantResult
     | GrantUpdateResponse.IamResourceRoleGrantResult
     | GrantUpdateResponse.IamResourcePermissionGrantResult;
 
@@ -102,9 +71,9 @@ export interface GrantUpdateResponse {
 
 export namespace GrantUpdateResponse {
   /**
-   * One persisted direct role grant.
+   * One persisted tenant role grant.
    */
-  export interface IamRoleGrantResult {
+  export interface IamTenantRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -116,20 +85,20 @@ export namespace GrantUpdateResponse {
     grant_id: string;
 
     /**
-     * IAM role granted by this binding.
+     * IAM role conferred by this grant.
      */
     role_id: string;
 
     /**
-     * Identifies a role grant.
+     * Identifies a tenant role grant.
      */
-    type: 'role';
+    type: 'tenant_role';
   }
 
   /**
-   * One persisted direct permission grant.
+   * One persisted tenant permission grant.
    */
-  export interface IamPermissionGrantResult {
+  export interface IamTenantPermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -146,7 +115,7 @@ export namespace GrantUpdateResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -156,9 +125,9 @@ export namespace GrantUpdateResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a tenant permission grant.
      */
-    type: 'permission';
+    type: 'tenant_permission';
   }
 
   /**
@@ -176,17 +145,17 @@ export namespace GrantUpdateResponse {
     grant_id: string;
 
     /**
-     * IAM role granted by this binding.
+     * IAM role conferred by this grant.
      */
     role_id: string;
 
     /**
-     * Identifies a role grant.
+     * Identifies a resource role grant.
      */
-    type: 'role';
+    type: 'resource_role';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
@@ -212,7 +181,7 @@ export namespace GrantUpdateResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -222,12 +191,12 @@ export namespace GrantUpdateResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a resource permission grant.
      */
-    type: 'permission';
+    type: 'resource_permission';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
@@ -244,11 +213,11 @@ export interface GrantDeleteResponse {
   changed: boolean;
 
   /**
-   * Tenant or resource IAM grant changed by the operation.
+   * One persisted tenant or resource role or permission grant.
    */
   grant:
-    | GrantDeleteResponse.IamRoleGrantResult
-    | GrantDeleteResponse.IamPermissionGrantResult
+    | GrantDeleteResponse.IamTenantRoleGrantResult
+    | GrantDeleteResponse.IamTenantPermissionGrantResult
     | GrantDeleteResponse.IamResourceRoleGrantResult
     | GrantDeleteResponse.IamResourcePermissionGrantResult;
 
@@ -270,9 +239,9 @@ export interface GrantDeleteResponse {
 
 export namespace GrantDeleteResponse {
   /**
-   * One persisted direct role grant.
+   * One persisted tenant role grant.
    */
-  export interface IamRoleGrantResult {
+  export interface IamTenantRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -284,20 +253,20 @@ export namespace GrantDeleteResponse {
     grant_id: string;
 
     /**
-     * IAM role granted by this binding.
+     * IAM role conferred by this grant.
      */
     role_id: string;
 
     /**
-     * Identifies a role grant.
+     * Identifies a tenant role grant.
      */
-    type: 'role';
+    type: 'tenant_role';
   }
 
   /**
-   * One persisted direct permission grant.
+   * One persisted tenant permission grant.
    */
-  export interface IamPermissionGrantResult {
+  export interface IamTenantPermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -314,7 +283,7 @@ export namespace GrantDeleteResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -324,9 +293,9 @@ export namespace GrantDeleteResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a tenant permission grant.
      */
-    type: 'permission';
+    type: 'tenant_permission';
   }
 
   /**
@@ -344,17 +313,17 @@ export namespace GrantDeleteResponse {
     grant_id: string;
 
     /**
-     * IAM role granted by this binding.
+     * IAM role conferred by this grant.
      */
     role_id: string;
 
     /**
-     * Identifies a role grant.
+     * Identifies a resource role grant.
      */
-    type: 'role';
+    type: 'resource_role';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
@@ -380,7 +349,7 @@ export namespace GrantDeleteResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -390,12 +359,12 @@ export namespace GrantDeleteResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a resource permission grant.
      */
-    type: 'permission';
+    type: 'resource_permission';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
@@ -409,20 +378,14 @@ export interface GrantUpdateParams {
   tenant_id: string;
 
   /**
+   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   */
+  user_token_identifier: string | null;
+
+  /**
    * Body param: New grant expiry, or null for a non-expiring grant.
    */
-  expires_at: string | null;
-
-  /**
-   * Header param: Authority used for this operation: service or user.
-   */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
+  expires_at?: string | null;
 }
 
 export interface GrantDeleteParams {
@@ -432,15 +395,10 @@ export interface GrantDeleteParams {
   tenant_id: string;
 
   /**
-   * Header param: Authority used for this operation: service or user.
+   * Query param: Convex identity tokenIdentifier asserted by the trusted app
+   * backend.
    */
-  'X-Hercules-IAM-Actor': 'service' | 'user';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token'?: string;
+  user_token_identifier: string | null;
 }
 
 export declare namespace Grants {

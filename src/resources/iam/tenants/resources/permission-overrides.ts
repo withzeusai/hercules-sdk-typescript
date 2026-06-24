@@ -2,54 +2,34 @@
 
 import { APIResource } from '../../../../core/resource';
 import { APIPromise } from '../../../../core/api-promise';
-import { buildHeaders } from '../../../../internal/headers';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
 
 export class PermissionOverrides extends APIResource {
   /**
-   * Replaces direct allow and deny permission overrides for one subject and resource
-   * target.
+   * Updates direct allow and deny permission overrides for one subject and resource
+   * selection.
    */
-  replace(
+  update(
     tenantID: string,
-    params: PermissionOverrideReplaceParams,
+    body: PermissionOverrideUpdateParams,
     options?: RequestOptions,
-  ): APIPromise<PermissionOverrideReplaceResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
-    return this._client.put(path`/v1/iam/tenants/${tenantID}/resource-permission-overrides`, {
+  ): APIPromise<PermissionOverrideUpdateResponse> {
+    return this._client.patch(path`/v1/iam/tenants/${tenantID}/resource-permission-overrides`, {
       body,
       ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
     });
   }
 }
 
 /**
- * Result of replacing direct resource permission overrides.
+ * Result of updating direct resource permission overrides.
  */
-export interface PermissionOverrideReplaceResponse {
+export interface PermissionOverrideUpdateResponse {
   /**
    * Whether persisted IAM state changed.
    */
   changed: boolean;
-
-  /**
-   * Complete resulting direct permission override set.
-   */
-  grants: Array<PermissionOverrideReplaceResponse.Grant>;
 
   /**
    * Projection IDs scheduled to receive the updated IAM state.
@@ -65,9 +45,14 @@ export interface PermissionOverrideReplaceResponse {
    * Tenant changed by the operation.
    */
   tenant_id: string;
+
+  /**
+   * Complete resulting direct permission override set.
+   */
+  grants?: Array<PermissionOverrideUpdateResponse.Grant>;
 }
 
-export namespace PermissionOverrideReplaceResponse {
+export namespace PermissionOverrideUpdateResponse {
   /**
    * One persisted resource permission grant.
    */
@@ -88,7 +73,7 @@ export namespace PermissionOverrideReplaceResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -98,277 +83,160 @@ export namespace PermissionOverrideReplaceResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a resource permission grant.
      */
-    type: 'permission';
+    type: 'resource_permission';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
   }
 }
 
-export type PermissionOverrideReplaceParams =
-  | PermissionOverrideReplaceParams.Variant0
-  | PermissionOverrideReplaceParams.Variant1;
+export interface PermissionOverrideUpdateParams {
+  /**
+   * Resource selection receiving permission overrides.
+   */
+  resource:
+    | PermissionOverrideUpdateParams.IamAllResourcesSelection
+    | PermissionOverrideUpdateParams.IamExactResourceSelection;
 
-export declare namespace PermissionOverrideReplaceParams {
-  export interface Variant0 {
-    /**
-     * Body param: Complete desired permission override set.
-     */
-    overrides: Array<Variant0.Override>;
+  /**
+   * Canonical app resource type, such as app.projects.
+   */
+  resource_type: string;
 
-    /**
-     * Body param: Canonical app resource type, such as app.projects.
-     */
-    resource_type: string;
+  /**
+   * User, group, or role receiving resource permission overrides.
+   */
+  subject:
+    | PermissionOverrideUpdateParams.IamResourcePermissionOverrideUserSubject
+    | PermissionOverrideUpdateParams.IamResourcePermissionOverrideGroupSubject
+    | PermissionOverrideUpdateParams.IamResourcePermissionOverrideRoleSubject;
 
-    /**
-     * Body param: User, group, or role receiving resource permission overrides.
-     */
-    subject: Variant0.UnionMember0 | Variant0.UnionMember1 | Variant0.UnionMember2;
+  /**
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   */
+  user_token_identifier: string | null;
 
-    /**
-     * Body param: All resources of this type.
-     */
-    target: Variant0.Target;
+  /**
+   * Whether the grant applies only to this resource or also to descendants
+   * authorized through it.
+   */
+  applies_to?: 'self' | 'self_and_descendants';
 
-    /**
-     * Header param: Authority used for this operation: service or user.
-     */
-    'X-Hercules-IAM-Actor': 'service' | 'user';
+  /**
+   * Complete desired permission override set.
+   */
+  overrides?: Array<PermissionOverrideUpdateParams.Override>;
+}
 
+export namespace PermissionOverrideUpdateParams {
+  /**
+   * All resources of this type.
+   */
+  export interface IamAllResourcesSelection {
     /**
-     * Body param: Type-wide overrides apply independently to each exact resource.
+     * Apply to every resource of this type.
      */
-    applies_to?: 'self';
-
-    /**
-     * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-     * service.
-     */
-    'X-Hercules-User-ID-Token'?: string;
+    type: 'all';
   }
 
-  export namespace Variant0 {
+  /**
+   * One exact resource.
+   */
+  export interface IamExactResourceSelection {
     /**
-     * One resource permission override.
+     * Exact application resource ID.
      */
-    export interface Override {
-      /**
-       * Whether the permission is allowed or denied.
-       */
-      effect: 'allow' | 'deny';
-
-      /**
-       * Permission changed by this override.
-       */
-      permission_key: string;
-
-      /**
-       * Override expiry, or null for a non-expiring override.
-       */
-      expires_at?: string | null;
-    }
-
-    export interface UnionMember0 {
-      /**
-       * Apply overrides to one tenant user.
-       */
-      type: 'user';
-
-      /**
-       * Hercules Auth user ID receiving the overrides.
-       */
-      user_id: string;
-    }
-
-    export interface UnionMember1 {
-      /**
-       * Tenant group ID receiving the overrides.
-       */
-      group_id: string;
-
-      /**
-       * Apply overrides to one tenant group.
-       */
-      type: 'group';
-    }
-
-    export interface UnionMember2 {
-      /**
-       * Role receiving the overrides.
-       */
-      role: UnionMember2.ID | UnionMember2.Key;
-
-      /**
-       * Apply overrides to one IAM role.
-       */
-      type: 'role';
-    }
-
-    export namespace UnionMember2 {
-      export interface ID {
-        /**
-         * Existing IAM role ID.
-         */
-        id: string;
-      }
-
-      export interface Key {
-        /**
-         * Stable role key from the deployment's IAM catalog.
-         */
-        key: string;
-      }
-    }
+    resource_id: string;
 
     /**
-     * All resources of this type.
+     * Apply to one exact resource.
      */
-    export interface Target {
+    type: 'resource';
+  }
+
+  export interface IamResourcePermissionOverrideUserSubject {
+    /**
+     * Apply overrides to one tenant user.
+     */
+    type: 'user';
+
+    /**
+     * Hercules Auth user ID receiving the overrides.
+     */
+    user_id: string;
+  }
+
+  export interface IamResourcePermissionOverrideGroupSubject {
+    /**
+     * Tenant group ID receiving the overrides.
+     */
+    group_id: string;
+
+    /**
+     * Apply overrides to one tenant group.
+     */
+    type: 'group';
+  }
+
+  export interface IamResourcePermissionOverrideRoleSubject {
+    /**
+     * Role receiving the overrides.
+     */
+    role:
+      | IamResourcePermissionOverrideRoleSubject.IamRoleIDReference
+      | IamResourcePermissionOverrideRoleSubject.IamRoleKeyReference;
+
+    /**
+     * Apply overrides to one IAM role.
+     */
+    type: 'role';
+  }
+
+  export namespace IamResourcePermissionOverrideRoleSubject {
+    export interface IamRoleIDReference {
       /**
-       * Apply to every resource of this type.
+       * Existing IAM role ID.
        */
-      type: 'all';
+      id: string;
+    }
+
+    export interface IamRoleKeyReference {
+      /**
+       * Stable role key from the deployment's IAM catalog.
+       */
+      key: string;
     }
   }
 
-  export interface Variant1 {
+  /**
+   * One resource permission override.
+   */
+  export interface Override {
     /**
-     * Body param: Complete desired permission override set.
+     * Whether the permission is allowed or denied.
      */
-    overrides: Array<Variant1.Override>;
-
-    /**
-     * Body param: Canonical app resource type, such as app.projects.
-     */
-    resource_type: string;
+    effect: 'allow' | 'deny';
 
     /**
-     * Body param: User, group, or role receiving resource permission overrides.
+     * Permission changed by this override.
      */
-    subject: Variant1.UnionMember0 | Variant1.UnionMember1 | Variant1.UnionMember2;
+    permission_key: string;
 
     /**
-     * Body param: One exact resource.
+     * Override expiry, or null for a non-expiring override.
      */
-    target: Variant1.Target;
-
-    /**
-     * Header param: Authority used for this operation: service or user.
-     */
-    'X-Hercules-IAM-Actor': 'service' | 'user';
-
-    /**
-     * Body param: Whether the access entry applies only to this resource or also to
-     * descendants authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
-
-    /**
-     * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-     * service.
-     */
-    'X-Hercules-User-ID-Token'?: string;
-  }
-
-  export namespace Variant1 {
-    /**
-     * One resource permission override.
-     */
-    export interface Override {
-      /**
-       * Whether the permission is allowed or denied.
-       */
-      effect: 'allow' | 'deny';
-
-      /**
-       * Permission changed by this override.
-       */
-      permission_key: string;
-
-      /**
-       * Override expiry, or null for a non-expiring override.
-       */
-      expires_at?: string | null;
-    }
-
-    export interface UnionMember0 {
-      /**
-       * Apply overrides to one tenant user.
-       */
-      type: 'user';
-
-      /**
-       * Hercules Auth user ID receiving the overrides.
-       */
-      user_id: string;
-    }
-
-    export interface UnionMember1 {
-      /**
-       * Tenant group ID receiving the overrides.
-       */
-      group_id: string;
-
-      /**
-       * Apply overrides to one tenant group.
-       */
-      type: 'group';
-    }
-
-    export interface UnionMember2 {
-      /**
-       * Role receiving the overrides.
-       */
-      role: UnionMember2.ID | UnionMember2.Key;
-
-      /**
-       * Apply overrides to one IAM role.
-       */
-      type: 'role';
-    }
-
-    export namespace UnionMember2 {
-      export interface ID {
-        /**
-         * Existing IAM role ID.
-         */
-        id: string;
-      }
-
-      export interface Key {
-        /**
-         * Stable role key from the deployment's IAM catalog.
-         */
-        key: string;
-      }
-    }
-
-    /**
-     * One exact resource.
-     */
-    export interface Target {
-      /**
-       * Exact application resource ID.
-       */
-      resource_id: string;
-
-      /**
-       * Apply to one exact resource.
-       */
-      type: 'resource';
-    }
+    expires_at?: string | null;
   }
 }
 
 export declare namespace PermissionOverrides {
   export {
-    type PermissionOverrideReplaceResponse as PermissionOverrideReplaceResponse,
-    type PermissionOverrideReplaceParams as PermissionOverrideReplaceParams,
+    type PermissionOverrideUpdateResponse as PermissionOverrideUpdateResponse,
+    type PermissionOverrideUpdateParams as PermissionOverrideUpdateParams,
   };
 }
