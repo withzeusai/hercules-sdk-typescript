@@ -179,7 +179,7 @@ export interface UserCreateResponse {
   changed: boolean;
 
   /**
-   * Role grant assigned to the tenant user.
+   * One persisted direct role grant.
    */
   grant: UserCreateResponse.Grant;
 
@@ -206,7 +206,7 @@ export interface UserCreateResponse {
 
 export namespace UserCreateResponse {
   /**
-   * Role grant assigned to the tenant user.
+   * One persisted direct role grant.
    */
   export interface Grant {
     /**

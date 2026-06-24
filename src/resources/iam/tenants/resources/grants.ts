@@ -84,9 +84,11 @@ export interface GrantCreateResponse {
   changed: boolean;
 
   /**
-   * Resource grant changed by the operation.
+   * One persisted resource role or permission grant.
    */
-  grant: GrantCreateResponse.UnionMember0 | GrantCreateResponse.UnionMember1;
+  grant:
+    | GrantCreateResponse.IamResourceRoleGrantResult
+    | GrantCreateResponse.IamResourcePermissionGrantResult;
 
   /**
    * Projection IDs scheduled to receive the updated IAM state.
@@ -108,7 +110,7 @@ export namespace GrantCreateResponse {
   /**
    * One persisted resource role grant.
    */
-  export interface UnionMember0 {
+  export interface IamResourceRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -139,7 +141,7 @@ export namespace GrantCreateResponse {
   /**
    * One persisted resource permission grant.
    */
-  export interface UnionMember1 {
+  export interface IamResourcePermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -226,19 +228,19 @@ export namespace GrantReplaceResponse {
     /**
      * Complete resulting grant set.
      */
-    grants: Array<Subject.UnionMember0 | Subject.UnionMember1>;
+    grants: Array<Subject.IamResourceRoleGrantResult | Subject.IamResourcePermissionGrantResult>;
 
     /**
      * User or group receiving a resource role grant.
      */
-    subject: Subject.UnionMember0 | Subject.UnionMember1;
+    subject: Subject.IamResourceGrantUserSubject | Subject.IamResourceGrantGroupSubject;
   }
 
   export namespace Subject {
     /**
      * One persisted resource role grant.
      */
-    export interface UnionMember0 {
+    export interface IamResourceRoleGrantResult {
       /**
        * Grant expiry, or null for a permanent grant.
        */
@@ -269,7 +271,7 @@ export namespace GrantReplaceResponse {
     /**
      * One persisted resource permission grant.
      */
-    export interface UnionMember1 {
+    export interface IamResourcePermissionGrantResult {
       /**
        * Whether the permission is allowed or denied.
        */
@@ -307,7 +309,7 @@ export namespace GrantReplaceResponse {
       applies_to?: 'self' | 'self_and_descendants';
     }
 
-    export interface UnionMember0 {
+    export interface IamResourceGrantUserSubject {
       /**
        * Grant access directly to a tenant user.
        */
@@ -319,7 +321,7 @@ export namespace GrantReplaceResponse {
       user_id: string;
     }
 
-    export interface UnionMember1 {
+    export interface IamResourceGrantGroupSubject {
       /**
        * Tenant group ID receiving the grant.
        */
@@ -352,7 +354,7 @@ export interface GrantCreateParams {
   /**
    * Body param: User or group receiving a resource role grant.
    */
-  subject: GrantCreateParams.UnionMember0 | GrantCreateParams.UnionMember1;
+  subject: GrantCreateParams.IamResourceGrantUserSubject | GrantCreateParams.IamResourceGrantGroupSubject;
 
   /**
    * Header param: Authority used for this operation: service or user.
@@ -392,7 +394,7 @@ export namespace GrantCreateParams {
     key: string;
   }
 
-  export interface UnionMember0 {
+  export interface IamResourceGrantUserSubject {
     /**
      * Grant access directly to a tenant user.
      */
@@ -404,7 +406,7 @@ export namespace GrantCreateParams {
     user_id: string;
   }
 
-  export interface UnionMember1 {
+  export interface IamResourceGrantGroupSubject {
     /**
      * Tenant group ID receiving the grant.
      */
@@ -458,7 +460,7 @@ export namespace GrantReplaceParams {
     /**
      * User or group receiving a resource role grant.
      */
-    subject: Subject.UnionMember0 | Subject.UnionMember1;
+    subject: Subject.IamResourceGrantUserSubject | Subject.IamResourceGrantGroupSubject;
   }
 
   export namespace Subject {
@@ -499,7 +501,7 @@ export namespace GrantReplaceParams {
       }
     }
 
-    export interface UnionMember0 {
+    export interface IamResourceGrantUserSubject {
       /**
        * Grant access directly to a tenant user.
        */
@@ -511,7 +513,7 @@ export namespace GrantReplaceParams {
       user_id: string;
     }
 
-    export interface UnionMember1 {
+    export interface IamResourceGrantGroupSubject {
       /**
        * Tenant group ID receiving the grant.
        */

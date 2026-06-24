@@ -70,11 +70,11 @@ export namespace AuditEventListResponse {
      * Public identity of the actor that produced the audit event.
      */
     actor:
-      | AuditEvent.UnionMember0
-      | AuditEvent.UnionMember1
-      | AuditEvent.UnionMember2
-      | AuditEvent.Type
-      | AuditEvent.Type;
+      | AuditEvent.IamAuditUserActor
+      | AuditEvent.IamAuditPlatformUserActor
+      | AuditEvent.IamAuditServiceActor
+      | AuditEvent.IamAuditSystemActor
+      | AuditEvent.IamAuditAgentActor;
 
     /**
      * Audit event ID.
@@ -118,7 +118,7 @@ export namespace AuditEventListResponse {
   }
 
   export namespace AuditEvent {
-    export interface UnionMember0 {
+    export interface IamAuditUserActor {
       /**
        * Tenant user actor.
        */
@@ -140,7 +140,7 @@ export namespace AuditEventListResponse {
       name?: string | null;
     }
 
-    export interface UnionMember1 {
+    export interface IamAuditPlatformUserActor {
       /**
        * Hercules IAM identifier.
        */
@@ -162,7 +162,7 @@ export namespace AuditEventListResponse {
       name?: string | null;
     }
 
-    export interface UnionMember2 {
+    export interface IamAuditServiceActor {
       /**
        * Hercules IAM identifier.
        */
@@ -184,14 +184,14 @@ export namespace AuditEventListResponse {
       name?: string | null;
     }
 
-    export interface Type {
+    export interface IamAuditSystemActor {
       /**
        * Hercules system actor.
        */
       type: 'system';
     }
 
-    export interface Type {
+    export interface IamAuditAgentActor {
       /**
        * Hercules agent actor.
        */

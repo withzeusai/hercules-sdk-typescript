@@ -42,10 +42,10 @@ export interface InvitationAcceptResponse {
    * Resulting grants assigned by the invitation.
    */
   grants: Array<
-    | InvitationAcceptResponse.UnionMember0
-    | InvitationAcceptResponse.UnionMember1
-    | InvitationAcceptResponse.UnionMember2
-    | InvitationAcceptResponse.UnionMember3
+    | InvitationAcceptResponse.IamRoleGrantResult
+    | InvitationAcceptResponse.IamPermissionGrantResult
+    | InvitationAcceptResponse.IamResourceRoleGrantResult
+    | InvitationAcceptResponse.IamResourcePermissionGrantResult
   >;
 
   /**
@@ -73,7 +73,7 @@ export namespace InvitationAcceptResponse {
   /**
    * One persisted direct role grant.
    */
-  export interface UnionMember0 {
+  export interface IamRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -98,7 +98,7 @@ export namespace InvitationAcceptResponse {
   /**
    * One persisted direct permission grant.
    */
-  export interface UnionMember1 {
+  export interface IamPermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -133,7 +133,7 @@ export namespace InvitationAcceptResponse {
   /**
    * One persisted resource role grant.
    */
-  export interface UnionMember2 {
+  export interface IamResourceRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -164,7 +164,7 @@ export namespace InvitationAcceptResponse {
   /**
    * One persisted resource permission grant.
    */
-  export interface UnionMember3 {
+  export interface IamResourcePermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
