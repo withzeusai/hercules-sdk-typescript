@@ -826,7 +826,7 @@ export class Hercules {
   /**
    * Manage IAM tenants, users, groups, roles, admission rules, invitations,
    * resource grants, and permission overrides. Requires an API key with the
-   * iam:admin scope.
+   * IAM administration permission.
    */
   iam: API.Iam = new API.Iam(this);
   /**

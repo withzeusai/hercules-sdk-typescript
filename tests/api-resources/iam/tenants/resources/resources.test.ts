@@ -8,11 +8,13 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource invitations', () => {
+describe('resource resources', () => {
   // Mock server tests are disabled
-  test.skip('accept: only required params', async () => {
-    const responsePromise = client.iam.invitations.accept({
-      invitation_token: 'x',
+  test.skip('accessGrantingRoles: only required params', async () => {
+    const responsePromise = client.iam.tenants.resources.accessGrantingRoles('resource_id', {
+      tenant_id: 'tenant_id',
+      resource_type: 'resource_type',
+      subject_type: 'user',
       user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -25,10 +27,13 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('accept: required and optional params', async () => {
-    const response = await client.iam.invitations.accept({
-      invitation_token: 'x',
+  test.skip('accessGrantingRoles: required and optional params', async () => {
+    const response = await client.iam.tenants.resources.accessGrantingRoles('resource_id', {
+      tenant_id: 'tenant_id',
+      resource_type: 'resource_type',
+      subject_type: 'user',
       user_token_identifier: 'x',
+      applies_to: 'self',
     });
   });
 });

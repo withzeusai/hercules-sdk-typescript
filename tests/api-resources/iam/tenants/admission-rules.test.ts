@@ -14,7 +14,7 @@ describe('resource admissionRules', () => {
     const responsePromise = client.iam.tenants.admissionRules.create('tenant_id', {
       effect: 'allow',
       subject: { type: 'email', value: 'dev@stainless.com' },
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -30,9 +30,8 @@ describe('resource admissionRules', () => {
     const response = await client.iam.tenants.admissionRules.create('tenant_id', {
       effect: 'allow',
       subject: { type: 'email', value: 'dev@stainless.com' },
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
       reason: 'reason',
-      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
@@ -40,8 +39,7 @@ describe('resource admissionRules', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.admissionRules.update('rule_id', {
       tenant_id: 'tenant_id',
-      reason: 'reason',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -56,16 +54,15 @@ describe('resource admissionRules', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.admissionRules.update('rule_id', {
       tenant_id: 'tenant_id',
+      user_token_identifier: 'x',
       reason: 'reason',
-      'X-Hercules-IAM-Actor': 'service',
-      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
     const responsePromise = client.iam.tenants.admissionRules.list('tenant_id', {
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -79,13 +76,12 @@ describe('resource admissionRules', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.iam.tenants.admissionRules.list('tenant_id', {
-      'X-Hercules-IAM-Actor': 'service',
-      archived: 'true',
+      user_token_identifier: 'x',
+      archived: true,
       cursor: 'x',
       effect: 'allow',
       limit: 1,
       subject_type: 'email',
-      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
@@ -93,7 +89,7 @@ describe('resource admissionRules', () => {
   test.skip('archive: only required params', async () => {
     const responsePromise = client.iam.tenants.admissionRules.archive('rule_id', {
       tenant_id: 'tenant_id',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -108,8 +104,30 @@ describe('resource admissionRules', () => {
   test.skip('archive: required and optional params', async () => {
     const response = await client.iam.tenants.admissionRules.archive('rule_id', {
       tenant_id: 'tenant_id',
-      'X-Hercules-IAM-Actor': 'service',
-      'X-Hercules-User-ID-Token': 'x',
+      user_token_identifier: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('unarchive: only required params', async () => {
+    const responsePromise = client.iam.tenants.admissionRules.unarchive('rule_id', {
+      tenant_id: 'tenant_id',
+      user_token_identifier: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('unarchive: required and optional params', async () => {
+    const response = await client.iam.tenants.admissionRules.unarchive('rule_id', {
+      tenant_id: 'tenant_id',
+      user_token_identifier: 'x',
     });
   });
 });

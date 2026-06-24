@@ -6,10 +6,12 @@ export {
   type AdmissionRuleUpdateResponse,
   type AdmissionRuleListResponse,
   type AdmissionRuleArchiveResponse,
+  type AdmissionRuleUnarchiveResponse,
   type AdmissionRuleCreateParams,
   type AdmissionRuleUpdateParams,
   type AdmissionRuleListParams,
   type AdmissionRuleArchiveParams,
+  type AdmissionRuleUnarchiveParams,
 } from './admission-rules';
 export { AuditEvents, type AuditEventListResponse, type AuditEventListParams } from './audit-events';
 export {
@@ -24,64 +26,60 @@ export {
   type GroupCreateResponse,
   type GroupUpdateResponse,
   type GroupArchiveResponse,
-  type GroupListPermissionOverridesResponse,
-  type GroupReplacePermissionOverridesResponse,
-  type GroupReplaceRolesResponse,
+  type GroupUnarchiveResponse,
   type GroupCreateParams,
   type GroupUpdateParams,
   type GroupArchiveParams,
-  type GroupListPermissionOverridesParams,
-  type GroupReplacePermissionOverridesParams,
-  type GroupReplaceRolesParams,
+  type GroupUnarchiveParams,
 } from './groups/index';
 export {
   Invitations,
-  type InvitationCreateResponse,
   type InvitationListResponse,
+  type InvitationCreateResourceResponse,
+  type InvitationCreateTenantResponse,
   type InvitationRevokeResponse,
-  type InvitationCreateParams,
   type InvitationListParams,
+  type InvitationCreateResourceParams,
+  type InvitationCreateTenantParams,
   type InvitationRevokeParams,
 } from './invitations';
-export { Resources } from './resources/index';
+export {
+  Resources,
+  type ResourceAccessGrantingRolesResponse,
+  type ResourceAccessGrantingRolesParams,
+} from './resources/index';
 export {
   Roles,
   type RoleCreateResponse,
   type RoleUpdateResponse,
   type RoleArchiveResponse,
-  type RoleEvaluateGrantabilityResponse,
-  type RoleListPermissionOverridesResponse,
-  type RoleReplacePermissionOverridesResponse,
+  type RoleUnarchiveResponse,
   type RoleCreateParams,
   type RoleUpdateParams,
   type RoleArchiveParams,
-  type RoleEvaluateGrantabilityParams,
-  type RoleListPermissionOverridesParams,
-  type RoleReplacePermissionOverridesParams,
-} from './roles';
+  type RoleUnarchiveParams,
+} from './roles/index';
 export {
   Tenants,
   type TenantCreateResponse,
   type TenantUpdateResponse,
   type TenantArchiveResponse,
-  type TenantEvaluateEntryResponse,
+  type TenantEvaluateAccessResponse,
+  type TenantGrantableRolesResponse,
+  type TenantUnarchiveResponse,
   type TenantCreateParams,
   type TenantUpdateParams,
   type TenantArchiveParams,
-  type TenantEvaluateEntryParams,
+  type TenantEvaluateAccessParams,
+  type TenantGrantableRolesParams,
+  type TenantUnarchiveParams,
 } from './tenants';
 export {
   Users,
   type UserCreateResponse,
   type UserUpdateResponse,
-  type UserListPermissionOverridesResponse,
   type UserRemoveResponse,
-  type UserReplacePermissionOverridesResponse,
-  type UserReplaceRolesResponse,
   type UserCreateParams,
   type UserUpdateParams,
-  type UserListPermissionOverridesParams,
   type UserRemoveParams,
-  type UserReplacePermissionOverridesParams,
-  type UserReplaceRolesParams,
-} from './users';
+} from './users/index';

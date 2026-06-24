@@ -9,8 +9,12 @@ import {
   TenantArchiveResponse,
   TenantCreateParams,
   TenantCreateResponse,
-  TenantEvaluateEntryParams,
-  TenantEvaluateEntryResponse,
+  TenantEvaluateAccessParams,
+  TenantEvaluateAccessResponse,
+  TenantGrantableRolesParams,
+  TenantGrantableRolesResponse,
+  TenantUnarchiveParams,
+  TenantUnarchiveResponse,
   TenantUpdateParams,
   TenantUpdateResponse,
   Tenants,
@@ -19,7 +23,7 @@ import {
 /**
  * Manage IAM tenants, users, groups, roles, admission rules, invitations,
  * resource grants, and permission overrides. Requires an API key with the
- * iam:admin scope.
+ * IAM administration permission.
  */
 export class Iam extends APIResource {
   invitations: InvitationsAPI.Invitations = new InvitationsAPI.Invitations(this._client);
@@ -41,10 +45,14 @@ export declare namespace Iam {
     type TenantCreateResponse as TenantCreateResponse,
     type TenantUpdateResponse as TenantUpdateResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
-    type TenantEvaluateEntryResponse as TenantEvaluateEntryResponse,
+    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantGrantableRolesResponse as TenantGrantableRolesResponse,
+    type TenantUnarchiveResponse as TenantUnarchiveResponse,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
     type TenantArchiveParams as TenantArchiveParams,
-    type TenantEvaluateEntryParams as TenantEvaluateEntryParams,
+    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
+    type TenantGrantableRolesParams as TenantGrantableRolesParams,
+    type TenantUnarchiveParams as TenantUnarchiveParams,
   };
 }

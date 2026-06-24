@@ -3,13 +3,17 @@
 export {
   Grants,
   type GrantCreateResponse,
-  type GrantReplaceResponse,
+  type GrantUpdateResponse,
   type GrantCreateParams,
-  type GrantReplaceParams,
+  type GrantUpdateParams,
 } from './grants';
 export {
   PermissionOverrides,
-  type PermissionOverrideReplaceResponse,
-  type PermissionOverrideReplaceParams,
+  type PermissionOverrideUpdateResponse,
+  type PermissionOverrideUpdateParams,
 } from './permission-overrides';
-export { Resources } from './resources';
+export {
+  Resources,
+  type ResourceAccessGrantingRolesResponse,
+  type ResourceAccessGrantingRolesParams,
+} from './resources';
