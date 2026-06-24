@@ -79,10 +79,10 @@ export interface GrantUpdateResponse {
    * Updated tenant or resource IAM grant.
    */
   grant:
-    | GrantUpdateResponse.UnionMember0
-    | GrantUpdateResponse.UnionMember1
-    | GrantUpdateResponse.UnionMember2
-    | GrantUpdateResponse.UnionMember3;
+    | GrantUpdateResponse.IamRoleGrantResult
+    | GrantUpdateResponse.IamPermissionGrantResult
+    | GrantUpdateResponse.IamResourceRoleGrantResult
+    | GrantUpdateResponse.IamResourcePermissionGrantResult;
 
   /**
    * Projection IDs scheduled to receive the updated IAM state.
@@ -104,7 +104,7 @@ export namespace GrantUpdateResponse {
   /**
    * One persisted direct role grant.
    */
-  export interface UnionMember0 {
+  export interface IamRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -129,7 +129,7 @@ export namespace GrantUpdateResponse {
   /**
    * One persisted direct permission grant.
    */
-  export interface UnionMember1 {
+  export interface IamPermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -164,7 +164,7 @@ export namespace GrantUpdateResponse {
   /**
    * One persisted resource role grant.
    */
-  export interface UnionMember2 {
+  export interface IamResourceRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -195,7 +195,7 @@ export namespace GrantUpdateResponse {
   /**
    * One persisted resource permission grant.
    */
-  export interface UnionMember3 {
+  export interface IamResourcePermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -247,10 +247,10 @@ export interface GrantDeleteResponse {
    * Tenant or resource IAM grant changed by the operation.
    */
   grant:
-    | GrantDeleteResponse.UnionMember0
-    | GrantDeleteResponse.UnionMember1
-    | GrantDeleteResponse.UnionMember2
-    | GrantDeleteResponse.UnionMember3;
+    | GrantDeleteResponse.IamRoleGrantResult
+    | GrantDeleteResponse.IamPermissionGrantResult
+    | GrantDeleteResponse.IamResourceRoleGrantResult
+    | GrantDeleteResponse.IamResourcePermissionGrantResult;
 
   /**
    * Projection IDs scheduled to receive the updated IAM state.
@@ -272,7 +272,7 @@ export namespace GrantDeleteResponse {
   /**
    * One persisted direct role grant.
    */
-  export interface UnionMember0 {
+  export interface IamRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -297,7 +297,7 @@ export namespace GrantDeleteResponse {
   /**
    * One persisted direct permission grant.
    */
-  export interface UnionMember1 {
+  export interface IamPermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -332,7 +332,7 @@ export namespace GrantDeleteResponse {
   /**
    * One persisted resource role grant.
    */
-  export interface UnionMember2 {
+  export interface IamResourceRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -363,7 +363,7 @@ export namespace GrantDeleteResponse {
   /**
    * One persisted resource permission grant.
    */
-  export interface UnionMember3 {
+  export interface IamResourcePermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
