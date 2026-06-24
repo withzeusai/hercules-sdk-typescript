@@ -20,7 +20,6 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
-import { Domain, DomainListParams, Domains, DomainsCursorIDPage } from './resources/domains';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
@@ -33,6 +32,17 @@ import {
   Currency,
 } from './resources/commerce/commerce';
 import { Content } from './resources/content/content';
+import {
+  Domain,
+  DomainAvailability,
+  DomainCheckAvailabilityParams,
+  DomainCheckAvailabilityResponse,
+  DomainListParams,
+  DomainSearchParams,
+  DomainSearchResponse,
+  Domains,
+  DomainsCursorIDPage,
+} from './resources/domains/domains';
 import {
   Attachment,
   Email,
@@ -837,8 +847,8 @@ export class Hercules {
    */
   content: API.Content = new API.Content(this);
   /**
-   * List custom domains linked to a website, including Cloudflare verification
-   * and SSL status.
+   * Manage custom domains linked to a website, check domain availability,
+   * purchase and register new domains, and list previously purchased domains.
    */
   domains: API.Domains = new API.Domains(this);
   /**
@@ -895,8 +905,13 @@ export declare namespace Hercules {
   export {
     Domains as Domains,
     type Domain as Domain,
+    type DomainAvailability as DomainAvailability,
+    type DomainCheckAvailabilityResponse as DomainCheckAvailabilityResponse,
+    type DomainSearchResponse as DomainSearchResponse,
     type DomainsCursorIDPage as DomainsCursorIDPage,
     type DomainListParams as DomainListParams,
+    type DomainCheckAvailabilityParams as DomainCheckAvailabilityParams,
+    type DomainSearchParams as DomainSearchParams,
   };
 
   export {

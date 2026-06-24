@@ -380,11 +380,31 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/domains.ts">Domain</a></code>
+- <code><a href="./src/resources/domains/domains.ts">Domain</a></code>
+- <code><a href="./src/resources/domains/domains.ts">DomainAvailability</a></code>
+- <code><a href="./src/resources/domains/domains.ts">DomainCheckAvailabilityResponse</a></code>
+- <code><a href="./src/resources/domains/domains.ts">DomainSearchResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/domains">client.domains.<a href="./src/resources/domains.ts">list</a>({ ...params }) -> DomainsCursorIDPage</code>
+- <code title="get /v1/domains">client.domains.<a href="./src/resources/domains/domains.ts">list</a>({ ...params }) -> DomainsCursorIDPage</code>
+- <code title="post /v1/domains/check-availability">client.domains.<a href="./src/resources/domains/domains.ts">checkAvailability</a>({ ...params }) -> DomainCheckAvailabilityResponse</code>
+- <code title="post /v1/domains/search">client.domains.<a href="./src/resources/domains/domains.ts">search</a>({ ...params }) -> DomainSearchResponse</code>
+
+## Purchased
+
+Types:
+
+- <code><a href="./src/resources/domains/purchased.ts">PurchasedDomain</a></code>
+- <code><a href="./src/resources/domains/purchased.ts">PurchasedCreateResponse</a></code>
+- <code><a href="./src/resources/domains/purchased.ts">PurchasedConfirmResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/domains/purchase">client.domains.purchased.<a href="./src/resources/domains/purchased.ts">create</a>({ ...params }) -> PurchasedCreateResponse</code>
+- <code title="get /v1/domains/purchased">client.domains.purchased.<a href="./src/resources/domains/purchased.ts">list</a>({ ...params }) -> PurchasedDomainsCursorIDPage</code>
+- <code title="post /v1/domains/purchase/confirm">client.domains.purchased.<a href="./src/resources/domains/purchased.ts">confirm</a>({ ...params }) -> PurchasedConfirmResponse</code>
+- <code title="get /v1/domains/purchased/{domain_id}">client.domains.purchased.<a href="./src/resources/domains/purchased.ts">get</a>(domainID) -> PurchasedDomain</code>
 
 # Email
 

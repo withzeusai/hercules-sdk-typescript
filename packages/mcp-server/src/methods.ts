@@ -623,6 +623,42 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/domains',
   },
   {
+    clientCallName: 'client.domains.checkAvailability',
+    fullyQualifiedName: 'domains.checkAvailability',
+    httpMethod: 'post',
+    httpPath: '/v1/domains/check-availability',
+  },
+  {
+    clientCallName: 'client.domains.search',
+    fullyQualifiedName: 'domains.search',
+    httpMethod: 'post',
+    httpPath: '/v1/domains/search',
+  },
+  {
+    clientCallName: 'client.domains.purchased.create',
+    fullyQualifiedName: 'domains.purchased.create',
+    httpMethod: 'post',
+    httpPath: '/v1/domains/purchase',
+  },
+  {
+    clientCallName: 'client.domains.purchased.list',
+    fullyQualifiedName: 'domains.purchased.list',
+    httpMethod: 'get',
+    httpPath: '/v1/domains/purchased',
+  },
+  {
+    clientCallName: 'client.domains.purchased.confirm',
+    fullyQualifiedName: 'domains.purchased.confirm',
+    httpMethod: 'post',
+    httpPath: '/v1/domains/purchase/confirm',
+  },
+  {
+    clientCallName: 'client.domains.purchased.get',
+    fullyQualifiedName: 'domains.purchased.get',
+    httpMethod: 'get',
+    httpPath: '/v1/domains/purchased/{domain_id}',
+  },
+  {
     clientCallName: 'client.email.list',
     fullyQualifiedName: 'email.list',
     httpMethod: 'get',
