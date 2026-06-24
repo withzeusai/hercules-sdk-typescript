@@ -12,7 +12,17 @@ export {
 } from './commerce/commerce';
 export { Connectors, type ConnectorCredentialsResponse, type ConnectorCredentialsParams } from './connectors';
 export { Content } from './content/content';
-export { Domains, type Domain, type DomainListParams, type DomainsCursorIDPage } from './domains';
+export {
+  Domains,
+  type Domain,
+  type DomainAvailability,
+  type DomainCheckAvailabilityResponse,
+  type DomainSearchResponse,
+  type DomainListParams,
+  type DomainCheckAvailabilityParams,
+  type DomainSearchParams,
+  type DomainsCursorIDPage,
+} from './domains/domains';
 export {
   EmailResource,
   type Attachment,

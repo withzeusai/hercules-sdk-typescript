@@ -1,4 +1,4 @@
-configured_endpoints: 120
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/zeus/hercules-9d40105ca4e35e8eee06ca72a48d86641ed486a0d4a23419d560f79fcb1dc190.yml
+configured_endpoints: 126
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/zeus/hercules-e74b3c899892a844fe6d0afb01381d572b9e70cb0b7c7173b90452df9d2873a9.yml
 openapi_spec_hash: 8ec8b26e0d41fb8c256fc7283c5a274f
-config_hash: 15d17b9dd2598a3577529f59423774bb
+config_hash: 8926d81655bcc26e9a6b90bafeeb9939

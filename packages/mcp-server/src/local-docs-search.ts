@@ -3042,6 +3042,177 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'check_availability',
+    endpoint: '/v1/domains/check-availability',
+    httpMethod: 'post',
+    summary: 'Check Domain Availability',
+    description:
+      'Checks whether the specified domain names are available for registration and returns pricing information.',
+    stainlessPath: '(resource) domains > (method) check_availability',
+    qualified: 'client.domains.checkAvailability',
+    params: ['domains: string[];'],
+    response:
+      '{ data: { available: boolean; domain_name: string; premium: boolean; price: number; renewal_price: number; sld: string; tld: string; }[]; }',
+    markdown:
+      "## check_availability\n\n`client.domains.checkAvailability(domains: string[]): { data: domain_availability[]; }`\n\n**post** `/v1/domains/check-availability`\n\nChecks whether the specified domain names are available for registration and returns pricing information.\n\n### Parameters\n\n- `domains: string[]`\n  Array of domain names to check availability for\n\n### Returns\n\n- `{ data: { available: boolean; domain_name: string; premium: boolean; price: number; renewal_price: number; sld: string; tld: string; }[]; }`\n  Domain availability check results\n\n  - `data: { available: boolean; domain_name: string; premium: boolean; price: number; renewal_price: number; sld: string; tld: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.domains.checkAvailability({ domains: ['string'] });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.domains.checkAvailability',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.domains.checkAvailability({ domains: ['string'] });\n\nconsole.log(response.data);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/domains/check-availability \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "domains": [\n            "string"\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'search',
+    endpoint: '/v1/domains/search',
+    httpMethod: 'post',
+    summary: 'Search Domains',
+    description:
+      'Searches for available domain names based on a keyword and returns suggestions with pricing.',
+    stainlessPath: '(resource) domains > (method) search',
+    qualified: 'client.domains.search',
+    params: ['keyword: string;', 'tld_filter?: string[];'],
+    response:
+      '{ data: { available: boolean; domain_name: string; premium: boolean; price: number; renewal_price: number; sld: string; tld: string; }[]; }',
+    markdown:
+      "## search\n\n`client.domains.search(keyword: string, tld_filter?: string[]): { data: domain_availability[]; }`\n\n**post** `/v1/domains/search`\n\nSearches for available domain names based on a keyword and returns suggestions with pricing.\n\n### Parameters\n\n- `keyword: string`\n  Keyword to search for domain suggestions\n\n- `tld_filter?: string[]`\n  Optional list of TLDs to restrict search results\n\n### Returns\n\n- `{ data: { available: boolean; domain_name: string; premium: boolean; price: number; renewal_price: number; sld: string; tld: string; }[]; }`\n  Domain search results\n\n  - `data: { available: boolean; domain_name: string; premium: boolean; price: number; renewal_price: number; sld: string; tld: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.domains.search({ keyword: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.domains.search',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.domains.search({ keyword: 'x' });\n\nconsole.log(response.data);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/domains/search \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "keyword": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/domains/purchase',
+    httpMethod: 'post',
+    summary: 'Purchase Domain',
+    description:
+      'Initiates a domain purchase. Verifies availability, creates a payment invoice, and begins the registration process. If the payment requires 3D Secure authentication, the response includes a client_secret for confirmation.',
+    stainlessPath: '(resource) domains.purchased > (method) create',
+    qualified: 'client.domains.purchased.create',
+    params: [
+      'domain_name: string;',
+      'payment_method_id: string;',
+      'website_id: string;',
+      'autorenew?: boolean;',
+      'years?: number;',
+    ],
+    response:
+      "{ client_secret: string; domain: { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }; invoice_id: string; status: 'succeeded' | 'requires_action'; }",
+    markdown:
+      "## create\n\n`client.domains.purchased.create(domain_name: string, payment_method_id: string, website_id: string, autorenew?: boolean, years?: number): { client_secret: string; domain: purchased_domain; invoice_id: string; status: 'succeeded' | 'requires_action'; }`\n\n**post** `/v1/domains/purchase`\n\nInitiates a domain purchase. Verifies availability, creates a payment invoice, and begins the registration process. If the payment requires 3D Secure authentication, the response includes a client_secret for confirmation.\n\n### Parameters\n\n- `domain_name: string`\n  The domain name to purchase\n\n- `payment_method_id: string`\n  Stripe payment method ID\n\n- `website_id: string`\n  The website to associate the domain with\n\n- `autorenew?: boolean`\n  Whether to enable automatic renewal\n\n- `years?: number`\n  Number of years to register (1-10)\n\n### Returns\n\n- `{ client_secret: string; domain: { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }; invoice_id: string; status: 'succeeded' | 'requires_action'; }`\n  Domain purchase result\n\n  - `client_secret: string`\n  - `domain: { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }`\n  - `invoice_id: string`\n  - `status: 'succeeded' | 'requires_action'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst purchased = await client.domains.purchased.create({\n  domain_name: 'x',\n  payment_method_id: 'x',\n  website_id: 'x',\n});\n\nconsole.log(purchased);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.domains.purchased.create',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst purchased = await client.domains.purchased.create({\n  domain_name: 'x',\n  payment_method_id: 'x',\n  website_id: 'x',\n});\n\nconsole.log(purchased.invoice_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/domains/purchase \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "domain_name": "x",\n          "payment_method_id": "x",\n          "website_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'confirm',
+    endpoint: '/v1/domains/purchase/confirm',
+    httpMethod: 'post',
+    summary: 'Confirm Domain Purchase',
+    description:
+      'Confirms a domain purchase after 3D Secure authentication has been completed. Call this endpoint after the customer has authenticated with their bank.',
+    stainlessPath: '(resource) domains.purchased > (method) confirm',
+    qualified: 'client.domains.purchased.confirm',
+    params: [
+      'domain_name: string;',
+      'invoice_id: string;',
+      'website_id: string;',
+      'autorenew?: boolean;',
+      'years?: number;',
+    ],
+    response:
+      "{ domain: { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }; }",
+    markdown:
+      "## confirm\n\n`client.domains.purchased.confirm(domain_name: string, invoice_id: string, website_id: string, autorenew?: boolean, years?: number): { domain: purchased_domain; }`\n\n**post** `/v1/domains/purchase/confirm`\n\nConfirms a domain purchase after 3D Secure authentication has been completed. Call this endpoint after the customer has authenticated with their bank.\n\n### Parameters\n\n- `domain_name: string`\n  The domain name being purchased\n\n- `invoice_id: string`\n  Stripe invoice ID from the purchase request\n\n- `website_id: string`\n  The website to associate the domain with\n\n- `autorenew?: boolean`\n  Whether to enable automatic renewal\n\n- `years?: number`\n  Number of years to register\n\n### Returns\n\n- `{ domain: { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }; }`\n  Domain purchase confirmation result\n\n  - `domain: { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.domains.purchased.confirm({\n  domain_name: 'x',\n  invoice_id: 'x',\n  website_id: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.domains.purchased.confirm',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.domains.purchased.confirm({\n  domain_name: 'x',\n  invoice_id: 'x',\n  website_id: 'x',\n});\n\nconsole.log(response.domain);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/domains/purchase/confirm \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "domain_name": "x",\n          "invoice_id": "x",\n          "website_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/domains/purchased',
+    httpMethod: 'get',
+    summary: 'List Purchased Domains',
+    description: 'Retrieves a paginated list of domains purchased by the organization.',
+    stainlessPath: '(resource) domains.purchased > (method) list',
+    qualified: 'client.domains.purchased.list',
+    params: [
+      'ending_before?: string;',
+      'limit?: number;',
+      'starting_after?: string;',
+      "status?: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed';",
+    ],
+    response:
+      "{ id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }",
+    markdown:
+      "## list\n\n`client.domains.purchased.list(ending_before?: string, limit?: number, starting_after?: string, status?: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'): { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }`\n\n**get** `/v1/domains/purchased`\n\nRetrieves a paginated list of domains purchased by the organization.\n\n### Parameters\n\n- `ending_before?: string`\n  Cursor for backward pagination\n\n- `limit?: number`\n  Maximum number of domains to return (1-100)\n\n- `starting_after?: string`\n  Cursor for forward pagination\n\n- `status?: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'`\n  Filter by domain status\n\n### Returns\n\n- `{ id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }`\n  A domain purchased through the platform.\n\n  - `id: string`\n  - `autorenew: boolean`\n  - `created: string`\n  - `domain_name: string`\n  - `expires_at: string`\n  - `is_premium: boolean`\n  - `locked: boolean`\n  - `nameservers: string[]`\n  - `privacy_enabled: boolean`\n  - `purchase_price: string`\n  - `registered_at: string`\n  - `renewal_price: string`\n  - `sld: string`\n  - `status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'`\n  - `tld: string`\n  - `updated: string`\n  - `years: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\n// Automatically fetches more pages as needed.\nfor await (const purchasedDomain of client.domains.purchased.list()) {\n  console.log(purchasedDomain);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.domains.purchased.list',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const purchasedDomain of client.domains.purchased.list()) {\n  console.log(purchasedDomain.id);\n}",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/domains/purchased \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get',
+    endpoint: '/v1/domains/purchased/{domain_id}',
+    httpMethod: 'get',
+    summary: 'Get Purchased Domain',
+    description: 'Retrieves details of a specific purchased domain by its ID.',
+    stainlessPath: '(resource) domains.purchased > (method) get',
+    qualified: 'client.domains.purchased.get',
+    params: ['domain_id: string;'],
+    response:
+      "{ id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }",
+    markdown:
+      "## get\n\n`client.domains.purchased.get(domain_id: string): { id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }`\n\n**get** `/v1/domains/purchased/{domain_id}`\n\nRetrieves details of a specific purchased domain by its ID.\n\n### Parameters\n\n- `domain_id: string`\n\n### Returns\n\n- `{ id: string; autorenew: boolean; created: string; domain_name: string; expires_at: string; is_premium: boolean; locked: boolean; nameservers: string[]; privacy_enabled: boolean; purchase_price: string; registered_at: string; renewal_price: string; sld: string; status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'; tld: string; updated: string; years: number; }`\n  A domain purchased through the platform.\n\n  - `id: string`\n  - `autorenew: boolean`\n  - `created: string`\n  - `domain_name: string`\n  - `expires_at: string`\n  - `is_premium: boolean`\n  - `locked: boolean`\n  - `nameservers: string[]`\n  - `privacy_enabled: boolean`\n  - `purchase_price: string`\n  - `registered_at: string`\n  - `renewal_price: string`\n  - `sld: string`\n  - `status: 'pending' | 'active' | 'expired' | 'cancelled' | 'transferring' | 'failed'`\n  - `tld: string`\n  - `updated: string`\n  - `years: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst purchasedDomain = await client.domains.purchased.get('x');\n\nconsole.log(purchasedDomain);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.domains.purchased.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst purchasedDomain = await client.domains.purchased.get('x');\n\nconsole.log(purchasedDomain.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/domains/purchased/$DOMAIN_ID \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'send',
     endpoint: '/v1/email',
     httpMethod: 'post',
