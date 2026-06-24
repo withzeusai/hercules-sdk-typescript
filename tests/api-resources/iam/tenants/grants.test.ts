@@ -8,10 +8,14 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource userExceptions', () => {
+describe('resource grants', () => {
   // Mock server tests are disabled
-  test.skip('get: only required params', async () => {
-    const responsePromise = client.iam.userExceptions.get({ actor_mode: 'service' });
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.iam.tenants.grants.update('grant_id', {
+      tenant_id: 'tenant_id',
+      expires_at: '2019-12-27T18:11:19.117Z',
+      'X-Hercules-IAM-Actor': 'service',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,19 +26,21 @@ describe('resource userExceptions', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('get: required and optional params', async () => {
-    const response = await client.iam.userExceptions.get({
-      actor_mode: 'service',
-      hercules_auth_user_id: 'x',
-      id_token: 'x',
-      principal_id: 'x',
-      scope_id: 'x',
+  test.skip('update: required and optional params', async () => {
+    const response = await client.iam.tenants.grants.update('grant_id', {
+      tenant_id: 'tenant_id',
+      expires_at: '2019-12-27T18:11:19.117Z',
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('set: only required params', async () => {
-    const responsePromise = client.iam.userExceptions.set({ actor_mode: 'service' });
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.iam.tenants.grants.delete('grant_id', {
+      tenant_id: 'tenant_id',
+      'X-Hercules-IAM-Actor': 'service',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -45,15 +51,11 @@ describe('resource userExceptions', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('set: required and optional params', async () => {
-    const response = await client.iam.userExceptions.set({
-      actor_mode: 'service',
-      allow: ['x'],
-      deny: ['x'],
-      hercules_auth_user_id: 'x',
-      id_token: 'x',
-      principal_id: 'x',
-      scope_id: 'x',
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.iam.tenants.grants.delete('grant_id', {
+      tenant_id: 'tenant_id',
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 });

@@ -506,7 +506,14 @@ describe('idempotency', () => {
       apiKey: 'My API Key',
       apiVersion: '2025-12-09',
     });
-    await client.iam.entry({ id_token: 'x' }, { idempotencyKey: 'my-idempotency-key' });
+    await client.iam.invitations.accept(
+      {
+        token: 'x',
+        'X-Hercules-IAM-Actor': 'user',
+        'X-Hercules-User-ID-Token': 'x',
+      },
+      { idempotencyKey: 'my-idempotency-key' },
+    );
   });
 });
 

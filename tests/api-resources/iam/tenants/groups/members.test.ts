@@ -8,13 +8,13 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource admissionRules', () => {
+describe('resource members', () => {
   // Mock server tests are disabled
-  test.skip('archive: only required params', async () => {
-    const responsePromise = client.iam.admissionRules.archive({
-      actor_mode: 'service',
-      rule_id: 'x',
-      scope_id: 'x',
+  test.skip('add: only required params', async () => {
+    const responsePromise = client.iam.tenants.groups.members.add('user_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -26,23 +26,21 @@ describe('resource admissionRules', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('archive: required and optional params', async () => {
-    const response = await client.iam.admissionRules.archive({
-      actor_mode: 'service',
-      rule_id: 'x',
-      scope_id: 'x',
-      id_token: 'x',
+  test.skip('add: required and optional params', async () => {
+    const response = await client.iam.tenants.groups.members.add('user_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 
   // Mock server tests are disabled
-  test.skip('upsert: only required params', async () => {
-    const responsePromise = client.iam.admissionRules.upsert({
-      actor_mode: 'service',
-      effect: 'allow',
-      scope_id: 'x',
-      subject_type: 'email',
-      subject_value: 'x',
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.iam.tenants.groups.members.remove('user_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      'X-Hercules-IAM-Actor': 'service',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -54,15 +52,12 @@ describe('resource admissionRules', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('upsert: required and optional params', async () => {
-    const response = await client.iam.admissionRules.upsert({
-      actor_mode: 'service',
-      effect: 'allow',
-      scope_id: 'x',
-      subject_type: 'email',
-      subject_value: 'x',
-      id_token: 'x',
-      reason: 'reason',
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.iam.tenants.groups.members.remove('user_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      'X-Hercules-IAM-Actor': 'service',
+      'X-Hercules-User-ID-Token': 'x',
     });
   });
 });

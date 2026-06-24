@@ -43,7 +43,7 @@ import {
   EmailSendResponse,
   EmailsCursorIDPage,
 } from './resources/email/email';
-import { Iam, IamEntryParams, IamEntryResponse } from './resources/iam/iam';
+import { Iam } from './resources/iam/iam';
 import {
   PushNotificationEnableResponse,
   PushNotificationIdentifyParams,
@@ -814,9 +814,8 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   /**
-   * Manage IAM for a website: scopes (organizations), invitations,
-   * roles and role assignments, permission grants, resource rules, grant
-   * expiries, and per-user permission exceptions. Requires an API key with the
+   * Manage IAM tenants, users, groups, roles, admission rules, invitations,
+   * resource grants, and permission overrides. Requires an API key with the
    * iam:admin scope.
    */
   iam: API.Iam = new API.Iam(this);
@@ -870,7 +869,7 @@ export declare namespace Hercules {
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
 
-  export { Iam as Iam, type IamEntryResponse as IamEntryResponse, type IamEntryParams as IamEntryParams };
+  export { Iam as Iam };
 
   export {
     Commerce as Commerce,

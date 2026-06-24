@@ -24,7 +24,7 @@ export {
   type EmailsCursorIDPage,
 } from './email/email';
 export { Files, type File, type Upload, type FileListParams, type FilesCursorIDPage } from './files';
-export { Iam, type IamEntryResponse, type IamEntryParams } from './iam/iam';
+export { Iam } from './iam/iam';
 export {
   PushNotifications,
   type PushNotificationEnableResponse,
