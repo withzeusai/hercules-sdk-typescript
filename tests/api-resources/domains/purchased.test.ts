@@ -11,11 +11,7 @@ const client = new Hercules({
 describe('resource purchased', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.domains.purchased.create({
-      domain_name: 'x',
-      payment_method_id: 'x',
-      website_id: 'x',
-    });
+    const responsePromise = client.domains.purchased.create({ domain_name: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -29,9 +25,9 @@ describe('resource purchased', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.domains.purchased.create({
       domain_name: 'x',
+      autorenew: true,
       payment_method_id: 'x',
       website_id: 'x',
-      autorenew: true,
       years: 1,
     });
   });
