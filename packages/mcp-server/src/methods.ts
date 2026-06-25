@@ -29,6 +29,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/iam/tenants/{tenant_id}',
   },
   {
+    clientCallName: 'client.iam.tenants.list',
+    fullyQualifiedName: 'iam.tenants.list',
+    httpMethod: 'get',
+    httpPath: '/v1/iam/tenants',
+  },
+  {
     clientCallName: 'client.iam.tenants.archive',
     fullyQualifiedName: 'iam.tenants.archive',
     httpMethod: 'delete',
@@ -39,6 +45,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'iam.tenants.evaluateAccess',
     httpMethod: 'post',
     httpPath: '/v1/iam/tenants/{tenant_id}/evaluate-access',
+  },
+  {
+    clientCallName: 'client.iam.tenants.get',
+    fullyQualifiedName: 'iam.tenants.get',
+    httpMethod: 'get',
+    httpPath: '/v1/iam/tenants/{tenant_id}',
   },
   {
     clientCallName: 'client.iam.tenants.grantableRoles',

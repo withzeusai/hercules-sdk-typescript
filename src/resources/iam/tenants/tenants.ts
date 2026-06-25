@@ -92,7 +92,13 @@ export class Tenants extends APIResource {
   resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
 
   /**
-   * Creates an IAM tenant in the API key's deployment.
+   * Creates an IAM tenant in the API key's deployment. Service authority uses
+   * user_token_identifier null and must provide owner_user_id. User authority uses a
+   * verified user_token_identifier and makes that user the initial Owner. Optionally
+   * send Idempotency-Key; the key is opaque, scoped to the deployment and trusted
+   * actor, stored only as a hash by the backend, and exact same-key replays return
+   * the original tenant create result while same-key/different normalized intent
+   * returns a stable conflict problem response.
    */
   create(body: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
     return this._client.post('/v1/iam/tenants', { body, ...options });
@@ -110,7 +116,29 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Archives a non-default IAM tenant.
+   * Returns the authoritative IAM tenant collection for the API key's deployment.
+   * Service authority (omit user_token_identifier or pass an empty value) returns
+   * all tenants visible to the deployment. User authority returns only tenants where
+   * the verified active user has a direct, exact-scope, unexpired immutable built-in
+   * Owner binding. Use status=active, status=archived, or status=all to discover
+   * archived tenants; the default is active. Tenant reads are authoritative; use
+   * projection mirrors only after observing the returned source_version from write
+   * responses.
+   */
+  list(
+    query: TenantListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TenantListResponse> {
+    return this._client.get('/v1/iam/tenants', { query, ...options });
+  }
+
+  /**
+   * Archives the exact custom IAM tenant ID named in the path. Service authority
+   * uses an empty user_token_identifier query value. User authority uses a verified
+   * user_token_identifier and is accepted only when the backend confirms direct
+   * immutable Owner authority on the exact target tenant. The default path sentinel
+   * is not resolved and is not a valid lifecycle target; callers must use an exact
+   * custom tenant ID.
    */
   archive(
     tenantID: string,
@@ -136,6 +164,22 @@ export class Tenants extends APIResource {
   }
 
   /**
+   * Returns one authoritative IAM tenant record from the API key's deployment,
+   * including archived tenants. Service authority (omit user_token_identifier or
+   * pass an empty value) can read any deployment tenant. User authority can read
+   * only a tenant where the verified active user has a direct, exact-scope,
+   * unexpired immutable built-in Owner binding. The default path sentinel resolves
+   * to the deployment default tenant for reads.
+   */
+  get(
+    tenantID: string,
+    query: TenantGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TenantGetResponse> {
+    return this._client.get(path`/v1/iam/tenants/${tenantID}`, { query, ...options });
+  }
+
+  /**
    * Lists roles the actor may grant to a user or group at the tenant level.
    */
   grantableRoles(
@@ -147,7 +191,12 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Unarchives an IAM tenant.
+   * Unarchives the exact custom IAM tenant ID named in the path. Service authority
+   * uses user_token_identifier null. User authority uses a verified
+   * user_token_identifier and is accepted only when the backend confirms retained
+   * direct immutable Owner authority on the exact target tenant. The default path
+   * sentinel is not resolved and is not a valid lifecycle target; callers must use
+   * an exact custom tenant ID.
    */
   unarchive(
     tenantID: string,
@@ -251,6 +300,64 @@ export namespace TenantUpdateResponse {
 }
 
 /**
+ * Cursor-paginated authoritative IAM tenant records.
+ */
+export interface TenantListResponse {
+  /**
+   * Tenant page.
+   */
+  tenants: Array<TenantListResponse.Tenant>;
+
+  /**
+   * Cursor for the next tenant page.
+   */
+  next_cursor?: string;
+}
+
+export namespace TenantListResponse {
+  /**
+   * Authoritative IAM tenant record.
+   */
+  export interface Tenant {
+    /**
+     * Admission policy for the tenant: open access, allowlist-only access,
+     * invitation-only access, or approval-required access.
+     */
+    access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+
+    /**
+     * Tenant creation timestamp.
+     */
+    created_at: string;
+
+    /**
+     * Public tenant kind. Custom includes internally managed org and suite tenants.
+     */
+    kind: 'default' | 'custom';
+
+    /**
+     * Public tenant lifecycle status.
+     */
+    lifecycle_status: 'active' | 'archived';
+
+    /**
+     * Human-readable tenant name.
+     */
+    name: string;
+
+    /**
+     * Tenant ID.
+     */
+    tenant_id: string;
+
+    /**
+     * Tenant last-updated timestamp.
+     */
+    updated_at: string;
+  }
+}
+
+/**
  * Result of an IAM tenant mutation.
  */
 export interface TenantArchiveResponse {
@@ -328,6 +435,47 @@ export interface TenantEvaluateAccessResponse {
    * Current tenant user status when a user record exists.
    */
   status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
+}
+
+/**
+ * Authoritative IAM tenant record.
+ */
+export interface TenantGetResponse {
+  /**
+   * Admission policy for the tenant: open access, allowlist-only access,
+   * invitation-only access, or approval-required access.
+   */
+  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+
+  /**
+   * Tenant creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Public tenant kind. Custom includes internally managed org and suite tenants.
+   */
+  kind: 'default' | 'custom';
+
+  /**
+   * Public tenant lifecycle status.
+   */
+  lifecycle_status: 'active' | 'archived';
+
+  /**
+   * Human-readable tenant name.
+   */
+  name: string;
+
+  /**
+   * Tenant ID.
+   */
+  tenant_id: string;
+
+  /**
+   * Tenant last-updated timestamp.
+   */
+  updated_at: string;
 }
 
 /**
@@ -531,11 +679,33 @@ export namespace TenantUpdateParams {
   }
 }
 
+export interface TenantListParams {
+  /**
+   * Opaque cursor returned by the previous page.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of records to return.
+   */
+  limit?: number;
+
+  /**
+   * Tenant lifecycle status filter.
+   */
+  status?: 'active' | 'archived' | 'all';
+
+  /**
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   */
+  user_token_identifier?: string | null;
+}
+
 export interface TenantArchiveParams {
   /**
-   * Null or empty query value selects service authority.
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  user_token_identifier: '' | null;
+  user_token_identifier: string | null;
 }
 
 export interface TenantEvaluateAccessParams {
@@ -543,6 +713,13 @@ export interface TenantEvaluateAccessParams {
    * Convex identity tokenIdentifier required for user authority.
    */
   user_token_identifier: string;
+}
+
+export interface TenantGetParams {
+  /**
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   */
+  user_token_identifier?: string | null;
 }
 
 export interface TenantGrantableRolesParams {
@@ -559,9 +736,9 @@ export interface TenantGrantableRolesParams {
 
 export interface TenantUnarchiveParams {
   /**
-   * Must be null to use service authority.
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  user_token_identifier: null;
+  user_token_identifier: string | null;
 }
 
 Tenants.Grants = Grants;
@@ -577,14 +754,18 @@ export declare namespace Tenants {
   export {
     type TenantCreateResponse as TenantCreateResponse,
     type TenantUpdateResponse as TenantUpdateResponse,
+    type TenantListResponse as TenantListResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
     type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantGetResponse as TenantGetResponse,
     type TenantGrantableRolesResponse as TenantGrantableRolesResponse,
     type TenantUnarchiveResponse as TenantUnarchiveResponse,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
+    type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
     type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
+    type TenantGetParams as TenantGetParams,
     type TenantGrantableRolesParams as TenantGrantableRolesParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,
   };
