@@ -10,13 +10,12 @@ const client = new Hercules({
 
 describe('resource permissionOverrides', () => {
   // Mock server tests are disabled
-  test.skip('replace: only required params', async () => {
-    const responsePromise = client.iam.tenants.resources.permissionOverrides.replace('tenant_id', {
-      overrides: [{ effect: 'allow', permission_key: 'x' }],
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.iam.tenants.resources.permissionOverrides.update('tenant_id', {
+      resource: { type: 'all' },
       resource_type: 'x',
       subject: { type: 'user', user_id: 'x' },
-      target: { type: 'all' },
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,8 +27,13 @@ describe('resource permissionOverrides', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('replace: required and optional params', async () => {
-    const response = await client.iam.tenants.resources.permissionOverrides.replace('tenant_id', {
+  test.skip('update: required and optional params', async () => {
+    const response = await client.iam.tenants.resources.permissionOverrides.update('tenant_id', {
+      resource: { type: 'all' },
+      resource_type: 'x',
+      subject: { type: 'user', user_id: 'x' },
+      user_token_identifier: 'x',
+      applies_to: 'self',
       overrides: [
         {
           effect: 'allow',
@@ -37,12 +41,6 @@ describe('resource permissionOverrides', () => {
           expires_at: '2019-12-27T18:11:19.117Z',
         },
       ],
-      resource_type: 'x',
-      subject: { type: 'user', user_id: 'x' },
-      target: { type: 'all' },
-      'X-Hercules-IAM-Actor': 'service',
-      applies_to: 'self',
-      'X-Hercules-User-ID-Token': 'x',
     });
   });
 });

@@ -5,15 +5,11 @@ export {
   type GroupCreateResponse,
   type GroupUpdateResponse,
   type GroupArchiveResponse,
-  type GroupListPermissionOverridesResponse,
-  type GroupReplacePermissionOverridesResponse,
-  type GroupReplaceRolesResponse,
+  type GroupUnarchiveResponse,
   type GroupCreateParams,
   type GroupUpdateParams,
   type GroupArchiveParams,
-  type GroupListPermissionOverridesParams,
-  type GroupReplacePermissionOverridesParams,
-  type GroupReplaceRolesParams,
+  type GroupUnarchiveParams,
 } from './groups';
 export {
   Members,
@@ -22,3 +18,10 @@ export {
   type MemberAddParams,
   type MemberRemoveParams,
 } from './members';
+export {
+  PermissionOverrides,
+  type PermissionOverrideUpdateResponse,
+  type PermissionOverrideGetResponse,
+  type PermissionOverrideUpdateParams,
+  type PermissionOverrideGetParams,
+} from './permission-overrides';

@@ -10,43 +10,8 @@ const client = new Hercules({
 
 describe('resource invitations', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.iam.tenants.invitations.create('tenant_id', {
-      email: 'dev@stainless.com',
-      target: { type: 'tenant' },
-      'X-Hercules-IAM-Actor': 'service',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.iam.tenants.invitations.create('tenant_id', {
-      email: 'dev@stainless.com',
-      target: { type: 'tenant' },
-      'X-Hercules-IAM-Actor': 'service',
-      expires_at: '2019-12-27T18:11:19.117Z',
-      grants: [
-        {
-          role: { id: 'x' },
-          expires_at: '2019-12-27T18:11:19.117Z',
-        },
-      ],
-      'X-Hercules-User-ID-Token': 'x',
-    });
-  });
-
-  // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.iam.tenants.invitations.list('tenant_id', {
-      'X-Hercules-IAM-Actor': 'service',
-    });
+    const responsePromise = client.iam.tenants.invitations.list('tenant_id', { user_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -59,14 +24,79 @@ describe('resource invitations', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.iam.tenants.invitations.list('tenant_id', {
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
       cursor: 'x',
       email: 'dev@stainless.com',
       limit: 1,
-      resource_id: 'x',
-      resource_type: 'x',
-      target_type: 'tenant',
-      'X-Hercules-User-ID-Token': 'x',
+      target: { type: 'tenant' },
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('createResource: only required params', async () => {
+    const responsePromise = client.iam.tenants.invitations.createResource('resource_id', {
+      tenant_id: 'tenant_id',
+      resource_type: 'resource_type',
+      email: 'dev@stainless.com',
+      grant: {
+        role: { id: 'x' },
+        type: 'role',
+      },
+      user_token_identifier: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createResource: required and optional params', async () => {
+    const response = await client.iam.tenants.invitations.createResource('resource_id', {
+      tenant_id: 'tenant_id',
+      resource_type: 'resource_type',
+      email: 'dev@stainless.com',
+      grant: {
+        role: { id: 'x' },
+        type: 'role',
+        expires_at: '2019-12-27T18:11:19.117Z',
+      },
+      user_token_identifier: 'x',
+      applies_to: 'self',
+      expires_at: '2019-12-27T18:11:19.117Z',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('createTenant: only required params', async () => {
+    const responsePromise = client.iam.tenants.invitations.createTenant('tenant_id', {
+      email: 'dev@stainless.com',
+      user_token_identifier: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createTenant: required and optional params', async () => {
+    const response = await client.iam.tenants.invitations.createTenant('tenant_id', {
+      email: 'dev@stainless.com',
+      user_token_identifier: 'x',
+      expires_at: '2019-12-27T18:11:19.117Z',
+      grants: [
+        {
+          role: { id: 'x' },
+          expires_at: '2019-12-27T18:11:19.117Z',
+        },
+      ],
     });
   });
 
@@ -74,7 +104,7 @@ describe('resource invitations', () => {
   test.skip('revoke: only required params', async () => {
     const responsePromise = client.iam.tenants.invitations.revoke('invitation_id', {
       tenant_id: 'tenant_id',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -89,8 +119,7 @@ describe('resource invitations', () => {
   test.skip('revoke: required and optional params', async () => {
     const response = await client.iam.tenants.invitations.revoke('invitation_id', {
       tenant_id: 'tenant_id',
-      'X-Hercules-IAM-Actor': 'service',
-      'X-Hercules-User-ID-Token': 'x',
+      user_token_identifier: 'x',
     });
   });
 });

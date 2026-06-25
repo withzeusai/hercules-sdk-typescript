@@ -2,30 +2,14 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 
 export class Invitations extends APIResource {
   /**
    * Accepts a tenant or resource invitation for the signed-in user.
    */
-  accept(params: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
-    return this._client.post('/v1/iam/invitations/accept', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-        },
-        options?.headers,
-      ]),
-    });
+  accept(body: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
+    return this._client.post('/v1/iam/invitations/accept', { body, ...options });
   }
 }
 
@@ -34,16 +18,16 @@ export class Invitations extends APIResource {
  */
 export interface InvitationAcceptResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Convex projection source data produced by the acceptance.
    */
-  changed: boolean;
+  convex_source_data: InvitationAcceptResponse.ConvexSourceData;
 
   /**
    * Resulting grants assigned by the invitation.
    */
   grants: Array<
-    | InvitationAcceptResponse.IamRoleGrantResult
-    | InvitationAcceptResponse.IamPermissionGrantResult
+    | InvitationAcceptResponse.IamTenantRoleGrantResult
+    | InvitationAcceptResponse.IamTenantPermissionGrantResult
     | InvitationAcceptResponse.IamResourceRoleGrantResult
     | InvitationAcceptResponse.IamResourcePermissionGrantResult
   >;
@@ -54,26 +38,36 @@ export interface InvitationAcceptResponse {
   invitation_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
-   * Tenant changed by the operation.
+   * Tenant containing the accepted invitation.
    */
   tenant_id: string;
 }
 
 export namespace InvitationAcceptResponse {
   /**
-   * One persisted direct role grant.
+   * Convex projection source data produced by the acceptance.
    */
-  export interface IamRoleGrantResult {
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Projection IDs scheduled to receive the updated IAM state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation.
+     */
+    version: number;
+  }
+
+  /**
+   * One persisted tenant role grant.
+   */
+  export interface IamTenantRoleGrantResult {
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -85,20 +79,20 @@ export namespace InvitationAcceptResponse {
     grant_id: string;
 
     /**
-     * IAM role granted by this binding.
+     * IAM role conferred by this grant.
      */
     role_id: string;
 
     /**
-     * Identifies a role grant.
+     * Identifies a tenant role grant.
      */
-    type: 'role';
+    type: 'tenant_role';
   }
 
   /**
-   * One persisted direct permission grant.
+   * One persisted tenant permission grant.
    */
-  export interface IamPermissionGrantResult {
+  export interface IamTenantPermissionGrantResult {
     /**
      * Whether the permission is allowed or denied.
      */
@@ -115,7 +109,7 @@ export namespace InvitationAcceptResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -125,9 +119,9 @@ export namespace InvitationAcceptResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a tenant permission grant.
      */
-    type: 'permission';
+    type: 'tenant_permission';
   }
 
   /**
@@ -145,17 +139,17 @@ export namespace InvitationAcceptResponse {
     grant_id: string;
 
     /**
-     * IAM role granted by this binding.
+     * IAM role conferred by this grant.
      */
     role_id: string;
 
     /**
-     * Identifies a role grant.
+     * Identifies a resource role grant.
      */
-    type: 'role';
+    type: 'resource_role';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
@@ -181,7 +175,7 @@ export namespace InvitationAcceptResponse {
     grant_id: string;
 
     /**
-     * IAM permission granted or denied by this binding.
+     * IAM permission granted or denied by this grant.
      */
     permission_id: string;
 
@@ -191,12 +185,12 @@ export namespace InvitationAcceptResponse {
     permission_key: string;
 
     /**
-     * Identifies a direct permission grant.
+     * Identifies a resource permission grant.
      */
-    type: 'permission';
+    type: 'resource_permission';
 
     /**
-     * Whether the access entry applies only to this resource or also to descendants
+     * Whether the grant applies only to this resource or also to descendants
      * authorized through it.
      */
     applies_to?: 'self' | 'self_and_descendants';
@@ -205,20 +199,14 @@ export namespace InvitationAcceptResponse {
 
 export interface InvitationAcceptParams {
   /**
-   * Body param: Secret invitation token.
+   * Secret invitation token.
    */
-  token: string;
+  invitation_token: string;
 
   /**
-   * Header param: Must be user for this signed-in user operation.
+   * Convex identity tokenIdentifier required for user authority.
    */
-  'X-Hercules-IAM-Actor': 'user';
-
-  /**
-   * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-   * service.
-   */
-  'X-Hercules-User-ID-Token': string;
+  user_token_identifier: string;
 }
 
 export declare namespace Invitations {

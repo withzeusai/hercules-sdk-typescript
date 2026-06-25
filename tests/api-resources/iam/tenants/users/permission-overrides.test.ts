@@ -8,43 +8,11 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource grants', () => {
-  // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.iam.tenants.resources.grants.create('resource_id', {
-      tenant_id: 'tenant_id',
-      resource_type: 'resource_type',
-      role: { id: 'x' },
-      subject: { type: 'user', user_id: 'x' },
-      user_token_identifier: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.iam.tenants.resources.grants.create('resource_id', {
-      tenant_id: 'tenant_id',
-      resource_type: 'resource_type',
-      role: { id: 'x' },
-      subject: { type: 'user', user_id: 'x' },
-      user_token_identifier: 'x',
-      applies_to: 'self',
-      expires_at: '2019-12-27T18:11:19.117Z',
-    });
-  });
-
+describe('resource permissionOverrides', () => {
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.iam.tenants.resources.grants.update('resource_id', {
+    const responsePromise = client.iam.tenants.users.permissionOverrides.update('user_id', {
       tenant_id: 'tenant_id',
-      resource_type: 'resource_type',
       user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -58,22 +26,39 @@ describe('resource grants', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.iam.tenants.resources.grants.update('resource_id', {
+    const response = await client.iam.tenants.users.permissionOverrides.update('user_id', {
       tenant_id: 'tenant_id',
-      resource_type: 'resource_type',
       user_token_identifier: 'x',
-      subjects: [
+      overrides: [
         {
-          grants: [
-            {
-              role: { id: 'x' },
-              applies_to: 'self',
-              expires_at: '2019-12-27T18:11:19.117Z',
-            },
-          ],
-          subject: { type: 'user', user_id: 'x' },
+          effect: 'allow',
+          permission_key: 'x',
+          expires_at: '2019-12-27T18:11:19.117Z',
         },
       ],
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.iam.tenants.users.permissionOverrides.get('user_id', {
+      tenant_id: 'tenant_id',
+      user_token_identifier: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: required and optional params', async () => {
+    const response = await client.iam.tenants.users.permissionOverrides.get('user_id', {
+      tenant_id: 'tenant_id',
+      user_token_identifier: 'x',
     });
   });
 });

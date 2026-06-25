@@ -9,6 +9,8 @@ import {
   AdmissionRuleCreateResponse,
   AdmissionRuleListParams,
   AdmissionRuleListResponse,
+  AdmissionRuleUnarchiveParams,
+  AdmissionRuleUnarchiveResponse,
   AdmissionRuleUpdateParams,
   AdmissionRuleUpdateResponse,
   AdmissionRules,
@@ -25,66 +27,57 @@ import {
 } from './grants';
 import * as InvitationsAPI from './invitations';
 import {
-  InvitationCreateParams,
-  InvitationCreateResponse,
+  InvitationCreateResourceParams,
+  InvitationCreateResourceResponse,
+  InvitationCreateTenantParams,
+  InvitationCreateTenantResponse,
   InvitationListParams,
   InvitationListResponse,
   InvitationRevokeParams,
   InvitationRevokeResponse,
   Invitations,
 } from './invitations';
-import * as RolesAPI from './roles';
-import {
-  RoleArchiveParams,
-  RoleArchiveResponse,
-  RoleCreateParams,
-  RoleCreateResponse,
-  RoleEvaluateGrantabilityParams,
-  RoleEvaluateGrantabilityResponse,
-  RoleListPermissionOverridesParams,
-  RoleListPermissionOverridesResponse,
-  RoleReplacePermissionOverridesParams,
-  RoleReplacePermissionOverridesResponse,
-  RoleUpdateParams,
-  RoleUpdateResponse,
-  Roles,
-} from './roles';
-import * as UsersAPI from './users';
-import {
-  UserCreateParams,
-  UserCreateResponse,
-  UserListPermissionOverridesParams,
-  UserListPermissionOverridesResponse,
-  UserRemoveParams,
-  UserRemoveResponse,
-  UserReplacePermissionOverridesParams,
-  UserReplacePermissionOverridesResponse,
-  UserReplaceRolesParams,
-  UserReplaceRolesResponse,
-  UserUpdateParams,
-  UserUpdateResponse,
-  Users,
-} from './users';
 import * as GroupsAPI from './groups/groups';
 import {
   GroupArchiveParams,
   GroupArchiveResponse,
   GroupCreateParams,
   GroupCreateResponse,
-  GroupListPermissionOverridesParams,
-  GroupListPermissionOverridesResponse,
-  GroupReplacePermissionOverridesParams,
-  GroupReplacePermissionOverridesResponse,
-  GroupReplaceRolesParams,
-  GroupReplaceRolesResponse,
+  GroupUnarchiveParams,
+  GroupUnarchiveResponse,
   GroupUpdateParams,
   GroupUpdateResponse,
   Groups,
 } from './groups/groups';
 import * as ResourcesAPI from './resources/resources';
-import { Resources } from './resources/resources';
+import {
+  ResourceAccessGrantingRolesParams,
+  ResourceAccessGrantingRolesResponse,
+  Resources,
+} from './resources/resources';
+import * as RolesAPI from './roles/roles';
+import {
+  RoleArchiveParams,
+  RoleArchiveResponse,
+  RoleCreateParams,
+  RoleCreateResponse,
+  RoleUnarchiveParams,
+  RoleUnarchiveResponse,
+  RoleUpdateParams,
+  RoleUpdateResponse,
+  Roles,
+} from './roles/roles';
+import * as UsersAPI from './users/users';
+import {
+  UserCreateParams,
+  UserCreateResponse,
+  UserRemoveParams,
+  UserRemoveResponse,
+  UserUpdateParams,
+  UserUpdateResponse,
+  Users,
+} from './users/users';
 import { APIPromise } from '../../../core/api-promise';
-import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
@@ -101,41 +94,19 @@ export class Tenants extends APIResource {
   /**
    * Creates an IAM tenant in the API key's deployment.
    */
-  create(params: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
-    const { 'X-Hercules-IAM-Actor': xHerculesIamActor, ...body } = params;
-    return this._client.post('/v1/iam/tenants', {
-      body,
-      ...options,
-      headers: buildHeaders([{ 'X-Hercules-IAM-Actor': xHerculesIamActor.toString() }, options?.headers]),
-    });
+  create(body: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
+    return this._client.post('/v1/iam/tenants', { body, ...options });
   }
 
   /**
-   * Updates the name, default role, or entry mode for an IAM tenant.
+   * Updates the name, default role, or access mode for an IAM tenant.
    */
   update(
     tenantID: string,
-    params: TenantUpdateParams,
+    body: TenantUpdateParams,
     options?: RequestOptions,
   ): APIPromise<TenantUpdateResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
-    return this._client.patch(path`/v1/iam/tenants/${tenantID}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          ...(xHerculesUserIDToken != null ?
-            { 'X-Hercules-User-ID-Token': xHerculesUserIDToken }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    return this._client.patch(path`/v1/iam/tenants/${tenantID}`, { body, ...options });
   }
 
   /**
@@ -146,37 +117,44 @@ export class Tenants extends APIResource {
     params: TenantArchiveParams,
     options?: RequestOptions,
   ): APIPromise<TenantArchiveResponse> {
-    const { 'X-Hercules-IAM-Actor': xHerculesIamActor } = params;
+    const { user_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenantID}`, {
+      query: { user_token_identifier },
       ...options,
-      headers: buildHeaders([{ 'X-Hercules-IAM-Actor': xHerculesIamActor.toString() }, options?.headers]),
     });
   }
 
   /**
    * Evaluates tenant admission for the signed-in user.
    */
-  evaluateEntry(
+  evaluateAccess(
     tenantID: string,
-    params: TenantEvaluateEntryParams,
+    body: TenantEvaluateAccessParams,
     options?: RequestOptions,
-  ): APIPromise<TenantEvaluateEntryResponse> {
-    const {
-      'X-Hercules-IAM-Actor': xHerculesIamActor,
-      'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-      ...body
-    } = params;
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/entry`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          'X-Hercules-IAM-Actor': xHerculesIamActor.toString(),
-          'X-Hercules-User-ID-Token': xHerculesUserIDToken,
-        },
-        options?.headers,
-      ]),
-    });
+  ): APIPromise<TenantEvaluateAccessResponse> {
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/evaluate-access`, { body, ...options });
+  }
+
+  /**
+   * Lists roles the actor may grant to a user or group at the tenant level.
+   */
+  grantableRoles(
+    tenantID: string,
+    query: TenantGrantableRolesParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantGrantableRolesResponse> {
+    return this._client.get(path`/v1/iam/tenants/${tenantID}/grantable-roles`, { query, ...options });
+  }
+
+  /**
+   * Unarchives an IAM tenant.
+   */
+  unarchive(
+    tenantID: string,
+    body: TenantUnarchiveParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantUnarchiveResponse> {
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/unarchive`, { body, ...options });
   }
 }
 
@@ -230,14 +208,14 @@ export interface TenantUpdateResponse {
   tenant_id: string;
 
   /**
+   * Current access mode when the admission policy was updated.
+   */
+  access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+
+  /**
    * Current default role ID when the default role was updated.
    */
   default_role_id?: string;
-
-  /**
-   * Current entry mode when the entry policy was updated.
-   */
-  entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
   /**
    * Current tenant name when the tenant was renamed.
@@ -245,19 +223,31 @@ export interface TenantUpdateResponse {
   name?: string;
 
   /**
-   * Hercules IAM identifier.
+   * Previous values for fields changed by the update.
    */
-  previous_default_role_id?: string | null;
+  previous?: TenantUpdateResponse.Previous;
+}
 
+export namespace TenantUpdateResponse {
   /**
-   * Previous entry mode when the entry policy was updated.
+   * Previous values for fields changed by the update.
    */
-  previous_entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  export interface Previous {
+    /**
+     * Previous tenant access mode.
+     */
+    access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
-  /**
-   * Previous tenant name when the tenant was renamed.
-   */
-  previous_name?: string;
+    /**
+     * Hercules IAM identifier.
+     */
+    default_role_id?: string | null;
+
+    /**
+     * Previous tenant name.
+     */
+    name?: string;
+  }
 }
 
 /**
@@ -286,21 +276,21 @@ export interface TenantArchiveResponse {
 }
 
 /**
- * Tenant entry decision for one user.
+ * Tenant access decision for one user.
  */
-export interface TenantEvaluateEntryResponse {
+export interface TenantEvaluateAccessResponse {
   /**
-   * Whether the user may enter the tenant now.
+   * Whether the user may access the tenant now.
    */
   allowed: boolean;
 
   /**
-   * Whether entry evaluation changed IAM state.
+   * Whether access evaluation changed IAM state.
    */
   changed: boolean;
 
   /**
-   * Machine-readable reason for the tenant entry decision.
+   * Machine-readable reason for the tenant access decision.
    */
   reason:
     | 'baseline_missing_open_fallback'
@@ -317,65 +307,223 @@ export interface TenantEvaluateEntryResponse {
     | 'principal_blocked'
     | 'principal_suspended'
     | 'principal_removed'
-    | 'unsupported_entry_mode';
+    | 'unsupported_access_mode';
 
   /**
-   * IAM state version used for the entry decision.
+   * IAM state version used for the access decision.
    */
   state_version: number;
 
   /**
-   * Tenant evaluated for entry.
+   * Tenant evaluated for access.
    */
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID evaluated for entry.
+   * Hercules Auth user ID evaluated for access.
    */
   user_id: string;
 
   /**
-   * Current tenant user status when a principal exists.
+   * Current tenant user status when a user record exists.
    */
   status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
 }
 
-export interface TenantCreateParams {
+/**
+ * Grantable IAM roles for one tenant or exact resource.
+ */
+export interface TenantGrantableRolesResponse {
   /**
-   * Body param: Human-readable tenant name.
+   * Roles the actor may grant.
    */
-  name: string;
+  roles: Array<TenantGrantableRolesResponse.Role>;
 
   /**
-   * Body param: Hercules Auth user ID bootstrapped as the tenant's initial Owner.
+   * Tenant used for the grantability decision.
    */
-  owner_user_id: string;
-
-  /**
-   * Header param: Must be service for this trusted backend operation.
-   */
-  'X-Hercules-IAM-Actor': 'service';
-
-  /**
-   * Body param: Reusable role assigned automatically to newly admitted users.
-   */
-  default_role?: TenantCreateParams.ID | TenantCreateParams.Key;
-
-  /**
-   * Body param: Initial tenant admission policy.
-   */
-  entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  tenant_id: string;
 }
 
-export namespace TenantCreateParams {
-  export interface ID {
+export namespace TenantGrantableRolesResponse {
+  /**
+   * One role the actor may grant for the requested tenant or resource.
+   */
+  export interface Role {
+    /**
+     * Grantable IAM role ID.
+     */
+    role_id: string;
+
+    /**
+     * Stable IAM role key.
+     */
+    role_key: string;
+
+    /**
+     * Whether the role is system or custom.
+     */
+    role_kind: 'system' | 'custom';
+
+    /**
+     * Human-readable IAM role name.
+     */
+    role_name: string;
+
+    /**
+     * Whether the role is reusable across tenants.
+     */
+    shared: boolean;
+  }
+}
+
+/**
+ * Result of an IAM tenant mutation.
+ */
+export interface TenantUnarchiveResponse {
+  /**
+   * Whether persisted IAM state changed.
+   */
+  changed: boolean;
+
+  /**
+   * Projection IDs scheduled to receive the updated IAM state.
+   */
+  projection_ids: Array<string>;
+
+  /**
+   * IAM source version after the operation.
+   */
+  source_version: number;
+
+  /**
+   * Tenant changed by the operation.
+   */
+  tenant_id: string;
+}
+
+export type TenantCreateParams =
+  | TenantCreateParams.IamTenantCreateAsUserRequest
+  | TenantCreateParams.IamTenantCreateAsServiceRequest;
+
+export declare namespace TenantCreateParams {
+  export interface IamTenantCreateAsUserRequest {
+    /**
+     * Human-readable tenant name.
+     */
+    name: string;
+
+    /**
+     * Convex identity tokenIdentifier required for user authority.
+     */
+    user_token_identifier: string;
+
+    /**
+     * Initial tenant admission policy.
+     */
+    access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+
+    /**
+     * Role receiving the overrides.
+     */
+    default_role?:
+      | IamTenantCreateAsUserRequest.IamRoleIDReference
+      | IamTenantCreateAsUserRequest.IamRoleKeyReference;
+  }
+
+  export namespace IamTenantCreateAsUserRequest {
+    export interface IamRoleIDReference {
+      /**
+       * Existing IAM role ID.
+       */
+      id: string;
+    }
+
+    export interface IamRoleKeyReference {
+      /**
+       * Stable role key from the deployment's IAM catalog.
+       */
+      key: string;
+    }
+  }
+
+  export interface IamTenantCreateAsServiceRequest {
+    /**
+     * Human-readable tenant name.
+     */
+    name: string;
+
+    /**
+     * Hercules Auth user ID bootstrapped as the tenant's initial Owner.
+     */
+    owner_user_id: string;
+
+    /**
+     * Must be null to use service authority.
+     */
+    user_token_identifier: null;
+
+    /**
+     * Initial tenant admission policy.
+     */
+    access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+
+    /**
+     * Role receiving the overrides.
+     */
+    default_role?:
+      | IamTenantCreateAsServiceRequest.IamRoleIDReference
+      | IamTenantCreateAsServiceRequest.IamRoleKeyReference;
+  }
+
+  export namespace IamTenantCreateAsServiceRequest {
+    export interface IamRoleIDReference {
+      /**
+       * Existing IAM role ID.
+       */
+      id: string;
+    }
+
+    export interface IamRoleKeyReference {
+      /**
+       * Stable role key from the deployment's IAM catalog.
+       */
+      key: string;
+    }
+  }
+}
+
+export interface TenantUpdateParams {
+  /**
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   */
+  user_token_identifier: string | null;
+
+  /**
+   * Admission policy used when a user requests access to this tenant.
+   */
+  access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+
+  /**
+   * Role receiving the overrides.
+   */
+  default_role?: TenantUpdateParams.IamRoleIDReference | TenantUpdateParams.IamRoleKeyReference;
+
+  /**
+   * New tenant name.
+   */
+  name?: string;
+}
+
+export namespace TenantUpdateParams {
+  export interface IamRoleIDReference {
     /**
      * Existing IAM role ID.
      */
     id: string;
   }
 
-  export interface Key {
+  export interface IamRoleKeyReference {
     /**
      * Stable role key from the deployment's IAM catalog.
      */
@@ -383,162 +531,37 @@ export namespace TenantCreateParams {
   }
 }
 
-export type TenantUpdateParams =
-  | TenantUpdateParams.Variant0
-  | TenantUpdateParams.Variant1
-  | TenantUpdateParams.Variant2;
-
-export declare namespace TenantUpdateParams {
-  export interface Variant0 {
-    /**
-     * Body param: New tenant name.
-     */
-    name: string;
-
-    /**
-     * Header param: Authority used for this operation: service or user.
-     */
-    'X-Hercules-IAM-Actor': 'service' | 'user';
-
-    /**
-     * Body param: Role assigned automatically to users admitted to this tenant.
-     */
-    default_role?: Variant0.ID | Variant0.Key;
-
-    /**
-     * Body param: Admission policy used when a user attempts to enter this tenant.
-     */
-    entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-    /**
-     * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-     * service.
-     */
-    'X-Hercules-User-ID-Token'?: string;
-  }
-
-  export namespace Variant0 {
-    export interface ID {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface Key {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
-
-  export interface Variant1 {
-    /**
-     * Body param: Role assigned automatically to users admitted to this tenant.
-     */
-    default_role: Variant1.ID | Variant1.Key;
-
-    /**
-     * Header param: Authority used for this operation: service or user.
-     */
-    'X-Hercules-IAM-Actor': 'service' | 'user';
-
-    /**
-     * Body param: Admission policy used when a user attempts to enter this tenant.
-     */
-    entry_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-    /**
-     * Body param: New tenant name.
-     */
-    name?: string;
-
-    /**
-     * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-     * service.
-     */
-    'X-Hercules-User-ID-Token'?: string;
-  }
-
-  export namespace Variant1 {
-    export interface ID {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface Key {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
-
-  export interface Variant2 {
-    /**
-     * Body param: Admission policy used when a user attempts to enter this tenant.
-     */
-    entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-    /**
-     * Header param: Authority used for this operation: service or user.
-     */
-    'X-Hercules-IAM-Actor': 'service' | 'user';
-
-    /**
-     * Body param: Role assigned automatically to users admitted to this tenant.
-     */
-    default_role?: Variant2.ID | Variant2.Key;
-
-    /**
-     * Body param: New tenant name.
-     */
-    name?: string;
-
-    /**
-     * Header param: Signed Hercules Auth ID token. Required for user and omitted for
-     * service.
-     */
-    'X-Hercules-User-ID-Token'?: string;
-  }
-
-  export namespace Variant2 {
-    export interface ID {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface Key {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
-}
-
 export interface TenantArchiveParams {
   /**
-   * Must be service for this trusted backend operation.
+   * Null or empty query value selects service authority.
    */
-  'X-Hercules-IAM-Actor': 'service';
+  user_token_identifier: '' | null;
 }
 
-export interface TenantEvaluateEntryParams {
+export interface TenantEvaluateAccessParams {
   /**
-   * Must be user for this signed-in user operation.
+   * Convex identity tokenIdentifier required for user authority.
    */
-  'X-Hercules-IAM-Actor': 'user';
+  user_token_identifier: string;
+}
+
+export interface TenantGrantableRolesParams {
+  /**
+   * Recipient kind for the proposed grant.
+   */
+  subject_type: 'user' | 'group';
 
   /**
-   * Signed Hercules Auth ID token. Required for user and omitted for service.
+   * Convex identity tokenIdentifier asserted by the trusted app backend.
    */
-  'X-Hercules-User-ID-Token': string;
+  user_token_identifier: string | null;
+}
+
+export interface TenantUnarchiveParams {
+  /**
+   * Must be null to use service authority.
+   */
+  user_token_identifier: null;
 }
 
 Tenants.Grants = Grants;
@@ -555,11 +578,15 @@ export declare namespace Tenants {
     type TenantCreateResponse as TenantCreateResponse,
     type TenantUpdateResponse as TenantUpdateResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
-    type TenantEvaluateEntryResponse as TenantEvaluateEntryResponse,
+    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantGrantableRolesResponse as TenantGrantableRolesResponse,
+    type TenantUnarchiveResponse as TenantUnarchiveResponse,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
     type TenantArchiveParams as TenantArchiveParams,
-    type TenantEvaluateEntryParams as TenantEvaluateEntryParams,
+    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
+    type TenantGrantableRolesParams as TenantGrantableRolesParams,
+    type TenantUnarchiveParams as TenantUnarchiveParams,
   };
 
   export {
@@ -574,16 +601,10 @@ export declare namespace Tenants {
     Users as Users,
     type UserCreateResponse as UserCreateResponse,
     type UserUpdateResponse as UserUpdateResponse,
-    type UserListPermissionOverridesResponse as UserListPermissionOverridesResponse,
     type UserRemoveResponse as UserRemoveResponse,
-    type UserReplacePermissionOverridesResponse as UserReplacePermissionOverridesResponse,
-    type UserReplaceRolesResponse as UserReplaceRolesResponse,
     type UserCreateParams as UserCreateParams,
     type UserUpdateParams as UserUpdateParams,
-    type UserListPermissionOverridesParams as UserListPermissionOverridesParams,
     type UserRemoveParams as UserRemoveParams,
-    type UserReplacePermissionOverridesParams as UserReplacePermissionOverridesParams,
-    type UserReplaceRolesParams as UserReplaceRolesParams,
   };
 
   export {
@@ -591,15 +612,11 @@ export declare namespace Tenants {
     type GroupCreateResponse as GroupCreateResponse,
     type GroupUpdateResponse as GroupUpdateResponse,
     type GroupArchiveResponse as GroupArchiveResponse,
-    type GroupListPermissionOverridesResponse as GroupListPermissionOverridesResponse,
-    type GroupReplacePermissionOverridesResponse as GroupReplacePermissionOverridesResponse,
-    type GroupReplaceRolesResponse as GroupReplaceRolesResponse,
+    type GroupUnarchiveResponse as GroupUnarchiveResponse,
     type GroupCreateParams as GroupCreateParams,
     type GroupUpdateParams as GroupUpdateParams,
     type GroupArchiveParams as GroupArchiveParams,
-    type GroupListPermissionOverridesParams as GroupListPermissionOverridesParams,
-    type GroupReplacePermissionOverridesParams as GroupReplacePermissionOverridesParams,
-    type GroupReplaceRolesParams as GroupReplaceRolesParams,
+    type GroupUnarchiveParams as GroupUnarchiveParams,
   };
 
   export {
@@ -607,15 +624,11 @@ export declare namespace Tenants {
     type RoleCreateResponse as RoleCreateResponse,
     type RoleUpdateResponse as RoleUpdateResponse,
     type RoleArchiveResponse as RoleArchiveResponse,
-    type RoleEvaluateGrantabilityResponse as RoleEvaluateGrantabilityResponse,
-    type RoleListPermissionOverridesResponse as RoleListPermissionOverridesResponse,
-    type RoleReplacePermissionOverridesResponse as RoleReplacePermissionOverridesResponse,
+    type RoleUnarchiveResponse as RoleUnarchiveResponse,
     type RoleCreateParams as RoleCreateParams,
     type RoleUpdateParams as RoleUpdateParams,
     type RoleArchiveParams as RoleArchiveParams,
-    type RoleEvaluateGrantabilityParams as RoleEvaluateGrantabilityParams,
-    type RoleListPermissionOverridesParams as RoleListPermissionOverridesParams,
-    type RoleReplacePermissionOverridesParams as RoleReplacePermissionOverridesParams,
+    type RoleUnarchiveParams as RoleUnarchiveParams,
   };
 
   export {
@@ -624,10 +637,12 @@ export declare namespace Tenants {
     type AdmissionRuleUpdateResponse as AdmissionRuleUpdateResponse,
     type AdmissionRuleListResponse as AdmissionRuleListResponse,
     type AdmissionRuleArchiveResponse as AdmissionRuleArchiveResponse,
+    type AdmissionRuleUnarchiveResponse as AdmissionRuleUnarchiveResponse,
     type AdmissionRuleCreateParams as AdmissionRuleCreateParams,
     type AdmissionRuleUpdateParams as AdmissionRuleUpdateParams,
     type AdmissionRuleListParams as AdmissionRuleListParams,
     type AdmissionRuleArchiveParams as AdmissionRuleArchiveParams,
+    type AdmissionRuleUnarchiveParams as AdmissionRuleUnarchiveParams,
   };
 
   export {
@@ -638,13 +653,19 @@ export declare namespace Tenants {
 
   export {
     Invitations as Invitations,
-    type InvitationCreateResponse as InvitationCreateResponse,
     type InvitationListResponse as InvitationListResponse,
+    type InvitationCreateResourceResponse as InvitationCreateResourceResponse,
+    type InvitationCreateTenantResponse as InvitationCreateTenantResponse,
     type InvitationRevokeResponse as InvitationRevokeResponse,
-    type InvitationCreateParams as InvitationCreateParams,
     type InvitationListParams as InvitationListParams,
+    type InvitationCreateResourceParams as InvitationCreateResourceParams,
+    type InvitationCreateTenantParams as InvitationCreateTenantParams,
     type InvitationRevokeParams as InvitationRevokeParams,
   };
 
-  export { Resources as Resources };
+  export {
+    Resources as Resources,
+    type ResourceAccessGrantingRolesResponse as ResourceAccessGrantingRolesResponse,
+    type ResourceAccessGrantingRolesParams as ResourceAccessGrantingRolesParams,
+  };
 }

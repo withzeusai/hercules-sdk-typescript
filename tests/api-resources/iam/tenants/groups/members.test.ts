@@ -14,7 +14,7 @@ describe('resource members', () => {
     const responsePromise = client.iam.tenants.groups.members.add('user_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -30,8 +30,7 @@ describe('resource members', () => {
     const response = await client.iam.tenants.groups.members.add('user_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      'X-Hercules-IAM-Actor': 'service',
-      'X-Hercules-User-ID-Token': 'x',
+      user_token_identifier: 'x',
     });
   });
 
@@ -40,7 +39,7 @@ describe('resource members', () => {
     const responsePromise = client.iam.tenants.groups.members.remove('user_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -56,8 +55,7 @@ describe('resource members', () => {
     const response = await client.iam.tenants.groups.members.remove('user_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      'X-Hercules-IAM-Actor': 'service',
-      'X-Hercules-User-ID-Token': 'x',
+      user_token_identifier: 'x',
     });
   });
 });

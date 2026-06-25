@@ -11,11 +11,7 @@ const client = new Hercules({
 describe('resource tenants', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.iam.tenants.create({
-      name: 'x',
-      owner_user_id: 'x',
-      'X-Hercules-IAM-Actor': 'service',
-    });
+    const responsePromise = client.iam.tenants.create({ name: 'x', user_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -29,19 +25,15 @@ describe('resource tenants', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.iam.tenants.create({
       name: 'x',
-      owner_user_id: 'x',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
+      access_mode: 'open',
       default_role: { id: 'x' },
-      entry_mode: 'open',
     });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.iam.tenants.update('tenant_id', {
-      name: 'x',
-      'X-Hercules-IAM-Actor': 'service',
-    });
+    const responsePromise = client.iam.tenants.update('tenant_id', { user_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,17 +46,16 @@ describe('resource tenants', () => {
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.update('tenant_id', {
-      name: 'x',
-      'X-Hercules-IAM-Actor': 'service',
+      user_token_identifier: 'x',
+      access_mode: 'open',
       default_role: { id: 'x' },
-      entry_mode: 'open',
-      'X-Hercules-User-ID-Token': 'x',
+      name: 'x',
     });
   });
 
   // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.iam.tenants.archive('tenant_id', { 'X-Hercules-IAM-Actor': 'service' });
+    const responsePromise = client.iam.tenants.archive('tenant_id', { user_token_identifier: '' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -76,14 +67,31 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.iam.tenants.archive('tenant_id', { 'X-Hercules-IAM-Actor': 'service' });
+    const response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: '' });
   });
 
   // Mock server tests are disabled
-  test.skip('evaluateEntry: only required params', async () => {
-    const responsePromise = client.iam.tenants.evaluateEntry('tenant_id', {
-      'X-Hercules-IAM-Actor': 'user',
-      'X-Hercules-User-ID-Token': 'x',
+  test.skip('evaluateAccess: only required params', async () => {
+    const responsePromise = client.iam.tenants.evaluateAccess('tenant_id', { user_token_identifier: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('evaluateAccess: required and optional params', async () => {
+    const response = await client.iam.tenants.evaluateAccess('tenant_id', { user_token_identifier: 'x' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('grantableRoles: only required params', async () => {
+    const responsePromise = client.iam.tenants.grantableRoles('tenant_id', {
+      subject_type: 'user',
+      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -95,10 +103,27 @@ describe('resource tenants', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('evaluateEntry: required and optional params', async () => {
-    const response = await client.iam.tenants.evaluateEntry('tenant_id', {
-      'X-Hercules-IAM-Actor': 'user',
-      'X-Hercules-User-ID-Token': 'x',
+  test.skip('grantableRoles: required and optional params', async () => {
+    const response = await client.iam.tenants.grantableRoles('tenant_id', {
+      subject_type: 'user',
+      user_token_identifier: 'x',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('unarchive: only required params', async () => {
+    const responsePromise = client.iam.tenants.unarchive('tenant_id', { user_token_identifier: null });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('unarchive: required and optional params', async () => {
+    const response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: null });
   });
 });
