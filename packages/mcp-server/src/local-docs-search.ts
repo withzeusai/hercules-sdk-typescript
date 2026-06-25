@@ -76,11 +76,43 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list',
+    endpoint: '/v1/iam/tenants',
+    httpMethod: 'get',
+    summary: 'List tenants',
+    description:
+      "Returns the authoritative IAM tenant collection for the API key's deployment. Service authority (omit user_token_identifier or pass an empty value) returns all tenants visible to the deployment. User authority returns only tenants where the verified active user has a direct, exact-scope, unexpired immutable built-in Owner binding. Use status=active, status=archived, or status=all to discover archived tenants; the default is active. Tenant reads are authoritative; use projection mirrors only after observing the returned source_version from write responses.",
+    stainlessPath: '(resource) iam.tenants > (method) list',
+    qualified: 'client.iam.tenants.list',
+    params: [
+      'cursor?: string;',
+      'limit?: number;',
+      "status?: 'active' | 'archived' | 'all';",
+      'user_token_identifier?: string;',
+    ],
+    response:
+      "{ tenants: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; kind: 'default' | 'custom'; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]; next_cursor?: string; }",
+    markdown:
+      "## list\n\n`client.iam.tenants.list(cursor?: string, limit?: number, status?: 'active' | 'archived' | 'all', user_token_identifier?: string): { tenants: object[]; next_cursor?: string; }`\n\n**get** `/v1/iam/tenants`\n\nReturns the authoritative IAM tenant collection for the API key's deployment. Service authority (omit user_token_identifier or pass an empty value) returns all tenants visible to the deployment. User authority returns only tenants where the verified active user has a direct, exact-scope, unexpired immutable built-in Owner binding. Use status=active, status=archived, or status=all to discover archived tenants; the default is active. Tenant reads are authoritative; use projection mirrors only after observing the returned source_version from write responses.\n\n### Parameters\n\n- `cursor?: string`\n  Opaque cursor returned by the previous page.\n\n- `limit?: number`\n  Maximum number of records to return.\n\n- `status?: 'active' | 'archived' | 'all'`\n  Tenant lifecycle status filter.\n\n- `user_token_identifier?: string`\n  Convex identity tokenIdentifier asserted by the trusted app backend.\n\n### Returns\n\n- `{ tenants: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; kind: 'default' | 'custom'; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]; next_cursor?: string; }`\n  Cursor-paginated authoritative IAM tenant records.\n\n  - `tenants: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; kind: 'default' | 'custom'; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]`\n  - `next_cursor?: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.iam.tenants.list',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants.tenants);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/iam/tenants \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'create',
     endpoint: '/v1/iam/tenants',
     httpMethod: 'post',
     summary: 'Create tenant',
-    description: "Creates an IAM tenant in the API key's deployment.",
+    description:
+      "Creates an IAM tenant in the API key's deployment. Service authority uses user_token_identifier null and must provide owner_user_id. User authority uses a verified user_token_identifier and makes that user the initial Owner. Optionally send Idempotency-Key; the key is opaque, scoped to the deployment and trusted actor, stored only as a hash by the backend, and exact same-key replays return the original tenant create result while same-key/different normalized intent returns a stable conflict problem response.",
     stainlessPath: '(resource) iam.tenants > (method) create',
     qualified: 'client.iam.tenants.create',
     params: [
@@ -96,6 +128,32 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/iam/tenants \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "name": "x",\n          "user_token_identifier": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'get',
+    endpoint: '/v1/iam/tenants/{tenant_id}',
+    httpMethod: 'get',
+    summary: 'Get tenant',
+    description:
+      "Returns one authoritative IAM tenant record from the API key's deployment, including archived tenants. Service authority (omit user_token_identifier or pass an empty value) can read any deployment tenant. User authority can read only a tenant where the verified active user has a direct, exact-scope, unexpired immutable built-in Owner binding. The default path sentinel resolves to the deployment default tenant for reads.",
+    stainlessPath: '(resource) iam.tenants > (method) get',
+    qualified: 'client.iam.tenants.get',
+    params: ['tenant_id: string;', 'user_token_identifier?: string;'],
+    response:
+      "{ access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; kind: 'default' | 'custom'; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }",
+    markdown:
+      "## get\n\n`client.iam.tenants.get(tenant_id: string, user_token_identifier?: string): { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; kind: 'default' | 'custom'; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}`\n\nReturns one authoritative IAM tenant record from the API key's deployment, including archived tenants. Service authority (omit user_token_identifier or pass an empty value) can read any deployment tenant. User authority can read only a tenant where the verified active user has a direct, exact-scope, unexpired immutable built-in Owner binding. The default path sentinel resolves to the deployment default tenant for reads.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `user_token_identifier?: string`\n  Convex identity tokenIdentifier asserted by the trusted app backend.\n\n### Returns\n\n- `{ access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; kind: 'default' | 'custom'; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }`\n  Authoritative IAM tenant record.\n\n  - `access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  - `created_at: string`\n  - `kind: 'default' | 'custom'`\n  - `lifecycle_status: 'active' | 'archived'`\n  - `name: string`\n  - `tenant_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.get('tenant_id');\n\nconsole.log(tenant);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.iam.tenants.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenant = await client.iam.tenants.get('tenant_id');\n\nconsole.log(tenant.tenant_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
       },
     },
   },
@@ -135,18 +193,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/v1/iam/tenants/{tenant_id}',
     httpMethod: 'delete',
     summary: 'Archive tenant',
-    description: 'Archives a non-default IAM tenant.',
+    description:
+      'Archives the exact custom IAM tenant ID named in the path. Service authority uses an empty user_token_identifier query value. User authority uses a verified user_token_identifier and is accepted only when the backend confirms direct immutable Owner authority on the exact target tenant. The default path sentinel is not resolved and is not a valid lifecycle target; callers must use an exact custom tenant ID.',
     stainlessPath: '(resource) iam.tenants > (method) archive',
     qualified: 'client.iam.tenants.archive',
-    params: ['tenant_id: string;', "user_token_identifier: '';"],
+    params: ['tenant_id: string;', 'user_token_identifier: string;'],
     response: '{ changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.archive(tenant_id: string, user_token_identifier: ''): { changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}`\n\nArchives a non-default IAM tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `user_token_identifier: ''`\n  Null or empty query value selects service authority.\n\n### Returns\n\n- `{ changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `changed: boolean`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: '' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.archive(tenant_id: string, user_token_identifier: string): { changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}`\n\nArchives the exact custom IAM tenant ID named in the path. Service authority uses an empty user_token_identifier query value. User authority uses a verified user_token_identifier and is accepted only when the backend confirms direct immutable Owner authority on the exact target tenant. The default path sentinel is not resolved and is not a valid lifecycle target; callers must use an exact custom tenant ID.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `user_token_identifier: string`\n  Convex identity tokenIdentifier asserted by the trusted app backend.\n\n### Returns\n\n- `{ changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `changed: boolean`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.archive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: '' });\n\nconsole.log(response.projection_ids);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: 'x' });\n\nconsole.log(response.projection_ids);",
       },
       http: {
         example:
@@ -159,22 +218,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/v1/iam/tenants/{tenant_id}/unarchive',
     httpMethod: 'post',
     summary: 'Unarchive tenant',
-    description: 'Unarchives an IAM tenant.',
+    description:
+      'Unarchives the exact custom IAM tenant ID named in the path. Service authority uses user_token_identifier null. User authority uses a verified user_token_identifier and is accepted only when the backend confirms retained direct immutable Owner authority on the exact target tenant. The default path sentinel is not resolved and is not a valid lifecycle target; callers must use an exact custom tenant ID.',
     stainlessPath: '(resource) iam.tenants > (method) unarchive',
     qualified: 'client.iam.tenants.unarchive',
-    params: ['tenant_id: string;', 'user_token_identifier: null;'],
+    params: ['tenant_id: string;', 'user_token_identifier: string;'],
     response: '{ changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }',
     markdown:
-      "## unarchive\n\n`client.iam.tenants.unarchive(tenant_id: string, user_token_identifier: null): { changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/unarchive`\n\nUnarchives an IAM tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `user_token_identifier: null`\n  Must be null to use service authority.\n\n### Returns\n\n- `{ changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `changed: boolean`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: null });\n\nconsole.log(response);\n```",
+      "## unarchive\n\n`client.iam.tenants.unarchive(tenant_id: string, user_token_identifier: string): { changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/unarchive`\n\nUnarchives the exact custom IAM tenant ID named in the path. Service authority uses user_token_identifier null. User authority uses a verified user_token_identifier and is accepted only when the backend confirms retained direct immutable Owner authority on the exact target tenant. The default path sentinel is not resolved and is not a valid lifecycle target; callers must use an exact custom tenant ID.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `user_token_identifier: string`\n  Convex identity tokenIdentifier asserted by the trusted app backend.\n\n### Returns\n\n- `{ changed: boolean; projection_ids: string[]; source_version: number; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `changed: boolean`\n  - `projection_ids: string[]`\n  - `source_version: number`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.unarchive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: null });\n\nconsole.log(response.projection_ids);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: 'x' });\n\nconsole.log(response.projection_ids);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/unarchive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "user_token_identifier": null\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/unarchive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "user_token_identifier": "x"\n        }\'',
       },
     },
   },
