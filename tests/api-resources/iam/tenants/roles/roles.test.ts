@@ -12,9 +12,9 @@ describe('resource roles', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.iam.tenants.roles.create('tenant_id', {
+      actor_token_identifier: 'x',
       key: 'x',
       name: 'x',
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,9 +28,9 @@ describe('resource roles', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.iam.tenants.roles.create('tenant_id', {
+      actor_token_identifier: 'x',
       key: 'x',
       name: 'x',
-      user_token_identifier: 'x',
       description: 'description',
       permission_keys: ['x'],
     });
@@ -40,7 +40,7 @@ describe('resource roles', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.roles.update('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -55,7 +55,7 @@ describe('resource roles', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.roles.update('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       description: 'description',
       name: 'x',
       permission_keys: ['x'],
@@ -66,7 +66,7 @@ describe('resource roles', () => {
   test.skip('archive: only required params', async () => {
     const responsePromise = client.iam.tenants.roles.archive('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -81,7 +81,7 @@ describe('resource roles', () => {
   test.skip('archive: required and optional params', async () => {
     const response = await client.iam.tenants.roles.archive('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 
@@ -89,7 +89,7 @@ describe('resource roles', () => {
   test.skip('unarchive: only required params', async () => {
     const responsePromise = client.iam.tenants.roles.unarchive('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -104,7 +104,7 @@ describe('resource roles', () => {
   test.skip('unarchive: required and optional params', async () => {
     const response = await client.iam.tenants.roles.unarchive('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 });

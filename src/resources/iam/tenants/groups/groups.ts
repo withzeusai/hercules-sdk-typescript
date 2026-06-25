@@ -27,7 +27,8 @@ export class Groups extends APIResource {
     new PermissionOverridesAPI.PermissionOverrides(this._client);
 
   /**
-   * Creates a group in one IAM tenant.
+   * Creates an active group in the tenant. The new group has no members, roles, or
+   * permission overrides.
    */
   create(
     tenantID: string,
@@ -38,7 +39,8 @@ export class Groups extends APIResource {
   }
 
   /**
-   * Updates one tenant group's name, lifecycle state, or direct role grants.
+   * Updates a group's name and/or replaces its direct tenant roles. Memberships and
+   * permission overrides are unchanged.
    */
   update(
     groupID: string,
@@ -50,22 +52,24 @@ export class Groups extends APIResource {
   }
 
   /**
-   * Archives one tenant group.
+   * Archives a group so it stops granting access while preserving its members,
+   * roles, and permission overrides for restoration.
    */
   archive(
     groupID: string,
     params: GroupArchiveParams,
     options?: RequestOptions,
   ): APIPromise<GroupArchiveResponse> {
-    const { tenant_id, user_token_identifier } = params;
+    const { tenant_id, actor_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/groups/${groupID}`, {
-      query: { user_token_identifier },
+      query: { actor_token_identifier },
       ...options,
     });
   }
 
   /**
-   * Unarchives one tenant group.
+   * Restores an archived group. Its existing memberships, roles, and permission
+   * overrides begin granting access again.
    */
   unarchive(
     groupID: string,
@@ -85,6 +89,11 @@ export class Groups extends APIResource {
  */
 export interface GroupCreateResponse {
   /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: GroupCreateResponse.ConvexSourceData;
+
+  /**
    * Confirms that the group was created.
    */
   created: true;
@@ -95,19 +104,32 @@ export interface GroupCreateResponse {
   group_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant containing the created group.
    */
   tenant_id: string;
+}
+
+export namespace GroupCreateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -115,24 +137,14 @@ export interface GroupCreateResponse {
  */
 export interface GroupUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: GroupUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant group changed by the operation.
    */
   group_id: string;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
 
   /**
    * Tenant changed by the operation.
@@ -143,19 +155,30 @@ export interface GroupUpdateResponse {
    * Complete resulting direct role grant set.
    */
   grants?: Array<GroupUpdateResponse.Grant>;
-
-  /**
-   * Tenant group's previous status.
-   */
-  previous_status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
-
-  /**
-   * Tenant group's current status.
-   */
-  status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
 }
 
 export namespace GroupUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
   /**
    * One persisted tenant role grant.
    */
@@ -187,9 +210,9 @@ export namespace GroupUpdateResponse {
  */
 export interface GroupArchiveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: GroupArchiveResponse.ConvexSourceData;
 
   /**
    * Tenant group changed by the operation.
@@ -197,19 +220,32 @@ export interface GroupArchiveResponse {
   group_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
+}
+
+export namespace GroupArchiveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -217,9 +253,9 @@ export interface GroupArchiveResponse {
  */
 export interface GroupUnarchiveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: GroupUnarchiveResponse.ConvexSourceData;
 
   /**
    * Tenant group changed by the operation.
@@ -227,48 +263,59 @@ export interface GroupUnarchiveResponse {
   group_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
 }
 
+export namespace GroupUnarchiveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 export interface GroupCreateParams {
+  /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string | null;
+
   /**
    * Human-readable group name.
    */
   name: string;
-
-  /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
 }
 
 export interface GroupUpdateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
-
-  /**
-   * Body param: Optional lifecycle transition to apply to the tenant group.
-   */
-  action?: 'suspend' | 'unsuspend';
+  actor_token_identifier: string | null;
 
   /**
    * Body param: New human-readable group name.
@@ -292,7 +339,7 @@ export namespace GroupUpdateParams {
     role: Role.IamRoleIDReference | Role.IamRoleKeyReference;
 
     /**
-     * Grant expiry, or null for a permanent grant.
+     * Grant expiry. Omit or pass null for a permanent grant.
      */
     expires_at?: string | null;
   }
@@ -316,27 +363,30 @@ export namespace GroupUpdateParams {
 
 export interface GroupArchiveParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export interface GroupUnarchiveParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 Groups.Members = Members;

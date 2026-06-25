@@ -12,9 +12,9 @@ describe('resource users', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.iam.tenants.users.create('tenant_id', {
+      actor_token_identifier: 'x',
       roles: [{ role: { id: 'x' } }],
       user_id: 'x',
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,6 +28,7 @@ describe('resource users', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.iam.tenants.users.create('tenant_id', {
+      actor_token_identifier: 'x',
       roles: [
         {
           role: { id: 'x' },
@@ -35,7 +36,6 @@ describe('resource users', () => {
         },
       ],
       user_id: 'x',
-      user_token_identifier: 'x',
     });
   });
 
@@ -43,7 +43,7 @@ describe('resource users', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.users.update('user_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -58,7 +58,7 @@ describe('resource users', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.users.update('user_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       action: 'approve',
       roles: [
         {
@@ -73,7 +73,7 @@ describe('resource users', () => {
   test.skip('remove: only required params', async () => {
     const responsePromise = client.iam.tenants.users.remove('user_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -88,7 +88,7 @@ describe('resource users', () => {
   test.skip('remove: required and optional params', async () => {
     const response = await client.iam.tenants.users.remove('user_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 });

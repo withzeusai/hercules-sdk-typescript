@@ -12,8 +12,8 @@ describe('resource invitations', () => {
   // Mock server tests are disabled
   test.skip('accept: only required params', async () => {
     const responsePromise = client.iam.invitations.accept({
+      actor_token_identifier: 'x',
       invitation_token: 'x',
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,8 +27,8 @@ describe('resource invitations', () => {
   // Mock server tests are disabled
   test.skip('accept: required and optional params', async () => {
     const response = await client.iam.invitations.accept({
+      actor_token_identifier: 'x',
       invitation_token: 'x',
-      user_token_identifier: 'x',
     });
   });
 });

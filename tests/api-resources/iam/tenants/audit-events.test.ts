@@ -11,7 +11,7 @@ const client = new Hercules({
 describe('resource auditEvents', () => {
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.iam.tenants.auditEvents.list('tenant_id', { user_token_identifier: 'x' });
+    const responsePromise = client.iam.tenants.auditEvents.list('tenant_id', { actor_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,7 +24,7 @@ describe('resource auditEvents', () => {
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
     const response = await client.iam.tenants.auditEvents.list('tenant_id', {
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       action: 'x',
       actor_type: 'system',
       api_key_id: 'x',

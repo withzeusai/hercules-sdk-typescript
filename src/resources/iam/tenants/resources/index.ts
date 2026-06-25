@@ -15,5 +15,7 @@ export {
 export {
   Resources,
   type ResourceAccessGrantingRolesResponse,
+  type ResourceCreateInvitationResponse,
   type ResourceAccessGrantingRolesParams,
+  type ResourceCreateInvitationParams,
 } from './resources';

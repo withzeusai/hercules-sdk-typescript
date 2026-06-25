@@ -7,7 +7,8 @@ import { path } from '../../../internal/utils/path';
 
 export class Invitations extends APIResource {
   /**
-   * Returns a filtered page of pending tenant and resource invitations.
+   * Lists pending, unexpired tenant and resource invitations. Accepted, revoked, and
+   * expired invitations are not returned.
    */
   list(
     tenantID: string,
@@ -18,42 +19,17 @@ export class Invitations extends APIResource {
   }
 
   /**
-   * Creates an invitation to one exact resource.
-   */
-  createResource(
-    resourceID: string,
-    params: InvitationCreateResourceParams,
-    options?: RequestOptions,
-  ): APIPromise<InvitationCreateResourceResponse> {
-    const { tenant_id, resource_type, ...body } = params;
-    return this._client.post(
-      path`/v1/iam/tenants/${tenant_id}/resources/${resource_type}/${resourceID}/invitations`,
-      { body, ...options },
-    );
-  }
-
-  /**
-   * Creates an invitation to a tenant.
-   */
-  createTenant(
-    tenantID: string,
-    body: InvitationCreateTenantParams,
-    options?: RequestOptions,
-  ): APIPromise<InvitationCreateTenantResponse> {
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/invitations`, { body, ...options });
-  }
-
-  /**
-   * Revokes one pending tenant or resource invitation.
+   * Revokes a pending tenant or resource invitation. It does not remove access
+   * already granted by an accepted invitation.
    */
   revoke(
     invitationID: string,
     params: InvitationRevokeParams,
     options?: RequestOptions,
   ): APIPromise<InvitationRevokeResponse> {
-    const { tenant_id, user_token_identifier } = params;
+    const { tenant_id, actor_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/invitations/${invitationID}`, {
-      query: { user_token_identifier },
+      query: { actor_token_identifier },
       ...options,
     });
   }
@@ -92,11 +68,6 @@ export namespace InvitationListResponse {
     created_at: string;
 
     /**
-     * Email address of the invited user.
-     */
-    email: string;
-
-    /**
      * Invitation expiry timestamp.
      */
     expires_at: string;
@@ -110,6 +81,11 @@ export namespace InvitationListResponse {
      * Tenant invitation ID.
      */
     invitation_id: string;
+
+    /**
+     * Recipient of an invitation.
+     */
+    recipient: IamTenantInvitationListItem.Recipient;
 
     /**
      * Identifies a tenant invitation.
@@ -147,6 +123,21 @@ export namespace InvitationListResponse {
        */
       type: 'tenant_role';
     }
+
+    /**
+     * Recipient of an invitation.
+     */
+    export interface Recipient {
+      /**
+       * Identifies an email recipient.
+       */
+      type: 'email';
+
+      /**
+       * Email address of the invited user.
+       */
+      value: string;
+    }
   }
 
   /**
@@ -157,11 +148,6 @@ export namespace InvitationListResponse {
      * Invitation creation timestamp.
      */
     created_at: string;
-
-    /**
-     * Email address of the invited user.
-     */
-    email: string;
 
     /**
      * Invitation expiry timestamp.
@@ -179,6 +165,11 @@ export namespace InvitationListResponse {
      * Resource invitation ID.
      */
     invitation_id: string;
+
+    /**
+     * Recipient of an invitation.
+     */
+    recipient: IamResourceInvitationListItem.Recipient;
 
     /**
      * Resource covered by the invitation.
@@ -252,9 +243,29 @@ export namespace InvitationListResponse {
     }
 
     /**
+     * Recipient of an invitation.
+     */
+    export interface Recipient {
+      /**
+       * Identifies an email recipient.
+       */
+      type: 'email';
+
+      /**
+       * Email address of the invited user.
+       */
+      value: string;
+    }
+
+    /**
      * Resource covered by the invitation.
      */
     export interface Resource {
+      /**
+       * Whether the grant applies only to this resource or also to descendants.
+       */
+      applies_to: 'self' | 'self_and_descendants';
+
       /**
        * Exact application resource ID.
        */
@@ -264,234 +275,7 @@ export namespace InvitationListResponse {
        * Canonical app resource type, such as app.projects.
        */
       resource_type: string;
-
-      /**
-       * Whether the grant applies only to this resource or also to descendants
-       * authorized through it.
-       */
-      applies_to?: 'self' | 'self_and_descendants';
     }
-  }
-}
-
-/**
- * Created resource invitation.
- */
-export interface InvitationCreateResourceResponse {
-  /**
-   * One-time secret invitation token.
-   */
-  token: string;
-
-  /**
-   * URL the invited user can open to accept.
-   */
-  accept_url: string;
-
-  /**
-   * Email address of the invited user.
-   */
-  email: string;
-
-  /**
-   * Invitation expiry timestamp.
-   */
-  expires_at: string;
-
-  /**
-   * Role or permission grant created on acceptance.
-   */
-  grant:
-    | InvitationCreateResourceResponse.IamResourceInvitationPendingRoleGrant
-    | InvitationCreateResourceResponse.IamResourceInvitationPendingPermissionGrant;
-
-  /**
-   * Created resource invitation ID.
-   */
-  invitation_id: string;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * Resource covered by the invitation.
-   */
-  resource: InvitationCreateResourceResponse.Resource;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
-   * Tenant containing the invited resource.
-   */
-  tenant_id: string;
-
-  /**
-   * Identifies a resource invitation.
-   */
-  type: 'resource';
-}
-
-export namespace InvitationCreateResourceResponse {
-  export interface IamResourceInvitationPendingRoleGrant {
-    /**
-     * Pending role conferral ID.
-     */
-    conferral_id: string;
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * IAM role granted on acceptance.
-     */
-    role_id: string;
-
-    /**
-     * Identifies a resource role grant.
-     */
-    type: 'resource_role';
-  }
-
-  export interface IamResourceInvitationPendingPermissionGrant {
-    /**
-     * Pending permission conferral ID.
-     */
-    conferral_id: string;
-
-    /**
-     * Resource invitations grant the permission.
-     */
-    effect: 'allow';
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * IAM permission granted on acceptance.
-     */
-    permission_id: string;
-
-    /**
-     * Stable IAM permission key.
-     */
-    permission_key: string;
-
-    /**
-     * Identifies a resource permission grant.
-     */
-    type: 'resource_permission';
-  }
-
-  /**
-   * Resource covered by the invitation.
-   */
-  export interface Resource {
-    /**
-     * Exact application resource ID.
-     */
-    resource_id: string;
-
-    /**
-     * Canonical app resource type, such as app.projects.
-     */
-    resource_type: string;
-
-    /**
-     * Whether the grant applies only to this resource or also to descendants
-     * authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
-  }
-}
-
-/**
- * Created tenant invitation.
- */
-export interface InvitationCreateTenantResponse {
-  /**
-   * One-time secret invitation token.
-   */
-  token: string;
-
-  /**
-   * URL the invited user can open to accept.
-   */
-  accept_url: string;
-
-  /**
-   * Email address of the invited user.
-   */
-  email: string;
-
-  /**
-   * Invitation expiry timestamp.
-   */
-  expires_at: string;
-
-  /**
-   * Role grants created on acceptance.
-   */
-  grants: Array<InvitationCreateTenantResponse.Grant>;
-
-  /**
-   * Created tenant invitation ID.
-   */
-  invitation_id: string;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
-   * Tenant receiving the invited user.
-   */
-  tenant_id: string;
-
-  /**
-   * Identifies a tenant invitation.
-   */
-  type: 'tenant';
-}
-
-export namespace InvitationCreateTenantResponse {
-  /**
-   * Role grant created when the invitation is accepted.
-   */
-  export interface Grant {
-    /**
-     * Pending role conferral ID.
-     */
-    conferral_id: string;
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * IAM role granted on acceptance.
-     */
-    role_id: string;
-
-    /**
-     * Identifies a tenant role grant.
-     */
-    type: 'tenant_role';
   }
 }
 
@@ -500,9 +284,9 @@ export namespace InvitationCreateTenantResponse {
  */
 export interface InvitationRevokeResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: InvitationRevokeResponse.ConvexSourceData;
 
   /**
    * Revoked invitation ID.
@@ -510,19 +294,9 @@ export interface InvitationRevokeResponse {
   invitation_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
    * Whether the invitation was revoked.
    */
   revoked: boolean;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
 
   /**
    * Tenant changed by the operation.
@@ -530,11 +304,35 @@ export interface InvitationRevokeResponse {
   tenant_id: string;
 }
 
+export namespace InvitationRevokeResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 export interface InvitationListParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Opaque cursor returned by the previous page.
@@ -542,14 +340,14 @@ export interface InvitationListParams {
   cursor?: string;
 
   /**
-   * Filter by exact invitation email.
-   */
-  email?: string;
-
-  /**
-   * Maximum number of records to return.
+   * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
+
+  /**
+   * Optional exact invitation recipient.
+   */
+  recipient?: InvitationListParams.Recipient;
 
   /**
    * Optional tenant, all-resource, or exact-resource invitation selection.
@@ -561,6 +359,21 @@ export interface InvitationListParams {
 }
 
 export namespace InvitationListParams {
+  /**
+   * Optional exact invitation recipient.
+   */
+  export interface Recipient {
+    /**
+     * Identifies an email recipient.
+     */
+    type: 'email';
+
+    /**
+     * Email address of the invited user.
+     */
+    value: string;
+  }
+
   /**
    * Selects pending tenant invitations.
    */
@@ -602,185 +415,25 @@ export namespace InvitationListParams {
   }
 }
 
-export interface InvitationCreateResourceParams {
-  /**
-   * Path param
-   */
-  tenant_id: string;
-
-  /**
-   * Path param
-   */
-  resource_type: string;
-
-  /**
-   * Body param: Email address of the invited user.
-   */
-  email: string;
-
-  /**
-   * Body param: Exactly one role or permission grant created on acceptance.
-   */
-  grant:
-    | InvitationCreateResourceParams.IamResourceInvitationRoleGrantInput
-    | InvitationCreateResourceParams.IamResourceInvitationPermissionGrantInput;
-
-  /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
-
-  /**
-   * Body param: Whether the grant applies only to this resource or also to
-   * descendants authorized through it.
-   */
-  applies_to?: 'self' | 'self_and_descendants';
-
-  /**
-   * Body param: Invitation expiry timestamp. The service default is used when
-   * omitted.
-   */
-  expires_at?: string;
-}
-
-export namespace InvitationCreateResourceParams {
-  /**
-   * Role grant created on the resource when accepted.
-   */
-  export interface IamResourceInvitationRoleGrantInput {
-    /**
-     * Role receiving the overrides.
-     */
-    role:
-      | IamResourceInvitationRoleGrantInput.IamRoleIDReference
-      | IamResourceInvitationRoleGrantInput.IamRoleKeyReference;
-
-    /**
-     * Identifies a role grant.
-     */
-    type: 'role';
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at?: string | null;
-  }
-
-  export namespace IamResourceInvitationRoleGrantInput {
-    export interface IamRoleIDReference {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface IamRoleKeyReference {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
-
-  /**
-   * Direct permission grant created on the resource when accepted.
-   */
-  export interface IamResourceInvitationPermissionGrantInput {
-    /**
-     * Permission granted on the resource.
-     */
-    permission_key: string;
-
-    /**
-     * Identifies a permission grant.
-     */
-    type: 'permission';
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at?: string | null;
-  }
-}
-
-export interface InvitationCreateTenantParams {
-  /**
-   * Email address of the invited user.
-   */
-  email: string;
-
-  /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
-
-  /**
-   * Invitation expiry timestamp. The service default is used when omitted.
-   */
-  expires_at?: string;
-
-  /**
-   * Role grants created on acceptance. The permanent tenant default is used when
-   * omitted.
-   */
-  grants?: Array<InvitationCreateTenantParams.Grant>;
-}
-
-export namespace InvitationCreateTenantParams {
-  /**
-   * One direct role grant.
-   */
-  export interface Grant {
-    /**
-     * Role receiving the overrides.
-     */
-    role: Grant.IamRoleIDReference | Grant.IamRoleKeyReference;
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at?: string | null;
-  }
-
-  export namespace Grant {
-    export interface IamRoleIDReference {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface IamRoleKeyReference {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
-}
-
 export interface InvitationRevokeParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export declare namespace Invitations {
   export {
     type InvitationListResponse as InvitationListResponse,
-    type InvitationCreateResourceResponse as InvitationCreateResourceResponse,
-    type InvitationCreateTenantResponse as InvitationCreateTenantResponse,
     type InvitationRevokeResponse as InvitationRevokeResponse,
     type InvitationListParams as InvitationListParams,
-    type InvitationCreateResourceParams as InvitationCreateResourceParams,
-    type InvitationCreateTenantParams as InvitationCreateTenantParams,
     type InvitationRevokeParams as InvitationRevokeParams,
   };
 }

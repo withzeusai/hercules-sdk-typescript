@@ -7,15 +7,17 @@ import { path } from '../../../../internal/utils/path';
 
 export class PermissionOverrides extends APIResource {
   /**
-   * Updates direct allow and deny permission overrides for one subject and resource
-   * selection.
+   * Replaces direct allow and deny permission overrides for one user, group, or
+   * role. An empty list clears the selected overrides; omitting the list makes no
+   * change. Overrides can target one resource or every resource of a type and can
+   * optionally apply to descendants.
    */
   update(
     tenantID: string,
     body: PermissionOverrideUpdateParams,
     options?: RequestOptions,
   ): APIPromise<PermissionOverrideUpdateResponse> {
-    return this._client.patch(path`/v1/iam/tenants/${tenantID}/resource-permission-overrides`, {
+    return this._client.patch(path`/v1/iam/tenants/${tenantID}/resource/permission-overrides`, {
       body,
       ...options,
     });
@@ -27,19 +29,9 @@ export class PermissionOverrides extends APIResource {
  */
 export interface PermissionOverrideUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
+  convex_source_data: PermissionOverrideUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant changed by the operation.
@@ -54,9 +46,35 @@ export interface PermissionOverrideUpdateResponse {
 
 export namespace PermissionOverrideUpdateResponse {
   /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
+  /**
    * One persisted resource permission grant.
    */
   export interface Grant {
+    /**
+     * Whether the grant applies only to this resource or also to descendants.
+     */
+    applies_to: 'self' | 'self_and_descendants';
+
     /**
      * Whether the permission is allowed or denied.
      */
@@ -86,16 +104,16 @@ export namespace PermissionOverrideUpdateResponse {
      * Identifies a resource permission grant.
      */
     type: 'resource_permission';
-
-    /**
-     * Whether the grant applies only to this resource or also to descendants
-     * authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
   }
 }
 
 export interface PermissionOverrideUpdateParams {
+  /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string | null;
+
   /**
    * Resource selection receiving permission overrides.
    */
@@ -117,13 +135,8 @@ export interface PermissionOverrideUpdateParams {
     | PermissionOverrideUpdateParams.IamResourcePermissionOverrideRoleSubject;
 
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
-
-  /**
    * Whether the grant applies only to this resource or also to descendants
-   * authorized through it.
+   * authorized through it. Defaults to `self`.
    */
   applies_to?: 'self' | 'self_and_descendants';
 
@@ -166,7 +179,7 @@ export namespace PermissionOverrideUpdateParams {
     type: 'user';
 
     /**
-     * Hercules Auth user ID receiving the overrides.
+     * Target tenant user ID receiving the overrides. Do not pass a token identifier.
      */
     user_id: string;
   }

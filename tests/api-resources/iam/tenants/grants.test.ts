@@ -13,7 +13,7 @@ describe('resource grants', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.grants.update('grant_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,7 +28,7 @@ describe('resource grants', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.grants.update('grant_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       expires_at: '2019-12-27T18:11:19.117Z',
     });
   });
@@ -37,7 +37,7 @@ describe('resource grants', () => {
   test.skip('delete: only required params', async () => {
     const responsePromise = client.iam.tenants.grants.delete('grant_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,7 +52,7 @@ describe('resource grants', () => {
   test.skip('delete: required and optional params', async () => {
     const response = await client.iam.tenants.grants.delete('grant_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 });

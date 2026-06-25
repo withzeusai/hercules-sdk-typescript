@@ -8,13 +8,13 @@ const client = new Hercules({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource admissionRules', () => {
+describe('resource accessRules', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.iam.tenants.admissionRules.create('tenant_id', {
+    const responsePromise = client.iam.tenants.accessRules.create('tenant_id', {
+      actor_token_identifier: 'x',
       effect: 'allow',
       subject: { type: 'email', value: 'dev@stainless.com' },
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,19 +27,19 @@ describe('resource admissionRules', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.iam.tenants.admissionRules.create('tenant_id', {
+    const response = await client.iam.tenants.accessRules.create('tenant_id', {
+      actor_token_identifier: 'x',
       effect: 'allow',
       subject: { type: 'email', value: 'dev@stainless.com' },
-      user_token_identifier: 'x',
       reason: 'reason',
     });
   });
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.iam.tenants.admissionRules.update('rule_id', {
+    const responsePromise = client.iam.tenants.accessRules.update('rule_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,18 +52,16 @@ describe('resource admissionRules', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.iam.tenants.admissionRules.update('rule_id', {
+    const response = await client.iam.tenants.accessRules.update('rule_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       reason: 'reason',
     });
   });
 
   // Mock server tests are disabled
   test.skip('list: only required params', async () => {
-    const responsePromise = client.iam.tenants.admissionRules.list('tenant_id', {
-      user_token_identifier: 'x',
-    });
+    const responsePromise = client.iam.tenants.accessRules.list('tenant_id', { actor_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -75,8 +73,8 @@ describe('resource admissionRules', () => {
 
   // Mock server tests are disabled
   test.skip('list: required and optional params', async () => {
-    const response = await client.iam.tenants.admissionRules.list('tenant_id', {
-      user_token_identifier: 'x',
+    const response = await client.iam.tenants.accessRules.list('tenant_id', {
+      actor_token_identifier: 'x',
       archived: true,
       cursor: 'x',
       effect: 'allow',
@@ -87,9 +85,9 @@ describe('resource admissionRules', () => {
 
   // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.iam.tenants.admissionRules.archive('rule_id', {
+    const responsePromise = client.iam.tenants.accessRules.archive('rule_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -102,17 +100,17 @@ describe('resource admissionRules', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.iam.tenants.admissionRules.archive('rule_id', {
+    const response = await client.iam.tenants.accessRules.archive('rule_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 
   // Mock server tests are disabled
   test.skip('unarchive: only required params', async () => {
-    const responsePromise = client.iam.tenants.admissionRules.unarchive('rule_id', {
+    const responsePromise = client.iam.tenants.accessRules.unarchive('rule_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -125,9 +123,9 @@ describe('resource admissionRules', () => {
 
   // Mock server tests are disabled
   test.skip('unarchive: required and optional params', async () => {
-    const response = await client.iam.tenants.admissionRules.unarchive('rule_id', {
+    const response = await client.iam.tenants.accessRules.unarchive('rule_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 });
