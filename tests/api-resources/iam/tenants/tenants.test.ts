@@ -54,8 +54,36 @@ describe('resource tenants', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('list', async () => {
+    const responsePromise = client.iam.tenants.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.list(
+        {
+          cursor: 'x',
+          limit: 1,
+          status: 'active',
+          user_token_identifier: 'x',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('archive: only required params', async () => {
-    const responsePromise = client.iam.tenants.archive('tenant_id', { user_token_identifier: '' });
+    const responsePromise = client.iam.tenants.archive('tenant_id', { user_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -67,7 +95,7 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
-    const response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: '' });
+    const response = await client.iam.tenants.archive('tenant_id', { user_token_identifier: 'x' });
   });
 
   // Mock server tests are disabled
@@ -85,6 +113,30 @@ describe('resource tenants', () => {
   // Mock server tests are disabled
   test.skip('evaluateAccess: required and optional params', async () => {
     const response = await client.iam.tenants.evaluateAccess('tenant_id', { user_token_identifier: 'x' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('get', async () => {
+    const responsePromise = client.iam.tenants.get('tenant_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.get(
+        'tenant_id',
+        { user_token_identifier: 'x' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -112,7 +164,7 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('unarchive: only required params', async () => {
-    const responsePromise = client.iam.tenants.unarchive('tenant_id', { user_token_identifier: null });
+    const responsePromise = client.iam.tenants.unarchive('tenant_id', { user_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -124,6 +176,6 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('unarchive: required and optional params', async () => {
-    const response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: null });
+    const response = await client.iam.tenants.unarchive('tenant_id', { user_token_identifier: 'x' });
   });
 });

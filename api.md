@@ -16,8 +16,10 @@ Types:
 
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantCreateResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantArchiveResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantEvaluateAccessResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantGetResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantGrantableRolesResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantUnarchiveResponse</a></code>
 
@@ -25,8 +27,10 @@ Methods:
 
 - <code title="post /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">create</a>({ ...params }) -> TenantCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">update</a>(tenantID, { ...params }) -> TenantUpdateResponse</code>
+- <code title="get /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">list</a>({ ...params }) -> TenantListResponse</code>
 - <code title="delete /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/evaluate-access">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">evaluateAccess</a>(tenantID, { ...params }) -> TenantEvaluateAccessResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">get</a>(tenantID, { ...params }) -> TenantGetResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/grantable-roles">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">grantableRoles</a>(tenantID, { ...params }) -> TenantGrantableRolesResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/unarchive">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">unarchive</a>(tenantID, { ...params }) -> TenantUnarchiveResponse</code>
 
