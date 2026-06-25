@@ -179,19 +179,20 @@ export interface PurchasedCreateParams {
   domain_name: string;
 
   /**
-   * Stripe payment method ID
-   */
-  payment_method_id: string;
-
-  /**
-   * The website to associate the domain with
-   */
-  website_id: string;
-
-  /**
    * Whether to enable automatic renewal
    */
   autorenew?: boolean;
+
+  /**
+   * Stripe payment method ID. Falls back to the customer's default payment method.
+   */
+  payment_method_id?: string;
+
+  /**
+   * The website to associate the domain with. Falls back to the website associated
+   * with the API key.
+   */
+  website_id?: string;
 
   /**
    * Number of years to register (1-10)
