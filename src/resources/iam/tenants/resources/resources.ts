@@ -25,7 +25,9 @@ export class Resources extends APIResource {
     new PermissionOverridesAPI.PermissionOverrides(this._client);
 
   /**
-   * Lists roles the actor may grant to a user or group on one exact resource.
+   * Lists roles the signed-in user or trusted server code can assign on a resource.
+   * Use this operation to populate resource-sharing role pickers; the write
+   * operation checks access again.
    */
   accessGrantingRoles(
     resourceID: string,
@@ -38,6 +40,23 @@ export class Resources extends APIResource {
       { query, ...options },
     );
   }
+
+  /**
+   * Invites a recipient to receive one role or permission on a resource. The grant
+   * can apply only to that resource or also to its descendants, and is created only
+   * after the invitation is accepted.
+   */
+  createInvitation(
+    resourceID: string,
+    params: ResourceCreateInvitationParams,
+    options?: RequestOptions,
+  ): APIPromise<ResourceCreateInvitationResponse> {
+    const { tenant_id, resource_type, ...body } = params;
+    return this._client.post(
+      path`/v1/iam/tenants/${tenant_id}/resources/${resource_type}/${resourceID}/invitations`,
+      { body, ...options },
+    );
+  }
 }
 
 /**
@@ -45,7 +64,7 @@ export class Resources extends APIResource {
  */
 export interface ResourceAccessGrantingRolesResponse {
   /**
-   * Roles the actor may grant.
+   * Roles the supplied authority may grant.
    */
   roles: Array<ResourceAccessGrantingRolesResponse.Role>;
 
@@ -57,7 +76,7 @@ export interface ResourceAccessGrantingRolesResponse {
 
 export namespace ResourceAccessGrantingRolesResponse {
   /**
-   * One role the actor may grant for the requested tenant or resource.
+   * One role the supplied authority may grant for the requested tenant or resource.
    */
   export interface Role {
     /**
@@ -87,16 +106,192 @@ export namespace ResourceAccessGrantingRolesResponse {
   }
 }
 
-export interface ResourceAccessGrantingRolesParams {
+/**
+ * Created resource invitation.
+ */
+export interface ResourceCreateInvitationResponse {
   /**
-   * Path param
+   * One-time secret invitation token.
+   */
+  token: string;
+
+  /**
+   * URL the invited user can open to accept.
+   */
+  accept_url: string;
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: ResourceCreateInvitationResponse.ConvexSourceData;
+
+  /**
+   * Invitation expiry timestamp.
+   */
+  expires_at: string;
+
+  /**
+   * Role or permission grant created on acceptance.
+   */
+  grant:
+    | ResourceCreateInvitationResponse.IamResourceInvitationPendingRoleGrant
+    | ResourceCreateInvitationResponse.IamResourceInvitationPendingPermissionGrant;
+
+  /**
+   * Created resource invitation ID.
+   */
+  invitation_id: string;
+
+  /**
+   * Recipient of an invitation.
+   */
+  recipient: ResourceCreateInvitationResponse.Recipient;
+
+  /**
+   * Resource covered by the invitation.
+   */
+  resource: ResourceCreateInvitationResponse.Resource;
+
+  /**
+   * Tenant containing the invited resource.
    */
   tenant_id: string;
 
   /**
-   * Path param
+   * Identifies a resource invitation.
+   */
+  type: 'resource';
+}
+
+export namespace ResourceCreateInvitationResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
+  export interface IamResourceInvitationPendingRoleGrant {
+    /**
+     * Pending role conferral ID.
+     */
+    conferral_id: string;
+
+    /**
+     * Grant expiry, or null for a permanent grant.
+     */
+    expires_at: string | null;
+
+    /**
+     * IAM role granted on acceptance.
+     */
+    role_id: string;
+
+    /**
+     * Identifies a resource role grant.
+     */
+    type: 'resource_role';
+  }
+
+  export interface IamResourceInvitationPendingPermissionGrant {
+    /**
+     * Pending permission conferral ID.
+     */
+    conferral_id: string;
+
+    /**
+     * Resource invitations grant the permission.
+     */
+    effect: 'allow';
+
+    /**
+     * Grant expiry, or null for a permanent grant.
+     */
+    expires_at: string | null;
+
+    /**
+     * IAM permission granted on acceptance.
+     */
+    permission_id: string;
+
+    /**
+     * Stable IAM permission key.
+     */
+    permission_key: string;
+
+    /**
+     * Identifies a resource permission grant.
+     */
+    type: 'resource_permission';
+  }
+
+  /**
+   * Recipient of an invitation.
+   */
+  export interface Recipient {
+    /**
+     * Identifies an email recipient.
+     */
+    type: 'email';
+
+    /**
+     * Email address of the invited user.
+     */
+    value: string;
+  }
+
+  /**
+   * Resource covered by the invitation.
+   */
+  export interface Resource {
+    /**
+     * Whether the grant applies only to this resource or also to descendants.
+     */
+    applies_to: 'self' | 'self_and_descendants';
+
+    /**
+     * Exact application resource ID.
+     */
+    resource_id: string;
+
+    /**
+     * Canonical app resource type, such as app.projects.
+     */
+    resource_type: string;
+  }
+}
+
+export interface ResourceAccessGrantingRolesParams {
+  /**
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
+   */
+  tenant_id: string;
+
+  /**
+   * Path param: The canonical app resource type, such as `app.projects`.
    */
   resource_type: string;
+
+  /**
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
+   */
+  actor_token_identifier: string | null;
 
   /**
    * Query param: Recipient kind for the proposed grant.
@@ -104,16 +299,127 @@ export interface ResourceAccessGrantingRolesParams {
   subject_type: 'user' | 'group';
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
-   */
-  user_token_identifier: string | null;
-
-  /**
    * Query param: Whether the grant applies only to this resource or also to
-   * descendants authorized through it.
+   * descendants authorized through it. Defaults to `self`.
    */
   applies_to?: 'self' | 'self_and_descendants';
+}
+
+export interface ResourceCreateInvitationParams {
+  /**
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
+   */
+  tenant_id: string;
+
+  /**
+   * Path param: The canonical app resource type, such as `app.projects`.
+   */
+  resource_type: string;
+
+  /**
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
+   */
+  actor_token_identifier: string | null;
+
+  /**
+   * Body param: Exactly one role or permission grant created on acceptance.
+   */
+  grant:
+    | ResourceCreateInvitationParams.IamResourceInvitationRoleGrantInput
+    | ResourceCreateInvitationParams.IamResourceInvitationPermissionGrantInput;
+
+  /**
+   * Body param: Recipient of an invitation.
+   */
+  recipient: ResourceCreateInvitationParams.Recipient;
+
+  /**
+   * Body param: Whether the grant applies only to this resource or also to
+   * descendants authorized through it. Defaults to `self`.
+   */
+  applies_to?: 'self' | 'self_and_descendants';
+
+  /**
+   * Body param: Invitation expiry timestamp. Defaults to 14 days after creation.
+   */
+  expires_at?: string;
+}
+
+export namespace ResourceCreateInvitationParams {
+  /**
+   * Role grant created on the resource when accepted.
+   */
+  export interface IamResourceInvitationRoleGrantInput {
+    /**
+     * Role receiving the overrides.
+     */
+    role:
+      | IamResourceInvitationRoleGrantInput.IamRoleIDReference
+      | IamResourceInvitationRoleGrantInput.IamRoleKeyReference;
+
+    /**
+     * Identifies a role grant.
+     */
+    type: 'role';
+
+    /**
+     * Grant expiry. Omit or pass null for a permanent grant.
+     */
+    expires_at?: string | null;
+  }
+
+  export namespace IamResourceInvitationRoleGrantInput {
+    export interface IamRoleIDReference {
+      /**
+       * Existing IAM role ID.
+       */
+      id: string;
+    }
+
+    export interface IamRoleKeyReference {
+      /**
+       * Stable role key from the deployment's IAM catalog.
+       */
+      key: string;
+    }
+  }
+
+  /**
+   * Direct permission grant created on the resource when accepted.
+   */
+  export interface IamResourceInvitationPermissionGrantInput {
+    /**
+     * Permission granted on the resource.
+     */
+    permission_key: string;
+
+    /**
+     * Identifies a permission grant.
+     */
+    type: 'permission';
+
+    /**
+     * Grant expiry. Omit or pass null for a permanent grant.
+     */
+    expires_at?: string | null;
+  }
+
+  /**
+   * Recipient of an invitation.
+   */
+  export interface Recipient {
+    /**
+     * Identifies an email recipient.
+     */
+    type: 'email';
+
+    /**
+     * Email address of the invited user.
+     */
+    value: string;
+  }
 }
 
 Resources.Grants = Grants;
@@ -122,7 +428,9 @@ Resources.PermissionOverrides = PermissionOverrides;
 export declare namespace Resources {
   export {
     type ResourceAccessGrantingRolesResponse as ResourceAccessGrantingRolesResponse,
+    type ResourceCreateInvitationResponse as ResourceCreateInvitationResponse,
     type ResourceAccessGrantingRolesParams as ResourceAccessGrantingRolesParams,
+    type ResourceCreateInvitationParams as ResourceCreateInvitationParams,
   };
 
   export {

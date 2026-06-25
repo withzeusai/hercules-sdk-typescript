@@ -1,20 +1,20 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as AdmissionRulesAPI from './admission-rules';
+import * as AccessRulesAPI from './access-rules';
 import {
-  AdmissionRuleArchiveParams,
-  AdmissionRuleArchiveResponse,
-  AdmissionRuleCreateParams,
-  AdmissionRuleCreateResponse,
-  AdmissionRuleListParams,
-  AdmissionRuleListResponse,
-  AdmissionRuleUnarchiveParams,
-  AdmissionRuleUnarchiveResponse,
-  AdmissionRuleUpdateParams,
-  AdmissionRuleUpdateResponse,
-  AdmissionRules,
-} from './admission-rules';
+  AccessRuleArchiveParams,
+  AccessRuleArchiveResponse,
+  AccessRuleCreateParams,
+  AccessRuleCreateResponse,
+  AccessRuleListParams,
+  AccessRuleListResponse,
+  AccessRuleUnarchiveParams,
+  AccessRuleUnarchiveResponse,
+  AccessRuleUpdateParams,
+  AccessRuleUpdateResponse,
+  AccessRules,
+} from './access-rules';
 import * as AuditEventsAPI from './audit-events';
 import { AuditEventListParams, AuditEventListResponse, AuditEvents } from './audit-events';
 import * as GrantsAPI from './grants';
@@ -27,10 +27,6 @@ import {
 } from './grants';
 import * as InvitationsAPI from './invitations';
 import {
-  InvitationCreateResourceParams,
-  InvitationCreateResourceResponse,
-  InvitationCreateTenantParams,
-  InvitationCreateTenantResponse,
   InvitationListParams,
   InvitationListResponse,
   InvitationRevokeParams,
@@ -53,6 +49,8 @@ import * as ResourcesAPI from './resources/resources';
 import {
   ResourceAccessGrantingRolesParams,
   ResourceAccessGrantingRolesResponse,
+  ResourceCreateInvitationParams,
+  ResourceCreateInvitationResponse,
   Resources,
 } from './resources/resources';
 import * as RolesAPI from './roles/roles';
@@ -86,26 +84,22 @@ export class Tenants extends APIResource {
   users: UsersAPI.Users = new UsersAPI.Users(this._client);
   groups: GroupsAPI.Groups = new GroupsAPI.Groups(this._client);
   roles: RolesAPI.Roles = new RolesAPI.Roles(this._client);
-  admissionRules: AdmissionRulesAPI.AdmissionRules = new AdmissionRulesAPI.AdmissionRules(this._client);
+  accessRules: AccessRulesAPI.AccessRules = new AccessRulesAPI.AccessRules(this._client);
   auditEvents: AuditEventsAPI.AuditEvents = new AuditEventsAPI.AuditEvents(this._client);
   invitations: InvitationsAPI.Invitations = new InvitationsAPI.Invitations(this._client);
   resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
 
   /**
-   * Creates an IAM tenant in the API key's deployment. Service authority uses
-   * user_token_identifier null and must provide owner_user_id. User authority uses a
-   * verified user_token_identifier and makes that user the initial Owner. Optionally
-   * send Idempotency-Key; the key is opaque, scoped to the deployment and trusted
-   * actor, stored only as a hash by the backend, and exact same-key replays return
-   * the original tenant create result while same-key/different normalized intent
-   * returns a stable conflict problem response.
+   * Creates a tenant and assigns its initial Owner. The signed-in user becomes the
+   * Owner unless trusted server code specifies another user.
    */
   create(body: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
     return this._client.post('/v1/iam/tenants', { body, ...options });
   }
 
   /**
-   * Updates the name, default role, or access mode for an IAM tenant.
+   * Updates a tenant's name, default role, or access mode. Access mode changes
+   * immediately re-evaluate users whose access is controlled by tenant policy.
    */
   update(
     tenantID: string,
@@ -116,14 +110,9 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Returns the authoritative IAM tenant collection for the API key's deployment.
-   * Service authority (omit user_token_identifier or pass an empty value) returns
-   * all tenants visible to the deployment. User authority returns only tenants where
-   * the verified active user has a direct, exact-scope, unexpired immutable built-in
-   * Owner binding. Use status=active, status=archived, or status=all to discover
-   * archived tenants; the default is active. Tenant reads are authoritative; use
-   * projection mirrors only after observing the returned source_version from write
-   * responses.
+   * Lists active tenants available to manage by default. Signed-in users see only
+   * tenants they directly own; trusted server code can see all tenants. Use
+   * `status=archived` or `status=all` to include archived tenants.
    */
   list(
     query: TenantListParams | null | undefined = {},
@@ -133,27 +122,38 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Archives the exact custom IAM tenant ID named in the path. Service authority
-   * uses an empty user_token_identifier query value. User authority uses a verified
-   * user_token_identifier and is accepted only when the backend confirms direct
-   * immutable Owner authority on the exact target tenant. The default path sentinel
-   * is not resolved and is not a valid lifecycle target; callers must use an exact
-   * custom tenant ID.
+   * Archives a non-root tenant and blocks its access without deleting its users,
+   * groups, roles, or grants.
    */
   archive(
     tenantID: string,
     params: TenantArchiveParams,
     options?: RequestOptions,
   ): APIPromise<TenantArchiveResponse> {
-    const { user_token_identifier } = params;
+    const { actor_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenantID}`, {
-      query: { user_token_identifier },
+      query: { actor_token_identifier },
       ...options,
     });
   }
 
   /**
-   * Evaluates tenant admission for the signed-in user.
+   * Invites a recipient to join the tenant with the selected roles. If no roles are
+   * provided, the tenant's current default role is saved on the invitation and
+   * granted when the invitation is accepted.
+   */
+  createInvitation(
+    tenantID: string,
+    body: TenantCreateInvitationParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantCreateInvitationResponse> {
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/invitations`, { body, ...options });
+  }
+
+  /**
+   * Evaluates whether the signed-in user may enter the tenant under its access mode
+   * and access rules. It creates or updates the user and assigns the default role
+   * when access is first granted.
    */
   evaluateAccess(
     tenantID: string,
@@ -164,12 +164,9 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Returns one authoritative IAM tenant record from the API key's deployment,
-   * including archived tenants. Service authority (omit user_token_identifier or
-   * pass an empty value) can read any deployment tenant. User authority can read
-   * only a tenant where the verified active user has a direct, exact-scope,
-   * unexpired immutable built-in Owner binding. The default path sentinel resolves
-   * to the deployment default tenant for reads.
+   * Returns a tenant and its current settings, including when the tenant is
+   * archived. Signed-in users can retrieve only tenants they directly own; trusted
+   * server code can retrieve any tenant.
    */
   get(
     tenantID: string,
@@ -180,7 +177,9 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Lists roles the actor may grant to a user or group at the tenant level.
+   * Lists active roles the signed-in user can assign at the tenant level. Use this
+   * operation to populate role pickers for users, groups, and tenant invitations;
+   * the write operation checks access again.
    */
   grantableRoles(
     tenantID: string,
@@ -191,12 +190,8 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Unarchives the exact custom IAM tenant ID named in the path. Service authority
-   * uses user_token_identifier null. User authority uses a verified
-   * user_token_identifier and is accepted only when the backend confirms retained
-   * direct immutable Owner authority on the exact target tenant. The default path
-   * sentinel is not resolved and is not a valid lifecycle target; callers must use
-   * an exact custom tenant ID.
+   * Restores an archived tenant and re-enables access through its existing users,
+   * groups, roles, and grants.
    */
   unarchive(
     tenantID: string,
@@ -212,19 +207,14 @@ export class Tenants extends APIResource {
  */
 export interface TenantCreateResponse {
   /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantCreateResponse.ConvexSourceData;
+
+  /**
    * Confirms that the tenant was created.
    */
   created: true;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
 
   /**
    * Created tenant ID.
@@ -232,24 +222,37 @@ export interface TenantCreateResponse {
   tenant_id: string;
 }
 
+export namespace TenantCreateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 /**
  * Updated IAM tenant settings.
  */
 export interface TenantUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
+  convex_source_data: TenantUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant changed by the operation.
@@ -278,6 +281,27 @@ export interface TenantUpdateResponse {
 }
 
 export namespace TenantUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
   /**
    * Previous values for fields changed by the update.
    */
@@ -331,9 +355,9 @@ export namespace TenantListResponse {
     created_at: string;
 
     /**
-     * Public tenant kind. Custom includes internally managed org and suite tenants.
+     * Whether this is the deployment's root tenant.
      */
-    kind: 'default' | 'custom';
+    is_root: boolean;
 
     /**
      * Public tenant lifecycle status.
@@ -362,24 +386,150 @@ export namespace TenantListResponse {
  */
 export interface TenantArchiveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
+  convex_source_data: TenantArchiveResponse.ConvexSourceData;
 
   /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
+}
+
+export namespace TenantArchiveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
+/**
+ * Created tenant invitation.
+ */
+export interface TenantCreateInvitationResponse {
+  /**
+   * One-time secret invitation token.
+   */
+  token: string;
+
+  /**
+   * URL the invited user can open to accept.
+   */
+  accept_url: string;
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantCreateInvitationResponse.ConvexSourceData;
+
+  /**
+   * Invitation expiry timestamp.
+   */
+  expires_at: string;
+
+  /**
+   * Role grants created on acceptance.
+   */
+  grants: Array<TenantCreateInvitationResponse.Grant>;
+
+  /**
+   * Created tenant invitation ID.
+   */
+  invitation_id: string;
+
+  /**
+   * Recipient of an invitation.
+   */
+  recipient: TenantCreateInvitationResponse.Recipient;
+
+  /**
+   * Tenant receiving the invited user.
+   */
+  tenant_id: string;
+
+  /**
+   * Identifies a tenant invitation.
+   */
+  type: 'tenant';
+}
+
+export namespace TenantCreateInvitationResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
+  /**
+   * Role grant created when the invitation is accepted.
+   */
+  export interface Grant {
+    /**
+     * Pending role conferral ID.
+     */
+    conferral_id: string;
+
+    /**
+     * Grant expiry, or null for a permanent grant.
+     */
+    expires_at: string | null;
+
+    /**
+     * IAM role granted on acceptance.
+     */
+    role_id: string;
+
+    /**
+     * Identifies a tenant role grant.
+     */
+    type: 'tenant_role';
+  }
+
+  /**
+   * Recipient of an invitation.
+   */
+  export interface Recipient {
+    /**
+     * Identifies an email recipient.
+     */
+    type: 'email';
+
+    /**
+     * Email address of the invited user.
+     */
+    value: string;
+  }
 }
 
 /**
@@ -392,34 +542,47 @@ export interface TenantEvaluateAccessResponse {
   allowed: boolean;
 
   /**
-   * Whether access evaluation changed IAM state.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: TenantEvaluateAccessResponse.ConvexSourceData;
 
   /**
-   * Machine-readable reason for the tenant access decision.
+   * Stable explanation for the tenant access decision. Use `allowed` and `status`
+   * for application control flow; use this value to explain the outcome.
+   *
+   * - `user_active` - The user already has active access to the tenant.
+   * - `access_mode_open` - The tenant's open access mode admitted the user.
+   * - `access_rule_allowed` - An active email or domain access rule admitted the
+   *   user.
+   * - `access_rule_email_denied` - An active access rule denied the user's email
+   *   address.
+   * - `access_rule_domain_denied` - An active access rule denied the user's email
+   *   domain.
+   * - `access_rule_not_matched` - No active allow rule matched the user's verified
+   *   email address or domain.
+   * - `access_mode_approval_required` - The tenant requires administrator approval
+   *   before the user becomes active.
+   * - `access_mode_invitation_required` - The tenant requires an invitation or
+   *   explicit admission before access.
+   * - `access_rule_email_required` - Email or domain access rules cannot admit a
+   *   phone-only user.
+   * - `user_blocked` - The tenant's admission policy blocked the user.
+   * - `user_suspended` - An administrator suspended the user.
+   * - `user_removed` - The user was removed from the tenant.
    */
   reason:
-    | 'baseline_missing_open_fallback'
-    | 'evaluation_error_open_fallback'
-    | 'existing_active'
-    | 'open_allowed'
-    | 'allowlist_allowed'
-    | 'denylisted_email'
-    | 'denylisted_domain'
-    | 'not_allowlisted'
-    | 'approval_required'
-    | 'invite_required'
-    | 'phone_not_supported_for_allowlist'
-    | 'principal_blocked'
-    | 'principal_suspended'
-    | 'principal_removed'
-    | 'unsupported_access_mode';
-
-  /**
-   * IAM state version used for the access decision.
-   */
-  state_version: number;
+    | 'user_active'
+    | 'access_mode_open'
+    | 'access_rule_allowed'
+    | 'access_rule_email_denied'
+    | 'access_rule_domain_denied'
+    | 'access_rule_not_matched'
+    | 'access_mode_approval_required'
+    | 'access_mode_invitation_required'
+    | 'access_rule_email_required'
+    | 'user_blocked'
+    | 'user_suspended'
+    | 'user_removed';
 
   /**
    * Tenant evaluated for access.
@@ -427,7 +590,7 @@ export interface TenantEvaluateAccessResponse {
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID evaluated for access.
+   * User ID evaluated for access.
    */
   user_id: string;
 
@@ -435,6 +598,29 @@ export interface TenantEvaluateAccessResponse {
    * Current tenant user status when a user record exists.
    */
   status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
+}
+
+export namespace TenantEvaluateAccessResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -453,9 +639,9 @@ export interface TenantGetResponse {
   created_at: string;
 
   /**
-   * Public tenant kind. Custom includes internally managed org and suite tenants.
+   * Whether this is the deployment's root tenant.
    */
-  kind: 'default' | 'custom';
+  is_root: boolean;
 
   /**
    * Public tenant lifecycle status.
@@ -483,7 +669,7 @@ export interface TenantGetResponse {
  */
 export interface TenantGrantableRolesResponse {
   /**
-   * Roles the actor may grant.
+   * Roles the supplied authority may grant.
    */
   roles: Array<TenantGrantableRolesResponse.Role>;
 
@@ -495,7 +681,7 @@ export interface TenantGrantableRolesResponse {
 
 export namespace TenantGrantableRolesResponse {
   /**
-   * One role the actor may grant for the requested tenant or resource.
+   * One role the supplied authority may grant for the requested tenant or resource.
    */
   export interface Role {
     /**
@@ -530,24 +716,37 @@ export namespace TenantGrantableRolesResponse {
  */
 export interface TenantUnarchiveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
+  convex_source_data: TenantUnarchiveResponse.ConvexSourceData;
 
   /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
+}
+
+export namespace TenantUnarchiveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 export type TenantCreateParams =
@@ -557,17 +756,18 @@ export type TenantCreateParams =
 export declare namespace TenantCreateParams {
   export interface IamTenantCreateAsUserRequest {
     /**
+     * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+     * trusted app backend.
+     */
+    actor_token_identifier: string;
+
+    /**
      * Human-readable tenant name.
      */
     name: string;
 
     /**
-     * Convex identity tokenIdentifier required for user authority.
-     */
-    user_token_identifier: string;
-
-    /**
-     * Initial tenant admission policy.
+     * Initial tenant admission policy. Defaults to `allowlisted_only`.
      */
     access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
@@ -597,22 +797,23 @@ export declare namespace TenantCreateParams {
 
   export interface IamTenantCreateAsServiceRequest {
     /**
+     * Must be null to use service authority.
+     */
+    actor_token_identifier: null;
+
+    /**
      * Human-readable tenant name.
      */
     name: string;
 
     /**
-     * Hercules Auth user ID bootstrapped as the tenant's initial Owner.
+     * Target user ID granted the built-in Owner role when creating the tenant with
+     * service authority. Do not pass a token identifier.
      */
     owner_user_id: string;
 
     /**
-     * Must be null to use service authority.
-     */
-    user_token_identifier: null;
-
-    /**
-     * Initial tenant admission policy.
+     * Initial tenant admission policy. Defaults to `allowlisted_only`.
      */
     access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
@@ -643,9 +844,10 @@ export declare namespace TenantCreateParams {
 
 export interface TenantUpdateParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Admission policy used when a user requests access to this tenant.
@@ -681,71 +883,151 @@ export namespace TenantUpdateParams {
 
 export interface TenantListParams {
   /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier?: string | null;
+
+  /**
    * Opaque cursor returned by the previous page.
    */
   cursor?: string;
 
   /**
-   * Maximum number of records to return.
+   * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
 
   /**
-   * Tenant lifecycle status filter.
+   * Filter by tenant lifecycle status. Defaults to `active`; use `archived` or `all`
+   * to discover archived tenants.
    */
   status?: 'active' | 'archived' | 'all';
-
-  /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier?: string | null;
 }
 
 export interface TenantArchiveParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
+}
+
+export interface TenantCreateInvitationParams {
+  /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string | null;
+
+  /**
+   * Recipient of an invitation.
+   */
+  recipient: TenantCreateInvitationParams.Recipient;
+
+  /**
+   * Invitation expiry timestamp. Defaults to 14 days after creation.
+   */
+  expires_at?: string;
+
+  /**
+   * Role grants created on acceptance. The permanent tenant default is used when
+   * omitted.
+   */
+  grants?: Array<TenantCreateInvitationParams.Grant>;
+}
+
+export namespace TenantCreateInvitationParams {
+  /**
+   * Recipient of an invitation.
+   */
+  export interface Recipient {
+    /**
+     * Identifies an email recipient.
+     */
+    type: 'email';
+
+    /**
+     * Email address of the invited user.
+     */
+    value: string;
+  }
+
+  /**
+   * One direct role grant.
+   */
+  export interface Grant {
+    /**
+     * Role receiving the overrides.
+     */
+    role: Grant.IamRoleIDReference | Grant.IamRoleKeyReference;
+
+    /**
+     * Grant expiry. Omit or pass null for a permanent grant.
+     */
+    expires_at?: string | null;
+  }
+
+  export namespace Grant {
+    export interface IamRoleIDReference {
+      /**
+       * Existing IAM role ID.
+       */
+      id: string;
+    }
+
+    export interface IamRoleKeyReference {
+      /**
+       * Stable role key from the deployment's IAM catalog.
+       */
+      key: string;
+    }
+  }
 }
 
 export interface TenantEvaluateAccessParams {
   /**
-   * Convex identity tokenIdentifier required for user authority.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string;
+  actor_token_identifier: string;
 }
 
 export interface TenantGetParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier?: string | null;
+  actor_token_identifier?: string | null;
 }
 
 export interface TenantGrantableRolesParams {
   /**
-   * Recipient kind for the proposed grant.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  subject_type: 'user' | 'group';
+  actor_token_identifier: string;
 
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Recipient kind for the proposed grant. Omit or use all to return roles valid for
+   * at least one recipient kind.
    */
-  user_token_identifier: string | null;
+  subject_type?: 'user' | 'group' | 'all';
 }
 
 export interface TenantUnarchiveParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 Tenants.Grants = Grants;
 Tenants.Users = Users;
 Tenants.Groups = Groups;
 Tenants.Roles = Roles;
-Tenants.AdmissionRules = AdmissionRules;
+Tenants.AccessRules = AccessRules;
 Tenants.AuditEvents = AuditEvents;
 Tenants.Invitations = Invitations;
 Tenants.Resources = Resources;
@@ -756,6 +1038,7 @@ export declare namespace Tenants {
     type TenantUpdateResponse as TenantUpdateResponse,
     type TenantListResponse as TenantListResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
+    type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
     type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
     type TenantGetResponse as TenantGetResponse,
     type TenantGrantableRolesResponse as TenantGrantableRolesResponse,
@@ -764,6 +1047,7 @@ export declare namespace Tenants {
     type TenantUpdateParams as TenantUpdateParams,
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
+    type TenantCreateInvitationParams as TenantCreateInvitationParams,
     type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
     type TenantGetParams as TenantGetParams,
     type TenantGrantableRolesParams as TenantGrantableRolesParams,
@@ -813,17 +1097,17 @@ export declare namespace Tenants {
   };
 
   export {
-    AdmissionRules as AdmissionRules,
-    type AdmissionRuleCreateResponse as AdmissionRuleCreateResponse,
-    type AdmissionRuleUpdateResponse as AdmissionRuleUpdateResponse,
-    type AdmissionRuleListResponse as AdmissionRuleListResponse,
-    type AdmissionRuleArchiveResponse as AdmissionRuleArchiveResponse,
-    type AdmissionRuleUnarchiveResponse as AdmissionRuleUnarchiveResponse,
-    type AdmissionRuleCreateParams as AdmissionRuleCreateParams,
-    type AdmissionRuleUpdateParams as AdmissionRuleUpdateParams,
-    type AdmissionRuleListParams as AdmissionRuleListParams,
-    type AdmissionRuleArchiveParams as AdmissionRuleArchiveParams,
-    type AdmissionRuleUnarchiveParams as AdmissionRuleUnarchiveParams,
+    AccessRules as AccessRules,
+    type AccessRuleCreateResponse as AccessRuleCreateResponse,
+    type AccessRuleUpdateResponse as AccessRuleUpdateResponse,
+    type AccessRuleListResponse as AccessRuleListResponse,
+    type AccessRuleArchiveResponse as AccessRuleArchiveResponse,
+    type AccessRuleUnarchiveResponse as AccessRuleUnarchiveResponse,
+    type AccessRuleCreateParams as AccessRuleCreateParams,
+    type AccessRuleUpdateParams as AccessRuleUpdateParams,
+    type AccessRuleListParams as AccessRuleListParams,
+    type AccessRuleArchiveParams as AccessRuleArchiveParams,
+    type AccessRuleUnarchiveParams as AccessRuleUnarchiveParams,
   };
 
   export {
@@ -835,18 +1119,16 @@ export declare namespace Tenants {
   export {
     Invitations as Invitations,
     type InvitationListResponse as InvitationListResponse,
-    type InvitationCreateResourceResponse as InvitationCreateResourceResponse,
-    type InvitationCreateTenantResponse as InvitationCreateTenantResponse,
     type InvitationRevokeResponse as InvitationRevokeResponse,
     type InvitationListParams as InvitationListParams,
-    type InvitationCreateResourceParams as InvitationCreateResourceParams,
-    type InvitationCreateTenantParams as InvitationCreateTenantParams,
     type InvitationRevokeParams as InvitationRevokeParams,
   };
 
   export {
     Resources as Resources,
     type ResourceAccessGrantingRolesResponse as ResourceAccessGrantingRolesResponse,
+    type ResourceCreateInvitationResponse as ResourceCreateInvitationResponse,
     type ResourceAccessGrantingRolesParams as ResourceAccessGrantingRolesParams,
+    type ResourceCreateInvitationParams as ResourceCreateInvitationParams,
   };
 }

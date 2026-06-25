@@ -18,14 +18,16 @@ export class Roles extends APIResource {
     new PermissionOverridesAPI.PermissionOverrides(this._client);
 
   /**
-   * Creates a tenant-owned IAM role with its initial permission set.
+   * Creates a custom tenant role with its complete initial permission set.
    */
   create(tenantID: string, body: RoleCreateParams, options?: RequestOptions): APIPromise<RoleCreateResponse> {
     return this._client.post(path`/v1/iam/tenants/${tenantID}/roles`, { body, ...options });
   }
 
   /**
-   * Updates role metadata or its complete permission set.
+   * Updates a custom role's name, description, and/or complete permission set. Use
+   * tenant-specific permission overrides to customize roles that are reusable across
+   * tenants.
    */
   update(roleID: string, params: RoleUpdateParams, options?: RequestOptions): APIPromise<RoleUpdateResponse> {
     const { tenant_id, ...body } = params;
@@ -33,22 +35,24 @@ export class Roles extends APIResource {
   }
 
   /**
-   * Archives one tenant-owned IAM role.
+   * Archives a custom role so it no longer grants access while preserving it for
+   * restoration. A tenant's default role cannot be archived.
    */
   archive(
     roleID: string,
     params: RoleArchiveParams,
     options?: RequestOptions,
   ): APIPromise<RoleArchiveResponse> {
-    const { tenant_id, user_token_identifier } = params;
+    const { tenant_id, actor_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}`, {
-      query: { user_token_identifier },
+      query: { actor_token_identifier },
       ...options,
     });
   }
 
   /**
-   * Unarchives one tenant-owned IAM role.
+   * Restores an archived custom role. Its existing assignments and permissions begin
+   * granting access again.
    */
   unarchive(
     roleID: string,
@@ -68,6 +72,11 @@ export class Roles extends APIResource {
  */
 export interface RoleCreateResponse {
   /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: RoleCreateResponse.ConvexSourceData;
+
+  /**
    * Confirms that the role was created.
    */
   created: true;
@@ -76,11 +85,6 @@ export interface RoleCreateResponse {
    * Complete permission key set on the created role.
    */
   permission_keys: Array<string>;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
 
   /**
    * Created tenant role ID.
@@ -93,14 +97,32 @@ export interface RoleCreateResponse {
   role_key: string;
 
   /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant owning the created role.
    */
   tenant_id: string;
+}
+
+export namespace RoleCreateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -108,14 +130,9 @@ export interface RoleCreateResponse {
  */
 export interface RoleUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
+  convex_source_data: RoleUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant role changed by the operation.
@@ -123,9 +140,9 @@ export interface RoleUpdateResponse {
   role_id: string;
 
   /**
-   * IAM source version after the operation.
+   * Stable key of the updated tenant role.
    */
-  source_version: number;
+  role_key: string;
 
   /**
    * Tenant changed by the operation.
@@ -138,19 +155,37 @@ export interface RoleUpdateResponse {
   permission_keys?: Array<string>;
 }
 
+export namespace RoleUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 /**
  * Result of changing a tenant role.
  */
 export interface RoleArchiveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
+  convex_source_data: RoleArchiveResponse.ConvexSourceData;
 
   /**
    * Tenant role changed by the operation.
@@ -158,14 +193,32 @@ export interface RoleArchiveResponse {
   role_id: string;
 
   /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
+}
+
+export namespace RoleArchiveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -173,14 +226,9 @@ export interface RoleArchiveResponse {
  */
 export interface RoleUnarchiveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
+  convex_source_data: RoleUnarchiveResponse.ConvexSourceData;
 
   /**
    * Tenant role changed by the operation.
@@ -188,17 +236,41 @@ export interface RoleUnarchiveResponse {
   role_id: string;
 
   /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
 }
 
+export namespace RoleUnarchiveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 export interface RoleCreateParams {
+  /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string | null;
+
   /**
    * Stable tenant role key.
    */
@@ -210,31 +282,28 @@ export interface RoleCreateParams {
   name: string;
 
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
-
-  /**
    * Optional role description.
    */
   description?: string | null;
 
   /**
-   * Complete initial permission set for the role.
+   * Complete initial permission set for the role. Defaults to an empty set.
    */
   permission_keys?: Array<string>;
 }
 
 export interface RoleUpdateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Body param: New role description, or null to clear it.
@@ -254,27 +323,30 @@ export interface RoleUpdateParams {
 
 export interface RoleArchiveParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export interface RoleUnarchiveParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 Roles.PermissionOverrides = PermissionOverrides;

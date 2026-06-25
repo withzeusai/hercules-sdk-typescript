@@ -13,7 +13,7 @@ describe('resource permissionOverrides', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.roles.permissionOverrides.update('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,7 +28,7 @@ describe('resource permissionOverrides', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.roles.permissionOverrides.update('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       overrides: [{ effect: 'allow', permission_key: 'x' }],
     });
   });
@@ -37,7 +37,7 @@ describe('resource permissionOverrides', () => {
   test.skip('get: only required params', async () => {
     const responsePromise = client.iam.tenants.roles.permissionOverrides.get('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,7 +52,7 @@ describe('resource permissionOverrides', () => {
   test.skip('get: required and optional params', async () => {
     const response = await client.iam.tenants.roles.permissionOverrides.get('role_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 });

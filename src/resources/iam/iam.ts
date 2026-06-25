@@ -7,6 +7,8 @@ import * as TenantsAPI from './tenants/tenants';
 import {
   TenantArchiveParams,
   TenantArchiveResponse,
+  TenantCreateInvitationParams,
+  TenantCreateInvitationResponse,
   TenantCreateParams,
   TenantCreateResponse,
   TenantEvaluateAccessParams,
@@ -25,7 +27,7 @@ import {
 } from './tenants/tenants';
 
 /**
- * Manage IAM tenants, users, groups, roles, admission rules, invitations,
+ * Manage IAM tenants, users, groups, roles, access rules, invitations,
  * resource grants, and permission overrides. Requires an API key with the
  * IAM administration permission.
  */
@@ -50,6 +52,7 @@ export declare namespace Iam {
     type TenantUpdateResponse as TenantUpdateResponse,
     type TenantListResponse as TenantListResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
+    type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
     type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
     type TenantGetResponse as TenantGetResponse,
     type TenantGrantableRolesResponse as TenantGrantableRolesResponse,
@@ -58,6 +61,7 @@ export declare namespace Iam {
     type TenantUpdateParams as TenantUpdateParams,
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
+    type TenantCreateInvitationParams as TenantCreateInvitationParams,
     type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
     type TenantGetParams as TenantGetParams,
     type TenantGrantableRolesParams as TenantGrantableRolesParams,

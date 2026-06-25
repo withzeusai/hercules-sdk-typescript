@@ -18,14 +18,17 @@ export class Users extends APIResource {
     new PermissionOverridesAPI.PermissionOverrides(this._client);
 
   /**
-   * Creates or restores a user in one tenant with the requested role grants.
+   * Adds a user to the tenant or restores a removed or suspended user. A non-empty
+   * role list replaces the user's complete direct tenant roles; an empty list
+   * ensures the default role without removing existing roles.
    */
   create(tenantID: string, body: UserCreateParams, options?: RequestOptions): APIPromise<UserCreateResponse> {
     return this._client.post(path`/v1/iam/tenants/${tenantID}/users`, { body, ...options });
   }
 
   /**
-   * Updates one tenant user's lifecycle state or direct role grants.
+   * Approves, suspends, or unsuspends a tenant user and/or replaces their direct
+   * tenant roles. Omitted fields are left unchanged.
    */
   update(userID: string, params: UserUpdateParams, options?: RequestOptions): APIPromise<UserUpdateResponse> {
     const { tenant_id, ...body } = params;
@@ -33,12 +36,14 @@ export class Users extends APIResource {
   }
 
   /**
-   * Removes one user from a tenant.
+   * Removes a user from the tenant and revokes their direct roles, permission
+   * overrides, resource grants, and group memberships. The last Owner cannot be
+   * removed.
    */
   remove(userID: string, params: UserRemoveParams, options?: RequestOptions): APIPromise<UserRemoveResponse> {
-    const { tenant_id, user_token_identifier } = params;
+    const { tenant_id, actor_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/users/${userID}`, {
-      query: { user_token_identifier },
+      query: { actor_token_identifier },
       ...options,
     });
   }
@@ -49,9 +54,9 @@ export class Users extends APIResource {
  */
 export interface UserCreateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: UserCreateResponse.ConvexSourceData;
 
   /**
    * Direct role grants assigned to the tenant user.
@@ -59,27 +64,38 @@ export interface UserCreateResponse {
   grants: Array<UserCreateResponse.Grant>;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID added to the tenant.
+   * User ID added to the tenant.
    */
   user_id: string;
 }
 
 export namespace UserCreateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
   /**
    * One persisted tenant role grant.
    */
@@ -111,19 +127,9 @@ export namespace UserCreateResponse {
  */
 export interface UserUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
+  convex_source_data: UserUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant changed by the operation.
@@ -131,7 +137,7 @@ export interface UserUpdateResponse {
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID that was updated.
+   * User ID that was updated.
    */
   user_id: string;
 
@@ -141,9 +147,9 @@ export interface UserUpdateResponse {
   grants?: Array<UserUpdateResponse.Grant>;
 
   /**
-   * Tenant user's previous status.
+   * Previous values for fields changed by the update.
    */
-  previous_status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
+  previous?: UserUpdateResponse.Previous;
 
   /**
    * Tenant user's current status.
@@ -152,6 +158,27 @@ export interface UserUpdateResponse {
 }
 
 export namespace UserUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
   /**
    * One persisted tenant role grant.
    */
@@ -176,6 +203,16 @@ export namespace UserUpdateResponse {
      */
     type: 'tenant_role';
   }
+
+  /**
+   * Previous values for fields changed by the update.
+   */
+  export interface Previous {
+    /**
+     * Tenant user's previous status.
+     */
+    status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
+  }
 }
 
 /**
@@ -183,19 +220,9 @@ export namespace UserUpdateResponse {
  */
 export interface UserRemoveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
+  convex_source_data: UserRemoveResponse.ConvexSourceData;
 
   /**
    * Tenant changed by the operation.
@@ -203,12 +230,41 @@ export interface UserRemoveResponse {
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID removed from the tenant.
+   * User ID removed from the tenant.
    */
   user_id: string;
 }
 
+export namespace UserRemoveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 export interface UserCreateParams {
+  /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string | null;
+
   /**
    * Role grants assigned to the user. An empty array assigns the permanent tenant
    * default role.
@@ -216,14 +272,9 @@ export interface UserCreateParams {
   roles: Array<UserCreateParams.Role>;
 
   /**
-   * Hercules Auth user ID to add or restore in the tenant.
+   * Target user ID to add or restore in the tenant. Do not pass a token identifier.
    */
   user_id: string;
-
-  /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
 }
 
 export namespace UserCreateParams {
@@ -237,7 +288,7 @@ export namespace UserCreateParams {
     role: Role.IamRoleIDReference | Role.IamRoleKeyReference;
 
     /**
-     * Grant expiry, or null for a permanent grant.
+     * Grant expiry. Omit or pass null for a permanent grant.
      */
     expires_at?: string | null;
   }
@@ -261,14 +312,16 @@ export namespace UserCreateParams {
 
 export interface UserUpdateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Body param: Optional lifecycle transition to apply to the tenant user.
@@ -292,7 +345,7 @@ export namespace UserUpdateParams {
     role: Role.IamRoleIDReference | Role.IamRoleKeyReference;
 
     /**
-     * Grant expiry, or null for a permanent grant.
+     * Grant expiry. Omit or pass null for a permanent grant.
      */
     expires_at?: string | null;
   }
@@ -316,15 +369,16 @@ export namespace UserUpdateParams {
 
 export interface UserRemoveParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 Users.PermissionOverrides = PermissionOverrides;

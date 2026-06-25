@@ -7,7 +7,9 @@ import { path } from '../../../internal/utils/path';
 
 export class AuditEvents extends APIResource {
   /**
-   * Returns a filtered page of IAM audit events for one tenant.
+   * Lists IAM management and access events for a tenant, with filters for time,
+   * action, status, user, and target. Routine access checks are included only when
+   * `action=access.account_entry.evaluate` is requested.
    */
   list(
     tenantID: string,
@@ -84,7 +86,8 @@ export namespace AuditEventListResponse {
     request_id: string | null;
 
     /**
-     * IAM source version after the operation.
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
      */
     source_version: number | null;
 
@@ -199,9 +202,10 @@ export namespace AuditEventListResponse {
 
 export interface AuditEventListParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Filter by exact audit action.
@@ -229,7 +233,7 @@ export interface AuditEventListParams {
   end_time?: string;
 
   /**
-   * Maximum number of records to return.
+   * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
 
@@ -254,7 +258,7 @@ export interface AuditEventListParams {
   target_type?: string;
 
   /**
-   * Filter by Hercules Auth user ID.
+   * Filter by user ID.
    */
   user_id?: string;
 }

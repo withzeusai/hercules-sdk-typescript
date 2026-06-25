@@ -13,7 +13,7 @@ describe('resource permissionOverrides', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.permissionOverrides.update('group_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,7 +28,7 @@ describe('resource permissionOverrides', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.groups.permissionOverrides.update('group_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       overrides: [
         {
           effect: 'allow',
@@ -43,7 +43,7 @@ describe('resource permissionOverrides', () => {
   test.skip('get: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.permissionOverrides.get('group_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -58,7 +58,7 @@ describe('resource permissionOverrides', () => {
   test.skip('get: required and optional params', async () => {
     const response = await client.iam.tenants.groups.permissionOverrides.get('group_id', {
       tenant_id: 'tenant_id',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
   });
 });

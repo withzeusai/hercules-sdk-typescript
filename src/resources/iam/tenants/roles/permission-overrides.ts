@@ -7,7 +7,10 @@ import { path } from '../../../../internal/utils/path';
 
 export class PermissionOverrides extends APIResource {
   /**
-   * Updates the complete tenant-specific permission override set for one role.
+   * Replaces tenant-specific permission overrides for a role that is reusable across
+   * tenants without changing its base permissions. An empty list clears the
+   * overrides; omitting the list makes no change. Use the tenant role update
+   * operation for custom roles.
    */
   update(
     roleID: string,
@@ -22,7 +25,9 @@ export class PermissionOverrides extends APIResource {
   }
 
   /**
-   * Returns tenant-specific permission overrides for one IAM role.
+   * Returns tenant-specific permission overrides for a role. These overrides
+   * customize a role that is reusable across tenants without changing its base
+   * permissions.
    */
   get(
     roleID: string,
@@ -42,14 +47,9 @@ export class PermissionOverrides extends APIResource {
  */
 export interface PermissionOverrideUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
+  convex_source_data: PermissionOverrideUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant role changed by the operation.
@@ -57,14 +57,32 @@ export interface PermissionOverrideUpdateResponse {
   role_id: string;
 
   /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
+}
+
+export namespace PermissionOverrideUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -111,14 +129,16 @@ export namespace PermissionOverrideGetResponse {
 
 export interface PermissionOverrideUpdateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Body param: Complete desired role permission override set. An empty array clears
@@ -146,15 +166,16 @@ export namespace PermissionOverrideUpdateParams {
 
 export interface PermissionOverrideGetParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export declare namespace PermissionOverrides {
