@@ -127,14 +127,10 @@ export class Tenants extends APIResource {
    */
   archive(
     tenantID: string,
-    params: TenantArchiveParams,
+    body: TenantArchiveParams,
     options?: RequestOptions,
   ): APIPromise<TenantArchiveResponse> {
-    const { actor_token_identifier } = params;
-    return this._client.delete(path`/v1/iam/tenants/${tenantID}`, {
-      query: { actor_token_identifier },
-      ...options,
-    });
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/archive`, { body, ...options });
   }
 
   /**
@@ -324,25 +320,25 @@ export namespace TenantUpdateResponse {
 }
 
 /**
- * Cursor-paginated authoritative IAM tenant records.
+ * Paginated authoritative IAM tenant records.
  */
 export interface TenantListResponse {
   /**
    * Tenant page.
    */
-  tenants: Array<TenantListResponse.Tenant>;
+  data: Array<TenantListResponse.Data>;
 
   /**
-   * Cursor for the next tenant page.
+   * Whether more tenants are available after this page.
    */
-  next_cursor?: string;
+  has_more: boolean;
 }
 
 export namespace TenantListResponse {
   /**
    * Authoritative IAM tenant record.
    */
-  export interface Tenant {
+  export interface Data {
     /**
      * Admission policy for the tenant: open access, allowlist-only access,
      * invitation-only access, or approval-required access.
@@ -889,14 +885,15 @@ export interface TenantListParams {
   actor_token_identifier?: string | null;
 
   /**
-   * Opaque cursor returned by the previous page.
-   */
-  cursor?: string;
-
-  /**
    * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
 
   /**
    * Filter by tenant lifecycle status. Defaults to `active`; use `archived` or `all`

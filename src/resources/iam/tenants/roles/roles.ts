@@ -43,9 +43,9 @@ export class Roles extends APIResource {
     params: RoleArchiveParams,
     options?: RequestOptions,
   ): APIPromise<RoleArchiveResponse> {
-    const { tenant_id, actor_token_identifier } = params;
-    return this._client.delete(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}`, {
-      query: { actor_token_identifier },
+    const { tenant_id, ...body } = params;
+    return this._client.post(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}/archive`, {
+      body,
       ...options,
     });
   }
@@ -329,7 +329,7 @@ export interface RoleArchiveParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
    * unchanged by the trusted app backend.
    */
   actor_token_identifier: string | null;

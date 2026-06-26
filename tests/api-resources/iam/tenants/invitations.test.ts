@@ -25,9 +25,9 @@ describe('resource invitations', () => {
   test.skip('list: required and optional params', async () => {
     const response = await client.iam.tenants.invitations.list('tenant_id', {
       actor_token_identifier: 'x',
-      cursor: 'x',
       limit: 1,
       recipient: { type: 'email', value: 'dev@stainless.com' },
+      starting_after: 'starting_after',
       target: { type: 'tenant' },
     });
   });

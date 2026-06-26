@@ -36,25 +36,20 @@ export class Invitations extends APIResource {
 }
 
 /**
- * Cursor-paginated pending invitations in one tenant.
+ * Paginated pending invitations in one tenant.
  */
 export interface InvitationListResponse {
   /**
    * Pending tenant and resource invitations.
    */
-  invitations: Array<
+  data: Array<
     InvitationListResponse.IamTenantInvitationListItem | InvitationListResponse.IamResourceInvitationListItem
   >;
 
   /**
-   * Tenant whose invitations were returned.
+   * Whether more invitations are available after this page.
    */
-  tenant_id: string;
-
-  /**
-   * Cursor for the next invitation page.
-   */
-  next_cursor?: string;
+  has_more: boolean;
 }
 
 export namespace InvitationListResponse {
@@ -335,11 +330,6 @@ export interface InvitationListParams {
   actor_token_identifier: string | null;
 
   /**
-   * Opaque cursor returned by the previous page.
-   */
-  cursor?: string;
-
-  /**
    * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
@@ -348,6 +338,12 @@ export interface InvitationListParams {
    * Optional exact invitation recipient.
    */
   recipient?: InvitationListParams.Recipient;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
 
   /**
    * Optional tenant, all-resource, or exact-resource invitation selection.

@@ -56,9 +56,9 @@ export class AccessRules extends APIResource {
     params: AccessRuleArchiveParams,
     options?: RequestOptions,
   ): APIPromise<AccessRuleArchiveResponse> {
-    const { tenant_id, actor_token_identifier } = params;
-    return this._client.delete(path`/v1/iam/tenants/${tenant_id}/access-rules/${ruleID}`, {
-      query: { actor_token_identifier },
+    const { tenant_id, ...body } = params;
+    return this._client.post(path`/v1/iam/tenants/${tenant_id}/access-rules/${ruleID}/archive`, {
+      body,
       ...options,
     });
   }
@@ -177,30 +177,25 @@ export namespace AccessRuleUpdateResponse {
 }
 
 /**
- * Cursor-paginated tenant access rules.
+ * Paginated tenant access rules.
  */
 export interface AccessRuleListResponse {
   /**
    * Access rule page.
    */
-  access_rules: Array<AccessRuleListResponse.AccessRule>;
+  data: Array<AccessRuleListResponse.Data>;
 
   /**
-   * Tenant whose access rules were returned.
+   * Whether more access rules are available after this page.
    */
-  tenant_id: string;
-
-  /**
-   * Cursor for the next page.
-   */
-  next_cursor?: string;
+  has_more: boolean;
 }
 
 export namespace AccessRuleListResponse {
   /**
    * One tenant access rule.
    */
-  export interface AccessRule {
+  export interface Data {
     /**
      * Whether the rule is archived.
      */
@@ -229,10 +224,10 @@ export namespace AccessRuleListResponse {
     /**
      * Email or domain matched by the rule.
      */
-    subject: AccessRule.IamAccessRuleEmailSubject | AccessRule.IamAccessRuleDomainSubject;
+    subject: Data.IamAccessRuleEmailSubject | Data.IamAccessRuleDomainSubject;
   }
 
-  export namespace AccessRule {
+  export namespace Data {
     export interface IamAccessRuleEmailSubject {
       /**
        * Match one exact email address.
@@ -438,11 +433,6 @@ export interface AccessRuleListParams {
   archived?: boolean;
 
   /**
-   * Opaque cursor returned by the previous page.
-   */
-  cursor?: string;
-
-  /**
    * Filter by rule effect.
    */
   effect?: 'allow' | 'deny';
@@ -451,6 +441,12 @@ export interface AccessRuleListParams {
    * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
 
   /**
    * Filter by subject type.
@@ -466,7 +462,7 @@ export interface AccessRuleArchiveParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
    * unchanged by the trusted app backend.
    */
   actor_token_identifier: string | null;

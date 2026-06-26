@@ -87,19 +87,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.list',
     params: [
       'actor_token_identifier?: string;',
-      'cursor?: string;',
       'limit?: number;',
+      'starting_after?: string;',
       "status?: 'active' | 'archived' | 'all';",
     ],
     response:
-      "{ tenants: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; is_root: boolean; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]; next_cursor?: string; }",
+      "{ data: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; is_root: boolean; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.list(actor_token_identifier?: string, cursor?: string, limit?: number, status?: 'active' | 'archived' | 'all'): { tenants: object[]; next_cursor?: string; }`\n\n**get** `/v1/iam/tenants`\n\nLists active tenants available to manage by default. Signed-in users see only tenants they directly own; trusted server code can see all tenants. Use `status=archived` or `status=all` to include archived tenants.\n\n### Parameters\n\n- `actor_token_identifier?: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `cursor?: string`\n  Opaque cursor returned by the previous page.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `status?: 'active' | 'archived' | 'all'`\n  Filter by tenant lifecycle status. Defaults to `active`; use `archived` or `all` to discover archived tenants.\n\n### Returns\n\n- `{ tenants: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; is_root: boolean; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]; next_cursor?: string; }`\n  Cursor-paginated authoritative IAM tenant records.\n\n  - `tenants: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; is_root: boolean; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]`\n  - `next_cursor?: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants);\n```",
+      "## list\n\n`client.iam.tenants.list(actor_token_identifier?: string, limit?: number, starting_after?: string, status?: 'active' | 'archived' | 'all'): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants`\n\nLists active tenants available to manage by default. Signed-in users see only tenants they directly own; trusted server code can see all tenants. Use `status=archived` or `status=all` to include archived tenants.\n\n### Parameters\n\n- `actor_token_identifier?: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n- `status?: 'active' | 'archived' | 'all'`\n  Filter by tenant lifecycle status. Defaults to `active`; use `archived` or `all` to discover archived tenants.\n\n### Returns\n\n- `{ data: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; is_root: boolean; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]; has_more: boolean; }`\n  Paginated authoritative IAM tenant records.\n\n  - `data: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; is_root: boolean; lifecycle_status: 'active' | 'archived'; name: string; tenant_id: string; updated_at: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.list',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants.tenants);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants.data);",
       },
       http: {
         example:
@@ -193,8 +193,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'archive',
-    endpoint: '/v1/iam/tenants/{tenant_id}',
-    httpMethod: 'delete',
+    endpoint: '/v1/iam/tenants/{tenant_id}/archive',
+    httpMethod: 'post',
     summary: 'Archive tenant',
     description:
       'Archives a non-root tenant and blocks its access without deleting its users, groups, roles, or grants.',
@@ -204,7 +204,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.archive(tenant_id: string, actor_token_identifier: string): { convex_source_data: object; tenant_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}`\n\nArchives a non-root tenant and blocks its access without deleting its users, groups, roles, or grants.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.archive('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.archive(tenant_id: string, actor_token_identifier: string): { convex_source_data: object; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/archive`\n\nArchives a non-root tenant and blocks its access without deleting its users, groups, roles, or grants.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.archive('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.archive',
@@ -213,7 +213,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
       },
     },
   },
@@ -594,8 +594,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'archive',
-    endpoint: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
-    httpMethod: 'delete',
+    endpoint: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/archive',
+    httpMethod: 'post',
     summary: 'Archive tenant group',
     description:
       'Archives a group so it stops granting access while preserving its members, roles, and permission overrides for restoration.',
@@ -605,7 +605,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; tenant_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.groups.archive(tenant_id: string, group_id: string, actor_token_identifier: string): { convex_source_data: object; group_id: string; tenant_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nArchives a group so it stops granting access while preserving its members, roles, and permission overrides for restoration.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; tenant_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.archive('group_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.groups.archive(tenant_id: string, group_id: string, actor_token_identifier: string): { convex_source_data: object; group_id: string; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/archive`\n\nArchives a group so it stops granting access while preserving its members, roles, and permission overrides for restoration.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; tenant_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.archive('group_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.archive',
@@ -614,7 +614,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
       },
     },
   },
@@ -830,8 +830,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'archive',
-    endpoint: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
-    httpMethod: 'delete',
+    endpoint: '/v1/iam/tenants/{tenant_id}/roles/{role_id}/archive',
+    httpMethod: 'post',
     summary: 'Archive tenant role',
     description:
       "Archives a custom role so it no longer grants access while preserving it for restoration. A tenant's default role cannot be archived.",
@@ -841,7 +841,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; role_id: string; tenant_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.roles.archive(tenant_id: string, role_id: string, actor_token_identifier: string): { convex_source_data: object; role_id: string; tenant_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/roles/{role_id}`\n\nArchives a custom role so it no longer grants access while preserving it for restoration. A tenant's default role cannot be archived.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `role_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; role_id: string; tenant_id: string; }`\n  Result of changing a tenant role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `role_id: string`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.roles.archive('role_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.roles.archive(tenant_id: string, role_id: string, actor_token_identifier: string): { convex_source_data: object; role_id: string; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/roles/{role_id}/archive`\n\nArchives a custom role so it no longer grants access while preserving it for restoration. A tenant's default role cannot be archived.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `role_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; role_id: string; tenant_id: string; }`\n  Result of changing a tenant role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `role_id: string`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.roles.archive('role_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.roles.archive',
@@ -850,7 +850,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/roles/$ROLE_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/roles/$ROLE_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
       },
     },
   },
@@ -950,20 +950,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'tenant_id: string;',
       'actor_token_identifier: string;',
       'archived?: boolean;',
-      'cursor?: string;',
       "effect?: 'allow' | 'deny';",
       'limit?: number;',
+      'starting_after?: string;',
       "subject_type?: 'email' | 'domain';",
     ],
     response:
-      "{ access_rules: { archived: boolean; archived_at: string; effect: 'allow' | 'deny'; reason: string; rule_id: string; subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; }[]; tenant_id: string; next_cursor?: string; }",
+      "{ data: { archived: boolean; archived_at: string; effect: 'allow' | 'deny'; reason: string; rule_id: string; subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.accessRules.list(tenant_id: string, actor_token_identifier: string, archived?: boolean, cursor?: string, effect?: 'allow' | 'deny', limit?: number, subject_type?: 'email' | 'domain'): { access_rules: object[]; tenant_id: string; next_cursor?: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/access-rules`\n\nLists email and domain rules that control who may enter the tenant. Active rules are returned by default; archived rules can be requested separately.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `archived?: boolean`\n  Whether to return archived rules. Omit for active rules only.\n\n- `cursor?: string`\n  Opaque cursor returned by the previous page.\n\n- `effect?: 'allow' | 'deny'`\n  Filter by rule effect.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `subject_type?: 'email' | 'domain'`\n  Filter by subject type.\n\n### Returns\n\n- `{ access_rules: { archived: boolean; archived_at: string; effect: 'allow' | 'deny'; reason: string; rule_id: string; subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; }[]; tenant_id: string; next_cursor?: string; }`\n  Cursor-paginated tenant access rules.\n\n  - `access_rules: { archived: boolean; archived_at: string; effect: 'allow' | 'deny'; reason: string; rule_id: string; subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; }[]`\n  - `tenant_id: string`\n  - `next_cursor?: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst accessRules = await client.iam.tenants.accessRules.list('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(accessRules);\n```",
+      "## list\n\n`client.iam.tenants.accessRules.list(tenant_id: string, actor_token_identifier: string, archived?: boolean, effect?: 'allow' | 'deny', limit?: number, starting_after?: string, subject_type?: 'email' | 'domain'): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/access-rules`\n\nLists email and domain rules that control who may enter the tenant. Active rules are returned by default; archived rules can be requested separately.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `archived?: boolean`\n  Whether to return archived rules. Omit for active rules only.\n\n- `effect?: 'allow' | 'deny'`\n  Filter by rule effect.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n- `subject_type?: 'email' | 'domain'`\n  Filter by subject type.\n\n### Returns\n\n- `{ data: { archived: boolean; archived_at: string; effect: 'allow' | 'deny'; reason: string; rule_id: string; subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; }[]; has_more: boolean; }`\n  Paginated tenant access rules.\n\n  - `data: { archived: boolean; archived_at: string; effect: 'allow' | 'deny'; reason: string; rule_id: string; subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst accessRules = await client.iam.tenants.accessRules.list('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(accessRules);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.accessRules.list',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst accessRules = await client.iam.tenants.accessRules.list('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(accessRules.tenant_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst accessRules = await client.iam.tenants.accessRules.list('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(accessRules.data);",
       },
       http: {
         example:
@@ -1031,8 +1031,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'archive',
-    endpoint: '/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}',
-    httpMethod: 'delete',
+    endpoint: '/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive',
+    httpMethod: 'post',
     summary: 'Archive tenant access rule',
     description:
       'Archives an access rule so it no longer affects who can enter the tenant. Matching users are immediately re-evaluated against the remaining rules.',
@@ -1042,7 +1042,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; rule_id: string; tenant_id: string; created?: boolean; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.accessRules.archive(tenant_id: string, rule_id: string, actor_token_identifier: string): { convex_source_data: object; rule_id: string; tenant_id: string; created?: boolean; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}`\n\nArchives an access rule so it no longer affects who can enter the tenant. Matching users are immediately re-evaluated against the remaining rules.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `rule_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; rule_id: string; tenant_id: string; created?: boolean; }`\n  Result of changing a tenant access rule.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `rule_id: string`\n  - `tenant_id: string`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.accessRules.archive('rule_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.accessRules.archive(tenant_id: string, rule_id: string, actor_token_identifier: string): { convex_source_data: object; rule_id: string; tenant_id: string; created?: boolean; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive`\n\nArchives an access rule so it no longer affects who can enter the tenant. Matching users are immediately re-evaluated against the remaining rules.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `rule_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; rule_id: string; tenant_id: string; created?: boolean; }`\n  Result of changing a tenant access rule.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `rule_id: string`\n  - `tenant_id: string`\n  - `created?: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.accessRules.archive('rule_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.accessRules.archive',
@@ -1051,7 +1051,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/access-rules/$RULE_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/access-rules/$RULE_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
       },
     },
   },
@@ -1096,24 +1096,24 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'action?: string;',
       "actor_type?: 'system' | 'platform_user' | 'user' | 'agent' | 'service';",
       'api_key_id?: string;',
-      'cursor?: string;',
       'end_time?: string;',
       'limit?: number;',
       'start_time?: string;',
+      'starting_after?: string;',
       "status?: 'success' | 'denied' | 'failure';",
       'target_id?: string;',
       'target_type?: string;',
       'user_id?: string;',
     ],
     response:
-      "{ audit_events: { action: string; actor: { type: 'user'; user_id: string; email?: string; name?: string; } | { platform_user_id: string; type: 'platform_user'; email?: string; name?: string; } | { api_key_id: string; type: 'service'; email?: string; name?: string; } | { type: 'system'; } | { type: 'agent'; }; audit_event_id: string; created_at: string; metadata: object; reason_code: string; request_id: string; source_version: number; status: 'success' | 'denied' | 'failure'; target: { id: string; type: string; }; }[]; tenant_id: string; next_cursor?: string; }",
+      "{ data: { action: string; actor: { type: 'user'; user_id: string; email?: string; name?: string; } | { platform_user_id: string; type: 'platform_user'; email?: string; name?: string; } | { api_key_id: string; type: 'service'; email?: string; name?: string; } | { type: 'system'; } | { type: 'agent'; }; audit_event_id: string; created_at: string; metadata: object; reason_code: string; request_id: string; source_version: number; status: 'success' | 'denied' | 'failure'; target: { id: string; type: string; }; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.auditEvents.list(tenant_id: string, actor_token_identifier: string, action?: string, actor_type?: 'system' | 'platform_user' | 'user' | 'agent' | 'service', api_key_id?: string, cursor?: string, end_time?: string, limit?: number, start_time?: string, status?: 'success' | 'denied' | 'failure', target_id?: string, target_type?: string, user_id?: string): { audit_events: object[]; tenant_id: string; next_cursor?: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/audit-events`\n\nLists IAM management and access events for a tenant, with filters for time, action, status, user, and target. Routine access checks are included only when `action=access.account_entry.evaluate` is requested.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `action?: string`\n  Filter by exact audit action.\n\n- `actor_type?: 'system' | 'platform_user' | 'user' | 'agent' | 'service'`\n  Filter by public actor type.\n\n- `api_key_id?: string`\n  Filter by service API key ID.\n\n- `cursor?: string`\n  Opaque cursor returned by the previous page.\n\n- `end_time?: string`\n  Return events at or before this timestamp.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `start_time?: string`\n  Return events at or after this timestamp.\n\n- `status?: 'success' | 'denied' | 'failure'`\n  Filter by status.\n\n- `target_id?: string`\n  Filter by target ID.\n\n- `target_type?: string`\n  Filter by target type.\n\n- `user_id?: string`\n  Filter by user ID.\n\n### Returns\n\n- `{ audit_events: { action: string; actor: { type: 'user'; user_id: string; email?: string; name?: string; } | { platform_user_id: string; type: 'platform_user'; email?: string; name?: string; } | { api_key_id: string; type: 'service'; email?: string; name?: string; } | { type: 'system'; } | { type: 'agent'; }; audit_event_id: string; created_at: string; metadata: object; reason_code: string; request_id: string; source_version: number; status: 'success' | 'denied' | 'failure'; target: { id: string; type: string; }; }[]; tenant_id: string; next_cursor?: string; }`\n  Cursor-paginated tenant IAM audit events.\n\n  - `audit_events: { action: string; actor: { type: 'user'; user_id: string; email?: string; name?: string; } | { platform_user_id: string; type: 'platform_user'; email?: string; name?: string; } | { api_key_id: string; type: 'service'; email?: string; name?: string; } | { type: 'system'; } | { type: 'agent'; }; audit_event_id: string; created_at: string; metadata: object; reason_code: string; request_id: string; source_version: number; status: 'success' | 'denied' | 'failure'; target: { id: string; type: string; }; }[]`\n  - `tenant_id: string`\n  - `next_cursor?: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst auditEvents = await client.iam.tenants.auditEvents.list('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(auditEvents);\n```",
+      "## list\n\n`client.iam.tenants.auditEvents.list(tenant_id: string, actor_token_identifier: string, action?: string, actor_type?: 'system' | 'platform_user' | 'user' | 'agent' | 'service', api_key_id?: string, end_time?: string, limit?: number, start_time?: string, starting_after?: string, status?: 'success' | 'denied' | 'failure', target_id?: string, target_type?: string, user_id?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/audit-events`\n\nLists IAM management and access events for a tenant, with filters for time, action, status, user, and target. Routine access checks are included only when `action=access.account_entry.evaluate` is requested.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `action?: string`\n  Filter by exact audit action.\n\n- `actor_type?: 'system' | 'platform_user' | 'user' | 'agent' | 'service'`\n  Filter by public actor type.\n\n- `api_key_id?: string`\n  Filter by service API key ID.\n\n- `end_time?: string`\n  Return events at or before this timestamp.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `start_time?: string`\n  Return events at or after this timestamp.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n- `status?: 'success' | 'denied' | 'failure'`\n  Filter by status.\n\n- `target_id?: string`\n  Filter by target ID.\n\n- `target_type?: string`\n  Filter by target type.\n\n- `user_id?: string`\n  Filter by user ID.\n\n### Returns\n\n- `{ data: { action: string; actor: { type: 'user'; user_id: string; email?: string; name?: string; } | { platform_user_id: string; type: 'platform_user'; email?: string; name?: string; } | { api_key_id: string; type: 'service'; email?: string; name?: string; } | { type: 'system'; } | { type: 'agent'; }; audit_event_id: string; created_at: string; metadata: object; reason_code: string; request_id: string; source_version: number; status: 'success' | 'denied' | 'failure'; target: { id: string; type: string; }; }[]; has_more: boolean; }`\n  Paginated tenant IAM audit events.\n\n  - `data: { action: string; actor: { type: 'user'; user_id: string; email?: string; name?: string; } | { platform_user_id: string; type: 'platform_user'; email?: string; name?: string; } | { api_key_id: string; type: 'service'; email?: string; name?: string; } | { type: 'system'; } | { type: 'agent'; }; audit_event_id: string; created_at: string; metadata: object; reason_code: string; request_id: string; source_version: number; status: 'success' | 'denied' | 'failure'; target: { id: string; type: string; }; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst auditEvents = await client.iam.tenants.auditEvents.list('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(auditEvents);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.auditEvents.list',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst auditEvents = await client.iam.tenants.auditEvents.list('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(auditEvents.tenant_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst auditEvents = await client.iam.tenants.auditEvents.list('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(auditEvents.data);",
       },
       http: {
         example:
@@ -1133,20 +1133,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'actor_token_identifier: string;',
-      'cursor?: string;',
       'limit?: number;',
       "recipient?: { type: 'email'; value: string; };",
+      'starting_after?: string;',
       "target?: { type: 'tenant'; } | { type: 'resource'; } | { resource_id: string; resource_type: string; type: 'resource'; };",
     ],
     response:
-      "{ invitations: { created_at: string; expires_at: string; grants: { conferral_id: string; expires_at: string; role_id: string; type: 'tenant_role'; }[]; invitation_id: string; recipient: { type: 'email'; value: string; }; type: 'tenant'; updated_at: string; } | { created_at: string; expires_at: string; grant: { conferral_id: string; expires_at: string; role_id: string; type: 'resource_role'; } | { conferral_id: string; effect: 'allow'; expires_at: string; permission_id: string; permission_key: string; type: 'resource_permission'; }; invitation_id: string; recipient: { type: 'email'; value: string; }; resource: { applies_to: 'self' | 'self_and_descendants'; resource_id: string; resource_type: string; }; type: 'resource'; updated_at: string; }[]; tenant_id: string; next_cursor?: string; }",
+      "{ data: { created_at: string; expires_at: string; grants: { conferral_id: string; expires_at: string; role_id: string; type: 'tenant_role'; }[]; invitation_id: string; recipient: { type: 'email'; value: string; }; type: 'tenant'; updated_at: string; } | { created_at: string; expires_at: string; grant: { conferral_id: string; expires_at: string; role_id: string; type: 'resource_role'; } | { conferral_id: string; effect: 'allow'; expires_at: string; permission_id: string; permission_key: string; type: 'resource_permission'; }; invitation_id: string; recipient: { type: 'email'; value: string; }; resource: { applies_to: 'self' | 'self_and_descendants'; resource_id: string; resource_type: string; }; type: 'resource'; updated_at: string; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.invitations.list(tenant_id: string, actor_token_identifier: string, cursor?: string, limit?: number, recipient?: { type: 'email'; value: string; }, target?: { type: 'tenant'; } | { type: 'resource'; } | { resource_id: string; resource_type: string; type: 'resource'; }): { invitations: object | object[]; tenant_id: string; next_cursor?: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/invitations`\n\nLists pending, unexpired tenant and resource invitations. Accepted, revoked, and expired invitations are not returned.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `cursor?: string`\n  Opaque cursor returned by the previous page.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `recipient?: { type: 'email'; value: string; }`\n  Optional exact invitation recipient.\n  - `type: 'email'`\n    Identifies an email recipient.\n  - `value: string`\n    Email address of the invited user.\n\n- `target?: { type: 'tenant'; } | { type: 'resource'; } | { resource_id: string; resource_type: string; type: 'resource'; }`\n  Optional tenant, all-resource, or exact-resource invitation selection.\n\n### Returns\n\n- `{ invitations: { created_at: string; expires_at: string; grants: { conferral_id: string; expires_at: string; role_id: string; type: 'tenant_role'; }[]; invitation_id: string; recipient: { type: 'email'; value: string; }; type: 'tenant'; updated_at: string; } | { created_at: string; expires_at: string; grant: { conferral_id: string; expires_at: string; role_id: string; type: 'resource_role'; } | { conferral_id: string; effect: 'allow'; expires_at: string; permission_id: string; permission_key: string; type: 'resource_permission'; }; invitation_id: string; recipient: { type: 'email'; value: string; }; resource: { applies_to: 'self' | 'self_and_descendants'; resource_id: string; resource_type: string; }; type: 'resource'; updated_at: string; }[]; tenant_id: string; next_cursor?: string; }`\n  Cursor-paginated pending invitations in one tenant.\n\n  - `invitations: { created_at: string; expires_at: string; grants: { conferral_id: string; expires_at: string; role_id: string; type: 'tenant_role'; }[]; invitation_id: string; recipient: { type: 'email'; value: string; }; type: 'tenant'; updated_at: string; } | { created_at: string; expires_at: string; grant: { conferral_id: string; expires_at: string; role_id: string; type: 'resource_role'; } | { conferral_id: string; effect: 'allow'; expires_at: string; permission_id: string; permission_key: string; type: 'resource_permission'; }; invitation_id: string; recipient: { type: 'email'; value: string; }; resource: { applies_to: 'self' | 'self_and_descendants'; resource_id: string; resource_type: string; }; type: 'resource'; updated_at: string; }[]`\n  - `tenant_id: string`\n  - `next_cursor?: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst invitations = await client.iam.tenants.invitations.list('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(invitations);\n```",
+      "## list\n\n`client.iam.tenants.invitations.list(tenant_id: string, actor_token_identifier: string, limit?: number, recipient?: { type: 'email'; value: string; }, starting_after?: string, target?: { type: 'tenant'; } | { type: 'resource'; } | { resource_id: string; resource_type: string; type: 'resource'; }): { data: object | object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/invitations`\n\nLists pending, unexpired tenant and resource invitations. Accepted, revoked, and expired invitations are not returned.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `recipient?: { type: 'email'; value: string; }`\n  Optional exact invitation recipient.\n  - `type: 'email'`\n    Identifies an email recipient.\n  - `value: string`\n    Email address of the invited user.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n- `target?: { type: 'tenant'; } | { type: 'resource'; } | { resource_id: string; resource_type: string; type: 'resource'; }`\n  Optional tenant, all-resource, or exact-resource invitation selection.\n\n### Returns\n\n- `{ data: { created_at: string; expires_at: string; grants: { conferral_id: string; expires_at: string; role_id: string; type: 'tenant_role'; }[]; invitation_id: string; recipient: { type: 'email'; value: string; }; type: 'tenant'; updated_at: string; } | { created_at: string; expires_at: string; grant: { conferral_id: string; expires_at: string; role_id: string; type: 'resource_role'; } | { conferral_id: string; effect: 'allow'; expires_at: string; permission_id: string; permission_key: string; type: 'resource_permission'; }; invitation_id: string; recipient: { type: 'email'; value: string; }; resource: { applies_to: 'self' | 'self_and_descendants'; resource_id: string; resource_type: string; }; type: 'resource'; updated_at: string; }[]; has_more: boolean; }`\n  Paginated pending invitations in one tenant.\n\n  - `data: { created_at: string; expires_at: string; grants: { conferral_id: string; expires_at: string; role_id: string; type: 'tenant_role'; }[]; invitation_id: string; recipient: { type: 'email'; value: string; }; type: 'tenant'; updated_at: string; } | { created_at: string; expires_at: string; grant: { conferral_id: string; expires_at: string; role_id: string; type: 'resource_role'; } | { conferral_id: string; effect: 'allow'; expires_at: string; permission_id: string; permission_key: string; type: 'resource_permission'; }; invitation_id: string; recipient: { type: 'email'; value: string; }; resource: { applies_to: 'self' | 'self_and_descendants'; resource_id: string; resource_type: string; }; type: 'resource'; updated_at: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst invitations = await client.iam.tenants.invitations.list('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(invitations);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.invitations.list',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst invitations = await client.iam.tenants.invitations.list('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(invitations.tenant_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst invitations = await client.iam.tenants.invitations.list('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(invitations.data);",
       },
       http: {
         example:

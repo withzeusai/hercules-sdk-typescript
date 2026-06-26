@@ -29,7 +29,7 @@ Methods:
 - <code title="post /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">create</a>({ ...params }) -> TenantCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">update</a>(tenantID, { ...params }) -> TenantUpdateResponse</code>
 - <code title="get /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">list</a>({ ...params }) -> TenantListResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/archive">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">createInvitation</a>(tenantID, { ...params }) -> TenantCreateInvitationResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/evaluate-access">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">evaluateAccess</a>(tenantID, { ...params }) -> TenantEvaluateAccessResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">get</a>(tenantID, { ...params }) -> TenantGetResponse</code>
@@ -87,7 +87,7 @@ Methods:
 
 - <code title="post /v1/iam/tenants/{tenant_id}/groups">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">create</a>(tenantID, { ...params }) -> GroupCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">update</a>(groupID, { ...params }) -> GroupUpdateResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">archive</a>(groupID, { ...params }) -> GroupArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/archive">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">archive</a>(groupID, { ...params }) -> GroupArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">unarchive</a>(groupID, { ...params }) -> GroupUnarchiveResponse</code>
 
 #### Members
@@ -127,7 +127,7 @@ Methods:
 
 - <code title="post /v1/iam/tenants/{tenant_id}/roles">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">create</a>(tenantID, { ...params }) -> RoleCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">update</a>(roleID, { ...params }) -> RoleUpdateResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">archive</a>(roleID, { ...params }) -> RoleArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/roles/{role_id}/archive">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">archive</a>(roleID, { ...params }) -> RoleArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/roles/{role_id}/unarchive">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">unarchive</a>(roleID, { ...params }) -> RoleUnarchiveResponse</code>
 
 #### PermissionOverrides
@@ -157,7 +157,7 @@ Methods:
 - <code title="post /v1/iam/tenants/{tenant_id}/access-rules">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">create</a>(tenantID, { ...params }) -> AccessRuleCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">update</a>(ruleID, { ...params }) -> AccessRuleUpdateResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/access-rules">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">list</a>(tenantID, { ...params }) -> AccessRuleListResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">archive</a>(ruleID, { ...params }) -> AccessRuleArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">archive</a>(ruleID, { ...params }) -> AccessRuleArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/unarchive">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">unarchive</a>(ruleID, { ...params }) -> AccessRuleUnarchiveResponse</code>
 
 ### AuditEvents

@@ -37,8 +37,8 @@ export const sdkMethods: SdkMethod[] = [
   {
     clientCallName: 'client.iam.tenants.archive',
     fullyQualifiedName: 'iam.tenants.archive',
-    httpMethod: 'delete',
-    httpPath: '/v1/iam/tenants/{tenant_id}',
+    httpMethod: 'post',
+    httpPath: '/v1/iam/tenants/{tenant_id}/archive',
   },
   {
     clientCallName: 'client.iam.tenants.createInvitation',
@@ -127,8 +127,8 @@ export const sdkMethods: SdkMethod[] = [
   {
     clientCallName: 'client.iam.tenants.groups.archive',
     fullyQualifiedName: 'iam.tenants.groups.archive',
-    httpMethod: 'delete',
-    httpPath: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
+    httpMethod: 'post',
+    httpPath: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/archive',
   },
   {
     clientCallName: 'client.iam.tenants.groups.unarchive',
@@ -175,8 +175,8 @@ export const sdkMethods: SdkMethod[] = [
   {
     clientCallName: 'client.iam.tenants.roles.archive',
     fullyQualifiedName: 'iam.tenants.roles.archive',
-    httpMethod: 'delete',
-    httpPath: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
+    httpMethod: 'post',
+    httpPath: '/v1/iam/tenants/{tenant_id}/roles/{role_id}/archive',
   },
   {
     clientCallName: 'client.iam.tenants.roles.unarchive',
@@ -217,8 +217,8 @@ export const sdkMethods: SdkMethod[] = [
   {
     clientCallName: 'client.iam.tenants.accessRules.archive',
     fullyQualifiedName: 'iam.tenants.accessRules.archive',
-    httpMethod: 'delete',
-    httpPath: '/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}',
+    httpMethod: 'post',
+    httpPath: '/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive',
   },
   {
     clientCallName: 'client.iam.tenants.accessRules.unarchive',
