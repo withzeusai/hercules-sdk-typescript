@@ -60,9 +60,9 @@ export class Groups extends APIResource {
     params: GroupArchiveParams,
     options?: RequestOptions,
   ): APIPromise<GroupArchiveResponse> {
-    const { tenant_id, actor_token_identifier } = params;
-    return this._client.delete(path`/v1/iam/tenants/${tenant_id}/groups/${groupID}`, {
-      query: { actor_token_identifier },
+    const { tenant_id, ...body } = params;
+    return this._client.post(path`/v1/iam/tenants/${tenant_id}/groups/${groupID}/archive`, {
+      body,
       ...options,
     });
   }
@@ -369,7 +369,7 @@ export interface GroupArchiveParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
    * unchanged by the trusted app backend.
    */
   actor_token_identifier: string | null;

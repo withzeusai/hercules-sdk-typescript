@@ -21,30 +21,25 @@ export class AuditEvents extends APIResource {
 }
 
 /**
- * Cursor-paginated tenant IAM audit events.
+ * Paginated tenant IAM audit events.
  */
 export interface AuditEventListResponse {
   /**
    * Audit event page.
    */
-  audit_events: Array<AuditEventListResponse.AuditEvent>;
+  data: Array<AuditEventListResponse.Data>;
 
   /**
-   * Tenant whose audit events were returned.
+   * Whether more audit events are available after this page.
    */
-  tenant_id: string;
-
-  /**
-   * Cursor for the next page.
-   */
-  next_cursor?: string;
+  has_more: boolean;
 }
 
 export namespace AuditEventListResponse {
   /**
    * One tenant IAM audit event.
    */
-  export interface AuditEvent {
+  export interface Data {
     /**
      * Stable audit action key.
      */
@@ -54,11 +49,11 @@ export namespace AuditEventListResponse {
      * Public identity of the actor that produced the audit event.
      */
     actor:
-      | AuditEvent.IamAuditUserActor
-      | AuditEvent.IamAuditPlatformUserActor
-      | AuditEvent.IamAuditServiceActor
-      | AuditEvent.IamAuditSystemActor
-      | AuditEvent.IamAuditAgentActor;
+      | Data.IamAuditUserActor
+      | Data.IamAuditPlatformUserActor
+      | Data.IamAuditServiceActor
+      | Data.IamAuditSystemActor
+      | Data.IamAuditAgentActor;
 
     /**
      * Audit event ID.
@@ -99,10 +94,10 @@ export namespace AuditEventListResponse {
     /**
      * Entity affected by the audit event.
      */
-    target: AuditEvent.Target;
+    target: Data.Target;
   }
 
-  export namespace AuditEvent {
+  export namespace Data {
     export interface IamAuditUserActor {
       /**
        * Tenant user actor.
@@ -223,11 +218,6 @@ export interface AuditEventListParams {
   api_key_id?: string;
 
   /**
-   * Opaque cursor returned by the previous page.
-   */
-  cursor?: string;
-
-  /**
    * Return events at or before this timestamp.
    */
   end_time?: string;
@@ -241,6 +231,12 @@ export interface AuditEventListParams {
    * Return events at or after this timestamp.
    */
   start_time?: string;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
 
   /**
    * Filter by status.

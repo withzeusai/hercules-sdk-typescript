@@ -72,8 +72,8 @@ describe('resource tenants', () => {
       client.iam.tenants.list(
         {
           actor_token_identifier: 'x',
-          cursor: 'x',
           limit: 1,
+          starting_after: 'starting_after',
           status: 'active',
         },
         { path: '/_stainless_unknown_path' },

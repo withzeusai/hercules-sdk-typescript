@@ -76,9 +76,9 @@ describe('resource accessRules', () => {
     const response = await client.iam.tenants.accessRules.list('tenant_id', {
       actor_token_identifier: 'x',
       archived: true,
-      cursor: 'x',
       effect: 'allow',
       limit: 1,
+      starting_after: 'starting_after',
       subject_type: 'email',
     });
   });
