@@ -1,18 +1,18 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
-  AdmissionRules,
-  type AdmissionRuleCreateResponse,
-  type AdmissionRuleUpdateResponse,
-  type AdmissionRuleListResponse,
-  type AdmissionRuleArchiveResponse,
-  type AdmissionRuleUnarchiveResponse,
-  type AdmissionRuleCreateParams,
-  type AdmissionRuleUpdateParams,
-  type AdmissionRuleListParams,
-  type AdmissionRuleArchiveParams,
-  type AdmissionRuleUnarchiveParams,
-} from './admission-rules';
+  AccessRules,
+  type AccessRuleCreateResponse,
+  type AccessRuleUpdateResponse,
+  type AccessRuleListResponse,
+  type AccessRuleArchiveResponse,
+  type AccessRuleUnarchiveResponse,
+  type AccessRuleCreateParams,
+  type AccessRuleUpdateParams,
+  type AccessRuleListParams,
+  type AccessRuleArchiveParams,
+  type AccessRuleUnarchiveParams,
+} from './access-rules';
 export { AuditEvents, type AuditEventListResponse, type AuditEventListParams } from './audit-events';
 export {
   Grants,
@@ -35,18 +35,16 @@ export {
 export {
   Invitations,
   type InvitationListResponse,
-  type InvitationCreateResourceResponse,
-  type InvitationCreateTenantResponse,
   type InvitationRevokeResponse,
   type InvitationListParams,
-  type InvitationCreateResourceParams,
-  type InvitationCreateTenantParams,
   type InvitationRevokeParams,
 } from './invitations';
 export {
   Resources,
   type ResourceAccessGrantingRolesResponse,
+  type ResourceCreateInvitationResponse,
   type ResourceAccessGrantingRolesParams,
+  type ResourceCreateInvitationParams,
 } from './resources/index';
 export {
   Roles,
@@ -65,6 +63,7 @@ export {
   type TenantUpdateResponse,
   type TenantListResponse,
   type TenantArchiveResponse,
+  type TenantCreateInvitationResponse,
   type TenantEvaluateAccessResponse,
   type TenantGetResponse,
   type TenantGrantableRolesResponse,
@@ -73,6 +72,7 @@ export {
   type TenantUpdateParams,
   type TenantListParams,
   type TenantArchiveParams,
+  type TenantCreateInvitationParams,
   type TenantEvaluateAccessParams,
   type TenantGetParams,
   type TenantGrantableRolesParams,

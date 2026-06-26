@@ -14,8 +14,8 @@ describe('resource resources', () => {
     const responsePromise = client.iam.tenants.resources.accessGrantingRoles('resource_id', {
       tenant_id: 'tenant_id',
       resource_type: 'resource_type',
+      actor_token_identifier: 'x',
       subject_type: 'user',
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -31,9 +31,47 @@ describe('resource resources', () => {
     const response = await client.iam.tenants.resources.accessGrantingRoles('resource_id', {
       tenant_id: 'tenant_id',
       resource_type: 'resource_type',
+      actor_token_identifier: 'x',
       subject_type: 'user',
-      user_token_identifier: 'x',
       applies_to: 'self',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('createInvitation: only required params', async () => {
+    const responsePromise = client.iam.tenants.resources.createInvitation('resource_id', {
+      tenant_id: 'tenant_id',
+      resource_type: 'resource_type',
+      actor_token_identifier: 'x',
+      grant: {
+        role: { id: 'x' },
+        type: 'role',
+      },
+      recipient: { type: 'email', value: 'dev@stainless.com' },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createInvitation: required and optional params', async () => {
+    const response = await client.iam.tenants.resources.createInvitation('resource_id', {
+      tenant_id: 'tenant_id',
+      resource_type: 'resource_type',
+      actor_token_identifier: 'x',
+      grant: {
+        role: { id: 'x' },
+        type: 'role',
+        expires_at: '2019-12-27T18:11:19.117Z',
+      },
+      recipient: { type: 'email', value: 'dev@stainless.com' },
+      applies_to: 'self',
+      expires_at: '2019-12-27T18:11:19.117Z',
     });
   });
 });

@@ -7,7 +7,8 @@ import { path } from '../../../../internal/utils/path';
 
 export class Members extends APIResource {
   /**
-   * Adds one tenant user as a member of a group.
+   * Adds a tenant user to a group. The user immediately receives access provided by
+   * the group's roles and permission overrides.
    */
   add(userID: string, params: MemberAddParams, options?: RequestOptions): APIPromise<MemberAddResponse> {
     const { tenant_id, group_id, ...body } = params;
@@ -18,16 +19,17 @@ export class Members extends APIResource {
   }
 
   /**
-   * Removes one tenant user from a group.
+   * Removes a user from a group without changing the user's direct roles or
+   * permission overrides.
    */
   remove(
     userID: string,
     params: MemberRemoveParams,
     options?: RequestOptions,
   ): APIPromise<MemberRemoveResponse> {
-    const { tenant_id, group_id, user_token_identifier } = params;
+    const { tenant_id, group_id, actor_token_identifier } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/members/${userID}`, {
-      query: { user_token_identifier },
+      query: { actor_token_identifier },
       ...options,
     });
   }
@@ -38,9 +40,9 @@ export class Members extends APIResource {
  */
 export interface MemberAddResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: MemberAddResponse.ConvexSourceData;
 
   /**
    * Tenant group receiving the member.
@@ -53,24 +55,37 @@ export interface MemberAddResponse {
   membership_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID added to the group.
+   * User ID added to the group.
    */
   user_id: string;
+}
+
+export namespace MemberAddResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
 }
 
 /**
@@ -78,9 +93,9 @@ export interface MemberAddResponse {
  */
 export interface MemberRemoveResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: MemberRemoveResponse.ConvexSourceData;
 
   /**
    * Tenant group losing the member.
@@ -88,59 +103,75 @@ export interface MemberRemoveResponse {
   group_id: string;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
 
   /**
-   * Hercules Auth user ID removed from the group.
+   * User ID removed from the group.
    */
   user_id: string;
 }
 
+export namespace MemberRemoveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 export interface MemberAddParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Path param
+   * Path param: The unique identifier of the tenant group.
    */
   group_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export interface MemberRemoveParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Path param
+   * Path param: The unique identifier of the tenant group.
    */
   group_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export declare namespace Members {

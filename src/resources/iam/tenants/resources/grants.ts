@@ -7,7 +7,8 @@ import { path } from '../../../../internal/utils/path';
 
 export class Grants extends APIResource {
   /**
-   * Grants one IAM role to a tenant user or group on an exact resource.
+   * Grants a role to one user or group on an exact resource. The grant can apply
+   * only to that resource or also to its descendants.
    */
   create(
     resourceID: string,
@@ -22,7 +23,9 @@ export class Grants extends APIResource {
   }
 
   /**
-   * Updates direct resource role grants for the listed users and groups.
+   * Replaces the complete direct resource role grants for each listed user or group.
+   * Empty grant lists clear those role grants; unlisted users, groups, and
+   * permission overrides are unchanged.
    */
   update(
     resourceID: string,
@@ -42,9 +45,9 @@ export class Grants extends APIResource {
  */
 export interface GrantCreateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: GrantCreateResponse.ConvexSourceData;
 
   /**
    * One persisted resource role or permission grant.
@@ -54,16 +57,6 @@ export interface GrantCreateResponse {
     | GrantCreateResponse.IamResourcePermissionGrantResult;
 
   /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
-
-  /**
    * Tenant changed by the operation.
    */
   tenant_id: string;
@@ -71,9 +64,35 @@ export interface GrantCreateResponse {
 
 export namespace GrantCreateResponse {
   /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
+  /**
    * One persisted resource role grant.
    */
   export interface IamResourceRoleGrantResult {
+    /**
+     * Whether the grant applies only to this resource or also to descendants.
+     */
+    applies_to: 'self' | 'self_and_descendants';
+
     /**
      * Grant expiry, or null for a permanent grant.
      */
@@ -93,18 +112,17 @@ export namespace GrantCreateResponse {
      * Identifies a resource role grant.
      */
     type: 'resource_role';
-
-    /**
-     * Whether the grant applies only to this resource or also to descendants
-     * authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
   }
 
   /**
    * One persisted resource permission grant.
    */
   export interface IamResourcePermissionGrantResult {
+    /**
+     * Whether the grant applies only to this resource or also to descendants.
+     */
+    applies_to: 'self' | 'self_and_descendants';
+
     /**
      * Whether the permission is allowed or denied.
      */
@@ -134,12 +152,6 @@ export namespace GrantCreateResponse {
      * Identifies a resource permission grant.
      */
     type: 'resource_permission';
-
-    /**
-     * Whether the grant applies only to this resource or also to descendants
-     * authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
   }
 }
 
@@ -148,14 +160,9 @@ export namespace GrantCreateResponse {
  */
 export interface GrantUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
+  convex_source_data: GrantUpdateResponse.ConvexSourceData;
 
   /**
    * Exact application resource ID.
@@ -166,11 +173,6 @@ export interface GrantUpdateResponse {
    * Canonical app resource type, such as app.projects.
    */
   resource_type: string;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
 
   /**
    * Subjects reconciled by the update.
@@ -184,6 +186,27 @@ export interface GrantUpdateResponse {
 }
 
 export namespace GrantUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
   /**
    * One subject and its complete resulting resource grants.
    */
@@ -205,6 +228,11 @@ export namespace GrantUpdateResponse {
      */
     export interface IamResourceRoleGrantResult {
       /**
+       * Whether the grant applies only to this resource or also to descendants.
+       */
+      applies_to: 'self' | 'self_and_descendants';
+
+      /**
        * Grant expiry, or null for a permanent grant.
        */
       expires_at: string | null;
@@ -223,18 +251,17 @@ export namespace GrantUpdateResponse {
        * Identifies a resource role grant.
        */
       type: 'resource_role';
-
-      /**
-       * Whether the grant applies only to this resource or also to descendants
-       * authorized through it.
-       */
-      applies_to?: 'self' | 'self_and_descendants';
     }
 
     /**
      * One persisted resource permission grant.
      */
     export interface IamResourcePermissionGrantResult {
+      /**
+       * Whether the grant applies only to this resource or also to descendants.
+       */
+      applies_to: 'self' | 'self_and_descendants';
+
       /**
        * Whether the permission is allowed or denied.
        */
@@ -264,12 +291,6 @@ export namespace GrantUpdateResponse {
        * Identifies a resource permission grant.
        */
       type: 'resource_permission';
-
-      /**
-       * Whether the grant applies only to this resource or also to descendants
-       * authorized through it.
-       */
-      applies_to?: 'self' | 'self_and_descendants';
     }
 
     export interface IamResourceGrantUserSubject {
@@ -279,7 +300,7 @@ export namespace GrantUpdateResponse {
       type: 'user';
 
       /**
-       * Hercules Auth user ID receiving the grant.
+       * Target tenant user ID receiving the grant. Do not pass a token identifier.
        */
       user_id: string;
     }
@@ -300,14 +321,21 @@ export namespace GrantUpdateResponse {
 
 export interface GrantCreateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Path param
+   * Path param: The canonical app resource type, such as `app.projects`.
    */
   resource_type: string;
+
+  /**
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
+   */
+  actor_token_identifier: string | null;
 
   /**
    * Body param: Role receiving the overrides.
@@ -320,18 +348,13 @@ export interface GrantCreateParams {
   subject: GrantCreateParams.IamResourceGrantUserSubject | GrantCreateParams.IamResourceGrantGroupSubject;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
-   */
-  user_token_identifier: string | null;
-
-  /**
    * Body param: Whether the grant applies only to this resource or also to
-   * descendants authorized through it.
+   * descendants authorized through it. Defaults to `self`.
    */
   applies_to?: 'self' | 'self_and_descendants';
 
   /**
-   * Body param: Grant expiry, or null for a permanent grant.
+   * Body param: Grant expiry. Omit or pass null for a permanent grant.
    */
   expires_at?: string | null;
 }
@@ -358,7 +381,7 @@ export namespace GrantCreateParams {
     type: 'user';
 
     /**
-     * Hercules Auth user ID receiving the grant.
+     * Target tenant user ID receiving the grant. Do not pass a token identifier.
      */
     user_id: string;
   }
@@ -378,19 +401,21 @@ export namespace GrantCreateParams {
 
 export interface GrantUpdateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Path param
+   * Path param: The canonical app resource type, such as `app.projects`.
    */
   resource_type: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Body param: Subjects whose complete direct resource grants are updated.
@@ -426,12 +451,12 @@ export namespace GrantUpdateParams {
 
       /**
        * Whether the grant applies only to this resource or also to descendants
-       * authorized through it.
+       * authorized through it. Defaults to `self`.
        */
       applies_to?: 'self' | 'self_and_descendants';
 
       /**
-       * Grant expiry, or null for a permanent grant.
+       * Grant expiry. Omit or pass null for a permanent grant.
        */
       expires_at?: string | null;
     }
@@ -459,7 +484,7 @@ export namespace GrantUpdateParams {
       type: 'user';
 
       /**
-       * Hercules Auth user ID receiving the grant.
+       * Target tenant user ID receiving the grant. Do not pass a token identifier.
        */
       user_id: string;
     }

@@ -6,7 +6,9 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Invitations extends APIResource {
   /**
-   * Accepts a tenant or resource invitation for the signed-in user.
+   * Accepts a pending invitation for the signed-in user and applies its tenant or
+   * resource grants. The user's verified email must match, and tenant access rules
+   * are checked again before access is granted.
    */
   accept(body: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
     return this._client.post('/v1/iam/invitations/accept', { body, ...options });
@@ -18,7 +20,7 @@ export class Invitations extends APIResource {
  */
 export interface InvitationAcceptResponse {
   /**
-   * Convex projection source data produced by the acceptance.
+   * Synchronization metadata for Convex IAM projections.
    */
   convex_source_data: InvitationAcceptResponse.ConvexSourceData;
 
@@ -45,7 +47,7 @@ export interface InvitationAcceptResponse {
 
 export namespace InvitationAcceptResponse {
   /**
-   * Convex projection source data produced by the acceptance.
+   * Synchronization metadata for Convex IAM projections.
    */
   export interface ConvexSourceData {
     /**
@@ -54,12 +56,13 @@ export namespace InvitationAcceptResponse {
     changed: boolean;
 
     /**
-     * Projection IDs scheduled to receive the updated IAM state.
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
      */
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation.
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
      */
     version: number;
   }
@@ -129,6 +132,11 @@ export namespace InvitationAcceptResponse {
    */
   export interface IamResourceRoleGrantResult {
     /**
+     * Whether the grant applies only to this resource or also to descendants.
+     */
+    applies_to: 'self' | 'self_and_descendants';
+
+    /**
      * Grant expiry, or null for a permanent grant.
      */
     expires_at: string | null;
@@ -147,18 +155,17 @@ export namespace InvitationAcceptResponse {
      * Identifies a resource role grant.
      */
     type: 'resource_role';
-
-    /**
-     * Whether the grant applies only to this resource or also to descendants
-     * authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
   }
 
   /**
    * One persisted resource permission grant.
    */
   export interface IamResourcePermissionGrantResult {
+    /**
+     * Whether the grant applies only to this resource or also to descendants.
+     */
+    applies_to: 'self' | 'self_and_descendants';
+
     /**
      * Whether the permission is allowed or denied.
      */
@@ -188,25 +195,20 @@ export namespace InvitationAcceptResponse {
      * Identifies a resource permission grant.
      */
     type: 'resource_permission';
-
-    /**
-     * Whether the grant applies only to this resource or also to descendants
-     * authorized through it.
-     */
-    applies_to?: 'self' | 'self_and_descendants';
   }
 }
 
 export interface InvitationAcceptParams {
   /**
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string;
+
+  /**
    * Secret invitation token.
    */
   invitation_token: string;
-
-  /**
-   * Convex identity tokenIdentifier required for user authority.
-   */
-  user_token_identifier: string;
 }
 
 export declare namespace Invitations {

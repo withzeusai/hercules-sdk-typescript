@@ -7,7 +7,8 @@ import { path } from '../../../../internal/utils/path';
 
 export class PermissionOverrides extends APIResource {
   /**
-   * Updates the complete direct permission override set for one tenant group.
+   * Replaces a group's complete direct tenant permission override set. An empty list
+   * clears the overrides; omitting the list makes no change.
    */
   update(
     groupID: string,
@@ -22,7 +23,8 @@ export class PermissionOverrides extends APIResource {
   }
 
   /**
-   * Returns the direct permission overrides for one tenant group.
+   * Returns a group's direct tenant permission overrides. It does not include
+   * permissions from the group's roles or resource grants.
    */
   get(
     groupID: string,
@@ -42,24 +44,14 @@ export class PermissionOverrides extends APIResource {
  */
 export interface PermissionOverrideUpdateResponse {
   /**
-   * Whether persisted IAM state changed.
+   * Synchronization metadata for Convex IAM projections.
    */
-  changed: boolean;
+  convex_source_data: PermissionOverrideUpdateResponse.ConvexSourceData;
 
   /**
    * Tenant group whose overrides were updated.
    */
   group_id: string;
-
-  /**
-   * Projection IDs scheduled to receive the updated IAM state.
-   */
-  projection_ids: Array<string>;
-
-  /**
-   * IAM source version after the operation.
-   */
-  source_version: number;
 
   /**
    * Tenant changed by the operation.
@@ -73,6 +65,27 @@ export interface PermissionOverrideUpdateResponse {
 }
 
 export namespace PermissionOverrideUpdateResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
+     */
+    version: number;
+  }
+
   /**
    * One persisted tenant permission grant.
    */
@@ -168,14 +181,16 @@ export namespace PermissionOverrideGetResponse {
 
 export interface PermissionOverrideUpdateParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: Convex identity tokenIdentifier asserted by the trusted app backend.
+   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Body param: Complete desired permission override set. An empty array clears all
@@ -200,7 +215,7 @@ export namespace PermissionOverrideUpdateParams {
     permission_key: string;
 
     /**
-     * Grant expiry, or null for a permanent grant.
+     * Grant expiry. Omit or pass null for a permanent grant.
      */
     expires_at?: string | null;
   }
@@ -208,15 +223,16 @@ export namespace PermissionOverrideUpdateParams {
 
 export interface PermissionOverrideGetParams {
   /**
-   * Path param
+   * Path param: The tenant ID. Pass `default` to target the deployment's default
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: Convex identity tokenIdentifier asserted by the trusted app
-   * backend.
+   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
+   * unchanged by the trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 }
 
 export declare namespace PermissionOverrides {

@@ -12,10 +12,10 @@ describe('resource permissionOverrides', () => {
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.resources.permissionOverrides.update('tenant_id', {
+      actor_token_identifier: 'x',
       resource: { type: 'all' },
       resource_type: 'x',
       subject: { type: 'user', user_id: 'x' },
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -29,10 +29,10 @@ describe('resource permissionOverrides', () => {
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.resources.permissionOverrides.update('tenant_id', {
+      actor_token_identifier: 'x',
       resource: { type: 'all' },
       resource_type: 'x',
       subject: { type: 'user', user_id: 'x' },
-      user_token_identifier: 'x',
       applies_to: 'self',
       overrides: [
         {

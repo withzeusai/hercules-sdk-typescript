@@ -7,7 +7,9 @@ import { path } from '../../../internal/utils/path';
 
 export class AuditEvents extends APIResource {
   /**
-   * Returns a filtered page of IAM audit events for one tenant.
+   * Lists IAM management and access events for a tenant, with filters for time,
+   * action, status, user, and target. Routine access checks are included only when
+   * `action=access.account_entry.evaluate` is requested.
    */
   list(
     tenantID: string,
@@ -19,30 +21,25 @@ export class AuditEvents extends APIResource {
 }
 
 /**
- * Cursor-paginated tenant IAM audit events.
+ * Paginated tenant IAM audit events.
  */
 export interface AuditEventListResponse {
   /**
    * Audit event page.
    */
-  audit_events: Array<AuditEventListResponse.AuditEvent>;
+  data: Array<AuditEventListResponse.Data>;
 
   /**
-   * Tenant whose audit events were returned.
+   * Whether more audit events are available after this page.
    */
-  tenant_id: string;
-
-  /**
-   * Cursor for the next page.
-   */
-  next_cursor?: string;
+  has_more: boolean;
 }
 
 export namespace AuditEventListResponse {
   /**
    * One tenant IAM audit event.
    */
-  export interface AuditEvent {
+  export interface Data {
     /**
      * Stable audit action key.
      */
@@ -52,11 +49,11 @@ export namespace AuditEventListResponse {
      * Public identity of the actor that produced the audit event.
      */
     actor:
-      | AuditEvent.IamAuditUserActor
-      | AuditEvent.IamAuditPlatformUserActor
-      | AuditEvent.IamAuditServiceActor
-      | AuditEvent.IamAuditSystemActor
-      | AuditEvent.IamAuditAgentActor;
+      | Data.IamAuditUserActor
+      | Data.IamAuditPlatformUserActor
+      | Data.IamAuditServiceActor
+      | Data.IamAuditSystemActor
+      | Data.IamAuditAgentActor;
 
     /**
      * Audit event ID.
@@ -84,7 +81,8 @@ export namespace AuditEventListResponse {
     request_id: string | null;
 
     /**
-     * IAM source version after the operation.
+     * IAM source version after the operation. Before relying on Convex IAM mirror
+     * reads, wait for each returned projection to reach at least this version.
      */
     source_version: number | null;
 
@@ -96,10 +94,10 @@ export namespace AuditEventListResponse {
     /**
      * Entity affected by the audit event.
      */
-    target: AuditEvent.Target;
+    target: Data.Target;
   }
 
-  export namespace AuditEvent {
+  export namespace Data {
     export interface IamAuditUserActor {
       /**
        * Tenant user actor.
@@ -199,9 +197,10 @@ export namespace AuditEventListResponse {
 
 export interface AuditEventListParams {
   /**
-   * Convex identity tokenIdentifier asserted by the trusted app backend.
+   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * trusted app backend.
    */
-  user_token_identifier: string | null;
+  actor_token_identifier: string | null;
 
   /**
    * Filter by exact audit action.
@@ -219,17 +218,12 @@ export interface AuditEventListParams {
   api_key_id?: string;
 
   /**
-   * Opaque cursor returned by the previous page.
-   */
-  cursor?: string;
-
-  /**
    * Return events at or before this timestamp.
    */
   end_time?: string;
 
   /**
-   * Maximum number of records to return.
+   * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
 
@@ -237,6 +231,12 @@ export interface AuditEventListParams {
    * Return events at or after this timestamp.
    */
   start_time?: string;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
 
   /**
    * Filter by status.
@@ -254,7 +254,7 @@ export interface AuditEventListParams {
   target_type?: string;
 
   /**
-   * Filter by Hercules Auth user ID.
+   * Filter by user ID.
    */
   user_id?: string;
 }

@@ -18,6 +18,7 @@ Types:
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantUpdateResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantCreateInvitationResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantEvaluateAccessResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantGetResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantGrantableRolesResponse</a></code>
@@ -28,7 +29,8 @@ Methods:
 - <code title="post /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">create</a>({ ...params }) -> TenantCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">update</a>(tenantID, { ...params }) -> TenantUpdateResponse</code>
 - <code title="get /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">list</a>({ ...params }) -> TenantListResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/archive">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">createInvitation</a>(tenantID, { ...params }) -> TenantCreateInvitationResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/evaluate-access">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">evaluateAccess</a>(tenantID, { ...params }) -> TenantEvaluateAccessResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">get</a>(tenantID, { ...params }) -> TenantGetResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/grantable-roles">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">grantableRoles</a>(tenantID, { ...params }) -> TenantGrantableRolesResponse</code>
@@ -85,7 +87,7 @@ Methods:
 
 - <code title="post /v1/iam/tenants/{tenant_id}/groups">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">create</a>(tenantID, { ...params }) -> GroupCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">update</a>(groupID, { ...params }) -> GroupUpdateResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">archive</a>(groupID, { ...params }) -> GroupArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/archive">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">archive</a>(groupID, { ...params }) -> GroupArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">unarchive</a>(groupID, { ...params }) -> GroupUnarchiveResponse</code>
 
 #### Members
@@ -125,7 +127,7 @@ Methods:
 
 - <code title="post /v1/iam/tenants/{tenant_id}/roles">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">create</a>(tenantID, { ...params }) -> RoleCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">update</a>(roleID, { ...params }) -> RoleUpdateResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">archive</a>(roleID, { ...params }) -> RoleArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/roles/{role_id}/archive">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">archive</a>(roleID, { ...params }) -> RoleArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/roles/{role_id}/unarchive">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">unarchive</a>(roleID, { ...params }) -> RoleUnarchiveResponse</code>
 
 #### PermissionOverrides
@@ -140,23 +142,23 @@ Methods:
 - <code title="patch /v1/iam/tenants/{tenant_id}/roles/{role_id}/permission-overrides">client.iam.tenants.roles.permissionOverrides.<a href="./src/resources/iam/tenants/roles/permission-overrides.ts">update</a>(roleID, { ...params }) -> PermissionOverrideUpdateResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/roles/{role_id}/permission-overrides">client.iam.tenants.roles.permissionOverrides.<a href="./src/resources/iam/tenants/roles/permission-overrides.ts">get</a>(roleID, { ...params }) -> PermissionOverrideGetResponse</code>
 
-### AdmissionRules
+### AccessRules
 
 Types:
 
-- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleCreateResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleUpdateResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleListResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleArchiveResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/admission-rules.ts">AdmissionRuleUnarchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/access-rules.ts">AccessRuleCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/access-rules.ts">AccessRuleUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/access-rules.ts">AccessRuleListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/access-rules.ts">AccessRuleArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/access-rules.ts">AccessRuleUnarchiveResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/tenants/{tenant_id}/admission-rules">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">create</a>(tenantID, { ...params }) -> AdmissionRuleCreateResponse</code>
-- <code title="patch /v1/iam/tenants/{tenant_id}/admission-rules/{rule_id}">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">update</a>(ruleID, { ...params }) -> AdmissionRuleUpdateResponse</code>
-- <code title="get /v1/iam/tenants/{tenant_id}/admission-rules">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">list</a>(tenantID, { ...params }) -> AdmissionRuleListResponse</code>
-- <code title="delete /v1/iam/tenants/{tenant_id}/admission-rules/{rule_id}">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">archive</a>(ruleID, { ...params }) -> AdmissionRuleArchiveResponse</code>
-- <code title="post /v1/iam/tenants/{tenant_id}/admission-rules/{rule_id}/unarchive">client.iam.tenants.admissionRules.<a href="./src/resources/iam/tenants/admission-rules.ts">unarchive</a>(ruleID, { ...params }) -> AdmissionRuleUnarchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/access-rules">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">create</a>(tenantID, { ...params }) -> AccessRuleCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">update</a>(ruleID, { ...params }) -> AccessRuleUpdateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/access-rules">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">list</a>(tenantID, { ...params }) -> AccessRuleListResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">archive</a>(ruleID, { ...params }) -> AccessRuleArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/unarchive">client.iam.tenants.accessRules.<a href="./src/resources/iam/tenants/access-rules.ts">unarchive</a>(ruleID, { ...params }) -> AccessRuleUnarchiveResponse</code>
 
 ### AuditEvents
 
@@ -173,15 +175,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationListResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationCreateResourceResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationCreateTenantResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/invitations.ts">InvitationRevokeResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">list</a>(tenantID, { ...params }) -> InvitationListResponse</code>
-- <code title="post /v1/iam/tenants/{tenant_id}/resources/{resource_type}/{resource_id}/invitations">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">createResource</a>(resourceID, { ...params }) -> InvitationCreateResourceResponse</code>
-- <code title="post /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">createTenant</a>(tenantID, { ...params }) -> InvitationCreateTenantResponse</code>
 - <code title="delete /v1/iam/tenants/{tenant_id}/invitations/{invitation_id}">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">revoke</a>(invitationID, { ...params }) -> InvitationRevokeResponse</code>
 
 ### Resources
@@ -189,10 +187,12 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/iam/tenants/resources/resources.ts">ResourceAccessGrantingRolesResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/resources/resources.ts">ResourceCreateInvitationResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/iam/tenants/{tenant_id}/resources/{resource_type}/{resource_id}/access-granting-roles">client.iam.tenants.resources.<a href="./src/resources/iam/tenants/resources/resources.ts">accessGrantingRoles</a>(resourceID, { ...params }) -> ResourceAccessGrantingRolesResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/resources/{resource_type}/{resource_id}/invitations">client.iam.tenants.resources.<a href="./src/resources/iam/tenants/resources/resources.ts">createInvitation</a>(resourceID, { ...params }) -> ResourceCreateInvitationResponse</code>
 
 #### Grants
 
@@ -214,7 +214,7 @@ Types:
 
 Methods:
 
-- <code title="patch /v1/iam/tenants/{tenant_id}/resource-permission-overrides">client.iam.tenants.resources.permissionOverrides.<a href="./src/resources/iam/tenants/resources/permission-overrides.ts">update</a>(tenantID, { ...params }) -> PermissionOverrideUpdateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/resource/permission-overrides">client.iam.tenants.resources.permissionOverrides.<a href="./src/resources/iam/tenants/resources/permission-overrides.ts">update</a>(tenantID, { ...params }) -> PermissionOverrideUpdateResponse</code>
 
 # Commerce
 

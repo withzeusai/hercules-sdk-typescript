@@ -14,9 +14,9 @@ describe('resource grants', () => {
     const responsePromise = client.iam.tenants.resources.grants.create('resource_id', {
       tenant_id: 'tenant_id',
       resource_type: 'resource_type',
+      actor_token_identifier: 'x',
       role: { id: 'x' },
       subject: { type: 'user', user_id: 'x' },
-      user_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -32,9 +32,9 @@ describe('resource grants', () => {
     const response = await client.iam.tenants.resources.grants.create('resource_id', {
       tenant_id: 'tenant_id',
       resource_type: 'resource_type',
+      actor_token_identifier: 'x',
       role: { id: 'x' },
       subject: { type: 'user', user_id: 'x' },
-      user_token_identifier: 'x',
       applies_to: 'self',
       expires_at: '2019-12-27T18:11:19.117Z',
     });
@@ -45,7 +45,7 @@ describe('resource grants', () => {
     const responsePromise = client.iam.tenants.resources.grants.update('resource_id', {
       tenant_id: 'tenant_id',
       resource_type: 'resource_type',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -61,7 +61,7 @@ describe('resource grants', () => {
     const response = await client.iam.tenants.resources.grants.update('resource_id', {
       tenant_id: 'tenant_id',
       resource_type: 'resource_type',
-      user_token_identifier: 'x',
+      actor_token_identifier: 'x',
       subjects: [
         {
           grants: [
