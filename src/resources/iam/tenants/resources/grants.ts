@@ -321,8 +321,7 @@ export namespace GrantUpdateResponse {
 
 export interface GrantCreateParams {
   /**
-   * Path param: The tenant ID. Pass `default` to target the deployment's default
-   * tenant.
+   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
    */
   tenant_id: string;
 
@@ -401,8 +400,7 @@ export namespace GrantCreateParams {
 
 export interface GrantUpdateParams {
   /**
-   * Path param: The tenant ID. Pass `default` to target the deployment's default
-   * tenant.
+   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
    */
   tenant_id: string;
 

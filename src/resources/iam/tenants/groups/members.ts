@@ -138,8 +138,7 @@ export namespace MemberRemoveResponse {
 
 export interface MemberAddParams {
   /**
-   * Path param: The tenant ID. Pass `default` to target the deployment's default
-   * tenant.
+   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
    */
   tenant_id: string;
 
@@ -157,8 +156,7 @@ export interface MemberAddParams {
 
 export interface MemberRemoveParams {
   /**
-   * Path param: The tenant ID. Pass `default` to target the deployment's default
-   * tenant.
+   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
    */
   tenant_id: string;
 
