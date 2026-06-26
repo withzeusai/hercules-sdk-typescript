@@ -60,16 +60,26 @@ export class Resources extends APIResource {
 }
 
 /**
- * Grantable IAM roles for one tenant or exact resource.
+ * Roles that grant access to one exact resource.
  */
 export interface ResourceAccessGrantingRolesResponse {
   /**
-   * Roles the supplied authority may grant.
+   * Exact application resource ID.
+   */
+  resource_id: string;
+
+  /**
+   * Canonical app resource type, such as app.projects.
+   */
+  resource_type: string;
+
+  /**
+   * Roles that grant access to the resource.
    */
   roles: Array<ResourceAccessGrantingRolesResponse.Role>;
 
   /**
-   * Tenant used for the grantability decision.
+   * Tenant containing the resource.
    */
   tenant_id: string;
 }
