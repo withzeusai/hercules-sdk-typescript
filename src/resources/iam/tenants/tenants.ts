@@ -661,11 +661,11 @@ export interface TenantGetResponse {
 }
 
 /**
- * Grantable IAM roles for one tenant or exact resource.
+ * Grantable IAM roles for one tenant.
  */
 export interface TenantGrantableRolesResponse {
   /**
-   * Roles the supplied authority may grant.
+   * Roles the supplied authority may grant at the tenant level.
    */
   roles: Array<TenantGrantableRolesResponse.Role>;
 
