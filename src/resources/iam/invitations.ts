@@ -6,9 +6,8 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Invitations extends APIResource {
   /**
-   * Accepts a pending invitation for the signed-in user and applies its tenant or
-   * resource grants. The user's verified email must match, and tenant access rules
-   * are checked again before access is granted.
+   * Accepts a pending invitation as the signed-in end user and materializes its
+   * tenant-wide role assignments.
    */
   accept(body: InvitationAcceptParams, options?: RequestOptions): APIPromise<InvitationAcceptResponse> {
     return this._client.post('/v1/iam/invitations/accept', { body, ...options });
@@ -16,7 +15,7 @@ export class Invitations extends APIResource {
 }
 
 /**
- * Accepted tenant or resource invitation.
+ * Accepted invitation.
  */
 export interface InvitationAcceptResponse {
   /**
@@ -25,22 +24,22 @@ export interface InvitationAcceptResponse {
   convex_source_data: InvitationAcceptResponse.ConvexSourceData;
 
   /**
-   * Resulting grants assigned by the invitation.
-   */
-  grants: Array<
-    | InvitationAcceptResponse.IamTenantRoleGrantResult
-    | InvitationAcceptResponse.IamTenantPermissionGrantResult
-    | InvitationAcceptResponse.IamResourceRoleGrantResult
-    | InvitationAcceptResponse.IamResourcePermissionGrantResult
-  >;
-
-  /**
    * Accepted invitation ID.
    */
   invitation_id: string;
 
   /**
-   * Tenant containing the accepted invitation.
+   * The accepting user's tenant membership ID.
+   */
+  membership_id: string;
+
+  /**
+   * Tenant-wide role assignments created.
+   */
+  role_assignment_ids: Array<string>;
+
+  /**
+   * Tenant the invitation conferred access to.
    */
   tenant_id: string;
 }
@@ -61,146 +60,16 @@ export namespace InvitationAcceptResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
-  }
-
-  /**
-   * One persisted tenant role grant.
-   */
-  export interface IamTenantRoleGrantResult {
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * Persisted IAM grant ID.
-     */
-    grant_id: string;
-
-    /**
-     * IAM role conferred by this grant.
-     */
-    role_id: string;
-
-    /**
-     * Identifies a tenant role grant.
-     */
-    type: 'tenant_role';
-  }
-
-  /**
-   * One persisted tenant permission grant.
-   */
-  export interface IamTenantPermissionGrantResult {
-    /**
-     * Whether the permission is allowed or denied.
-     */
-    effect: 'allow' | 'deny';
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * Persisted IAM grant ID.
-     */
-    grant_id: string;
-
-    /**
-     * IAM permission granted or denied by this grant.
-     */
-    permission_id: string;
-
-    /**
-     * Stable IAM permission key.
-     */
-    permission_key: string;
-
-    /**
-     * Identifies a tenant permission grant.
-     */
-    type: 'tenant_permission';
-  }
-
-  /**
-   * One persisted resource role grant.
-   */
-  export interface IamResourceRoleGrantResult {
-    /**
-     * Whether the grant applies only to this resource or also to descendants.
-     */
-    applies_to: 'self' | 'self_and_descendants';
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * Persisted IAM grant ID.
-     */
-    grant_id: string;
-
-    /**
-     * IAM role conferred by this grant.
-     */
-    role_id: string;
-
-    /**
-     * Identifies a resource role grant.
-     */
-    type: 'resource_role';
-  }
-
-  /**
-   * One persisted resource permission grant.
-   */
-  export interface IamResourcePermissionGrantResult {
-    /**
-     * Whether the grant applies only to this resource or also to descendants.
-     */
-    applies_to: 'self' | 'self_and_descendants';
-
-    /**
-     * Whether the permission is allowed or denied.
-     */
-    effect: 'allow' | 'deny';
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * Persisted IAM grant ID.
-     */
-    grant_id: string;
-
-    /**
-     * IAM permission granted or denied by this grant.
-     */
-    permission_id: string;
-
-    /**
-     * Stable IAM permission key.
-     */
-    permission_key: string;
-
-    /**
-     * Identifies a resource permission grant.
-     */
-    type: 'resource_permission';
   }
 }
 
 export interface InvitationAcceptParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
    * trusted app backend.
    */
   actor_token_identifier: string;

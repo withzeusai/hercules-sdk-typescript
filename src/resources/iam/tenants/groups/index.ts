@@ -11,17 +11,5 @@ export {
   type GroupArchiveParams,
   type GroupUnarchiveParams,
 } from './groups';
-export {
-  Members,
-  type MemberAddResponse,
-  type MemberRemoveResponse,
-  type MemberAddParams,
-  type MemberRemoveParams,
-} from './members';
-export {
-  PermissionOverrides,
-  type PermissionOverrideUpdateResponse,
-  type PermissionOverrideGetResponse,
-  type PermissionOverrideUpdateParams,
-  type PermissionOverrideGetParams,
-} from './permission-overrides';
+export { Members } from './members';
+export { PermissionOverrides } from './permission-overrides';

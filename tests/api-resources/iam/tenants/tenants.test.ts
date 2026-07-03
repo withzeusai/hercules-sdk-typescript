@@ -28,6 +28,7 @@ describe('resource tenants', () => {
       name: 'x',
       access_mode: 'open',
       default_role: { id: 'x' },
+      owner_user_id: 'x',
     });
   });
 
@@ -71,7 +72,6 @@ describe('resource tenants', () => {
     await expect(
       client.iam.tenants.list(
         {
-          actor_token_identifier: 'x',
           limit: 1,
           starting_after: 'starting_after',
           status: 'active',
@@ -100,10 +100,7 @@ describe('resource tenants', () => {
 
   // Mock server tests are disabled
   test.skip('createInvitation: only required params', async () => {
-    const responsePromise = client.iam.tenants.createInvitation('tenant_id', {
-      actor_token_identifier: 'x',
-      recipient: { type: 'email', value: 'dev@stainless.com' },
-    });
+    const responsePromise = client.iam.tenants.createInvitation('tenant_id', { actor_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -117,32 +114,13 @@ describe('resource tenants', () => {
   test.skip('createInvitation: required and optional params', async () => {
     const response = await client.iam.tenants.createInvitation('tenant_id', {
       actor_token_identifier: 'x',
-      recipient: { type: 'email', value: 'dev@stainless.com' },
+      constraint: { type: 'email', value: 'dev@stainless.com' },
+      delivery: { from_email: 'dev@stainless.com', to_emails: ['dev@stainless.com'] },
       expires_at: '2019-12-27T18:11:19.117Z',
-      grants: [
-        {
-          role: { id: 'x' },
-          expires_at: '2019-12-27T18:11:19.117Z',
-        },
-      ],
+      max_uses: 1,
+      redirect_path: 'x',
+      roles: [{ id: 'x' }],
     });
-  });
-
-  // Mock server tests are disabled
-  test.skip('evaluateAccess: only required params', async () => {
-    const responsePromise = client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('evaluateAccess: required and optional params', async () => {
-    const response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });
   });
 
   // Mock server tests are disabled
@@ -155,38 +133,6 @@ describe('resource tenants', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('get: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.iam.tenants.get(
-        'tenant_id',
-        { actor_token_identifier: 'x' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Hercules.NotFoundError);
-  });
-
-  // Mock server tests are disabled
-  test.skip('grantableRoles: only required params', async () => {
-    const responsePromise = client.iam.tenants.grantableRoles('tenant_id', { actor_token_identifier: 'x' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('grantableRoles: required and optional params', async () => {
-    const response = await client.iam.tenants.grantableRoles('tenant_id', {
-      actor_token_identifier: 'x',
-      subject_type: 'user',
-    });
   });
 
   // Mock server tests are disabled

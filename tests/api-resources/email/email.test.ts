@@ -27,9 +27,17 @@ describe('resource email', () => {
     await expect(
       client.email.list(
         {
+          'created[gt]': 0,
+          'created[gte]': 0,
+          'created[lt]': 0,
+          'created[lte]': 0,
           ending_before: 'ending_before',
+          from: 'from',
           limit: 1,
+          query: 'query',
+          sort: '-last_event',
           starting_after: 'starting_after',
+          to: 'to',
         },
         { path: '/_stainless_unknown_path' },
       ),

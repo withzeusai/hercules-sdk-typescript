@@ -2,13 +2,7 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as PermissionOverridesAPI from './permission-overrides';
-import {
-  PermissionOverrideGetParams,
-  PermissionOverrideGetResponse,
-  PermissionOverrideUpdateParams,
-  PermissionOverrideUpdateResponse,
-  PermissionOverrides,
-} from './permission-overrides';
+import { PermissionOverrides } from './permission-overrides';
 import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -18,57 +12,25 @@ export class Roles extends APIResource {
     new PermissionOverridesAPI.PermissionOverrides(this._client);
 
   /**
-   * Creates a custom tenant role with its complete initial permission set.
+   * Creates a tenant-scoped role with a permission set. Shared and app-scoped roles
+   * are managed via iam.jsonc, not this API.
    */
   create(tenantID: string, body: RoleCreateParams, options?: RequestOptions): APIPromise<RoleCreateResponse> {
     return this._client.post(path`/v1/iam/tenants/${tenantID}/roles`, { body, ...options });
   }
 
   /**
-   * Updates a custom role's name, description, and/or complete permission set. Use
-   * tenant-specific permission overrides to customize roles that are reusable across
-   * tenants.
+   * Updates a tenant-scoped role's name, description, or permission set. Shared and
+   * app-scoped roles are managed via iam.jsonc, not this API.
    */
   update(roleID: string, params: RoleUpdateParams, options?: RequestOptions): APIPromise<RoleUpdateResponse> {
     const { tenant_id, ...body } = params;
     return this._client.patch(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}`, { body, ...options });
   }
-
-  /**
-   * Archives a custom role so it no longer grants access while preserving it for
-   * restoration. A tenant's default role cannot be archived.
-   */
-  archive(
-    roleID: string,
-    params: RoleArchiveParams,
-    options?: RequestOptions,
-  ): APIPromise<RoleArchiveResponse> {
-    const { tenant_id, ...body } = params;
-    return this._client.post(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}/archive`, {
-      body,
-      ...options,
-    });
-  }
-
-  /**
-   * Restores an archived custom role. Its existing assignments and permissions begin
-   * granting access again.
-   */
-  unarchive(
-    roleID: string,
-    params: RoleUnarchiveParams,
-    options?: RequestOptions,
-  ): APIPromise<RoleUnarchiveResponse> {
-    const { tenant_id, ...body } = params;
-    return this._client.post(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}/unarchive`, {
-      body,
-      ...options,
-    });
-  }
 }
 
 /**
- * Created tenant-owned role.
+ * Created IAM role.
  */
 export interface RoleCreateResponse {
   /**
@@ -77,29 +39,14 @@ export interface RoleCreateResponse {
   convex_source_data: RoleCreateResponse.ConvexSourceData;
 
   /**
-   * Confirms that the role was created.
+   * Whether the role is app-scoped (app-wide authority, primary-tenant-only).
    */
-  created: true;
+  is_app_scope: boolean;
 
   /**
-   * Complete permission key set on the created role.
-   */
-  permission_keys: Array<string>;
-
-  /**
-   * Created tenant role ID.
+   * Created role ID.
    */
   role_id: string;
-
-  /**
-   * Stable key of the created tenant role.
-   */
-  role_key: string;
-
-  /**
-   * Tenant owning the created role.
-   */
-  tenant_id: string;
 }
 
 export namespace RoleCreateResponse {
@@ -118,15 +65,15 @@ export namespace RoleCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
 }
 
 /**
- * Updated tenant-owned role.
+ * Result of changing an IAM role.
  */
 export interface RoleUpdateResponse {
   /**
@@ -135,24 +82,14 @@ export interface RoleUpdateResponse {
   convex_source_data: RoleUpdateResponse.ConvexSourceData;
 
   /**
-   * Tenant role changed by the operation.
+   * Whether the role is app-scoped (app-wide authority, primary-tenant-only).
+   */
+  is_app_scope: boolean;
+
+  /**
+   * Role changed by the operation.
    */
   role_id: string;
-
-  /**
-   * Stable key of the updated tenant role.
-   */
-  role_key: string;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-
-  /**
-   * Complete current permission key set when permissions were updated.
-   */
-  permission_keys?: Array<string>;
 }
 
 export namespace RoleUpdateResponse {
@@ -171,94 +108,8 @@ export namespace RoleUpdateResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
-     */
-    version: number;
-  }
-}
-
-/**
- * Result of changing a tenant role.
- */
-export interface RoleArchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: RoleArchiveResponse.ConvexSourceData;
-
-  /**
-   * Tenant role changed by the operation.
-   */
-  role_id: string;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-}
-
-export namespace RoleArchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
-     */
-    version: number;
-  }
-}
-
-/**
- * Result of changing a tenant role.
- */
-export interface RoleUnarchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: RoleUnarchiveResponse.ConvexSourceData;
-
-  /**
-   * Tenant role changed by the operation.
-   */
-  role_id: string;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-}
-
-export namespace RoleUnarchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
@@ -266,13 +117,13 @@ export namespace RoleUnarchiveResponse {
 
 export interface RoleCreateParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 
   /**
-   * Stable tenant role key.
+   * Stable, unique key for the role within its scope.
    */
   key: string;
 
@@ -282,68 +133,44 @@ export interface RoleCreateParams {
   name: string;
 
   /**
-   * Optional role description.
+   * Permission keys from the deployment's IAM catalog granted by this role.
    */
-  description?: string | null;
+  permission_keys: Array<string>;
 
   /**
-   * Complete initial permission set for the role. Defaults to an empty set.
+   * Optional human-readable role description.
    */
-  permission_keys?: Array<string>;
+  description?: string | null;
 }
 
 export interface RoleUpdateParams {
   /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
+   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
+   * unchanged by the trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 
   /**
-   * Body param: New role description, or null to clear it.
+   * Body param: Optional human-readable role description.
    */
   description?: string | null;
 
   /**
-   * Body param: New role name.
+   * Body param: New human-readable role name.
    */
   name?: string;
 
   /**
-   * Body param: Complete desired permission set for the role.
+   * Body param: Replacement permission set. Omit to leave the role's permissions
+   * unchanged.
    */
   permission_keys?: Array<string>;
-}
-
-export interface RoleArchiveParams {
-  /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
-   */
-  tenant_id: string;
-
-  /**
-   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
-   */
-  actor_token_identifier: string | null;
-}
-
-export interface RoleUnarchiveParams {
-  /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
-   */
-  tenant_id: string;
-
-  /**
-   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
-   */
-  actor_token_identifier: string | null;
 }
 
 Roles.PermissionOverrides = PermissionOverrides;
@@ -352,19 +179,9 @@ export declare namespace Roles {
   export {
     type RoleCreateResponse as RoleCreateResponse,
     type RoleUpdateResponse as RoleUpdateResponse,
-    type RoleArchiveResponse as RoleArchiveResponse,
-    type RoleUnarchiveResponse as RoleUnarchiveResponse,
     type RoleCreateParams as RoleCreateParams,
     type RoleUpdateParams as RoleUpdateParams,
-    type RoleArchiveParams as RoleArchiveParams,
-    type RoleUnarchiveParams as RoleUnarchiveParams,
   };
 
-  export {
-    PermissionOverrides as PermissionOverrides,
-    type PermissionOverrideUpdateResponse as PermissionOverrideUpdateResponse,
-    type PermissionOverrideGetResponse as PermissionOverrideGetResponse,
-    type PermissionOverrideUpdateParams as PermissionOverrideUpdateParams,
-    type PermissionOverrideGetParams as PermissionOverrideGetParams,
-  };
+  export { PermissionOverrides as PermissionOverrides };
 }

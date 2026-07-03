@@ -29,6 +29,7 @@ describe('resource groups', () => {
     const response = await client.iam.tenants.groups.create('tenant_id', {
       actor_token_identifier: 'x',
       name: 'x',
+      description: 'description',
     });
   });
 
@@ -52,13 +53,8 @@ describe('resource groups', () => {
     const response = await client.iam.tenants.groups.update('group_id', {
       tenant_id: 'tenant_id',
       actor_token_identifier: 'x',
+      description: 'description',
       name: 'x',
-      roles: [
-        {
-          role: { id: 'x' },
-          expires_at: '2019-12-27T18:11:19.117Z',
-        },
-      ],
     });
   });
 
