@@ -136,6 +136,68 @@ describe('resource tenants', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('listResourceRoleAssignments', async () => {
+    const responsePromise = client.iam.tenants.listResourceRoleAssignments('tenant_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listResourceRoleAssignments: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.listResourceRoleAssignments(
+        'tenant_id',
+        {
+          external_id: 'x',
+          group_id: 'x',
+          limit: 1,
+          membership_id: 'x',
+          resource_type_id: 'x',
+          role_id: 'x',
+          starting_after: 'starting_after',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listRoleAssignments', async () => {
+    const responsePromise = client.iam.tenants.listRoleAssignments('tenant_id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listRoleAssignments: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.listRoleAssignments(
+        'tenant_id',
+        {
+          group_id: 'x',
+          limit: 1,
+          membership_id: 'x',
+          role_id: 'x',
+          starting_after: 'starting_after',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('unarchive: only required params', async () => {
     const responsePromise = client.iam.tenants.unarchive('tenant_id', { actor_token_identifier: 'x' });
     const rawResponse = await responsePromise.asResponse();

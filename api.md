@@ -20,6 +20,8 @@ Types:
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantArchiveResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantCreateInvitationResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantGetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListResourceRoleAssignmentsResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListRoleAssignmentsResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantUnarchiveResponse</a></code>
 
 Methods:
@@ -30,13 +32,21 @@ Methods:
 - <code title="post /v1/iam/tenants/{tenant_id}/archive">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">createInvitation</a>(tenantID, { ...params }) -> TenantCreateInvitationResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">get</a>(tenantID) -> TenantGetResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/resource-role-assignments">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">listResourceRoleAssignments</a>(tenantID, { ...params }) -> TenantListResourceRoleAssignmentsResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/role-assignments">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">listRoleAssignments</a>(tenantID, { ...params }) -> TenantListRoleAssignmentsResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/unarchive">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">unarchive</a>(tenantID, { ...params }) -> TenantUnarchiveResponse</code>
 
-### Grants
+### Members
 
-### Users
+Types:
 
-#### PermissionOverrides
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberListResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/iam/tenants/{tenant_id}/members">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">create</a>(tenantID, { ...params }) -> MemberCreateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/members">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">list</a>(tenantID, { ...params }) -> MemberListResponse</code>
 
 ### Groups
 
@@ -44,33 +54,61 @@ Types:
 
 - <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupCreateResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupDeleteResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupArchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupAssignResourceRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupAssignRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupGetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupListResourceRoleAssignmentsResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupListRoleAssignmentsResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupUnarchiveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupUnassignResourceRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/groups.ts">GroupUnassignRoleResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/iam/tenants/{tenant_id}/groups">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">create</a>(tenantID, { ...params }) -> GroupCreateResponse</code>
 - <code title="patch /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">update</a>(groupID, { ...params }) -> GroupUpdateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/groups">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">list</a>(tenantID, { ...params }) -> GroupListResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">delete</a>(groupID, { ...params }) -> GroupDeleteResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/archive">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">archive</a>(groupID, { ...params }) -> GroupArchiveResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">assignResourceRole</a>(groupID, { ...params }) -> GroupAssignResourceRoleResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">assignRole</a>(groupID, { ...params }) -> GroupAssignRoleResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/groups/{group_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">get</a>(groupID, { ...params }) -> GroupGetResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">listResourceRoleAssignments</a>(groupID, { ...params }) -> GroupListResourceRoleAssignmentsResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">listRoleAssignments</a>(groupID, { ...params }) -> GroupListRoleAssignmentsResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">unarchive</a>(groupID, { ...params }) -> GroupUnarchiveResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments/{assignment_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">unassignResourceRole</a>(assignmentID, { ...params }) -> GroupUnassignResourceRoleResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments/{assignment_id}">client.iam.tenants.groups.<a href="./src/resources/iam/tenants/groups/groups.ts">unassignRole</a>(assignmentID, { ...params }) -> GroupUnassignRoleResponse</code>
 
 #### Members
 
-#### PermissionOverrides
+Types:
+
+- <code><a href="./src/resources/iam/tenants/groups/members.ts">MemberListResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/iam/tenants/{tenant_id}/groups/{group_id}/members">client.iam.tenants.groups.members.<a href="./src/resources/iam/tenants/groups/members.ts">list</a>(groupID, { ...params }) -> MemberListResponse</code>
 
 ### Roles
 
 Types:
 
-- <code><a href="./src/resources/iam/tenants/roles/roles.ts">RoleCreateResponse</a></code>
-- <code><a href="./src/resources/iam/tenants/roles/roles.ts">RoleUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleCreateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleUpdateResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleDeleteResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/roles.ts">RoleGetResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/iam/tenants/{tenant_id}/roles">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">create</a>(tenantID, { ...params }) -> RoleCreateResponse</code>
-- <code title="patch /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles/roles.ts">update</a>(roleID, { ...params }) -> RoleUpdateResponse</code>
-
-#### PermissionOverrides
+- <code title="post /v1/iam/tenants/{tenant_id}/roles">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">create</a>(tenantID, { ...params }) -> RoleCreateResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">update</a>(roleID, { ...params }) -> RoleUpdateResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/roles">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">list</a>(tenantID, { ...params }) -> RoleListResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">delete</a>(roleID, { ...params }) -> RoleDeleteResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/roles/{role_id}">client.iam.tenants.roles.<a href="./src/resources/iam/tenants/roles.ts">get</a>(roleID, { ...params }) -> RoleGetResponse</code>
 
 ### AccessRules
 
@@ -107,12 +145,6 @@ Methods:
 
 - <code title="get /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">list</a>(tenantID, { ...params }) -> InvitationListResponse</code>
 - <code title="delete /v1/iam/tenants/{tenant_id}/invitations/{invitation_id}">client.iam.tenants.invitations.<a href="./src/resources/iam/tenants/invitations.ts">revoke</a>(invitationID, { ...params }) -> InvitationRevokeResponse</code>
-
-### Resources
-
-#### Grants
-
-#### PermissionOverrides
 
 # Commerce
 
