@@ -9,22 +9,12 @@ import {
   AccessRuleCreateResponse,
   AccessRuleListParams,
   AccessRuleListResponse,
-  AccessRuleUnarchiveParams,
-  AccessRuleUnarchiveResponse,
-  AccessRuleUpdateParams,
-  AccessRuleUpdateResponse,
   AccessRules,
 } from './access-rules';
 import * as AuditEventsAPI from './audit-events';
 import { AuditEventListParams, AuditEventListResponse, AuditEvents } from './audit-events';
 import * as GrantsAPI from './grants';
-import {
-  GrantDeleteParams,
-  GrantDeleteResponse,
-  GrantUpdateParams,
-  GrantUpdateResponse,
-  Grants,
-} from './grants';
+import { Grants } from './grants';
 import * as InvitationsAPI from './invitations';
 import {
   InvitationListParams,
@@ -46,35 +36,17 @@ import {
   Groups,
 } from './groups/groups';
 import * as ResourcesAPI from './resources/resources';
-import {
-  ResourceAccessGrantingRolesParams,
-  ResourceAccessGrantingRolesResponse,
-  ResourceCreateInvitationParams,
-  ResourceCreateInvitationResponse,
-  Resources,
-} from './resources/resources';
+import { Resources } from './resources/resources';
 import * as RolesAPI from './roles/roles';
 import {
-  RoleArchiveParams,
-  RoleArchiveResponse,
   RoleCreateParams,
   RoleCreateResponse,
-  RoleUnarchiveParams,
-  RoleUnarchiveResponse,
   RoleUpdateParams,
   RoleUpdateResponse,
   Roles,
 } from './roles/roles';
 import * as UsersAPI from './users/users';
-import {
-  UserCreateParams,
-  UserCreateResponse,
-  UserRemoveParams,
-  UserRemoveResponse,
-  UserUpdateParams,
-  UserUpdateResponse,
-  Users,
-} from './users/users';
+import { Users } from './users/users';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -90,16 +62,17 @@ export class Tenants extends APIResource {
   resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
 
   /**
-   * Creates a tenant and assigns its initial Owner. The signed-in user becomes the
-   * Owner unless trusted server code specifies another user.
+   * Creates a tenant and assigns its initial owner. The signed-in user becomes the
+   * owner unless trusted server code specifies another user. The initial owner is
+   * granted the seeded owner role. The default role (for later members) defaults to
+   * the seeded member role and must not be an app-scoped role.
    */
   create(body: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
     return this._client.post('/v1/iam/tenants', { body, ...options });
   }
 
   /**
-   * Updates a tenant's name, default role, or access mode. Access mode changes
-   * immediately re-evaluate users whose access is controlled by tenant policy.
+   * Updates a tenant's name, default role, or admission policy.
    */
   update(
     tenantID: string,
@@ -110,9 +83,7 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Lists active tenants available to manage by default. Signed-in users see only
-   * tenants they directly own; trusted server code can see all tenants. Use
-   * `status=archived` or `status=all` to include archived tenants.
+   * Lists the deployment's IAM tenants, primary tenant first.
    */
   list(
     query: TenantListParams | null | undefined = {},
@@ -122,8 +93,7 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Archives a non-root tenant and blocks its access without deleting its users,
-   * groups, roles, or grants.
+   * Archives a non-primary tenant and blocks its access without deleting its data.
    */
   archive(
     tenantID: string,
@@ -134,9 +104,7 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Invites a recipient to join the tenant with the selected roles. If no roles are
-   * provided, the tenant's current default role is saved on the invitation and
-   * granted when the invitation is accepted.
+   * Creates an invitation that confers tenant-wide roles when accepted.
    */
   createInvitation(
     tenantID: string,
@@ -147,47 +115,15 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Evaluates whether the signed-in user may enter the tenant under its access mode
-   * and access rules. It creates or updates the user and assigns the default role
-   * when access is first granted.
+   * Returns one IAM tenant by ID. Pass `primary` for the deployment's primary
+   * tenant.
    */
-  evaluateAccess(
-    tenantID: string,
-    body: TenantEvaluateAccessParams,
-    options?: RequestOptions,
-  ): APIPromise<TenantEvaluateAccessResponse> {
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/evaluate-access`, { body, ...options });
+  get(tenantID: string, options?: RequestOptions): APIPromise<TenantGetResponse> {
+    return this._client.get(path`/v1/iam/tenants/${tenantID}`, options);
   }
 
   /**
-   * Returns a tenant and its current settings, including when the tenant is
-   * archived. Signed-in users can retrieve only tenants they directly own; trusted
-   * server code can retrieve any tenant.
-   */
-  get(
-    tenantID: string,
-    query: TenantGetParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TenantGetResponse> {
-    return this._client.get(path`/v1/iam/tenants/${tenantID}`, { query, ...options });
-  }
-
-  /**
-   * Lists active roles the signed-in user can assign at the tenant level. Use this
-   * operation to populate role pickers for users, groups, and tenant invitations;
-   * the write operation checks access again.
-   */
-  grantableRoles(
-    tenantID: string,
-    query: TenantGrantableRolesParams,
-    options?: RequestOptions,
-  ): APIPromise<TenantGrantableRolesResponse> {
-    return this._client.get(path`/v1/iam/tenants/${tenantID}/grantable-roles`, { query, ...options });
-  }
-
-  /**
-   * Restores an archived tenant and re-enables access through its existing users,
-   * groups, roles, and grants.
+   * Restores an archived tenant and re-enables access through its existing data.
    */
   unarchive(
     tenantID: string,
@@ -208,9 +144,19 @@ export interface TenantCreateResponse {
   convex_source_data: TenantCreateResponse.ConvexSourceData;
 
   /**
-   * Confirms that the tenant was created.
+   * Hercules IAM identifier.
    */
-  created: true;
+  default_role_id: string | null;
+
+  /**
+   * Whether this result replays a previous request with the same idempotency key.
+   */
+  idempotent: boolean;
+
+  /**
+   * Hercules IAM identifier.
+   */
+  membership_id: string | null;
 
   /**
    * Created tenant ID.
@@ -234,15 +180,15 @@ export namespace TenantCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
 }
 
 /**
- * Updated IAM tenant settings.
+ * Result of an IAM tenant mutation.
  */
 export interface TenantUpdateResponse {
   /**
@@ -254,26 +200,6 @@ export interface TenantUpdateResponse {
    * Tenant changed by the operation.
    */
   tenant_id: string;
-
-  /**
-   * Current access mode when the admission policy was updated.
-   */
-  access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-  /**
-   * Current default role ID when the default role was updated.
-   */
-  default_role_id?: string;
-
-  /**
-   * Current tenant name when the tenant was renamed.
-   */
-  name?: string;
-
-  /**
-   * Previous values for fields changed by the update.
-   */
-  previous?: TenantUpdateResponse.Previous;
 }
 
 export namespace TenantUpdateResponse {
@@ -292,35 +218,15 @@ export namespace TenantUpdateResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
-  }
-
-  /**
-   * Previous values for fields changed by the update.
-   */
-  export interface Previous {
-    /**
-     * Previous tenant access mode.
-     */
-    access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-    /**
-     * Hercules IAM identifier.
-     */
-    default_role_id?: string | null;
-
-    /**
-     * Previous tenant name.
-     */
-    name?: string;
   }
 }
 
 /**
- * Paginated authoritative IAM tenant records.
+ * Paginated IAM tenants.
  */
 export interface TenantListResponse {
   /**
@@ -329,21 +235,20 @@ export interface TenantListResponse {
   data: Array<TenantListResponse.Data>;
 
   /**
-   * Whether more tenants are available after this page.
+   * Whether more records are available after this page.
    */
   has_more: boolean;
 }
 
 export namespace TenantListResponse {
   /**
-   * Authoritative IAM tenant record.
+   * One IAM tenant.
    */
   export interface Data {
     /**
-     * Admission policy for the tenant: open access, allowlist-only access,
-     * invitation-only access, or approval-required access.
+     * The tenant's admission policy.
      */
-    access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+    account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
     /**
      * Tenant creation timestamp.
@@ -351,19 +256,24 @@ export namespace TenantListResponse {
     created_at: string;
 
     /**
-     * Whether this is the deployment's root tenant.
+     * Hercules IAM identifier.
      */
-    is_root: boolean;
+    default_role_id: string | null;
 
     /**
-     * Public tenant lifecycle status.
+     * Whether this is the deployment's primary tenant.
      */
-    lifecycle_status: 'active' | 'archived';
+    is_primary_tenant: boolean;
 
     /**
      * Human-readable tenant name.
      */
     name: string;
+
+    /**
+     * Tenant lifecycle status.
+     */
+    status: 'active' | 'disabled';
 
     /**
      * Tenant ID.
@@ -408,226 +318,120 @@ export namespace TenantArchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
 }
 
 /**
- * Created tenant invitation.
+ * Created invitation link.
  */
 export interface TenantCreateInvitationResponse {
   /**
-   * One-time secret invitation token.
+   * One-time secret invitation token embedded in the link. Stored only as a hash.
    */
   token: string;
 
   /**
-   * URL the invited user can open to accept.
+   * Optional signup constraint. Omit for an open link anyone can accept.
    */
-  accept_url: string;
+  constraint:
+    | TenantCreateInvitationResponse.IamInvitationEmailConstraint
+    | TenantCreateInvitationResponse.IamInvitationDomainConstraint
+    | null;
 
   /**
-   * Synchronization metadata for Convex IAM projections.
+   * Optional email delivery, independent of the signup constraint. Sends the
+   * invitation from from_email to each recipient. Omit for a manual link you share
+   * yourself.
    */
-  convex_source_data: TenantCreateInvitationResponse.ConvexSourceData;
+  delivery: TenantCreateInvitationResponse.Delivery | null;
 
   /**
-   * Invitation expiry timestamp.
+   * Invitation expiry timestamp, or null if it never expires.
    */
-  expires_at: string;
+  expires_at: string | null;
 
   /**
-   * Role grants created on acceptance.
-   */
-  grants: Array<TenantCreateInvitationResponse.Grant>;
-
-  /**
-   * Created tenant invitation ID.
+   * Created invitation ID.
    */
   invitation_id: string;
 
   /**
-   * Recipient of an invitation.
+   * The full invitation link to share: the app's auth domain + /invite/{token}. Send
+   * this to the invitee.
    */
-  recipient: TenantCreateInvitationResponse.Recipient;
+  link: string;
 
   /**
-   * Tenant receiving the invited user.
+   * Effective signup cap, or null for unlimited.
    */
-  tenant_id: string;
+  max_uses: number | null;
 
   /**
-   * Identifies a tenant invitation.
+   * The app-relative path the user is sent to after accepting, or null.
    */
-  type: 'tenant';
+  redirect_path: string | null;
+
+  /**
+   * Number of users who have accepted so far (0 at creation).
+   */
+  use_count: number;
 }
 
 export namespace TenantCreateInvitationResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
+  export interface IamInvitationEmailConstraint {
     /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
-     */
-    version: number;
-  }
-
-  /**
-   * Role grant created when the invitation is accepted.
-   */
-  export interface Grant {
-    /**
-     * Pending role conferral ID.
-     */
-    conferral_id: string;
-
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * IAM role granted on acceptance.
-     */
-    role_id: string;
-
-    /**
-     * Identifies a tenant role grant.
-     */
-    type: 'tenant_role';
-  }
-
-  /**
-   * Recipient of an invitation.
-   */
-  export interface Recipient {
-    /**
-     * Identifies an email recipient.
+     * Only this exact email address may accept.
      */
     type: 'email';
 
     /**
-     * Email address of the invited user.
+     * The invited email address.
      */
     value: string;
   }
-}
 
-/**
- * Tenant access decision for one user.
- */
-export interface TenantEvaluateAccessResponse {
-  /**
-   * Whether the user may access the tenant now.
-   */
-  allowed: boolean;
-
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: TenantEvaluateAccessResponse.ConvexSourceData;
-
-  /**
-   * Stable explanation for the tenant access decision. Use `allowed` and `status`
-   * for application control flow; use this value to explain the outcome.
-   *
-   * - `user_active` - The user already has active access to the tenant.
-   * - `access_mode_open` - The tenant's open access mode admitted the user.
-   * - `access_rule_allowed` - An active email or domain access rule admitted the
-   *   user.
-   * - `access_rule_email_denied` - An active access rule denied the user's email
-   *   address.
-   * - `access_rule_domain_denied` - An active access rule denied the user's email
-   *   domain.
-   * - `access_rule_not_matched` - No active allow rule matched the user's verified
-   *   email address or domain.
-   * - `access_mode_approval_required` - The tenant requires administrator approval
-   *   before the user becomes active.
-   * - `access_mode_invitation_required` - The tenant requires an invitation or
-   *   explicit admission before access.
-   * - `access_rule_email_required` - Email or domain access rules cannot admit a
-   *   phone-only user.
-   * - `user_blocked` - The tenant's admission policy blocked the user.
-   * - `user_suspended` - An administrator suspended the user.
-   * - `user_removed` - The user was removed from the tenant.
-   */
-  reason:
-    | 'user_active'
-    | 'access_mode_open'
-    | 'access_rule_allowed'
-    | 'access_rule_email_denied'
-    | 'access_rule_domain_denied'
-    | 'access_rule_not_matched'
-    | 'access_mode_approval_required'
-    | 'access_mode_invitation_required'
-    | 'access_rule_email_required'
-    | 'user_blocked'
-    | 'user_suspended'
-    | 'user_removed';
-
-  /**
-   * Tenant evaluated for access.
-   */
-  tenant_id: string;
-
-  /**
-   * User ID evaluated for access.
-   */
-  user_id: string;
-
-  /**
-   * Current tenant user status when a user record exists.
-   */
-  status?: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
-}
-
-export namespace TenantEvaluateAccessResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
+  export interface IamInvitationDomainConstraint {
     /**
-     * Whether persisted IAM source data changed.
+     * Any address in this email domain may accept.
      */
-    changed: boolean;
+    type: 'domain';
 
     /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     * The allowed email domain, e.g. acme.com.
      */
-    projection_ids: Array<string>;
+    value: string;
+  }
+
+  /**
+   * Optional email delivery, independent of the signup constraint. Sends the
+   * invitation from from_email to each recipient. Omit for a manual link you share
+   * yourself.
+   */
+  export interface Delivery {
+    /**
+     * Sender address the invitation is emailed from.
+     */
+    from_email: string;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Recipients the invitation email is sent to.
      */
-    version: number;
+    to_emails: Array<string>;
   }
 }
 
 /**
- * Authoritative IAM tenant record.
+ * One IAM tenant.
  */
 export interface TenantGetResponse {
   /**
-   * Admission policy for the tenant: open access, allowlist-only access,
-   * invitation-only access, or approval-required access.
+   * The tenant's admission policy.
    */
-  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
   /**
    * Tenant creation timestamp.
@@ -635,19 +439,24 @@ export interface TenantGetResponse {
   created_at: string;
 
   /**
-   * Whether this is the deployment's root tenant.
+   * Hercules IAM identifier.
    */
-  is_root: boolean;
+  default_role_id: string | null;
 
   /**
-   * Public tenant lifecycle status.
+   * Whether this is the deployment's primary tenant.
    */
-  lifecycle_status: 'active' | 'archived';
+  is_primary_tenant: boolean;
 
   /**
    * Human-readable tenant name.
    */
   name: string;
+
+  /**
+   * Tenant lifecycle status.
+   */
+  status: 'active' | 'disabled';
 
   /**
    * Tenant ID.
@@ -658,53 +467,6 @@ export interface TenantGetResponse {
    * Tenant last-updated timestamp.
    */
   updated_at: string;
-}
-
-/**
- * Grantable IAM roles for one tenant.
- */
-export interface TenantGrantableRolesResponse {
-  /**
-   * Roles the supplied authority may grant at the tenant level.
-   */
-  roles: Array<TenantGrantableRolesResponse.Role>;
-
-  /**
-   * Tenant used for the grantability decision.
-   */
-  tenant_id: string;
-}
-
-export namespace TenantGrantableRolesResponse {
-  /**
-   * One role the supplied authority may grant for the requested tenant or resource.
-   */
-  export interface Role {
-    /**
-     * Grantable IAM role ID.
-     */
-    role_id: string;
-
-    /**
-     * Stable IAM role key.
-     */
-    role_key: string;
-
-    /**
-     * Whether the role is system or custom.
-     */
-    role_kind: 'system' | 'custom';
-
-    /**
-     * Human-readable IAM role name.
-     */
-    role_name: string;
-
-    /**
-     * Whether the role is reusable across tenants.
-     */
-    shared: boolean;
-  }
 }
 
 /**
@@ -738,120 +500,73 @@ export namespace TenantUnarchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
 }
 
-export type TenantCreateParams =
-  | TenantCreateParams.IamTenantCreateAsUserRequest
-  | TenantCreateParams.IamTenantCreateAsServiceRequest;
+export interface TenantCreateParams {
+  /**
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
+   */
+  actor_token_identifier: string | null;
 
-export declare namespace TenantCreateParams {
-  export interface IamTenantCreateAsUserRequest {
-    /**
-     * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-     * trusted app backend.
-     */
-    actor_token_identifier: string;
+  /**
+   * Human-readable tenant name.
+   */
+  name: string;
 
-    /**
-     * Human-readable tenant name.
-     */
-    name: string;
+  /**
+   * Initial tenant admission policy. Defaults to `open`.
+   */
+  access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
-    /**
-     * Initial tenant admission policy. Defaults to `allowlisted_only`.
-     */
-    access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  /**
+   * Identifies exactly one IAM role by ID or stable key.
+   */
+  default_role?: TenantCreateParams.IamRoleIDReference | TenantCreateParams.IamRoleKeyReference;
 
+  /**
+   * The end user's ID (their OIDC subject) to grant the initial owner role. Required
+   * when using service authority (actor_token_identifier null); with user authority
+   * the signed-in user becomes the owner.
+   */
+  owner_user_id?: string;
+}
+
+export namespace TenantCreateParams {
+  export interface IamRoleIDReference {
     /**
-     * Role receiving the overrides.
+     * Existing IAM role ID.
      */
-    default_role?:
-      | IamTenantCreateAsUserRequest.IamRoleIDReference
-      | IamTenantCreateAsUserRequest.IamRoleKeyReference;
+    id: string;
   }
 
-  export namespace IamTenantCreateAsUserRequest {
-    export interface IamRoleIDReference {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface IamRoleKeyReference {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
-
-  export interface IamTenantCreateAsServiceRequest {
+  export interface IamRoleKeyReference {
     /**
-     * Must be null to use service authority.
+     * Stable role key from the deployment's IAM catalog.
      */
-    actor_token_identifier: null;
-
-    /**
-     * Human-readable tenant name.
-     */
-    name: string;
-
-    /**
-     * Target user ID granted the built-in Owner role when creating the tenant with
-     * service authority. Do not pass a token identifier.
-     */
-    owner_user_id: string;
-
-    /**
-     * Initial tenant admission policy. Defaults to `allowlisted_only`.
-     */
-    access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-    /**
-     * Role receiving the overrides.
-     */
-    default_role?:
-      | IamTenantCreateAsServiceRequest.IamRoleIDReference
-      | IamTenantCreateAsServiceRequest.IamRoleKeyReference;
-  }
-
-  export namespace IamTenantCreateAsServiceRequest {
-    export interface IamRoleIDReference {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface IamRoleKeyReference {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
+    key: string;
   }
 }
 
 export interface TenantUpdateParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 
   /**
-   * Admission policy used when a user requests access to this tenant.
+   * New tenant admission policy.
    */
   access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
   /**
-   * Role receiving the overrides.
+   * Identifies exactly one IAM role by ID or stable key.
    */
   default_role?: TenantUpdateParams.IamRoleIDReference | TenantUpdateParams.IamRoleKeyReference;
 
@@ -879,12 +594,6 @@ export namespace TenantUpdateParams {
 
 export interface TenantListParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
-   */
-  actor_token_identifier?: string | null;
-
-  /**
    * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
@@ -896,126 +605,128 @@ export interface TenantListParams {
   starting_after?: string;
 
   /**
-   * Filter by tenant lifecycle status. Defaults to `active`; use `archived` or `all`
-   * to discover archived tenants.
+   * Filter by tenant status.
    */
-  status?: 'active' | 'archived' | 'all';
+  status?: 'active' | 'disabled';
 }
 
 export interface TenantArchiveParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 }
 
 export interface TenantCreateInvitationParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 
   /**
-   * Recipient of an invitation.
+   * Optional signup constraint. Omit for an open link anyone can accept.
    */
-  recipient: TenantCreateInvitationParams.Recipient;
+  constraint?:
+    | TenantCreateInvitationParams.IamInvitationEmailConstraint
+    | TenantCreateInvitationParams.IamInvitationDomainConstraint;
 
   /**
-   * Invitation expiry timestamp. Defaults to 14 days after creation.
+   * Optional email delivery, independent of the signup constraint. Sends the
+   * invitation from from_email to each recipient. Omit for a manual link you share
+   * yourself.
    */
-  expires_at?: string;
+  delivery?: TenantCreateInvitationParams.Delivery;
 
   /**
-   * Role grants created on acceptance. The permanent tenant default is used when
-   * omitted.
+   * Invitation expiry timestamp. Omit for the default of 30 days from creation; pass
+   * null for a link that never expires.
    */
-  grants?: Array<TenantCreateInvitationParams.Grant>;
+  expires_at?: string | null;
+
+  /**
+   * Maximum number of users who may accept. Omit for the default: 1 for an email
+   * constraint, otherwise unlimited.
+   */
+  max_uses?: number;
+
+  /**
+   * App-relative path the user is sent to after accepting (e.g. /welcome). Must
+   * start with a single '/'; composed with the app's own origin.
+   */
+  redirect_path?: string;
+
+  /**
+   * Tenant-wide roles conferred when the invitation is accepted. Omit to confer the
+   * tenant's default role instead.
+   */
+  roles?: Array<
+    TenantCreateInvitationParams.IamRoleIDReference | TenantCreateInvitationParams.IamRoleKeyReference
+  >;
 }
 
 export namespace TenantCreateInvitationParams {
-  /**
-   * Recipient of an invitation.
-   */
-  export interface Recipient {
+  export interface IamInvitationEmailConstraint {
     /**
-     * Identifies an email recipient.
+     * Only this exact email address may accept.
      */
     type: 'email';
 
     /**
-     * Email address of the invited user.
+     * The invited email address.
+     */
+    value: string;
+  }
+
+  export interface IamInvitationDomainConstraint {
+    /**
+     * Any address in this email domain may accept.
+     */
+    type: 'domain';
+
+    /**
+     * The allowed email domain, e.g. acme.com.
      */
     value: string;
   }
 
   /**
-   * One direct role grant.
+   * Optional email delivery, independent of the signup constraint. Sends the
+   * invitation from from_email to each recipient. Omit for a manual link you share
+   * yourself.
    */
-  export interface Grant {
+  export interface Delivery {
     /**
-     * Role receiving the overrides.
+     * Sender address the invitation is emailed from.
      */
-    role: Grant.IamRoleIDReference | Grant.IamRoleKeyReference;
+    from_email: string;
 
     /**
-     * Grant expiry. Omit or pass null for a permanent grant.
+     * Recipients the invitation email is sent to.
      */
-    expires_at?: string | null;
+    to_emails: Array<string>;
   }
 
-  export namespace Grant {
-    export interface IamRoleIDReference {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface IamRoleKeyReference {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
+  export interface IamRoleIDReference {
+    /**
+     * Existing IAM role ID.
+     */
+    id: string;
   }
-}
 
-export interface TenantEvaluateAccessParams {
-  /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
-   */
-  actor_token_identifier: string;
-}
-
-export interface TenantGetParams {
-  /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
-   */
-  actor_token_identifier?: string | null;
-}
-
-export interface TenantGrantableRolesParams {
-  /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
-   */
-  actor_token_identifier: string;
-
-  /**
-   * Recipient kind for the proposed grant. Omit or use all to return roles valid for
-   * at least one recipient kind.
-   */
-  subject_type?: 'user' | 'group' | 'all';
+  export interface IamRoleKeyReference {
+    /**
+     * Stable role key from the deployment's IAM catalog.
+     */
+    key: string;
+  }
 }
 
 export interface TenantUnarchiveParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 }
@@ -1036,38 +747,19 @@ export declare namespace Tenants {
     type TenantListResponse as TenantListResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
     type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
-    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
     type TenantGetResponse as TenantGetResponse,
-    type TenantGrantableRolesResponse as TenantGrantableRolesResponse,
     type TenantUnarchiveResponse as TenantUnarchiveResponse,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
     type TenantCreateInvitationParams as TenantCreateInvitationParams,
-    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
-    type TenantGetParams as TenantGetParams,
-    type TenantGrantableRolesParams as TenantGrantableRolesParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,
   };
 
-  export {
-    Grants as Grants,
-    type GrantUpdateResponse as GrantUpdateResponse,
-    type GrantDeleteResponse as GrantDeleteResponse,
-    type GrantUpdateParams as GrantUpdateParams,
-    type GrantDeleteParams as GrantDeleteParams,
-  };
+  export { Grants as Grants };
 
-  export {
-    Users as Users,
-    type UserCreateResponse as UserCreateResponse,
-    type UserUpdateResponse as UserUpdateResponse,
-    type UserRemoveResponse as UserRemoveResponse,
-    type UserCreateParams as UserCreateParams,
-    type UserUpdateParams as UserUpdateParams,
-    type UserRemoveParams as UserRemoveParams,
-  };
+  export { Users as Users };
 
   export {
     Groups as Groups,
@@ -1085,26 +777,18 @@ export declare namespace Tenants {
     Roles as Roles,
     type RoleCreateResponse as RoleCreateResponse,
     type RoleUpdateResponse as RoleUpdateResponse,
-    type RoleArchiveResponse as RoleArchiveResponse,
-    type RoleUnarchiveResponse as RoleUnarchiveResponse,
     type RoleCreateParams as RoleCreateParams,
     type RoleUpdateParams as RoleUpdateParams,
-    type RoleArchiveParams as RoleArchiveParams,
-    type RoleUnarchiveParams as RoleUnarchiveParams,
   };
 
   export {
     AccessRules as AccessRules,
     type AccessRuleCreateResponse as AccessRuleCreateResponse,
-    type AccessRuleUpdateResponse as AccessRuleUpdateResponse,
     type AccessRuleListResponse as AccessRuleListResponse,
     type AccessRuleArchiveResponse as AccessRuleArchiveResponse,
-    type AccessRuleUnarchiveResponse as AccessRuleUnarchiveResponse,
     type AccessRuleCreateParams as AccessRuleCreateParams,
-    type AccessRuleUpdateParams as AccessRuleUpdateParams,
     type AccessRuleListParams as AccessRuleListParams,
     type AccessRuleArchiveParams as AccessRuleArchiveParams,
-    type AccessRuleUnarchiveParams as AccessRuleUnarchiveParams,
   };
 
   export {
@@ -1121,11 +805,5 @@ export declare namespace Tenants {
     type InvitationRevokeParams as InvitationRevokeParams,
   };
 
-  export {
-    Resources as Resources,
-    type ResourceAccessGrantingRolesResponse as ResourceAccessGrantingRolesResponse,
-    type ResourceCreateInvitationResponse as ResourceCreateInvitationResponse,
-    type ResourceAccessGrantingRolesParams as ResourceAccessGrantingRolesParams,
-    type ResourceCreateInvitationParams as ResourceCreateInvitationParams,
-  };
+  export { Resources as Resources };
 }

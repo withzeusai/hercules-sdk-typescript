@@ -7,20 +7,19 @@ import { path } from '../../../internal/utils/path';
 
 export class Invitations extends APIResource {
   /**
-   * Lists pending, unexpired tenant and resource invitations. Accepted, revoked, and
-   * expired invitations are not returned.
+   * Lists active, unexpired invitation links in a tenant.
    */
   list(
     tenantID: string,
-    query: InvitationListParams,
+    query: InvitationListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<InvitationListResponse> {
     return this._client.get(path`/v1/iam/tenants/${tenantID}/invitations`, { query, ...options });
   }
 
   /**
-   * Revokes a pending tenant or resource invitation. It does not remove access
-   * already granted by an accepted invitation.
+   * Revokes a pending invitation. Access already granted by an accepted invitation
+   * is unaffected.
    */
   revoke(
     invitationID: string,
@@ -36,253 +35,122 @@ export class Invitations extends APIResource {
 }
 
 /**
- * Paginated pending invitations in one tenant.
+ * Paginated active invitation links in one tenant.
  */
 export interface InvitationListResponse {
   /**
-   * Pending tenant and resource invitations.
+   * Active invitation link page.
    */
-  data: Array<
-    InvitationListResponse.IamTenantInvitationListItem | InvitationListResponse.IamResourceInvitationListItem
-  >;
+  data: Array<InvitationListResponse.Data>;
 
   /**
-   * Whether more invitations are available after this page.
+   * Whether more records are available after this page.
    */
   has_more: boolean;
 }
 
 export namespace InvitationListResponse {
   /**
-   * Pending tenant invitation.
+   * One active invitation link.
    */
-  export interface IamTenantInvitationListItem {
+  export interface Data {
+    /**
+     * Optional signup constraint. Omit for an open link anyone can accept.
+     */
+    constraint: Data.IamInvitationEmailConstraint | Data.IamInvitationDomainConstraint | null;
+
     /**
      * Invitation creation timestamp.
      */
     created_at: string;
 
     /**
-     * Invitation expiry timestamp.
+     * Optional email delivery, independent of the signup constraint. Sends the
+     * invitation from from_email to each recipient. Omit for a manual link you share
+     * yourself.
      */
-    expires_at: string;
+    delivery: Data.Delivery | null;
 
     /**
-     * Role grants created on acceptance.
+     * Invitation expiry timestamp, or null if it never expires.
      */
-    grants: Array<IamTenantInvitationListItem.Grant>;
+    expires_at: string | null;
 
     /**
-     * Tenant invitation ID.
+     * Invitation ID.
      */
     invitation_id: string;
 
     /**
-     * Recipient of an invitation.
+     * Signup cap, or null for unlimited.
      */
-    recipient: IamTenantInvitationListItem.Recipient;
+    max_uses: number | null;
 
     /**
-     * Identifies a tenant invitation.
+     * Roles conferred on acceptance. Empty means the tenant's default role is
+     * conferred instead.
      */
-    type: 'tenant';
+    role_ids: Array<string>;
 
     /**
-     * Invitation last-updated timestamp.
+     * Tenant the invitation belongs to.
      */
-    updated_at: string;
+    tenant_id: string;
+
+    /**
+     * Number of users who have accepted so far.
+     */
+    use_count: number;
   }
 
-  export namespace IamTenantInvitationListItem {
-    /**
-     * Role grant created when the invitation is accepted.
-     */
-    export interface Grant {
+  export namespace Data {
+    export interface IamInvitationEmailConstraint {
       /**
-       * Pending role conferral ID.
-       */
-      conferral_id: string;
-
-      /**
-       * Grant expiry, or null for a permanent grant.
-       */
-      expires_at: string | null;
-
-      /**
-       * IAM role granted on acceptance.
-       */
-      role_id: string;
-
-      /**
-       * Identifies a tenant role grant.
-       */
-      type: 'tenant_role';
-    }
-
-    /**
-     * Recipient of an invitation.
-     */
-    export interface Recipient {
-      /**
-       * Identifies an email recipient.
+       * Only this exact email address may accept.
        */
       type: 'email';
 
       /**
-       * Email address of the invited user.
+       * The invited email address.
        */
       value: string;
     }
-  }
 
-  /**
-   * Pending resource invitation.
-   */
-  export interface IamResourceInvitationListItem {
-    /**
-     * Invitation creation timestamp.
-     */
-    created_at: string;
-
-    /**
-     * Invitation expiry timestamp.
-     */
-    expires_at: string;
-
-    /**
-     * Role or permission grant created on acceptance.
-     */
-    grant:
-      | IamResourceInvitationListItem.IamResourceInvitationPendingRoleGrant
-      | IamResourceInvitationListItem.IamResourceInvitationPendingPermissionGrant;
-
-    /**
-     * Resource invitation ID.
-     */
-    invitation_id: string;
-
-    /**
-     * Recipient of an invitation.
-     */
-    recipient: IamResourceInvitationListItem.Recipient;
-
-    /**
-     * Resource covered by the invitation.
-     */
-    resource: IamResourceInvitationListItem.Resource;
-
-    /**
-     * Identifies a resource invitation.
-     */
-    type: 'resource';
-
-    /**
-     * Invitation last-updated timestamp.
-     */
-    updated_at: string;
-  }
-
-  export namespace IamResourceInvitationListItem {
-    export interface IamResourceInvitationPendingRoleGrant {
+    export interface IamInvitationDomainConstraint {
       /**
-       * Pending role conferral ID.
+       * Any address in this email domain may accept.
        */
-      conferral_id: string;
+      type: 'domain';
 
       /**
-       * Grant expiry, or null for a permanent grant.
-       */
-      expires_at: string | null;
-
-      /**
-       * IAM role granted on acceptance.
-       */
-      role_id: string;
-
-      /**
-       * Identifies a resource role grant.
-       */
-      type: 'resource_role';
-    }
-
-    export interface IamResourceInvitationPendingPermissionGrant {
-      /**
-       * Pending permission conferral ID.
-       */
-      conferral_id: string;
-
-      /**
-       * Resource invitations grant the permission.
-       */
-      effect: 'allow';
-
-      /**
-       * Grant expiry, or null for a permanent grant.
-       */
-      expires_at: string | null;
-
-      /**
-       * IAM permission granted on acceptance.
-       */
-      permission_id: string;
-
-      /**
-       * Stable IAM permission key.
-       */
-      permission_key: string;
-
-      /**
-       * Identifies a resource permission grant.
-       */
-      type: 'resource_permission';
-    }
-
-    /**
-     * Recipient of an invitation.
-     */
-    export interface Recipient {
-      /**
-       * Identifies an email recipient.
-       */
-      type: 'email';
-
-      /**
-       * Email address of the invited user.
+       * The allowed email domain, e.g. acme.com.
        */
       value: string;
     }
 
     /**
-     * Resource covered by the invitation.
+     * Optional email delivery, independent of the signup constraint. Sends the
+     * invitation from from_email to each recipient. Omit for a manual link you share
+     * yourself.
      */
-    export interface Resource {
+    export interface Delivery {
       /**
-       * Whether the grant applies only to this resource or also to descendants.
+       * Sender address the invitation is emailed from.
        */
-      applies_to: 'self' | 'self_and_descendants';
+      from_email: string;
 
       /**
-       * Exact application resource ID.
+       * Recipients the invitation email is sent to.
        */
-      resource_id: string;
-
-      /**
-       * Canonical app resource type, such as app.projects.
-       */
-      resource_type: string;
+      to_emails: Array<string>;
     }
   }
 }
 
 /**
- * Revoked tenant or resource invitation.
+ * Revoked invitation.
  */
 export interface InvitationRevokeResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: InvitationRevokeResponse.ConvexSourceData;
-
   /**
    * Revoked invitation ID.
    */
@@ -292,136 +160,33 @@ export interface InvitationRevokeResponse {
    * Whether the invitation was revoked.
    */
   revoked: boolean;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-}
-
-export namespace InvitationRevokeResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
-     */
-    version: number;
-  }
 }
 
 export interface InvitationListParams {
-  /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
-   */
-  actor_token_identifier: string | null;
-
   /**
    * Maximum number of records to return. Defaults to 50.
    */
   limit?: number;
 
   /**
-   * Optional exact invitation recipient.
-   */
-  recipient?: InvitationListParams.Recipient;
-
-  /**
    * Cursor for forward pagination. Pass the ID of the last item from the previous
    * page.
    */
   starting_after?: string;
-
-  /**
-   * Optional tenant, all-resource, or exact-resource invitation selection.
-   */
-  target?:
-    | InvitationListParams.IamInvitationListTenantTarget
-    | InvitationListParams.IamInvitationListAllResourcesTarget
-    | InvitationListParams.IamInvitationListExactResourceTarget;
-}
-
-export namespace InvitationListParams {
-  /**
-   * Optional exact invitation recipient.
-   */
-  export interface Recipient {
-    /**
-     * Identifies an email recipient.
-     */
-    type: 'email';
-
-    /**
-     * Email address of the invited user.
-     */
-    value: string;
-  }
-
-  /**
-   * Selects pending tenant invitations.
-   */
-  export interface IamInvitationListTenantTarget {
-    /**
-     * Select tenant invitations.
-     */
-    type: 'tenant';
-  }
-
-  /**
-   * Selects all pending resource invitations.
-   */
-  export interface IamInvitationListAllResourcesTarget {
-    /**
-     * Select resource invitations.
-     */
-    type: 'resource';
-  }
-
-  /**
-   * Selects pending invitations for one exact resource.
-   */
-  export interface IamInvitationListExactResourceTarget {
-    /**
-     * Filter by exact resource ID.
-     */
-    resource_id: string;
-
-    /**
-     * Filter by exact resource type.
-     */
-    resource_type: string;
-
-    /**
-     * Select resource invitations.
-     */
-    type: 'resource';
-  }
 }
 
 export interface InvitationRevokeParams {
   /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Query param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
+   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
+   * to that user, or omitted for service authority.
    */
-  actor_token_identifier: string | null;
+  actor_token_identifier?: string;
 }
 
 export declare namespace Invitations {

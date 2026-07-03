@@ -2,21 +2,9 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as MembersAPI from './members';
-import {
-  MemberAddParams,
-  MemberAddResponse,
-  MemberRemoveParams,
-  MemberRemoveResponse,
-  Members,
-} from './members';
+import { Members } from './members';
 import * as PermissionOverridesAPI from './permission-overrides';
-import {
-  PermissionOverrideGetParams,
-  PermissionOverrideGetResponse,
-  PermissionOverrideUpdateParams,
-  PermissionOverrideUpdateResponse,
-  PermissionOverrides,
-} from './permission-overrides';
+import { PermissionOverrides } from './permission-overrides';
 import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -27,8 +15,7 @@ export class Groups extends APIResource {
     new PermissionOverridesAPI.PermissionOverrides(this._client);
 
   /**
-   * Creates an active group in the tenant. The new group has no members, roles, or
-   * permission overrides.
+   * Creates an active group with no members in a tenant.
    */
   create(
     tenantID: string,
@@ -39,8 +26,7 @@ export class Groups extends APIResource {
   }
 
   /**
-   * Updates a group's name and/or replaces its direct tenant roles. Memberships and
-   * permission overrides are unchanged.
+   * Updates a tenant group's name or description.
    */
   update(
     groupID: string,
@@ -52,8 +38,7 @@ export class Groups extends APIResource {
   }
 
   /**
-   * Archives a group so it stops granting access while preserving its members,
-   * roles, and permission overrides for restoration.
+   * Archives a tenant group so it stops granting access.
    */
   archive(
     groupID: string,
@@ -68,8 +53,7 @@ export class Groups extends APIResource {
   }
 
   /**
-   * Restores an archived group. Its existing memberships, roles, and permission
-   * overrides begin granting access again.
+   * Restores an archived tenant group so it grants access again.
    */
   unarchive(
     groupID: string,
@@ -94,19 +78,9 @@ export interface GroupCreateResponse {
   convex_source_data: GroupCreateResponse.ConvexSourceData;
 
   /**
-   * Confirms that the group was created.
-   */
-  created: true;
-
-  /**
    * Created tenant group ID.
    */
   group_id: string;
-
-  /**
-   * Tenant containing the created group.
-   */
-  tenant_id: string;
 }
 
 export namespace GroupCreateResponse {
@@ -125,15 +99,15 @@ export namespace GroupCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
 }
 
 /**
- * Updated tenant group.
+ * Result of changing a tenant group.
  */
 export interface GroupUpdateResponse {
   /**
@@ -145,16 +119,6 @@ export interface GroupUpdateResponse {
    * Tenant group changed by the operation.
    */
   group_id: string;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-
-  /**
-   * Complete resulting direct role grant set.
-   */
-  grants?: Array<GroupUpdateResponse.Grant>;
 }
 
 export namespace GroupUpdateResponse {
@@ -173,35 +137,10 @@ export namespace GroupUpdateResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
-  }
-
-  /**
-   * One persisted tenant role grant.
-   */
-  export interface Grant {
-    /**
-     * Grant expiry, or null for a permanent grant.
-     */
-    expires_at: string | null;
-
-    /**
-     * Persisted IAM grant ID.
-     */
-    grant_id: string;
-
-    /**
-     * IAM role conferred by this grant.
-     */
-    role_id: string;
-
-    /**
-     * Identifies a tenant role grant.
-     */
-    type: 'tenant_role';
   }
 }
 
@@ -218,11 +157,6 @@ export interface GroupArchiveResponse {
    * Tenant group changed by the operation.
    */
   group_id: string;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
 }
 
 export namespace GroupArchiveResponse {
@@ -241,8 +175,8 @@ export namespace GroupArchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
@@ -261,11 +195,6 @@ export interface GroupUnarchiveResponse {
    * Tenant group changed by the operation.
    */
   group_id: string;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
 }
 
 export namespace GroupUnarchiveResponse {
@@ -284,8 +213,8 @@ export namespace GroupUnarchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * IAM source version after the operation. Before relying on Convex IAM mirror
-     * reads, wait for each returned projection to reach at least this version.
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
      */
     version: number;
   }
@@ -293,8 +222,8 @@ export namespace GroupUnarchiveResponse {
 
 export interface GroupCreateParams {
   /**
-   * The signed-in actor's Convex identity tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 
@@ -302,86 +231,61 @@ export interface GroupCreateParams {
    * Human-readable group name.
    */
   name: string;
+
+  /**
+   * Optional human-readable group description.
+   */
+  description?: string | null;
 }
 
 export interface GroupUpdateParams {
   /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
+   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
+   * unchanged by the trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 
   /**
-   * Body param: New human-readable group name.
+   * Body param: Optional human-readable group description.
+   */
+  description?: string | null;
+
+  /**
+   * Body param: New human-readable group name. Omit to keep the current name.
    */
   name?: string;
-
-  /**
-   * Body param: Complete desired set of direct role grants for the group.
-   */
-  roles?: Array<GroupUpdateParams.Role>;
-}
-
-export namespace GroupUpdateParams {
-  /**
-   * One direct role grant.
-   */
-  export interface Role {
-    /**
-     * Role receiving the overrides.
-     */
-    role: Role.IamRoleIDReference | Role.IamRoleKeyReference;
-
-    /**
-     * Grant expiry. Omit or pass null for a permanent grant.
-     */
-    expires_at?: string | null;
-  }
-
-  export namespace Role {
-    export interface IamRoleIDReference {
-      /**
-       * Existing IAM role ID.
-       */
-      id: string;
-    }
-
-    export interface IamRoleKeyReference {
-      /**
-       * Stable role key from the deployment's IAM catalog.
-       */
-      key: string;
-    }
-  }
 }
 
 export interface GroupArchiveParams {
   /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
+   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
+   * unchanged by the trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 }
 
 export interface GroupUnarchiveParams {
   /**
-   * Path param: The tenant ID. Pass `root` to target the deployment's root tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
    */
   tenant_id: string;
 
   /**
-   * Body param: The signed-in actor's Convex identity tokenIdentifier, passed
-   * unchanged by the trusted app backend.
+   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
+   * unchanged by the trusted app backend. Used for identity and audit only.
    */
   actor_token_identifier: string | null;
 }
@@ -401,19 +305,7 @@ export declare namespace Groups {
     type GroupUnarchiveParams as GroupUnarchiveParams,
   };
 
-  export {
-    Members as Members,
-    type MemberAddResponse as MemberAddResponse,
-    type MemberRemoveResponse as MemberRemoveResponse,
-    type MemberAddParams as MemberAddParams,
-    type MemberRemoveParams as MemberRemoveParams,
-  };
+  export { Members as Members };
 
-  export {
-    PermissionOverrides as PermissionOverrides,
-    type PermissionOverrideUpdateResponse as PermissionOverrideUpdateResponse,
-    type PermissionOverrideGetResponse as PermissionOverrideGetResponse,
-    type PermissionOverrideUpdateParams as PermissionOverrideUpdateParams,
-    type PermissionOverrideGetParams as PermissionOverrideGetParams,
-  };
+  export { PermissionOverrides as PermissionOverrides };
 }
