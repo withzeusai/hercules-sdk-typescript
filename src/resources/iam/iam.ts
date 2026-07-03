@@ -13,7 +13,11 @@ import {
   TenantCreateResponse,
   TenantGetResponse,
   TenantListParams,
+  TenantListResourceRoleAssignmentsParams,
+  TenantListResourceRoleAssignmentsResponse,
   TenantListResponse,
+  TenantListRoleAssignmentsParams,
+  TenantListRoleAssignmentsResponse,
   TenantUnarchiveParams,
   TenantUnarchiveResponse,
   TenantUpdateParams,
@@ -22,8 +26,8 @@ import {
 } from './tenants/tenants';
 
 /**
- * Manage IAM tenants, users, groups, roles, access rules, invitations,
- * resource grants, and permission overrides. Requires an API key with the
+ * Manage IAM tenants, members, groups, roles, access rules, invitations,
+ * and tenant-wide / resource role assignments. Requires an API key with the
  * IAM administration permission.
  */
 export class Iam extends APIResource {
@@ -49,12 +53,16 @@ export declare namespace Iam {
     type TenantArchiveResponse as TenantArchiveResponse,
     type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
     type TenantGetResponse as TenantGetResponse,
+    type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
+    type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
     type TenantUnarchiveResponse as TenantUnarchiveResponse,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
     type TenantCreateInvitationParams as TenantCreateInvitationParams,
+    type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
+    type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,
   };
 }

@@ -10,17 +10,34 @@ export {
   type AccessRuleArchiveParams,
 } from './access-rules';
 export { AuditEvents, type AuditEventListResponse, type AuditEventListParams } from './audit-events';
-export { Grants } from './grants';
 export {
   Groups,
   type GroupCreateResponse,
   type GroupUpdateResponse,
+  type GroupListResponse,
+  type GroupDeleteResponse,
   type GroupArchiveResponse,
+  type GroupAssignResourceRoleResponse,
+  type GroupAssignRoleResponse,
+  type GroupGetResponse,
+  type GroupListResourceRoleAssignmentsResponse,
+  type GroupListRoleAssignmentsResponse,
   type GroupUnarchiveResponse,
+  type GroupUnassignResourceRoleResponse,
+  type GroupUnassignRoleResponse,
   type GroupCreateParams,
   type GroupUpdateParams,
+  type GroupListParams,
+  type GroupDeleteParams,
   type GroupArchiveParams,
+  type GroupAssignResourceRoleParams,
+  type GroupAssignRoleParams,
+  type GroupGetParams,
+  type GroupListResourceRoleAssignmentsParams,
+  type GroupListRoleAssignmentsParams,
   type GroupUnarchiveParams,
+  type GroupUnassignResourceRoleParams,
+  type GroupUnassignRoleParams,
 } from './groups/index';
 export {
   Invitations,
@@ -29,14 +46,26 @@ export {
   type InvitationListParams,
   type InvitationRevokeParams,
 } from './invitations';
-export { Resources } from './resources/index';
+export {
+  Members,
+  type MemberCreateResponse,
+  type MemberListResponse,
+  type MemberCreateParams,
+  type MemberListParams,
+} from './members';
 export {
   Roles,
   type RoleCreateResponse,
   type RoleUpdateResponse,
+  type RoleListResponse,
+  type RoleDeleteResponse,
+  type RoleGetResponse,
   type RoleCreateParams,
   type RoleUpdateParams,
-} from './roles/index';
+  type RoleListParams,
+  type RoleDeleteParams,
+  type RoleGetParams,
+} from './roles';
 export {
   Tenants,
   type TenantCreateResponse,
@@ -45,12 +74,15 @@ export {
   type TenantArchiveResponse,
   type TenantCreateInvitationResponse,
   type TenantGetResponse,
+  type TenantListResourceRoleAssignmentsResponse,
+  type TenantListRoleAssignmentsResponse,
   type TenantUnarchiveResponse,
   type TenantCreateParams,
   type TenantUpdateParams,
   type TenantListParams,
   type TenantArchiveParams,
   type TenantCreateInvitationParams,
+  type TenantListResourceRoleAssignmentsParams,
+  type TenantListRoleAssignmentsParams,
   type TenantUnarchiveParams,
 } from './tenants';
-export { Users } from './users/index';

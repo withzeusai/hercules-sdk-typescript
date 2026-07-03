@@ -824,8 +824,8 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   /**
-   * Manage IAM tenants, users, groups, roles, access rules, invitations,
-   * resource grants, and permission overrides. Requires an API key with the
+   * Manage IAM tenants, members, groups, roles, access rules, invitations,
+   * and tenant-wide / resource role assignments. Requires an API key with the
    * IAM administration permission.
    */
   iam: API.Iam = new API.Iam(this);
