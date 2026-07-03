@@ -13,8 +13,6 @@ import {
 } from './access-rules';
 import * as AuditEventsAPI from './audit-events';
 import { AuditEventListParams, AuditEventListResponse, AuditEvents } from './audit-events';
-import * as GrantsAPI from './grants';
-import { Grants } from './grants';
 import * as InvitationsAPI from './invitations';
 import {
   InvitationListParams,
@@ -23,43 +21,69 @@ import {
   InvitationRevokeResponse,
   Invitations,
 } from './invitations';
+import * as MembersAPI from './members';
+import {
+  MemberCreateParams,
+  MemberCreateResponse,
+  MemberListParams,
+  MemberListResponse,
+  Members,
+} from './members';
+import * as RolesAPI from './roles';
+import {
+  RoleCreateParams,
+  RoleCreateResponse,
+  RoleDeleteParams,
+  RoleDeleteResponse,
+  RoleGetParams,
+  RoleGetResponse,
+  RoleListParams,
+  RoleListResponse,
+  RoleUpdateParams,
+  RoleUpdateResponse,
+  Roles,
+} from './roles';
 import * as GroupsAPI from './groups/groups';
 import {
   GroupArchiveParams,
   GroupArchiveResponse,
+  GroupAssignResourceRoleParams,
+  GroupAssignResourceRoleResponse,
+  GroupAssignRoleParams,
+  GroupAssignRoleResponse,
   GroupCreateParams,
   GroupCreateResponse,
+  GroupDeleteParams,
+  GroupDeleteResponse,
+  GroupGetParams,
+  GroupGetResponse,
+  GroupListParams,
+  GroupListResourceRoleAssignmentsParams,
+  GroupListResourceRoleAssignmentsResponse,
+  GroupListResponse,
+  GroupListRoleAssignmentsParams,
+  GroupListRoleAssignmentsResponse,
   GroupUnarchiveParams,
   GroupUnarchiveResponse,
+  GroupUnassignResourceRoleParams,
+  GroupUnassignResourceRoleResponse,
+  GroupUnassignRoleParams,
+  GroupUnassignRoleResponse,
   GroupUpdateParams,
   GroupUpdateResponse,
   Groups,
 } from './groups/groups';
-import * as ResourcesAPI from './resources/resources';
-import { Resources } from './resources/resources';
-import * as RolesAPI from './roles/roles';
-import {
-  RoleCreateParams,
-  RoleCreateResponse,
-  RoleUpdateParams,
-  RoleUpdateResponse,
-  Roles,
-} from './roles/roles';
-import * as UsersAPI from './users/users';
-import { Users } from './users/users';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 export class Tenants extends APIResource {
-  grants: GrantsAPI.Grants = new GrantsAPI.Grants(this._client);
-  users: UsersAPI.Users = new UsersAPI.Users(this._client);
+  members: MembersAPI.Members = new MembersAPI.Members(this._client);
   groups: GroupsAPI.Groups = new GroupsAPI.Groups(this._client);
   roles: RolesAPI.Roles = new RolesAPI.Roles(this._client);
   accessRules: AccessRulesAPI.AccessRules = new AccessRulesAPI.AccessRules(this._client);
   auditEvents: AuditEventsAPI.AuditEvents = new AuditEventsAPI.AuditEvents(this._client);
   invitations: InvitationsAPI.Invitations = new InvitationsAPI.Invitations(this._client);
-  resources: ResourcesAPI.Resources = new ResourcesAPI.Resources(this._client);
 
   /**
    * Creates a tenant and assigns its initial owner. The signed-in user becomes the
@@ -120,6 +144,34 @@ export class Tenants extends APIResource {
    */
   get(tenantID: string, options?: RequestOptions): APIPromise<TenantGetResponse> {
     return this._client.get(path`/v1/iam/tenants/${tenantID}`, options);
+  }
+
+  /**
+   * Lists resource role assignments in a tenant, newest first. Filter by resource
+   * type and external ID to find who has a role on one exact resource, or by member,
+   * group, or role.
+   */
+  listResourceRoleAssignments(
+    tenantID: string,
+    query: TenantListResourceRoleAssignmentsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TenantListResourceRoleAssignmentsResponse> {
+    return this._client.get(path`/v1/iam/tenants/${tenantID}/resource-role-assignments`, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
+   * Lists tenant-wide role assignments in a tenant, newest first. Filter by member,
+   * group, or role.
+   */
+  listRoleAssignments(
+    tenantID: string,
+    query: TenantListRoleAssignmentsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TenantListRoleAssignmentsResponse> {
+    return this._client.get(path`/v1/iam/tenants/${tenantID}/role-assignments`, { query, ...options });
   }
 
   /**
@@ -470,6 +522,182 @@ export interface TenantGetResponse {
 }
 
 /**
+ * Paginated resource role assignments.
+ */
+export interface TenantListResourceRoleAssignmentsResponse {
+  /**
+   * Resource role assignment page.
+   */
+  data: Array<TenantListResourceRoleAssignmentsResponse.Data>;
+
+  /**
+   * Whether more records are available after this page.
+   */
+  has_more: boolean;
+}
+
+export namespace TenantListResourceRoleAssignmentsResponse {
+  /**
+   * One resource role assignment.
+   */
+  export interface Data {
+    /**
+     * Assignment creation timestamp.
+     */
+    created_at: string;
+
+    /**
+     * Assignment expiry, or null if permanent.
+     */
+    expires_at: string | null;
+
+    /**
+     * The exact resource's app-defined external ID.
+     */
+    external_id: string;
+
+    /**
+     * The resource type the assignment targets.
+     */
+    resource_type_id: string;
+
+    /**
+     * The assigned role ID.
+     */
+    role_id: string;
+
+    /**
+     * The assignment's subject and its prefixed assignment ID.
+     */
+    subject: Data.IamResourceRoleAssignmentMemberSubject | Data.IamResourceRoleAssignmentGroupSubject;
+
+    /**
+     * Tenant the assignment belongs to.
+     */
+    tenant_id: string;
+  }
+
+  export namespace Data {
+    export interface IamResourceRoleAssignmentMemberSubject {
+      /**
+       * The member resource role assignment ID.
+       */
+      member_resource_role_assignment_id: string;
+
+      /**
+       * The user's tenant membership ID holding the role.
+       */
+      membership_id: string;
+
+      /**
+       * A tenant member holds the role on the resource.
+       */
+      type: 'member';
+    }
+
+    export interface IamResourceRoleAssignmentGroupSubject {
+      /**
+       * The group holding the role.
+       */
+      group_id: string;
+
+      /**
+       * The group resource role assignment ID.
+       */
+      group_resource_role_assignment_id: string;
+
+      /**
+       * A group holds the role on the resource.
+       */
+      type: 'group';
+    }
+  }
+}
+
+/**
+ * Paginated tenant-wide role assignments.
+ */
+export interface TenantListRoleAssignmentsResponse {
+  /**
+   * Role assignment page.
+   */
+  data: Array<TenantListRoleAssignmentsResponse.Data>;
+
+  /**
+   * Whether more records are available after this page.
+   */
+  has_more: boolean;
+}
+
+export namespace TenantListRoleAssignmentsResponse {
+  /**
+   * One tenant-wide role assignment.
+   */
+  export interface Data {
+    /**
+     * Assignment creation timestamp.
+     */
+    created_at: string;
+
+    /**
+     * Assignment expiry, or null if permanent.
+     */
+    expires_at: string | null;
+
+    /**
+     * The assigned role ID.
+     */
+    role_id: string;
+
+    /**
+     * The assignment's subject and its prefixed assignment ID.
+     */
+    subject: Data.IamRoleAssignmentMemberSubject | Data.IamRoleAssignmentGroupSubject;
+
+    /**
+     * Tenant the assignment belongs to.
+     */
+    tenant_id: string;
+  }
+
+  export namespace Data {
+    export interface IamRoleAssignmentMemberSubject {
+      /**
+       * The member role assignment ID.
+       */
+      member_role_assignment_id: string;
+
+      /**
+       * The user's tenant membership ID holding the role.
+       */
+      membership_id: string;
+
+      /**
+       * A tenant member holds the role.
+       */
+      type: 'member';
+    }
+
+    export interface IamRoleAssignmentGroupSubject {
+      /**
+       * The group holding the role.
+       */
+      group_id: string;
+
+      /**
+       * The group role assignment ID.
+       */
+      group_role_assignment_id: string;
+
+      /**
+       * A group holds the role.
+       */
+      type: 'group';
+    }
+  }
+}
+
+/**
  * Result of an IAM tenant mutation.
  */
 export interface TenantUnarchiveResponse {
@@ -723,6 +951,73 @@ export namespace TenantCreateInvitationParams {
   }
 }
 
+export interface TenantListResourceRoleAssignmentsParams {
+  /**
+   * Filter to one exact resource's external ID. Pair with a resource type to find
+   * who has a role on that resource.
+   */
+  external_id?: string;
+
+  /**
+   * Return only this group's assignments.
+   */
+  group_id?: string;
+
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   */
+  limit?: number;
+
+  /**
+   * Return only this tenant membership's assignments.
+   */
+  membership_id?: string;
+
+  /**
+   * Filter to one resource type by ID.
+   */
+  resource_type_id?: string;
+
+  /**
+   * Return only assignments of this role.
+   */
+  role_id?: string;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
+}
+
+export interface TenantListRoleAssignmentsParams {
+  /**
+   * Return only this group's assignments.
+   */
+  group_id?: string;
+
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   */
+  limit?: number;
+
+  /**
+   * Return only this tenant membership's assignments.
+   */
+  membership_id?: string;
+
+  /**
+   * Return only assignments of this role.
+   */
+  role_id?: string;
+
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous
+   * page.
+   */
+  starting_after?: string;
+}
+
 export interface TenantUnarchiveParams {
   /**
    * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
@@ -731,14 +1026,12 @@ export interface TenantUnarchiveParams {
   actor_token_identifier: string | null;
 }
 
-Tenants.Grants = Grants;
-Tenants.Users = Users;
+Tenants.Members = Members;
 Tenants.Groups = Groups;
 Tenants.Roles = Roles;
 Tenants.AccessRules = AccessRules;
 Tenants.AuditEvents = AuditEvents;
 Tenants.Invitations = Invitations;
-Tenants.Resources = Resources;
 
 export declare namespace Tenants {
   export {
@@ -748,37 +1041,69 @@ export declare namespace Tenants {
     type TenantArchiveResponse as TenantArchiveResponse,
     type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
     type TenantGetResponse as TenantGetResponse,
+    type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
+    type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
     type TenantUnarchiveResponse as TenantUnarchiveResponse,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
     type TenantCreateInvitationParams as TenantCreateInvitationParams,
+    type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
+    type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,
   };
 
-  export { Grants as Grants };
-
-  export { Users as Users };
+  export {
+    Members as Members,
+    type MemberCreateResponse as MemberCreateResponse,
+    type MemberListResponse as MemberListResponse,
+    type MemberCreateParams as MemberCreateParams,
+    type MemberListParams as MemberListParams,
+  };
 
   export {
     Groups as Groups,
     type GroupCreateResponse as GroupCreateResponse,
     type GroupUpdateResponse as GroupUpdateResponse,
+    type GroupListResponse as GroupListResponse,
+    type GroupDeleteResponse as GroupDeleteResponse,
     type GroupArchiveResponse as GroupArchiveResponse,
+    type GroupAssignResourceRoleResponse as GroupAssignResourceRoleResponse,
+    type GroupAssignRoleResponse as GroupAssignRoleResponse,
+    type GroupGetResponse as GroupGetResponse,
+    type GroupListResourceRoleAssignmentsResponse as GroupListResourceRoleAssignmentsResponse,
+    type GroupListRoleAssignmentsResponse as GroupListRoleAssignmentsResponse,
     type GroupUnarchiveResponse as GroupUnarchiveResponse,
+    type GroupUnassignResourceRoleResponse as GroupUnassignResourceRoleResponse,
+    type GroupUnassignRoleResponse as GroupUnassignRoleResponse,
     type GroupCreateParams as GroupCreateParams,
     type GroupUpdateParams as GroupUpdateParams,
+    type GroupListParams as GroupListParams,
+    type GroupDeleteParams as GroupDeleteParams,
     type GroupArchiveParams as GroupArchiveParams,
+    type GroupAssignResourceRoleParams as GroupAssignResourceRoleParams,
+    type GroupAssignRoleParams as GroupAssignRoleParams,
+    type GroupGetParams as GroupGetParams,
+    type GroupListResourceRoleAssignmentsParams as GroupListResourceRoleAssignmentsParams,
+    type GroupListRoleAssignmentsParams as GroupListRoleAssignmentsParams,
     type GroupUnarchiveParams as GroupUnarchiveParams,
+    type GroupUnassignResourceRoleParams as GroupUnassignResourceRoleParams,
+    type GroupUnassignRoleParams as GroupUnassignRoleParams,
   };
 
   export {
     Roles as Roles,
     type RoleCreateResponse as RoleCreateResponse,
     type RoleUpdateResponse as RoleUpdateResponse,
+    type RoleListResponse as RoleListResponse,
+    type RoleDeleteResponse as RoleDeleteResponse,
+    type RoleGetResponse as RoleGetResponse,
     type RoleCreateParams as RoleCreateParams,
     type RoleUpdateParams as RoleUpdateParams,
+    type RoleListParams as RoleListParams,
+    type RoleDeleteParams as RoleDeleteParams,
+    type RoleGetParams as RoleGetParams,
   };
 
   export {
@@ -804,6 +1129,4 @@ export declare namespace Tenants {
     type InvitationListParams as InvitationListParams,
     type InvitationRevokeParams as InvitationRevokeParams,
   };
-
-  export { Resources as Resources };
 }
