@@ -29,4 +29,12 @@ export {
   type GroupUnassignResourceRoleParams,
   type GroupUnassignRoleParams,
 } from './groups';
-export { Members, type MemberListResponse, type MemberListParams } from './members';
+export {
+  Members,
+  type MemberListResponse,
+  type MemberAddResponse,
+  type MemberRemoveResponse,
+  type MemberListParams,
+  type MemberAddParams,
+  type MemberRemoveParams,
+} from './members';

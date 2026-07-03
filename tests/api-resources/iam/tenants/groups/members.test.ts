@@ -29,4 +29,53 @@ describe('resource members', () => {
       starting_after: 'starting_after',
     });
   });
+
+  // Mock server tests are disabled
+  test.skip('add: only required params', async () => {
+    const responsePromise = client.iam.tenants.groups.members.add('membership_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      actor_token_identifier: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('add: required and optional params', async () => {
+    const response = await client.iam.tenants.groups.members.add('membership_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      actor_token_identifier: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.iam.tenants.groups.members.remove('membership_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.iam.tenants.groups.members.remove('membership_id', {
+      tenant_id: 'tenant_id',
+      group_id: 'group_id',
+      actor_token_identifier: 'actor_token_identifier',
+    });
+  });
 });

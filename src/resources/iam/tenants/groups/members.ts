@@ -16,6 +16,36 @@ export class Members extends APIResource {
       ...options,
     });
   }
+
+  /**
+   * Adds a tenant member to a group.
+   */
+  add(
+    membershipID: string,
+    params: MemberAddParams,
+    options?: RequestOptions,
+  ): APIPromise<MemberAddResponse> {
+    const { tenant_id, group_id, ...body } = params;
+    return this._client.put(path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/members/${membershipID}`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Removes a tenant member from a group.
+   */
+  remove(
+    membershipID: string,
+    params: MemberRemoveParams,
+    options?: RequestOptions,
+  ): APIPromise<MemberRemoveResponse> {
+    const { tenant_id, group_id, actor_token_identifier } = params;
+    return this._client.delete(
+      path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/members/${membershipID}`,
+      { query: { actor_token_identifier }, ...options },
+    );
+  }
 }
 
 /**
@@ -85,6 +115,92 @@ export namespace MemberListResponse {
   }
 }
 
+/**
+ * Result of changing a tenant group membership.
+ */
+export interface MemberAddResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: MemberAddResponse.ConvexSourceData;
+
+  /**
+   * Tenant group changed by the operation.
+   */
+  group_id: string;
+
+  /**
+   * The user's tenant membership ID added to or removed from the group.
+   */
+  membership_id: string;
+}
+
+export namespace MemberAddResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
+/**
+ * Result of changing a tenant group membership.
+ */
+export interface MemberRemoveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: MemberRemoveResponse.ConvexSourceData;
+
+  /**
+   * Tenant group changed by the operation.
+   */
+  group_id: string;
+
+  /**
+   * The user's tenant membership ID added to or removed from the group.
+   */
+  membership_id: string;
+}
+
+export namespace MemberRemoveResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
+     */
+    version: number;
+  }
+}
+
 export interface MemberListParams {
   /**
    * Path param: The tenant ID. Pass `primary` to target the deployment's primary
@@ -104,6 +220,51 @@ export interface MemberListParams {
   starting_after?: string;
 }
 
+export interface MemberAddParams {
+  /**
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
+   */
+  tenant_id: string;
+
+  /**
+   * Path param: The unique identifier of the tenant group.
+   */
+  group_id: string;
+
+  /**
+   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
+   * unchanged by the trusted app backend. Used for identity and audit only.
+   */
+  actor_token_identifier: string | null;
+}
+
+export interface MemberRemoveParams {
+  /**
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
+   */
+  tenant_id: string;
+
+  /**
+   * Path param: The unique identifier of the tenant group.
+   */
+  group_id: string;
+
+  /**
+   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
+   * to that user, or omitted for service authority.
+   */
+  actor_token_identifier?: string;
+}
+
 export declare namespace Members {
-  export { type MemberListResponse as MemberListResponse, type MemberListParams as MemberListParams };
+  export {
+    type MemberListResponse as MemberListResponse,
+    type MemberAddResponse as MemberAddResponse,
+    type MemberRemoveResponse as MemberRemoveResponse,
+    type MemberListParams as MemberListParams,
+    type MemberAddParams as MemberAddParams,
+    type MemberRemoveParams as MemberRemoveParams,
+  };
 }

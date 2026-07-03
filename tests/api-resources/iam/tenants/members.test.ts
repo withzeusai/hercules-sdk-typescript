@@ -63,4 +63,216 @@ describe('resource members', () => {
       ),
     ).rejects.toThrow(Hercules.NotFoundError);
   });
+
+  // Mock server tests are disabled
+  test.skip('assignResourceRole: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.assignResourceRole('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'x',
+      external_id: 'x',
+      resource_type_id: 'x',
+      role: { id: 'x' },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('assignResourceRole: required and optional params', async () => {
+    const response = await client.iam.tenants.members.assignResourceRole('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'x',
+      external_id: 'x',
+      resource_type_id: 'x',
+      role: { id: 'x' },
+      expires_at: '2019-12-27T18:11:19.117Z',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('assignRole: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.assignRole('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'x',
+      role: { id: 'x' },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('assignRole: required and optional params', async () => {
+    const response = await client.iam.tenants.members.assignRole('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'x',
+      role: { id: 'x' },
+      expires_at: '2019-12-27T18:11:19.117Z',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.get('membership_id', { tenant_id: 'tenant_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: required and optional params', async () => {
+    const response = await client.iam.tenants.members.get('membership_id', { tenant_id: 'tenant_id' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listResourceRoleAssignments: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.listResourceRoleAssignments('membership_id', {
+      tenant_id: 'tenant_id',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listResourceRoleAssignments: required and optional params', async () => {
+    const response = await client.iam.tenants.members.listResourceRoleAssignments('membership_id', {
+      tenant_id: 'tenant_id',
+      limit: 1,
+      starting_after: 'starting_after',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listRoleAssignments: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.listRoleAssignments('membership_id', {
+      tenant_id: 'tenant_id',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listRoleAssignments: required and optional params', async () => {
+    const response = await client.iam.tenants.members.listRoleAssignments('membership_id', {
+      tenant_id: 'tenant_id',
+      limit: 1,
+      starting_after: 'starting_after',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.remove('membership_id', { tenant_id: 'tenant_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.iam.tenants.members.remove('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'actor_token_identifier',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('unassignResourceRole: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.unassignResourceRole('assignment_id', {
+      tenant_id: 'tenant_id',
+      membership_id: 'membership_id',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('unassignResourceRole: required and optional params', async () => {
+    const response = await client.iam.tenants.members.unassignResourceRole('assignment_id', {
+      tenant_id: 'tenant_id',
+      membership_id: 'membership_id',
+      actor_token_identifier: 'actor_token_identifier',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('unassignRole: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.unassignRole('assignment_id', {
+      tenant_id: 'tenant_id',
+      membership_id: 'membership_id',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('unassignRole: required and optional params', async () => {
+    const response = await client.iam.tenants.members.unassignRole('assignment_id', {
+      tenant_id: 'tenant_id',
+      membership_id: 'membership_id',
+      actor_token_identifier: 'actor_token_identifier',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateStatus: only required params', async () => {
+    const responsePromise = client.iam.tenants.members.updateStatus('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'x',
+      status: 'active',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateStatus: required and optional params', async () => {
+    const response = await client.iam.tenants.members.updateStatus('membership_id', {
+      tenant_id: 'tenant_id',
+      actor_token_identifier: 'x',
+      status: 'active',
+    });
+  });
 });
