@@ -3396,11 +3396,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Retrieves a paginated list of sent emails. Returns email metadata including delivery status.',
     stainlessPath: '(resource) email > (method) list',
     qualified: 'client.email.list',
-    params: ['ending_before?: string;', 'limit?: number;', 'starting_after?: string;'],
+    params: [
+      'created[gt]?: number;',
+      'created[gte]?: number;',
+      'created[lt]?: number;',
+      'created[lte]?: number;',
+      'ending_before?: string;',
+      'from?: string;',
+      'limit?: number;',
+      'query?: string;',
+      'sort?: string;',
+      'starting_after?: string;',
+      'to?: string;',
+    ],
     response:
       "{ id: string; created_at: string; from: string; subject: string; to: string[]; bcc?: string[]; cc?: string[]; last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'; reply_to?: string[]; }",
     markdown:
-      "## list\n\n`client.email.list(ending_before?: string, limit?: number, starting_after?: string): { id: string; created_at: string; from: string; subject: string; to: string[]; bcc?: string[]; cc?: string[]; last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'; reply_to?: string[]; }`\n\n**get** `/v1/email`\n\nRetrieves a paginated list of sent emails. Returns email metadata including delivery status.\n\n### Parameters\n\n- `ending_before?: string`\n  Cursor for backward pagination. Pass the ID of the first email from the previous page.\n\n- `limit?: number`\n  Maximum number of emails to return (1-100)\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last email from the previous page.\n\n### Returns\n\n- `{ id: string; created_at: string; from: string; subject: string; to: string[]; bcc?: string[]; cc?: string[]; last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'; reply_to?: string[]; }`\n  A sent email object\n\n  - `id: string`\n  - `created_at: string`\n  - `from: string`\n  - `subject: string`\n  - `to: string[]`\n  - `bcc?: string[]`\n  - `cc?: string[]`\n  - `last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'`\n  - `reply_to?: string[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\n// Automatically fetches more pages as needed.\nfor await (const email of client.email.list()) {\n  console.log(email);\n}\n```",
+      "## list\n\n`client.email.list(created[gt]?: number, created[gte]?: number, created[lt]?: number, created[lte]?: number, ending_before?: string, from?: string, limit?: number, query?: string, sort?: string, starting_after?: string, to?: string): { id: string; created_at: string; from: string; subject: string; to: string[]; bcc?: string[]; cc?: string[]; last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'; reply_to?: string[]; }`\n\n**get** `/v1/email`\n\nRetrieves a paginated list of sent emails. Returns email metadata including delivery status.\n\n### Parameters\n\n- `created[gt]?: number`\n  Only return emails created after this Unix timestamp (seconds).\n\n- `created[gte]?: number`\n  Only return emails created at or after this Unix timestamp (seconds).\n\n- `created[lt]?: number`\n  Only return emails created before this Unix timestamp (seconds).\n\n- `created[lte]?: number`\n  Only return emails created at or before this Unix timestamp (seconds).\n\n- `ending_before?: string`\n  Cursor for backward pagination. Pass the ID of the first email from the previous page.\n\n- `from?: string`\n  Filter by sender address (case-insensitive partial match).\n\n- `limit?: number`\n  Maximum number of emails to return (1-100)\n\n- `query?: string`\n  Search query to filter emails. Searches across sender, recipients, and subject (case-insensitive).\n\n- `sort?: string`\n  Sort order for emails. Prefix with '-' for descending order. Valid values: created, from, subject, last_event (each optionally prefixed with '-'). Default: -created (newest first).\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last email from the previous page.\n\n- `to?: string`\n  Filter by recipient address (case-insensitive partial match).\n\n### Returns\n\n- `{ id: string; created_at: string; from: string; subject: string; to: string[]; bcc?: string[]; cc?: string[]; last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'; reply_to?: string[]; }`\n  A sent email object\n\n  - `id: string`\n  - `created_at: string`\n  - `from: string`\n  - `subject: string`\n  - `to: string[]`\n  - `bcc?: string[]`\n  - `cc?: string[]`\n  - `last_event?: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'complained'`\n  - `reply_to?: string[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\n// Automatically fetches more pages as needed.\nfor await (const email of client.email.list()) {\n  console.log(email);\n}\n```",
     perLanguage: {
       typescript: {
         method: 'client.email.list',

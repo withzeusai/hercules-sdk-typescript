@@ -197,7 +197,50 @@ export interface EmailSendResponse {
   id: string;
 }
 
-export interface EmailListParams extends CursorIDPageParams {}
+export interface EmailListParams extends CursorIDPageParams {
+  /**
+   * Only return emails created after this Unix timestamp (seconds).
+   */
+  'created[gt]'?: number;
+
+  /**
+   * Only return emails created at or after this Unix timestamp (seconds).
+   */
+  'created[gte]'?: number;
+
+  /**
+   * Only return emails created before this Unix timestamp (seconds).
+   */
+  'created[lt]'?: number;
+
+  /**
+   * Only return emails created at or before this Unix timestamp (seconds).
+   */
+  'created[lte]'?: number;
+
+  /**
+   * Filter by sender address (case-insensitive partial match).
+   */
+  from?: string;
+
+  /**
+   * Search query to filter emails. Searches across sender, recipients, and subject
+   * (case-insensitive).
+   */
+  query?: string;
+
+  /**
+   * Sort order for emails. Prefix with '-' for descending order. Valid values:
+   * created, from, subject, last_event (each optionally prefixed with '-'). Default:
+   * -created (newest first).
+   */
+  sort?: string;
+
+  /**
+   * Filter by recipient address (case-insensitive partial match).
+   */
+  to?: string;
+}
 
 export interface EmailSendParams {
   /**
