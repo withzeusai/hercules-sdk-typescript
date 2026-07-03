@@ -10,8 +10,8 @@ const client = new Hercules({
 
 describe('resource invitations', () => {
   // Mock server tests are disabled
-  test.skip('list: only required params', async () => {
-    const responsePromise = client.iam.tenants.invitations.list('tenant_id', { actor_token_identifier: 'x' });
+  test.skip('list', async () => {
+    const responsePromise = client.iam.tenants.invitations.list('tenant_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,21 +22,21 @@ describe('resource invitations', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: required and optional params', async () => {
-    const response = await client.iam.tenants.invitations.list('tenant_id', {
-      actor_token_identifier: 'x',
-      limit: 1,
-      recipient: { type: 'email', value: 'dev@stainless.com' },
-      starting_after: 'starting_after',
-      target: { type: 'tenant' },
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.invitations.list(
+        'tenant_id',
+        { limit: 1, starting_after: 'starting_after' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('revoke: only required params', async () => {
     const responsePromise = client.iam.tenants.invitations.revoke('invitation_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -51,7 +51,7 @@ describe('resource invitations', () => {
   test.skip('revoke: required and optional params', async () => {
     const response = await client.iam.tenants.invitations.revoke('invitation_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_token_identifier: 'actor_token_identifier',
     });
   });
 });

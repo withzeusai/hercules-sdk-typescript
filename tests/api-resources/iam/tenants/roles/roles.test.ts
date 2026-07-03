@@ -15,6 +15,7 @@ describe('resource roles', () => {
       actor_token_identifier: 'x',
       key: 'x',
       name: 'x',
+      permission_keys: ['x'],
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -31,8 +32,8 @@ describe('resource roles', () => {
       actor_token_identifier: 'x',
       key: 'x',
       name: 'x',
-      description: 'description',
       permission_keys: ['x'],
+      description: 'description',
     });
   });
 
@@ -59,52 +60,6 @@ describe('resource roles', () => {
       description: 'description',
       name: 'x',
       permission_keys: ['x'],
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('archive: only required params', async () => {
-    const responsePromise = client.iam.tenants.roles.archive('role_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('archive: required and optional params', async () => {
-    const response = await client.iam.tenants.roles.archive('role_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('unarchive: only required params', async () => {
-    const responsePromise = client.iam.tenants.roles.unarchive('role_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('unarchive: required and optional params', async () => {
-    const response = await client.iam.tenants.roles.unarchive('role_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
     });
   });
 });

@@ -36,11 +36,8 @@ describe('resource accessRules', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.iam.tenants.accessRules.update('rule_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-    });
+  test.skip('list', async () => {
+    const responsePromise = client.iam.tenants.accessRules.list('tenant_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -51,36 +48,21 @@ describe('resource accessRules', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.iam.tenants.accessRules.update('rule_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-      reason: 'reason',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('list: only required params', async () => {
-    const responsePromise = client.iam.tenants.accessRules.list('tenant_id', { actor_token_identifier: 'x' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('list: required and optional params', async () => {
-    const response = await client.iam.tenants.accessRules.list('tenant_id', {
-      actor_token_identifier: 'x',
-      archived: true,
-      effect: 'allow',
-      limit: 1,
-      starting_after: 'starting_after',
-      subject_type: 'email',
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.accessRules.list(
+        'tenant_id',
+        {
+          effect: 'allow',
+          include_archived: 'include_archived',
+          limit: 1,
+          starting_after: 'starting_after',
+          subject_type: 'email',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -101,29 +83,6 @@ describe('resource accessRules', () => {
   // Mock server tests are disabled
   test.skip('archive: required and optional params', async () => {
     const response = await client.iam.tenants.accessRules.archive('rule_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('unarchive: only required params', async () => {
-    const responsePromise = client.iam.tenants.accessRules.unarchive('rule_id', {
-      tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('unarchive: required and optional params', async () => {
-    const response = await client.iam.tenants.accessRules.unarchive('rule_id', {
       tenant_id: 'tenant_id',
       actor_token_identifier: 'x',
     });

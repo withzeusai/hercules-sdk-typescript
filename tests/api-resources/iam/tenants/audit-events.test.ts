@@ -10,8 +10,8 @@ const client = new Hercules({
 
 describe('resource auditEvents', () => {
   // Mock server tests are disabled
-  test.skip('list: only required params', async () => {
-    const responsePromise = client.iam.tenants.auditEvents.list('tenant_id', { actor_token_identifier: 'x' });
+  test.skip('list', async () => {
+    const responsePromise = client.iam.tenants.auditEvents.list('tenant_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,20 +22,18 @@ describe('resource auditEvents', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: required and optional params', async () => {
-    const response = await client.iam.tenants.auditEvents.list('tenant_id', {
-      actor_token_identifier: 'x',
-      action: 'x',
-      actor_type: 'system',
-      api_key_id: 'x',
-      end_time: '2019-12-27T18:11:19.117Z',
-      limit: 1,
-      start_time: '2019-12-27T18:11:19.117Z',
-      starting_after: 'starting_after',
-      status: 'success',
-      target_id: 'x',
-      target_type: 'x',
-      user_id: 'x',
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.iam.tenants.auditEvents.list(
+        'tenant_id',
+        {
+          before: '2019-12-27T18:11:19.117Z',
+          limit: 1,
+          starting_after: 'starting_after',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
   });
 });
