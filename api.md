@@ -42,11 +42,29 @@ Types:
 
 - <code><a href="./src/resources/iam/tenants/members.ts">MemberCreateResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/members.ts">MemberListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberAssignResourceRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberAssignRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberGetResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberListResourceRoleAssignmentsResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberListRoleAssignmentsResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberRemoveResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberUnassignResourceRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberUnassignRoleResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/members.ts">MemberUpdateStatusResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/iam/tenants/{tenant_id}/members">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">create</a>(tenantID, { ...params }) -> MemberCreateResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/members">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">list</a>(tenantID, { ...params }) -> MemberListResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">assignResourceRole</a>(membershipID, { ...params }) -> MemberAssignResourceRoleResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">assignRole</a>(membershipID, { ...params }) -> MemberAssignRoleResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/members/{membership_id}">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">get</a>(membershipID, { ...params }) -> MemberGetResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">listResourceRoleAssignments</a>(membershipID, { ...params }) -> MemberListResourceRoleAssignmentsResponse</code>
+- <code title="get /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">listRoleAssignments</a>(membershipID, { ...params }) -> MemberListRoleAssignmentsResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/members/{membership_id}">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">remove</a>(membershipID, { ...params }) -> MemberRemoveResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments/{assignment_id}">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">unassignResourceRole</a>(assignmentID, { ...params }) -> MemberUnassignResourceRoleResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments/{assignment_id}">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">unassignRole</a>(assignmentID, { ...params }) -> MemberUnassignRoleResponse</code>
+- <code title="patch /v1/iam/tenants/{tenant_id}/members/{membership_id}">client.iam.tenants.members.<a href="./src/resources/iam/tenants/members.ts">updateStatus</a>(membershipID, { ...params }) -> MemberUpdateStatusResponse</code>
 
 ### Groups
 
@@ -87,10 +105,14 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/iam/tenants/groups/members.ts">MemberListResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/members.ts">MemberAddResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/groups/members.ts">MemberRemoveResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/iam/tenants/{tenant_id}/groups/{group_id}/members">client.iam.tenants.groups.members.<a href="./src/resources/iam/tenants/groups/members.ts">list</a>(groupID, { ...params }) -> MemberListResponse</code>
+- <code title="put /v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}">client.iam.tenants.groups.members.<a href="./src/resources/iam/tenants/groups/members.ts">add</a>(membershipID, { ...params }) -> MemberAddResponse</code>
+- <code title="delete /v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}">client.iam.tenants.groups.members.<a href="./src/resources/iam/tenants/groups/members.ts">remove</a>(membershipID, { ...params }) -> MemberRemoveResponse</code>
 
 ### Roles
 

@@ -2,7 +2,15 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as MembersAPI from './members';
-import { MemberListParams, MemberListResponse, Members } from './members';
+import {
+  MemberAddParams,
+  MemberAddResponse,
+  MemberListParams,
+  MemberListResponse,
+  MemberRemoveParams,
+  MemberRemoveResponse,
+  Members,
+} from './members';
 import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -1037,6 +1045,10 @@ export declare namespace Groups {
   export {
     Members as Members,
     type MemberListResponse as MemberListResponse,
+    type MemberAddResponse as MemberAddResponse,
+    type MemberRemoveResponse as MemberRemoveResponse,
     type MemberListParams as MemberListParams,
+    type MemberAddParams as MemberAddParams,
+    type MemberRemoveParams as MemberRemoveParams,
   };
 }
