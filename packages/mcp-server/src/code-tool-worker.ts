@@ -108,6 +108,9 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
+    'client.analytics.listTables',
+    'client.analytics.query',
+    'client.analytics.status',
     'client.iam.invitations.accept',
     'client.iam.tenants.archive',
     'client.iam.tenants.create',

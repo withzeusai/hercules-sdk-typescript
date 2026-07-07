@@ -11,6 +11,24 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
+    clientCallName: 'client.analytics.listTables',
+    fullyQualifiedName: 'analytics.listTables',
+    httpMethod: 'get',
+    httpPath: '/v1/analytics/tables',
+  },
+  {
+    clientCallName: 'client.analytics.query',
+    fullyQualifiedName: 'analytics.query',
+    httpMethod: 'post',
+    httpPath: '/v1/analytics/query',
+  },
+  {
+    clientCallName: 'client.analytics.status',
+    fullyQualifiedName: 'analytics.status',
+    httpMethod: 'get',
+    httpPath: '/v1/analytics/status',
+  },
+  {
     clientCallName: 'client.iam.invitations.accept',
     fullyQualifiedName: 'iam.invitations.accept',
     httpMethod: 'post',

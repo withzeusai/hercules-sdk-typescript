@@ -1,3 +1,18 @@
+# Analytics
+
+Types:
+
+- <code><a href="./src/resources/analytics.ts">QueryResponse</a></code>
+- <code><a href="./src/resources/analytics.ts">Status</a></code>
+- <code><a href="./src/resources/analytics.ts">Table</a></code>
+- <code><a href="./src/resources/analytics.ts">AnalyticsListTablesResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/analytics/tables">client.analytics.<a href="./src/resources/analytics.ts">listTables</a>() -> AnalyticsListTablesResponse</code>
+- <code title="post /v1/analytics/query">client.analytics.<a href="./src/resources/analytics.ts">query</a>({ ...params }) -> QueryResponse</code>
+- <code title="get /v1/analytics/status">client.analytics.<a href="./src/resources/analytics.ts">status</a>() -> Status</code>
+
 # Iam
 
 ## Invitations
