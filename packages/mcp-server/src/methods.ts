@@ -47,6 +47,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/iam/tenants/{tenant_id}/invitations',
   },
   {
+    clientCallName: 'client.iam.tenants.evaluateAccess',
+    fullyQualifiedName: 'iam.tenants.evaluateAccess',
+    httpMethod: 'post',
+    httpPath: '/v1/iam/tenants/{tenant_id}/evaluate-access',
+  },
+  {
     clientCallName: 'client.iam.tenants.get',
     fullyQualifiedName: 'iam.tenants.get',
     httpMethod: 'get',

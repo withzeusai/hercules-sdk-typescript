@@ -157,6 +157,21 @@ export class Tenants extends APIResource {
   }
 
   /**
+   * Evaluates whether the signed-in end user may enter the tenant and applies the
+   * result: entry mode `open` creates an active membership with the tenant default
+   * role, `approval_required` creates a pending membership, and denials create
+   * nothing. Call it after sign-in, before reading the user's access status. Safe to
+   * repeat; an existing membership is returned unchanged.
+   */
+  evaluateAccess(
+    tenantID: string,
+    body: TenantEvaluateAccessParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantEvaluateAccessResponse> {
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/evaluate-access`, { body, ...options });
+  }
+
+  /**
    * Returns one IAM tenant by ID. Pass `primary` for the deployment's primary
    * tenant.
    */
@@ -492,6 +507,70 @@ export namespace TenantCreateInvitationResponse {
      * sender configured in Auth branding.
      */
     from_email?: string | null;
+  }
+}
+
+/**
+ * Tenant entry decision for one end user.
+ */
+export interface TenantEvaluateAccessResponse {
+  /**
+   * Whether the user has an active membership in the tenant now.
+   */
+  allowed: boolean;
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantEvaluateAccessResponse.ConvexSourceData;
+
+  /**
+   * Hercules IAM identifier.
+   */
+  membership_id: string | null;
+
+  /**
+   * Why entry was denied.
+   */
+  reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled' | null;
+
+  /**
+   * Entry outcome: the user's membership status after evaluation, or `denied` when
+   * the tenant's admission policy rejects them and no membership exists.
+   */
+  status: 'active' | 'pending_approval' | 'denied';
+
+  /**
+   * Tenant evaluated for entry.
+   */
+  tenant_id: string;
+
+  /**
+   * The end user's ID (their OIDC subject) that was evaluated.
+   */
+  user_id: string;
+}
+
+export namespace TenantEvaluateAccessResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
+     */
+    version: number;
   }
 }
 
@@ -971,6 +1050,14 @@ export namespace TenantCreateInvitationParams {
   }
 }
 
+export interface TenantEvaluateAccessParams {
+  /**
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string;
+}
+
 export interface TenantListResourceRoleAssignmentsParams {
   /**
    * Filter to one exact resource's external ID. Pair with a resource type to find
@@ -1060,6 +1147,7 @@ export declare namespace Tenants {
     type TenantListResponse as TenantListResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
     type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
+    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
     type TenantGetResponse as TenantGetResponse,
     type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
     type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
@@ -1069,6 +1157,7 @@ export declare namespace Tenants {
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
     type TenantCreateInvitationParams as TenantCreateInvitationParams,
+    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
     type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
     type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,

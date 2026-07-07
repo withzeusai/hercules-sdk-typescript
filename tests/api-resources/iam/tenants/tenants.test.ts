@@ -124,6 +124,23 @@ describe('resource tenants', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('evaluateAccess: only required params', async () => {
+    const responsePromise = client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('evaluateAccess: required and optional params', async () => {
+    const response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });
+  });
+
+  // Mock server tests are disabled
   test.skip('get', async () => {
     const responsePromise = client.iam.tenants.get('tenant_id');
     const rawResponse = await responsePromise.asResponse();
