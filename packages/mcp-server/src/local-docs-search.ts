@@ -51,6 +51,81 @@ type SearchResult = {
 
 const EMBEDDED_METHODS: MethodEntry[] = [
   {
+    name: 'query',
+    endpoint: '/v1/analytics/query',
+    httpMethod: 'post',
+    summary: 'Run Analytics Query',
+    description:
+      "Executes a single read-only SQL statement against the app's analytics replica and returns rows with column metadata and execution stats.",
+    stainlessPath: '(resource) analytics > (method) query',
+    qualified: 'client.analytics.query',
+    params: ['sql: string;', 'params?: object;', 'timeout_ms?: number;'],
+    response:
+      '{ columns: { name: string; type: string; }[]; rows: object[][]; stats: { bytes_scanned: number; elapsed_ms: number; rows: number; }; truncated: boolean; }',
+    markdown:
+      "## query\n\n`client.analytics.query(sql: string, params?: object, timeout_ms?: number): { columns: object[]; rows: object[][]; stats: object; truncated: boolean; }`\n\n**post** `/v1/analytics/query`\n\nExecutes a single read-only SQL statement against the app's analytics replica and returns rows with column metadata and execution stats.\n\n### Parameters\n\n- `sql: string`\n  A single read-only SQL statement (SELECT / WITH / FROM / VALUES).\n\n- `params?: object`\n  Named parameters bound server-side; reference them in the SQL as $name. Always prefer parameters over string interpolation.\n\n- `timeout_ms?: number`\n  Query timeout in milliseconds (default and maximum 30000).\n\n### Returns\n\n- `{ columns: { name: string; type: string; }[]; rows: object[][]; stats: { bytes_scanned: number; elapsed_ms: number; rows: number; }; truncated: boolean; }`\n  The result of a read-only analytics query.\n\n  - `columns: { name: string; type: string; }[]`\n  - `rows: object[][]`\n  - `stats: { bytes_scanned: number; elapsed_ms: number; rows: number; }`\n  - `truncated: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst queryResponse = await client.analytics.query({ sql: 'x' });\n\nconsole.log(queryResponse);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.analytics.query',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst queryResponse = await client.analytics.query({ sql: 'x' });\n\nconsole.log(queryResponse.columns);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/analytics/query \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "sql": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list_tables',
+    endpoint: '/v1/analytics/tables',
+    httpMethod: 'get',
+    summary: 'List Analytics Tables',
+    description:
+      "Retrieves the replicated tables and their column types, along with the replica's last sync time.",
+    stainlessPath: '(resource) analytics > (method) list_tables',
+    qualified: 'client.analytics.listTables',
+    response: '{ data: { columns: object[]; name: string; }[]; last_synced_at: string; }',
+    markdown:
+      "## list_tables\n\n`client.analytics.listTables(): { data: table[]; last_synced_at: string; }`\n\n**get** `/v1/analytics/tables`\n\nRetrieves the replicated tables and their column types, along with the replica's last sync time.\n\n### Returns\n\n- `{ data: { columns: object[]; name: string; }[]; last_synced_at: string; }`\n\n  - `data: { columns: { name: string; type: string; }[]; name: string; }[]`\n  - `last_synced_at: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.analytics.listTables();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.analytics.listTables',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.analytics.listTables();\n\nconsole.log(response.data);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/analytics/tables \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'status',
+    endpoint: '/v1/analytics/status',
+    httpMethod: 'get',
+    summary: 'Get Analytics Status',
+    description:
+      'Reports whether analytics is enabled for the app, the replication state, last sync time, and replica storage size.',
+    stainlessPath: '(resource) analytics > (method) status',
+    qualified: 'client.analytics.status',
+    response:
+      "{ enabled: boolean; last_synced_at: string; state: 'backfilling' | 'active' | 'paused' | 'error' | 'disabling' | 'disabled'; storage_bytes: number; sync_interval_minutes: number; }",
+    markdown:
+      "## status\n\n`client.analytics.status(): { enabled: boolean; last_synced_at: string; state: 'backfilling' | 'active' | 'paused' | 'error' | 'disabling' | 'disabled'; storage_bytes: number; sync_interval_minutes: number; }`\n\n**get** `/v1/analytics/status`\n\nReports whether analytics is enabled for the app, the replication state, last sync time, and replica storage size.\n\n### Returns\n\n- `{ enabled: boolean; last_synced_at: string; state: 'backfilling' | 'active' | 'paused' | 'error' | 'disabling' | 'disabled'; storage_bytes: number; sync_interval_minutes: number; }`\n\n  - `enabled: boolean`\n  - `last_synced_at: string`\n  - `state: 'backfilling' | 'active' | 'paused' | 'error' | 'disabling' | 'disabled'`\n  - `storage_bytes: number`\n  - `sync_interval_minutes: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst status = await client.analytics.status();\n\nconsole.log(status);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.analytics.status',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst status = await client.analytics.status();\n\nconsole.log(status.enabled);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/analytics/status \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'accept',
     endpoint: '/v1/iam/invitations/accept',
     httpMethod: 'post',

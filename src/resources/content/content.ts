@@ -52,7 +52,7 @@ import {
 } from './releases/releases';
 
 /**
- * Content APIs are currently in beta.
+ * (Beta) Manage content collections, fields, entries, assets, locales, and releases.
  */
 export class Content extends APIResource {
   collections: CollectionsAPI.Collections = new CollectionsAPI.Collections(this._client);

@@ -19,6 +19,14 @@ import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './c
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import {
+  Analytics,
+  AnalyticsListTablesResponse,
+  AnalyticsQueryParams,
+  QueryResponse,
+  Status,
+  Table,
+} from './resources/analytics';
 import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
@@ -824,6 +832,11 @@ export class Hercules {
   static toFile = Uploads.toFile;
 
   /**
+   * (Beta) Query the app's analytics replica with read-only SQL, list the
+   * replicated tables and their columns, and check replication status.
+   */
+  analytics: API.Analytics = new API.Analytics(this);
+  /**
    * Manage IAM tenants, members, groups, roles, access rules, invitations,
    * and tenant-wide / resource role assignments. Requires an API key with the
    * IAM administration permission.
@@ -841,7 +854,7 @@ export class Hercules {
    */
   connectors: API.Connectors = new API.Connectors(this);
   /**
-   * Content APIs are currently in beta.
+   * (Beta) Manage content collections, fields, entries, assets, locales, and releases.
    */
   content: API.Content = new API.Content(this);
   /**
@@ -864,6 +877,7 @@ export class Hercules {
   pushNotifications: API.PushNotifications = new API.PushNotifications(this);
 }
 
+Hercules.Analytics = Analytics;
 Hercules.Iam = Iam;
 Hercules.Commerce = Commerce;
 Hercules.Connectors = Connectors;
@@ -878,6 +892,15 @@ export declare namespace Hercules {
 
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
+
+  export {
+    Analytics as Analytics,
+    type QueryResponse as QueryResponse,
+    type Status as Status,
+    type Table as Table,
+    type AnalyticsListTablesResponse as AnalyticsListTablesResponse,
+    type AnalyticsQueryParams as AnalyticsQueryParams,
+  };
 
   export { Iam as Iam };
 
