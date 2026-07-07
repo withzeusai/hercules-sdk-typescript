@@ -240,6 +240,32 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'evaluate_access',
+    endpoint: '/v1/iam/tenants/{tenant_id}/evaluate-access',
+    httpMethod: 'post',
+    summary: 'Evaluate tenant access',
+    description:
+      "Evaluates whether the signed-in end user may enter the tenant and applies the result: entry mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.",
+    stainlessPath: '(resource) iam.tenants > (method) evaluate_access',
+    qualified: 'client.iam.tenants.evaluateAccess',
+    params: ['tenant_id: string;', 'actor_token_identifier: string;'],
+    response:
+      "{ allowed: boolean; convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }",
+    markdown:
+      "## evaluate_access\n\n`client.iam.tenants.evaluateAccess(tenant_id: string, actor_token_identifier: string): { allowed: boolean; convex_source_data: object; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/evaluate-access`\n\nEvaluates whether the signed-in end user may enter the tenant and applies the result: entry mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ allowed: boolean; convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }`\n  Tenant entry decision for one end user.\n\n  - `allowed: boolean`\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `membership_id: string`\n  - `reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'`\n  - `status: 'active' | 'pending_approval' | 'denied'`\n  - `tenant_id: string`\n  - `user_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.iam.tenants.evaluateAccess',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.evaluateAccess('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.membership_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/evaluate-access \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+      },
+    },
+  },
+  {
     name: 'create_invitation',
     endpoint: '/v1/iam/tenants/{tenant_id}/invitations',
     httpMethod: 'post',
