@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.2",
   "name": "@usehercules/mcp",
-  "version": "1.15.10",
+  "version": "1.15.11",
   "description": "The official MCP Server for the Hercules API",
   "author": {
     "name": "Hercules",

@@ -115,12 +115,29 @@ describe('resource tenants', () => {
     const response = await client.iam.tenants.createInvitation('tenant_id', {
       actor_token_identifier: 'x',
       constraint: { type: 'email', value: 'dev@stainless.com' },
-      delivery: { from_email: 'dev@stainless.com', to_emails: ['dev@stainless.com'] },
+      delivery: { to_emails: ['dev@stainless.com'], from_email: 'dev@stainless.com' },
       expires_at: '2019-12-27T18:11:19.117Z',
       max_uses: 1,
       redirect_path: 'x',
       roles: [{ id: 'x' }],
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('evaluateAccess: only required params', async () => {
+    const responsePromise = client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('evaluateAccess: required and optional params', async () => {
+    const response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });
   });
 
   // Mock server tests are disabled

@@ -19,6 +19,7 @@ Types:
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantArchiveResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantCreateInvitationResponse</a></code>
+- <code><a href="./src/resources/iam/tenants/tenants.ts">TenantEvaluateAccessResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantGetResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListResourceRoleAssignmentsResponse</a></code>
 - <code><a href="./src/resources/iam/tenants/tenants.ts">TenantListRoleAssignmentsResponse</a></code>
@@ -31,6 +32,7 @@ Methods:
 - <code title="get /v1/iam/tenants">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">list</a>({ ...params }) -> TenantListResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/archive">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">archive</a>(tenantID, { ...params }) -> TenantArchiveResponse</code>
 - <code title="post /v1/iam/tenants/{tenant_id}/invitations">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">createInvitation</a>(tenantID, { ...params }) -> TenantCreateInvitationResponse</code>
+- <code title="post /v1/iam/tenants/{tenant_id}/evaluate-access">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">evaluateAccess</a>(tenantID, { ...params }) -> TenantEvaluateAccessResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">get</a>(tenantID) -> TenantGetResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/resource-role-assignments">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">listResourceRoleAssignments</a>(tenantID, { ...params }) -> TenantListResourceRoleAssignmentsResponse</code>
 - <code title="get /v1/iam/tenants/{tenant_id}/role-assignments">client.iam.tenants.<a href="./src/resources/iam/tenants/tenants.ts">listRoleAssignments</a>(tenantID, { ...params }) -> TenantListRoleAssignmentsResponse</code>

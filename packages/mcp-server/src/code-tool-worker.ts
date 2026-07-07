@@ -112,6 +112,7 @@ const fuse = new Fuse(
     'client.iam.tenants.archive',
     'client.iam.tenants.create',
     'client.iam.tenants.createInvitation',
+    'client.iam.tenants.evaluateAccess',
     'client.iam.tenants.get',
     'client.iam.tenants.list',
     'client.iam.tenants.listResourceRoleAssignments',

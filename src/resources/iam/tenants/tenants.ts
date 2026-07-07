@@ -157,6 +157,21 @@ export class Tenants extends APIResource {
   }
 
   /**
+   * Evaluates whether the signed-in end user may enter the tenant and applies the
+   * result: entry mode `open` creates an active membership with the tenant default
+   * role, `approval_required` creates a pending membership, and denials create
+   * nothing. Call it after sign-in, before reading the user's access status. Safe to
+   * repeat; an existing membership is returned unchanged.
+   */
+  evaluateAccess(
+    tenantID: string,
+    body: TenantEvaluateAccessParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantEvaluateAccessResponse> {
+    return this._client.post(path`/v1/iam/tenants/${tenantID}/evaluate-access`, { body, ...options });
+  }
+
+  /**
    * Returns one IAM tenant by ID. Pass `primary` for the deployment's primary
    * tenant.
    */
@@ -414,7 +429,7 @@ export interface TenantCreateInvitationResponse {
 
   /**
    * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation from from_email to each recipient. Omit for a manual link you share
+   * invitation to each recipient. Omit delivery entirely for a manual link you share
    * yourself.
    */
   delivery: TenantCreateInvitationResponse.Delivery | null;
@@ -478,19 +493,84 @@ export namespace TenantCreateInvitationResponse {
 
   /**
    * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation from from_email to each recipient. Omit for a manual link you share
+   * invitation to each recipient. Omit delivery entirely for a manual link you share
    * yourself.
    */
   export interface Delivery {
     /**
-     * Sender address the invitation is emailed from.
-     */
-    from_email: string;
-
-    /**
      * Recipients the invitation email is sent to.
      */
     to_emails: Array<string>;
+
+    /**
+     * Sender address the invitation is emailed from. Null or omitted uses the verified
+     * sender configured in Auth branding.
+     */
+    from_email?: string | null;
+  }
+}
+
+/**
+ * Tenant entry decision for one end user.
+ */
+export interface TenantEvaluateAccessResponse {
+  /**
+   * Whether the user has an active membership in the tenant now.
+   */
+  allowed: boolean;
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantEvaluateAccessResponse.ConvexSourceData;
+
+  /**
+   * Hercules IAM identifier.
+   */
+  membership_id: string | null;
+
+  /**
+   * Why entry was denied.
+   */
+  reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled' | null;
+
+  /**
+   * Entry outcome: the user's membership status after evaluation, or `denied` when
+   * the tenant's admission policy rejects them and no membership exists.
+   */
+  status: 'active' | 'pending_approval' | 'denied';
+
+  /**
+   * Tenant evaluated for entry.
+   */
+  tenant_id: string;
+
+  /**
+   * The end user's ID (their OIDC subject) that was evaluated.
+   */
+  user_id: string;
+}
+
+export namespace TenantEvaluateAccessResponse {
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * Deployment IAM state version after the operation. Before relying on Convex IAM
+     * mirror reads, wait for the projection to reach at least this version.
+     */
+    version: number;
   }
 }
 
@@ -880,7 +960,7 @@ export interface TenantCreateInvitationParams {
 
   /**
    * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation from from_email to each recipient. Omit for a manual link you share
+   * invitation to each recipient. Omit delivery entirely for a manual link you share
    * yourself.
    */
   delivery?: TenantCreateInvitationParams.Delivery;
@@ -939,19 +1019,20 @@ export namespace TenantCreateInvitationParams {
 
   /**
    * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation from from_email to each recipient. Omit for a manual link you share
+   * invitation to each recipient. Omit delivery entirely for a manual link you share
    * yourself.
    */
   export interface Delivery {
     /**
-     * Sender address the invitation is emailed from.
-     */
-    from_email: string;
-
-    /**
      * Recipients the invitation email is sent to.
      */
     to_emails: Array<string>;
+
+    /**
+     * Sender address the invitation is emailed from. Null or omitted uses the verified
+     * sender configured in Auth branding.
+     */
+    from_email?: string | null;
   }
 
   export interface IamRoleIDReference {
@@ -967,6 +1048,14 @@ export namespace TenantCreateInvitationParams {
      */
     key: string;
   }
+}
+
+export interface TenantEvaluateAccessParams {
+  /**
+   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
+   * trusted app backend.
+   */
+  actor_token_identifier: string;
 }
 
 export interface TenantListResourceRoleAssignmentsParams {
@@ -1058,6 +1147,7 @@ export declare namespace Tenants {
     type TenantListResponse as TenantListResponse,
     type TenantArchiveResponse as TenantArchiveResponse,
     type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
+    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
     type TenantGetResponse as TenantGetResponse,
     type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
     type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
@@ -1067,6 +1157,7 @@ export declare namespace Tenants {
     type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
     type TenantCreateInvitationParams as TenantCreateInvitationParams,
+    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
     type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
     type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,

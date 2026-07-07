@@ -66,7 +66,7 @@ export namespace InvitationListResponse {
 
     /**
      * Optional email delivery, independent of the signup constraint. Sends the
-     * invitation from from_email to each recipient. Omit for a manual link you share
+     * invitation to each recipient. Omit delivery entirely for a manual link you share
      * yourself.
      */
     delivery: Data.Delivery | null;
@@ -130,19 +130,20 @@ export namespace InvitationListResponse {
 
     /**
      * Optional email delivery, independent of the signup constraint. Sends the
-     * invitation from from_email to each recipient. Omit for a manual link you share
+     * invitation to each recipient. Omit delivery entirely for a manual link you share
      * yourself.
      */
     export interface Delivery {
       /**
-       * Sender address the invitation is emailed from.
-       */
-      from_email: string;
-
-      /**
        * Recipients the invitation email is sent to.
        */
       to_emails: Array<string>;
+
+      /**
+       * Sender address the invitation is emailed from. Null or omitted uses the verified
+       * sender configured in Auth branding.
+       */
+      from_email?: string | null;
     }
   }
 }
