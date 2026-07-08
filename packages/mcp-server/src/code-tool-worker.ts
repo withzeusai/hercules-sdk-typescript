@@ -130,6 +130,8 @@ const fuse = new Fuse(
     'client.iam.tenants.members.listResourceRoleAssignments',
     'client.iam.tenants.members.listRoleAssignments',
     'client.iam.tenants.members.remove',
+    'client.iam.tenants.members.replaceResourceRoles',
+    'client.iam.tenants.members.replaceRoles',
     'client.iam.tenants.members.unassignResourceRole',
     'client.iam.tenants.members.unassignRole',
     'client.iam.tenants.members.updateStatus',

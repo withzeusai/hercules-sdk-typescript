@@ -143,6 +143,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/iam/tenants/{tenant_id}/members/{membership_id}',
   },
   {
+    clientCallName: 'client.iam.tenants.members.replaceResourceRoles',
+    fullyQualifiedName: 'iam.tenants.members.replaceResourceRoles',
+    httpMethod: 'put',
+    httpPath: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
+  },
+  {
+    clientCallName: 'client.iam.tenants.members.replaceRoles',
+    fullyQualifiedName: 'iam.tenants.members.replaceRoles',
+    httpMethod: 'put',
+    httpPath: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
+  },
+  {
     clientCallName: 'client.iam.tenants.members.unassignResourceRole',
     fullyQualifiedName: 'iam.tenants.members.unassignResourceRole',
     httpMethod: 'delete',

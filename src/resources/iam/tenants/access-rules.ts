@@ -156,10 +156,10 @@ export interface AccessRuleArchiveResponse {
 
 export interface AccessRuleCreateParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Whether matching users are allowed or denied entry.
@@ -241,10 +241,10 @@ export interface AccessRuleArchiveParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 }
 
 export declare namespace AccessRules {

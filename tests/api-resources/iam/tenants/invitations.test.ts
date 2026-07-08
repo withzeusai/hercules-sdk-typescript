@@ -51,7 +51,7 @@ describe('resource invitations', () => {
   test.skip('revoke: required and optional params', async () => {
     const response = await client.iam.tenants.invitations.revoke('invitation_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'actor_token_identifier',
+      actor_user_id: 'actor_user_id',
     });
   });
 });

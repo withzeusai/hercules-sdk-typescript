@@ -42,9 +42,9 @@ export class Roles extends APIResource {
    * API.
    */
   delete(roleID: string, params: RoleDeleteParams, options?: RequestOptions): APIPromise<RoleDeleteResponse> {
-    const { tenant_id, actor_token_identifier } = params;
+    const { tenant_id, actor_user_id } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/roles/${roleID}`, {
-      query: { actor_token_identifier },
+      query: { actor_user_id },
       ...options,
     });
   }
@@ -94,10 +94,11 @@ export namespace RoleCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -137,10 +138,11 @@ export namespace RoleUpdateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -249,10 +251,11 @@ export namespace RoleDeleteResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -330,10 +333,10 @@ export namespace RoleGetResponse {
 
 export interface RoleCreateParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Stable, unique key for the role within its scope.
@@ -364,10 +367,10 @@ export interface RoleUpdateParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: Optional human-readable role description.
@@ -412,10 +415,10 @@ export interface RoleDeleteParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 export interface RoleGetParams {

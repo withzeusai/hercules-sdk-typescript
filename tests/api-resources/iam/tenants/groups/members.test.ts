@@ -35,7 +35,7 @@ describe('resource members', () => {
     const responsePromise = client.iam.tenants.groups.members.add('membership_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -51,7 +51,7 @@ describe('resource members', () => {
     const response = await client.iam.tenants.groups.members.add('membership_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
   });
 
@@ -75,7 +75,7 @@ describe('resource members', () => {
     const response = await client.iam.tenants.groups.members.remove('membership_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      actor_token_identifier: 'actor_token_identifier',
+      actor_user_id: 'actor_user_id',
     });
   });
 });

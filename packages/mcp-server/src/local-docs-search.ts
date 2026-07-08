@@ -134,20 +134,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Accepts a pending invitation as the signed-in end user and materializes its tenant-wide role assignments.',
     stainlessPath: '(resource) iam.invitations > (method) accept',
     qualified: 'client.iam.invitations.accept',
-    params: ['actor_token_identifier: string;', 'invitation_token: string;'],
+    params: ['actor_user_id: string;', 'invitation_token: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; invitation_id: string; membership_id: string; role_assignment_ids: string[]; tenant_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; invitation_id: string; membership_id: string; role_assignment_ids: string[]; tenant_id: string; }',
     markdown:
-      "## accept\n\n`client.iam.invitations.accept(actor_token_identifier: string, invitation_token: string): { convex_source_data: object; invitation_id: string; membership_id: string; role_assignment_ids: string[]; tenant_id: string; }`\n\n**post** `/v1/iam/invitations/accept`\n\nAccepts a pending invitation as the signed-in end user and materializes its tenant-wide role assignments.\n\n### Parameters\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend.\n\n- `invitation_token: string`\n  Secret invitation token.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; invitation_id: string; membership_id: string; role_assignment_ids: string[]; tenant_id: string; }`\n  Accepted invitation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `invitation_id: string`\n  - `membership_id: string`\n  - `role_assignment_ids: string[]`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.invitations.accept({ actor_token_identifier: 'x', invitation_token: 'x' });\n\nconsole.log(response);\n```",
+      "## accept\n\n`client.iam.invitations.accept(actor_user_id: string, invitation_token: string): { convex_source_data: object; invitation_id: string; membership_id: string; role_assignment_ids: string[]; tenant_id: string; }`\n\n**post** `/v1/iam/invitations/accept`\n\nAccepts a pending invitation as the signed-in end user and materializes its tenant-wide role assignments.\n\n### Parameters\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend.\n\n- `invitation_token: string`\n  Secret invitation token.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; invitation_id: string; membership_id: string; role_assignment_ids: string[]; tenant_id: string; }`\n  Accepted invitation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `invitation_id: string`\n  - `membership_id: string`\n  - `role_assignment_ids: string[]`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.invitations.accept({ actor_user_id: 'x', invitation_token: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.invitations.accept',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.invitations.accept({\n  actor_token_identifier: 'x',\n  invitation_token: 'x',\n});\n\nconsole.log(response.invitation_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.invitations.accept({ actor_user_id: 'x', invitation_token: 'x' });\n\nconsole.log(response.invitation_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/invitations/accept \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "invitation_token": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/invitations/accept \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "invitation_token": "x"\n        }\'',
       },
     },
   },
@@ -159,11 +159,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: "Lists the deployment's IAM tenants, primary tenant first.",
     stainlessPath: '(resource) iam.tenants > (method) list',
     qualified: 'client.iam.tenants.list',
-    params: ['limit?: number;', 'starting_after?: string;', "status?: 'active' | 'disabled';"],
+    params: ['limit?: number;', 'starting_after?: string;', "status?: 'active' | 'archived';"],
     response:
-      "{ data: { account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'disabled'; tenant_id: string; updated_at: string; }[]; has_more: boolean; }",
+      "{ data: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'archived'; tenant_id: string; updated_at: string; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.list(limit?: number, starting_after?: string, status?: 'active' | 'disabled'): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants`\n\nLists the deployment's IAM tenants, primary tenant first.\n\n### Parameters\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n- `status?: 'active' | 'disabled'`\n  Filter by tenant status.\n\n### Returns\n\n- `{ data: { account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'disabled'; tenant_id: string; updated_at: string; }[]; has_more: boolean; }`\n  Paginated IAM tenants.\n\n  - `data: { account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'disabled'; tenant_id: string; updated_at: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants);\n```",
+      "## list\n\n`client.iam.tenants.list(limit?: number, starting_after?: string, status?: 'active' | 'archived'): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants`\n\nLists the deployment's IAM tenants, primary tenant first.\n\n### Parameters\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n- `status?: 'active' | 'archived'`\n  Filter by tenant status.\n\n### Returns\n\n- `{ data: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'archived'; tenant_id: string; updated_at: string; }[]; has_more: boolean; }`\n  Paginated IAM tenants.\n\n  - `data: { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'archived'; tenant_id: string; updated_at: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenants = await client.iam.tenants.list();\n\nconsole.log(tenants);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.list',
@@ -186,25 +186,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) iam.tenants > (method) create',
     qualified: 'client.iam.tenants.create',
     params: [
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'name: string;',
       "access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';",
       'default_role?: { id: string; } | { key: string; };',
       'owner_user_id?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; default_role_id: string; idempotent: boolean; membership_id: string; tenant_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; default_role_id: string; idempotent: boolean; membership_id: string; tenant_id: string; }',
     markdown:
-      "## create\n\n`client.iam.tenants.create(actor_token_identifier: string, name: string, access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role?: { id: string; } | { key: string; }, owner_user_id?: string): { convex_source_data: object; default_role_id: string; idempotent: boolean; membership_id: string; tenant_id: string; }`\n\n**post** `/v1/iam/tenants`\n\nCreates a tenant and assigns its initial owner. The signed-in user becomes the owner unless trusted server code specifies another user. The initial owner is granted the seeded owner role. The default role (for later members) defaults to the seeded member role and must not be an app-scoped role.\n\n### Parameters\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `name: string`\n  Human-readable tenant name.\n\n- `access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  Initial tenant admission policy. Defaults to `open`.\n\n- `default_role?: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `owner_user_id?: string`\n  The end user's ID (their OIDC subject) to grant the initial owner role. Required when using service authority (actor_token_identifier null); with user authority the signed-in user becomes the owner.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; default_role_id: string; idempotent: boolean; membership_id: string; tenant_id: string; }`\n  Created IAM tenant.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `default_role_id: string`\n  - `idempotent: boolean`\n  - `membership_id: string`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.create({ actor_token_identifier: 'x', name: 'x' });\n\nconsole.log(tenant);\n```",
+      "## create\n\n`client.iam.tenants.create(actor_user_id: string, name: string, access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role?: { id: string; } | { key: string; }, owner_user_id?: string): { convex_source_data: object; default_role_id: string; idempotent: boolean; membership_id: string; tenant_id: string; }`\n\n**post** `/v1/iam/tenants`\n\nCreates a tenant and assigns its initial owner. The signed-in user becomes the owner unless trusted server code specifies another user. The initial owner is granted the seeded owner role. The default role (for later members) defaults to the seeded member role and must not be an app-scoped role.\n\n### Parameters\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `name: string`\n  Human-readable tenant name.\n\n- `access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  Initial tenant access mode. Defaults to `open`.\n\n- `default_role?: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `owner_user_id?: string`\n  The end user's ID (their OIDC subject) to grant the initial owner role. Required when using service authority (actor_user_id null); with user authority the signed-in user becomes the owner.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; default_role_id: string; idempotent: boolean; membership_id: string; tenant_id: string; }`\n  Created IAM tenant.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `default_role_id: string`\n  - `idempotent: boolean`\n  - `membership_id: string`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.create({ actor_user_id: 'x', name: 'x' });\n\nconsole.log(tenant);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.create',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenant = await client.iam.tenants.create({ actor_token_identifier: 'x', name: 'x' });\n\nconsole.log(tenant.default_role_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenant = await client.iam.tenants.create({ actor_user_id: 'x', name: 'x' });\n\nconsole.log(tenant.default_role_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "name": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "name": "x"\n        }\'',
       },
     },
   },
@@ -218,9 +218,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.get',
     params: ['tenant_id: string;'],
     response:
-      "{ account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'disabled'; tenant_id: string; updated_at: string; }",
+      "{ access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'archived'; tenant_id: string; updated_at: string; }",
     markdown:
-      "## get\n\n`client.iam.tenants.get(tenant_id: string): { account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'disabled'; tenant_id: string; updated_at: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}`\n\nReturns one IAM tenant by ID. Pass `primary` for the deployment's primary tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n### Returns\n\n- `{ account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'disabled'; tenant_id: string; updated_at: string; }`\n  One IAM tenant.\n\n  - `account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  - `created_at: string`\n  - `default_role_id: string`\n  - `is_primary_tenant: boolean`\n  - `name: string`\n  - `status: 'active' | 'disabled'`\n  - `tenant_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.get('tenant_id');\n\nconsole.log(tenant);\n```",
+      "## get\n\n`client.iam.tenants.get(tenant_id: string): { access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'archived'; tenant_id: string; updated_at: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}`\n\nReturns one IAM tenant by ID. Pass `primary` for the deployment's primary tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n### Returns\n\n- `{ access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'; created_at: string; default_role_id: string; is_primary_tenant: boolean; name: string; status: 'active' | 'archived'; tenant_id: string; updated_at: string; }`\n  One IAM tenant.\n\n  - `access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  - `created_at: string`\n  - `default_role_id: string`\n  - `is_primary_tenant: boolean`\n  - `name: string`\n  - `status: 'active' | 'archived'`\n  - `tenant_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.get('tenant_id');\n\nconsole.log(tenant);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.get',
@@ -238,29 +238,29 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/v1/iam/tenants/{tenant_id}',
     httpMethod: 'patch',
     summary: 'Update tenant',
-    description: "Updates a tenant's name, default role, or admission policy.",
+    description: "Updates a tenant's name, default role, or access mode.",
     stainlessPath: '(resource) iam.tenants > (method) update',
     qualified: 'client.iam.tenants.update',
     params: [
       'tenant_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       "access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';",
       'default_role?: { id: string; } | { key: string; };',
       'name?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; tenant_id: string; }',
     markdown:
-      "## update\n\n`client.iam.tenants.update(tenant_id: string, actor_token_identifier: string, access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role?: { id: string; } | { key: string; }, name?: string): { convex_source_data: object; tenant_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}`\n\nUpdates a tenant's name, default role, or admission policy.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  New tenant admission policy.\n\n- `default_role?: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `name?: string`\n  New tenant name.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.update('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(tenant);\n```",
+      "## update\n\n`client.iam.tenants.update(tenant_id: string, actor_user_id: string, access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required', default_role?: { id: string; } | { key: string; }, name?: string): { convex_source_data: object; tenant_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}`\n\nUpdates a tenant's name, default role, or access mode.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required'`\n  New tenant access mode.\n\n- `default_role?: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `name?: string`\n  New tenant name.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst tenant = await client.iam.tenants.update('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(tenant);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.update',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenant = await client.iam.tenants.update('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(tenant.tenant_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst tenant = await client.iam.tenants.update('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(tenant.tenant_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -272,20 +272,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Archives a non-primary tenant and blocks its access without deleting its data.',
     stainlessPath: '(resource) iam.tenants > (method) archive',
     qualified: 'client.iam.tenants.archive',
-    params: ['tenant_id: string;', 'actor_token_identifier: string;'],
+    params: ['tenant_id: string;', 'actor_user_id: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; tenant_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.archive(tenant_id: string, actor_token_identifier: string): { convex_source_data: object; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/archive`\n\nArchives a non-primary tenant and blocks its access without deleting its data.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.archive('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.archive(tenant_id: string, actor_user_id: string): { convex_source_data: object; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/archive`\n\nArchives a non-primary tenant and blocks its access without deleting its data.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.archive('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.archive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.archive('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response.tenant_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.archive('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response.tenant_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -297,20 +297,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Restores an archived tenant and re-enables access through its existing data.',
     stainlessPath: '(resource) iam.tenants > (method) unarchive',
     qualified: 'client.iam.tenants.unarchive',
-    params: ['tenant_id: string;', 'actor_token_identifier: string;'],
+    params: ['tenant_id: string;', 'actor_user_id: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; tenant_id: string; }',
     markdown:
-      "## unarchive\n\n`client.iam.tenants.unarchive(tenant_id: string, actor_token_identifier: string): { convex_source_data: object; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/unarchive`\n\nRestores an archived tenant and re-enables access through its existing data.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## unarchive\n\n`client.iam.tenants.unarchive(tenant_id: string, actor_user_id: string): { convex_source_data: object; tenant_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/unarchive`\n\nRestores an archived tenant and re-enables access through its existing data.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; tenant_id: string; }`\n  Result of an IAM tenant mutation.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.unarchive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response.tenant_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.unarchive('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response.tenant_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/unarchive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/unarchive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -320,23 +320,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Evaluate tenant access',
     description:
-      "Evaluates whether the signed-in end user may enter the tenant and applies the result: entry mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.",
+      "Evaluates whether the signed-in end user may enter the tenant and applies the result: access mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.",
     stainlessPath: '(resource) iam.tenants > (method) evaluate_access',
     qualified: 'client.iam.tenants.evaluateAccess',
-    params: ['tenant_id: string;', 'actor_token_identifier: string;'],
+    params: ['tenant_id: string;', 'actor_user_id: string;'],
     response:
-      "{ allowed: boolean; convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }",
+      "{ allowed: boolean; convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }",
     markdown:
-      "## evaluate_access\n\n`client.iam.tenants.evaluateAccess(tenant_id: string, actor_token_identifier: string): { allowed: boolean; convex_source_data: object; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/evaluate-access`\n\nEvaluates whether the signed-in end user may enter the tenant and applies the result: entry mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend.\n\n### Returns\n\n- `{ allowed: boolean; convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }`\n  Tenant entry decision for one end user.\n\n  - `allowed: boolean`\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `membership_id: string`\n  - `reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled'`\n  - `status: 'active' | 'pending_approval' | 'denied'`\n  - `tenant_id: string`\n  - `user_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## evaluate_access\n\n`client.iam.tenants.evaluateAccess(tenant_id: string, actor_user_id: string): { allowed: boolean; convex_source_data: object; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/evaluate-access`\n\nEvaluates whether the signed-in end user may enter the tenant and applies the result: access mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend.\n\n### Returns\n\n- `{ allowed: boolean; convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived'; status: 'active' | 'pending_approval' | 'denied'; tenant_id: string; user_id: string; }`\n  Tenant entry decision for one end user.\n\n  - `allowed: boolean`\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `membership_id: string`\n  - `reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived'`\n  - `status: 'active' | 'pending_approval' | 'denied'`\n  - `tenant_id: string`\n  - `user_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.evaluateAccess',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.evaluateAccess('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.membership_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.evaluateAccess('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response.membership_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/evaluate-access \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/evaluate-access \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -350,7 +350,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.createInvitation',
     params: [
       'tenant_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       "constraint?: { type: 'email'; value: string; } | { type: 'domain'; value: string; };",
       'delivery?: { to_emails: string[]; from_email?: string; };',
       'expires_at?: string;',
@@ -361,16 +361,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ token: string; constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; link: string; max_uses: number; redirect_path: string; use_count: number; }",
     markdown:
-      "## create_invitation\n\n`client.iam.tenants.createInvitation(tenant_id: string, actor_token_identifier: string, constraint?: { type: 'email'; value: string; } | { type: 'domain'; value: string; }, delivery?: { to_emails: string[]; from_email?: string; }, expires_at?: string, max_uses?: number, redirect_path?: string, roles?: { id: string; } | { key: string; }[]): { token: string; constraint: object | object; delivery: object; expires_at: string; invitation_id: string; link: string; max_uses: number; redirect_path: string; use_count: number; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/invitations`\n\nCreates an invitation that confers tenant-wide roles when accepted.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `constraint?: { type: 'email'; value: string; } | { type: 'domain'; value: string; }`\n  Optional signup constraint. Omit for an open link anyone can accept.\n\n- `delivery?: { to_emails: string[]; from_email?: string; }`\n  Optional email delivery, independent of the signup constraint. Sends the invitation to each recipient. Omit delivery entirely for a manual link you share yourself.\n  - `to_emails: string[]`\n    Recipients the invitation email is sent to.\n  - `from_email?: string`\n    Sender address the invitation is emailed from. Null or omitted uses the verified sender configured in Auth branding.\n\n- `expires_at?: string`\n  Invitation expiry timestamp. Omit for the default of 30 days from creation; pass null for a link that never expires.\n\n- `max_uses?: number`\n  Maximum number of users who may accept. Omit for the default: 1 for an email constraint, otherwise unlimited.\n\n- `redirect_path?: string`\n  App-relative path the user is sent to after accepting (e.g. /welcome). Must start with a single '/'; composed with the app's own origin.\n\n- `roles?: { id: string; } | { key: string; }[]`\n  Tenant-wide roles conferred when the invitation is accepted. Omit to confer the tenant's default role instead.\n\n### Returns\n\n- `{ token: string; constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; link: string; max_uses: number; redirect_path: string; use_count: number; }`\n  Created invitation link.\n\n  - `token: string`\n  - `constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }`\n  - `delivery: { to_emails: string[]; from_email?: string; }`\n  - `expires_at: string`\n  - `invitation_id: string`\n  - `link: string`\n  - `max_uses: number`\n  - `redirect_path: string`\n  - `use_count: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.createInvitation('tenant_id', { actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## create_invitation\n\n`client.iam.tenants.createInvitation(tenant_id: string, actor_user_id: string, constraint?: { type: 'email'; value: string; } | { type: 'domain'; value: string; }, delivery?: { to_emails: string[]; from_email?: string; }, expires_at?: string, max_uses?: number, redirect_path?: string, roles?: { id: string; } | { key: string; }[]): { token: string; constraint: object | object; delivery: object; expires_at: string; invitation_id: string; link: string; max_uses: number; redirect_path: string; use_count: number; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/invitations`\n\nCreates an invitation that confers tenant-wide roles when accepted.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `constraint?: { type: 'email'; value: string; } | { type: 'domain'; value: string; }`\n  Optional signup constraint. Omit for an open link anyone can accept.\n\n- `delivery?: { to_emails: string[]; from_email?: string; }`\n  Optional email delivery, independent of the signup constraint. Sends the invitation to each recipient. Omit delivery entirely for a manual link you share yourself.\n  - `to_emails: string[]`\n    Recipients the invitation email is sent to.\n  - `from_email?: string`\n    Sender address the invitation is emailed from. Null or omitted uses the verified sender configured in Auth branding.\n\n- `expires_at?: string`\n  Invitation expiry timestamp. Omit for the default of 30 days from creation; pass null for a link that never expires.\n\n- `max_uses?: number`\n  Maximum number of users who may accept. Omit for the default: 1 for an email constraint, otherwise unlimited.\n\n- `redirect_path?: string`\n  App-relative path the user is sent to after accepting (e.g. /welcome). Must start with a single '/'; composed with the app's own origin.\n\n- `roles?: { id: string; } | { key: string; }[]`\n  Tenant-wide roles conferred when the invitation is accepted. Omit to confer the tenant's default role instead.\n\n### Returns\n\n- `{ token: string; constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; link: string; max_uses: number; redirect_path: string; use_count: number; }`\n  Created invitation link.\n\n  - `token: string`\n  - `constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }`\n  - `delivery: { to_emails: string[]; from_email?: string; }`\n  - `expires_at: string`\n  - `invitation_id: string`\n  - `link: string`\n  - `max_uses: number`\n  - `redirect_path: string`\n  - `use_count: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.createInvitation('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.createInvitation',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.createInvitation('tenant_id', {\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.invitation_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.createInvitation('tenant_id', { actor_user_id: 'x' });\n\nconsole.log(response.invitation_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/invitations \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/invitations \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -423,13 +423,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'limit?: number;',
       'membership_id?: string;',
       'resource_type_id?: string;',
+      'resource_type_key?: string;',
       'role_id?: string;',
       'starting_after?: string;',
     ],
     response:
       "{ data: { created_at: string; expires_at: string; external_id: string; resource_type_id: string; role_id: string; subject: { member_resource_role_assignment_id: string; membership_id: string; type: 'member'; } | { group_id: string; group_resource_role_assignment_id: string; type: 'group'; }; tenant_id: string; }[]; has_more: boolean; }",
     markdown:
-      "## list_resource_role_assignments\n\n`client.iam.tenants.listResourceRoleAssignments(tenant_id: string, external_id?: string, group_id?: string, limit?: number, membership_id?: string, resource_type_id?: string, role_id?: string, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/resource-role-assignments`\n\nLists resource role assignments in a tenant, newest first. Filter by resource type and external ID to find who has a role on one exact resource, or by member, group, or role.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `external_id?: string`\n  Filter to one exact resource's external ID. Pair with a resource type to find who has a role on that resource.\n\n- `group_id?: string`\n  Return only this group's assignments.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `membership_id?: string`\n  Return only this tenant membership's assignments.\n\n- `resource_type_id?: string`\n  Filter to one resource type by ID.\n\n- `role_id?: string`\n  Return only assignments of this role.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { created_at: string; expires_at: string; external_id: string; resource_type_id: string; role_id: string; subject: { member_resource_role_assignment_id: string; membership_id: string; type: 'member'; } | { group_id: string; group_resource_role_assignment_id: string; type: 'group'; }; tenant_id: string; }[]; has_more: boolean; }`\n  Paginated resource role assignments.\n\n  - `data: { created_at: string; expires_at: string; external_id: string; resource_type_id: string; role_id: string; subject: { member_resource_role_assignment_id: string; membership_id: string; type: 'member'; } | { group_id: string; group_resource_role_assignment_id: string; type: 'group'; }; tenant_id: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.listResourceRoleAssignments('tenant_id');\n\nconsole.log(response);\n```",
+      "## list_resource_role_assignments\n\n`client.iam.tenants.listResourceRoleAssignments(tenant_id: string, external_id?: string, group_id?: string, limit?: number, membership_id?: string, resource_type_id?: string, resource_type_key?: string, role_id?: string, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/resource-role-assignments`\n\nLists resource role assignments in a tenant, newest first. Filter by resource type and external ID to find who has a role on one exact resource, or by member, group, or role.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `external_id?: string`\n  Filter to one exact resource's external ID. Pair with a resource type to find who has a role on that resource.\n\n- `group_id?: string`\n  Return only this group's assignments.\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `membership_id?: string`\n  Return only this tenant membership's assignments.\n\n- `resource_type_id?: string`\n  Filter to one resource type by ID. Not combinable with resource_type_key.\n\n- `resource_type_key?: string`\n  Filter to one resource type by its catalog key (e.g. `app.project`). Not combinable with resource_type_id.\n\n- `role_id?: string`\n  Return only assignments of this role.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { created_at: string; expires_at: string; external_id: string; resource_type_id: string; role_id: string; subject: { member_resource_role_assignment_id: string; membership_id: string; type: 'member'; } | { group_id: string; group_resource_role_assignment_id: string; type: 'group'; }; tenant_id: string; }[]; has_more: boolean; }`\n  Paginated resource role assignments.\n\n  - `data: { created_at: string; expires_at: string; external_id: string; resource_type_id: string; role_id: string; subject: { member_resource_role_assignment_id: string; membership_id: string; type: 'member'; } | { group_id: string; group_resource_role_assignment_id: string; type: 'group'; }; tenant_id: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.listResourceRoleAssignments('tenant_id');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.listResourceRoleAssignments',
@@ -452,24 +453,24 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.members.create',
     params: [
       'tenant_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'user_id: string;',
       'role?: { id: string; } | { key: string; };',
       "status?: 'active' | 'blocked' | 'suspended';",
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; role_assignment_id: string; }',
     markdown:
-      "## create\n\n`client.iam.tenants.members.create(tenant_id: string, actor_token_identifier: string, user_id: string, role?: { id: string; } | { key: string; }, status?: 'active' | 'blocked' | 'suspended'): { convex_source_data: object; membership_id: string; role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/members`\n\nAdds an end user to the tenant, optionally with a role.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `user_id: string`\n  The end user's ID (their OIDC subject) to add to the tenant. Do not pass a token identifier.\n\n- `role?: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `status?: 'active' | 'blocked' | 'suspended'`\n  Initial membership status. Defaults to `active`.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; role_assignment_id: string; }`\n  Added tenant member.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `membership_id: string`\n  - `role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.iam.tenants.members.create('tenant_id', { actor_token_identifier: 'x', user_id: 'x' });\n\nconsole.log(member);\n```",
+      "## create\n\n`client.iam.tenants.members.create(tenant_id: string, actor_user_id: string, user_id: string, role?: { id: string; } | { key: string; }, status?: 'active' | 'blocked' | 'suspended'): { convex_source_data: object; membership_id: string; role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/members`\n\nAdds an end user to the tenant, optionally with a role.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `user_id: string`\n  The end user's ID (their OIDC subject) to add to the tenant.\n\n- `role?: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `status?: 'active' | 'blocked' | 'suspended'`\n  Initial membership status. Defaults to `active`.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; role_assignment_id: string; }`\n  Added tenant member.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `membership_id: string`\n  - `role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.iam.tenants.members.create('tenant_id', { actor_user_id: 'x', user_id: 'x' });\n\nconsole.log(member);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.create',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst member = await client.iam.tenants.members.create('tenant_id', {\n  actor_token_identifier: 'x',\n  user_id: 'x',\n});\n\nconsole.log(member.membership_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst member = await client.iam.tenants.members.create('tenant_id', {\n  actor_user_id: 'x',\n  user_id: 'x',\n});\n\nconsole.log(member.membership_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "user_id": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "user_id": "x"\n        }\'',
       },
     },
   },
@@ -542,22 +543,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'membership_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       "status: 'active' | 'blocked' | 'suspended' | 'removed';",
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; }',
     markdown:
-      "## update_status\n\n`client.iam.tenants.members.updateStatus(tenant_id: string, membership_id: string, actor_token_identifier: string, status: 'active' | 'blocked' | 'suspended' | 'removed'): { convex_source_data: object; membership_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}/members/{membership_id}`\n\nApproves, suspends, blocks, reactivates, or removes a tenant member.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `status: 'active' | 'blocked' | 'suspended' | 'removed'`\n  New membership status.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; }`\n  Result of changing a tenant member.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.updateStatus('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  status: 'active',\n});\n\nconsole.log(response);\n```",
+      "## update_status\n\n`client.iam.tenants.members.updateStatus(tenant_id: string, membership_id: string, actor_user_id: string, status: 'active' | 'blocked' | 'suspended' | 'removed'): { convex_source_data: object; membership_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}/members/{membership_id}`\n\nApproves, suspends, blocks, reactivates, or removes a tenant member.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `status: 'active' | 'blocked' | 'suspended' | 'removed'`\n  New membership status.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; }`\n  Result of changing a tenant member.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.updateStatus('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  status: 'active',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.updateStatus',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.updateStatus('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  status: 'active',\n});\n\nconsole.log(response.membership_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.updateStatus('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  status: 'active',\n});\n\nconsole.log(response.membership_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "status": "active"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "status": "active"\n        }\'',
       },
     },
   },
@@ -569,11 +570,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Removes a member from the tenant. The component treats a removed member as denied.',
     stainlessPath: '(resource) iam.tenants.members > (method) remove',
     qualified: 'client.iam.tenants.members.remove',
-    params: ['tenant_id: string;', 'membership_id: string;', 'actor_token_identifier?: string;'],
+    params: ['tenant_id: string;', 'membership_id: string;', 'actor_user_id?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; }',
     markdown:
-      "## remove\n\n`client.iam.tenants.members.remove(tenant_id: string, membership_id: string, actor_token_identifier?: string): { convex_source_data: object; membership_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/members/{membership_id}`\n\nRemoves a member from the tenant. The component treats a removed member as denied.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; membership_id: string; }`\n  Result of changing a tenant member.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.iam.tenants.members.remove('membership_id', { tenant_id: 'tenant_id' });\n\nconsole.log(member);\n```",
+      "## remove\n\n`client.iam.tenants.members.remove(tenant_id: string, membership_id: string, actor_user_id?: string): { convex_source_data: object; membership_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/members/{membership_id}`\n\nRemoves a member from the tenant. The component treats a removed member as denied.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; }`\n  Result of changing a tenant member.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.iam.tenants.members.remove('membership_id', { tenant_id: 'tenant_id' });\n\nconsole.log(member);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.remove',
@@ -597,23 +598,54 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'membership_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'role: { id: string; } | { key: string; };',
       'expires_at?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_role_assignment_id: string; }',
     markdown:
-      "## assign_role\n\n`client.iam.tenants.members.assignRole(tenant_id: string, membership_id: string, actor_token_identifier: string, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; member_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments`\n\nAssigns a tenant-wide role to a member.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_role_assignment_id: string; }`\n  Result of changing a member's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `member_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.assignRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
+      "## assign_role\n\n`client.iam.tenants.members.assignRole(tenant_id: string, membership_id: string, actor_user_id: string, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; member_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments`\n\nAssigns a tenant-wide role to a member.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_role_assignment_id: string; }`\n  Result of changing a member's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `member_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.assignRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.assignRole',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.assignRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response.member_role_assignment_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.assignRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response.member_role_assignment_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID/role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "role": {\n            "id": "x"\n          }\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID/role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "role": {\n            "id": "x"\n          }\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'replace_roles',
+    endpoint: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
+    httpMethod: 'put',
+    summary: 'Replace member tenant roles',
+    description:
+      "Reconciles the member's direct tenant-wide role assignments to exactly the supplied set in one transaction: missing roles are assigned, surplus assignments removed, matching ones kept. Roles conferred via groups are untouched. Idempotent; prefer this over unassign-then-assign loops.",
+    stainlessPath: '(resource) iam.tenants.members > (method) replace_roles',
+    qualified: 'client.iam.tenants.members.replaceRoles',
+    params: [
+      'tenant_id: string;',
+      'membership_id: string;',
+      'actor_user_id: string;',
+      'roles: { id: string; } | { key: string; }[];',
+    ],
+    response:
+      '{ assignments: { assignment_id: string; role_id: string; }[]; convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; }',
+    markdown:
+      "## replace_roles\n\n`client.iam.tenants.members.replaceRoles(tenant_id: string, membership_id: string, actor_user_id: string, roles: { id: string; } | { key: string; }[]): { assignments: object[]; convex_source_data: object; membership_id: string; }`\n\n**put** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments`\n\nReconciles the member's direct tenant-wide role assignments to exactly the supplied set in one transaction: missing roles are assigned, surplus assignments removed, matching ones kept. Roles conferred via groups are untouched. Idempotent; prefer this over unassign-then-assign loops.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `roles: { id: string; } | { key: string; }[]`\n  The complete desired set of the member's direct tenant-wide roles. Missing roles are assigned, surplus assignments are removed, and roles conferred via groups are untouched. An empty array removes every direct assignment.\n\n### Returns\n\n- `{ assignments: { assignment_id: string; role_id: string; }[]; convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; membership_id: string; }`\n  Result of replacing a member's tenant-wide role assignments.\n\n  - `assignments: { assignment_id: string; role_id: string; }[]`\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.replaceRoles('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  roles: [{ id: 'x' }],\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.iam.tenants.members.replaceRoles',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.replaceRoles('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  roles: [{ id: 'x' }],\n});\n\nconsole.log(response.membership_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID/role-assignments \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "roles": [\n            {\n              "id": "x"\n            }\n          ]\n        }\'',
       },
     },
   },
@@ -629,12 +661,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'tenant_id: string;',
       'membership_id: string;',
       'assignment_id: string;',
-      'actor_token_identifier?: string;',
+      'actor_user_id?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_role_assignment_id: string; }',
     markdown:
-      "## unassign_role\n\n`client.iam.tenants.members.unassignRole(tenant_id: string, membership_id: string, assignment_id: string, actor_token_identifier?: string): { convex_source_data: object; member_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments/{assignment_id}`\n\nRemoves a tenant-wide role assignment.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `assignment_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_role_assignment_id: string; }`\n  Result of changing a member's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `member_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.unassignRole('assignment_id', { tenant_id: 'tenant_id', membership_id: 'membership_id' });\n\nconsole.log(response);\n```",
+      "## unassign_role\n\n`client.iam.tenants.members.unassignRole(tenant_id: string, membership_id: string, assignment_id: string, actor_user_id?: string): { convex_source_data: object; member_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments/{assignment_id}`\n\nRemoves a tenant-wide role assignment.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `assignment_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_role_assignment_id: string; }`\n  Result of changing a member's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `member_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.unassignRole('assignment_id', { tenant_id: 'tenant_id', membership_id: 'membership_id' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.unassignRole',
@@ -683,25 +715,58 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'membership_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'external_id: string;',
-      'resource_type_id: string;',
+      'resource_type: { id: string; } | { key: string; };',
       'role: { id: string; } | { key: string; };',
       'expires_at?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_resource_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_resource_role_assignment_id: string; }',
     markdown:
-      "## assign_resource_role\n\n`client.iam.tenants.members.assignResourceRole(tenant_id: string, membership_id: string, actor_token_identifier: string, external_id: string, resource_type_id: string, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; member_resource_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments`\n\nAssigns a role to a member on one exact resource.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `external_id: string`\n  The app-defined external ID of the exact resource.\n\n- `resource_type_id: string`\n  The resource type ID.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_resource_role_assignment_id: string; }`\n  Result of changing a member resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `member_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.assignResourceRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  external_id: 'x',\n  resource_type_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
+      "## assign_resource_role\n\n`client.iam.tenants.members.assignResourceRole(tenant_id: string, membership_id: string, actor_user_id: string, external_id: string, resource_type: { id: string; } | { key: string; }, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; member_resource_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments`\n\nAssigns a role to a member on one exact resource.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `external_id: string`\n  The app-defined external ID of the exact resource.\n\n- `resource_type: { id: string; } | { key: string; }`\n  Identifies exactly one IAM resource type by ID or stable key.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_resource_role_assignment_id: string; }`\n  Result of changing a member resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `member_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.assignResourceRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  external_id: 'x',\n  resource_type: { id: 'x' },\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.assignResourceRole',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.assignResourceRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  external_id: 'x',\n  resource_type_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response.member_resource_role_assignment_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.assignResourceRole('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  external_id: 'x',\n  resource_type: { id: 'x' },\n  role: { id: 'x' },\n});\n\nconsole.log(response.member_resource_role_assignment_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID/resource-role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "external_id": "x",\n          "resource_type_id": "x",\n          "role": {\n            "id": "x"\n          }\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID/resource-role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "external_id": "x",\n          "resource_type": {\n            "id": "x"\n          },\n          "role": {\n            "id": "x"\n          }\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'replace_resource_roles',
+    endpoint: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
+    httpMethod: 'put',
+    summary: 'Replace member resource roles',
+    description:
+      "Reconciles the member's direct role assignments on one exact resource to exactly the supplied set in one transaction: missing roles are assigned, surplus assignments removed, matching ones kept. Grants on other resources and via groups are untouched. Idempotent; prefer this over unassign-then-assign loops.",
+    stainlessPath: '(resource) iam.tenants.members > (method) replace_resource_roles',
+    qualified: 'client.iam.tenants.members.replaceResourceRoles',
+    params: [
+      'tenant_id: string;',
+      'membership_id: string;',
+      'actor_user_id: string;',
+      'external_id: string;',
+      'resource_type: { id: string; } | { key: string; };',
+      'roles: { id: string; } | { key: string; }[];',
+    ],
+    response:
+      '{ assignments: { assignment_id: string; role_id: string; }[]; convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; external_id: string; membership_id: string; resource_type_id: string; }',
+    markdown:
+      "## replace_resource_roles\n\n`client.iam.tenants.members.replaceResourceRoles(tenant_id: string, membership_id: string, actor_user_id: string, external_id: string, resource_type: { id: string; } | { key: string; }, roles: { id: string; } | { key: string; }[]): { assignments: object[]; convex_source_data: object; external_id: string; membership_id: string; resource_type_id: string; }`\n\n**put** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments`\n\nReconciles the member's direct role assignments on one exact resource to exactly the supplied set in one transaction: missing roles are assigned, surplus assignments removed, matching ones kept. Grants on other resources and via groups are untouched. Idempotent; prefer this over unassign-then-assign loops.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `external_id: string`\n  The app-defined external ID of the exact resource.\n\n- `resource_type: { id: string; } | { key: string; }`\n  Identifies exactly one IAM resource type by ID or stable key.\n\n- `roles: { id: string; } | { key: string; }[]`\n  The complete desired set of the member's direct roles on this exact resource. Missing roles are assigned, surplus assignments are removed; assignments on other resources and via groups are untouched. An empty array removes every direct assignment on the resource.\n\n### Returns\n\n- `{ assignments: { assignment_id: string; role_id: string; }[]; convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; external_id: string; membership_id: string; resource_type_id: string; }`\n  Result of replacing a member's role assignments on one resource.\n\n  - `assignments: { assignment_id: string; role_id: string; }[]`\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `external_id: string`\n  - `membership_id: string`\n  - `resource_type_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.replaceResourceRoles('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  external_id: 'x',\n  resource_type: { id: 'x' },\n  roles: [{ id: 'x' }],\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.iam.tenants.members.replaceResourceRoles',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.members.replaceResourceRoles('membership_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  external_id: 'x',\n  resource_type: { id: 'x' },\n  roles: [{ id: 'x' }],\n});\n\nconsole.log(response.external_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/members/$MEMBERSHIP_ID/resource-role-assignments \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "external_id": "x",\n          "resource_type": {\n            "id": "x"\n          },\n          "roles": [\n            {\n              "id": "x"\n            }\n          ]\n        }\'',
       },
     },
   },
@@ -717,12 +782,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'tenant_id: string;',
       'membership_id: string;',
       'assignment_id: string;',
-      'actor_token_identifier?: string;',
+      'actor_user_id?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_resource_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_resource_role_assignment_id: string; }',
     markdown:
-      "## unassign_resource_role\n\n`client.iam.tenants.members.unassignResourceRole(tenant_id: string, membership_id: string, assignment_id: string, actor_token_identifier?: string): { convex_source_data: object; member_resource_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments/{assignment_id}`\n\nRemoves a member resource role assignment.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `assignment_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; member_resource_role_assignment_id: string; }`\n  Result of changing a member resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `member_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.unassignResourceRole('assignment_id', { tenant_id: 'tenant_id', membership_id: 'membership_id' });\n\nconsole.log(response);\n```",
+      "## unassign_resource_role\n\n`client.iam.tenants.members.unassignResourceRole(tenant_id: string, membership_id: string, assignment_id: string, actor_user_id?: string): { convex_source_data: object; member_resource_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments/{assignment_id}`\n\nRemoves a member resource role assignment.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `membership_id: string`\n\n- `assignment_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; member_resource_role_assignment_id: string; }`\n  Result of changing a member resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `member_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.members.unassignResourceRole('assignment_id', { tenant_id: 'tenant_id', membership_id: 'membership_id' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.members.unassignResourceRole',
@@ -768,25 +833,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Creates an active group with no members in a tenant.',
     stainlessPath: '(resource) iam.tenants.groups > (method) create',
     qualified: 'client.iam.tenants.groups.create',
-    params: [
-      'tenant_id: string;',
-      'actor_token_identifier: string;',
-      'name: string;',
-      'description?: string;',
-    ],
+    params: ['tenant_id: string;', 'actor_user_id: string;', 'name: string;', 'description?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }',
     markdown:
-      "## create\n\n`client.iam.tenants.groups.create(tenant_id: string, actor_token_identifier: string, name: string, description?: string): { convex_source_data: object; group_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups`\n\nCreates an active group with no members in a tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `name: string`\n  Human-readable group name.\n\n- `description?: string`\n  Optional human-readable group description.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }`\n  Created tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.create('tenant_id', { actor_token_identifier: 'x', name: 'x' });\n\nconsole.log(group);\n```",
+      "## create\n\n`client.iam.tenants.groups.create(tenant_id: string, actor_user_id: string, name: string, description?: string): { convex_source_data: object; group_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups`\n\nCreates an active group with no members in a tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `name: string`\n  Human-readable group name.\n\n- `description?: string`\n  Optional human-readable group description.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }`\n  Created tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.create('tenant_id', { actor_user_id: 'x', name: 'x' });\n\nconsole.log(group);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.create',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst group = await client.iam.tenants.groups.create('tenant_id', {\n  actor_token_identifier: 'x',\n  name: 'x',\n});\n\nconsole.log(group.group_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst group = await client.iam.tenants.groups.create('tenant_id', {\n  actor_user_id: 'x',\n  name: 'x',\n});\n\nconsole.log(group.group_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "name": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "name": "x"\n        }\'',
       },
     },
   },
@@ -800,9 +860,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.groups.list',
     params: ['tenant_id: string;', 'limit?: number;', 'starting_after?: string;'],
     response:
-      "{ data: { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'disabled'; tenant_id: string; }[]; has_more: boolean; }",
+      "{ data: { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'archived'; tenant_id: string; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.groups.list(tenant_id: string, limit?: number, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/groups`\n\nLists a tenant's groups, newest first.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'disabled'; tenant_id: string; }[]; has_more: boolean; }`\n  Paginated tenant groups.\n\n  - `data: { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'disabled'; tenant_id: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst groups = await client.iam.tenants.groups.list('tenant_id');\n\nconsole.log(groups);\n```",
+      "## list\n\n`client.iam.tenants.groups.list(tenant_id: string, limit?: number, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/groups`\n\nLists a tenant's groups, newest first.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'archived'; tenant_id: string; }[]; has_more: boolean; }`\n  Paginated tenant groups.\n\n  - `data: { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'archived'; tenant_id: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst groups = await client.iam.tenants.groups.list('tenant_id');\n\nconsole.log(groups);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.list',
@@ -825,9 +885,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.groups.get',
     params: ['tenant_id: string;', 'group_id: string;'],
     response:
-      "{ archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'disabled'; tenant_id: string; }",
+      "{ archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'archived'; tenant_id: string; }",
     markdown:
-      "## get\n\n`client.iam.tenants.groups.get(tenant_id: string, group_id: string): { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'disabled'; tenant_id: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nReturns one tenant group by ID.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n### Returns\n\n- `{ archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'disabled'; tenant_id: string; }`\n  One tenant group.\n\n  - `archived: boolean`\n  - `archived_at: string`\n  - `created_at: string`\n  - `description: string`\n  - `group_id: string`\n  - `name: string`\n  - `status: 'active' | 'disabled'`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.get('group_id', { tenant_id: 'tenant_id' });\n\nconsole.log(group);\n```",
+      "## get\n\n`client.iam.tenants.groups.get(tenant_id: string, group_id: string): { archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'archived'; tenant_id: string; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nReturns one tenant group by ID.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n### Returns\n\n- `{ archived: boolean; archived_at: string; created_at: string; description: string; group_id: string; name: string; status: 'active' | 'archived'; tenant_id: string; }`\n  One tenant group.\n\n  - `archived: boolean`\n  - `archived_at: string`\n  - `created_at: string`\n  - `description: string`\n  - `group_id: string`\n  - `name: string`\n  - `status: 'active' | 'archived'`\n  - `tenant_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.get('group_id', { tenant_id: 'tenant_id' });\n\nconsole.log(group);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.get',
@@ -851,23 +911,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'group_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'description?: string;',
       'name?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }',
     markdown:
-      "## update\n\n`client.iam.tenants.groups.update(tenant_id: string, group_id: string, actor_token_identifier: string, description?: string, name?: string): { convex_source_data: object; group_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nUpdates a tenant group's name or description.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `description?: string`\n  Optional human-readable group description.\n\n- `name?: string`\n  New human-readable group name. Omit to keep the current name.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.update('group_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(group);\n```",
+      "## update\n\n`client.iam.tenants.groups.update(tenant_id: string, group_id: string, actor_user_id: string, description?: string, name?: string): { convex_source_data: object; group_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nUpdates a tenant group's name or description.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `description?: string`\n  Optional human-readable group description.\n\n- `name?: string`\n  New human-readable group name. Omit to keep the current name.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.update('group_id', { tenant_id: 'tenant_id', actor_user_id: 'x' });\n\nconsole.log(group);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.update',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst group = await client.iam.tenants.groups.update('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(group.group_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst group = await client.iam.tenants.groups.update('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(group.group_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -879,11 +939,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Permanently deletes a tenant group, cascading its memberships and role assignments.',
     stainlessPath: '(resource) iam.tenants.groups > (method) delete',
     qualified: 'client.iam.tenants.groups.delete',
-    params: ['tenant_id: string;', 'group_id: string;', 'actor_token_identifier?: string;'],
+    params: ['tenant_id: string;', 'group_id: string;', 'actor_user_id?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }',
     markdown:
-      "## delete\n\n`client.iam.tenants.groups.delete(tenant_id: string, group_id: string, actor_token_identifier?: string): { convex_source_data: object; group_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nPermanently deletes a tenant group, cascading its memberships and role assignments.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.delete('group_id', { tenant_id: 'tenant_id' });\n\nconsole.log(group);\n```",
+      "## delete\n\n`client.iam.tenants.groups.delete(tenant_id: string, group_id: string, actor_user_id?: string): { convex_source_data: object; group_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}`\n\nPermanently deletes a tenant group, cascading its memberships and role assignments.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst group = await client.iam.tenants.groups.delete('group_id', { tenant_id: 'tenant_id' });\n\nconsole.log(group);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.delete',
@@ -904,20 +964,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Archives a tenant group so it stops granting access.',
     stainlessPath: '(resource) iam.tenants.groups > (method) archive',
     qualified: 'client.iam.tenants.groups.archive',
-    params: ['tenant_id: string;', 'group_id: string;', 'actor_token_identifier: string;'],
+    params: ['tenant_id: string;', 'group_id: string;', 'actor_user_id: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.groups.archive(tenant_id: string, group_id: string, actor_token_identifier: string): { convex_source_data: object; group_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/archive`\n\nArchives a tenant group so it stops granting access.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.archive('group_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.groups.archive(tenant_id: string, group_id: string, actor_user_id: string): { convex_source_data: object; group_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/archive`\n\nArchives a tenant group so it stops granting access.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.archive('group_id', { tenant_id: 'tenant_id', actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.archive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.archive('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.group_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.archive('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(response.group_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -929,20 +989,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Restores an archived tenant group so it grants access again.',
     stainlessPath: '(resource) iam.tenants.groups > (method) unarchive',
     qualified: 'client.iam.tenants.groups.unarchive',
-    params: ['tenant_id: string;', 'group_id: string;', 'actor_token_identifier: string;'],
+    params: ['tenant_id: string;', 'group_id: string;', 'actor_user_id: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }',
     markdown:
-      "## unarchive\n\n`client.iam.tenants.groups.unarchive(tenant_id: string, group_id: string, actor_token_identifier: string): { convex_source_data: object; group_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive`\n\nRestores an archived tenant group so it grants access again.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.unarchive('group_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## unarchive\n\n`client.iam.tenants.groups.unarchive(tenant_id: string, group_id: string, actor_user_id: string): { convex_source_data: object; group_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive`\n\nRestores an archived tenant group so it grants access again.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; }`\n  Result of changing a tenant group.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.unarchive('group_id', { tenant_id: 'tenant_id', actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.unarchive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.unarchive('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.group_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.unarchive('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(response.group_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/unarchive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/unarchive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -957,23 +1017,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'group_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'role: { id: string; } | { key: string; };',
       'expires_at?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_role_assignment_id: string; }',
     markdown:
-      "## assign_role\n\n`client.iam.tenants.groups.assignRole(tenant_id: string, group_id: string, actor_token_identifier: string, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; group_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments`\n\nAssigns a tenant-wide role to a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_role_assignment_id: string; }`\n  Result of changing a group's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.assignRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
+      "## assign_role\n\n`client.iam.tenants.groups.assignRole(tenant_id: string, group_id: string, actor_user_id: string, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; group_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments`\n\nAssigns a tenant-wide role to a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_role_assignment_id: string; }`\n  Result of changing a group's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.assignRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.assignRole',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.assignRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response.group_role_assignment_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.assignRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response.group_role_assignment_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "role": {\n            "id": "x"\n          }\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "role": {\n            "id": "x"\n          }\n        }\'',
       },
     },
   },
@@ -985,16 +1045,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Removes a tenant-wide role assignment from a group.',
     stainlessPath: '(resource) iam.tenants.groups > (method) unassign_role',
     qualified: 'client.iam.tenants.groups.unassignRole',
-    params: [
-      'tenant_id: string;',
-      'group_id: string;',
-      'assignment_id: string;',
-      'actor_token_identifier?: string;',
-    ],
+    params: ['tenant_id: string;', 'group_id: string;', 'assignment_id: string;', 'actor_user_id?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_role_assignment_id: string; }',
     markdown:
-      "## unassign_role\n\n`client.iam.tenants.groups.unassignRole(tenant_id: string, group_id: string, assignment_id: string, actor_token_identifier?: string): { convex_source_data: object; group_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments/{assignment_id}`\n\nRemoves a tenant-wide role assignment from a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `assignment_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_role_assignment_id: string; }`\n  Result of changing a group's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.unassignRole('assignment_id', { tenant_id: 'tenant_id', group_id: 'group_id' });\n\nconsole.log(response);\n```",
+      "## unassign_role\n\n`client.iam.tenants.groups.unassignRole(tenant_id: string, group_id: string, assignment_id: string, actor_user_id?: string): { convex_source_data: object; group_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments/{assignment_id}`\n\nRemoves a tenant-wide role assignment from a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `assignment_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_role_assignment_id: string; }`\n  Result of changing a group's tenant-wide role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.unassignRole('assignment_id', { tenant_id: 'tenant_id', group_id: 'group_id' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.unassignRole',
@@ -1043,25 +1098,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'group_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'external_id: string;',
-      'resource_type_id: string;',
+      'resource_type: { id: string; } | { key: string; };',
       'role: { id: string; } | { key: string; };',
       'expires_at?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_resource_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_resource_role_assignment_id: string; }',
     markdown:
-      "## assign_resource_role\n\n`client.iam.tenants.groups.assignResourceRole(tenant_id: string, group_id: string, actor_token_identifier: string, external_id: string, resource_type_id: string, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; group_resource_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments`\n\nAssigns a role to a group on one exact resource.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `external_id: string`\n  The app-defined external ID of the exact resource.\n\n- `resource_type_id: string`\n  The resource type ID.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_resource_role_assignment_id: string; }`\n  Result of changing a group resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.assignResourceRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  external_id: 'x',\n  resource_type_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
+      "## assign_resource_role\n\n`client.iam.tenants.groups.assignResourceRole(tenant_id: string, group_id: string, actor_user_id: string, external_id: string, resource_type: { id: string; } | { key: string; }, role: { id: string; } | { key: string; }, expires_at?: string): { convex_source_data: object; group_resource_role_assignment_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments`\n\nAssigns a role to a group on one exact resource.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `external_id: string`\n  The app-defined external ID of the exact resource.\n\n- `resource_type: { id: string; } | { key: string; }`\n  Identifies exactly one IAM resource type by ID or stable key.\n\n- `role: { id: string; } | { key: string; }`\n  Identifies exactly one IAM role by ID or stable key.\n\n- `expires_at?: string`\n  Assignment expiry. Omit or pass null for a permanent assignment.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_resource_role_assignment_id: string; }`\n  Result of changing a group resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.assignResourceRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  external_id: 'x',\n  resource_type: { id: 'x' },\n  role: { id: 'x' },\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.assignResourceRole',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.assignResourceRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n  external_id: 'x',\n  resource_type_id: 'x',\n  role: { id: 'x' },\n});\n\nconsole.log(response.group_resource_role_assignment_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.assignResourceRole('group_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n  external_id: 'x',\n  resource_type: { id: 'x' },\n  role: { id: 'x' },\n});\n\nconsole.log(response.group_resource_role_assignment_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/resource-role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "external_id": "x",\n          "resource_type_id": "x",\n          "role": {\n            "id": "x"\n          }\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/resource-role-assignments \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "external_id": "x",\n          "resource_type": {\n            "id": "x"\n          },\n          "role": {\n            "id": "x"\n          }\n        }\'',
       },
     },
   },
@@ -1073,16 +1128,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Removes a group resource role assignment.',
     stainlessPath: '(resource) iam.tenants.groups > (method) unassign_resource_role',
     qualified: 'client.iam.tenants.groups.unassignResourceRole',
-    params: [
-      'tenant_id: string;',
-      'group_id: string;',
-      'assignment_id: string;',
-      'actor_token_identifier?: string;',
-    ],
+    params: ['tenant_id: string;', 'group_id: string;', 'assignment_id: string;', 'actor_user_id?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_resource_role_assignment_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_resource_role_assignment_id: string; }',
     markdown:
-      "## unassign_resource_role\n\n`client.iam.tenants.groups.unassignResourceRole(tenant_id: string, group_id: string, assignment_id: string, actor_token_identifier?: string): { convex_source_data: object; group_resource_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments/{assignment_id}`\n\nRemoves a group resource role assignment.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `assignment_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_resource_role_assignment_id: string; }`\n  Result of changing a group resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.unassignResourceRole('assignment_id', { tenant_id: 'tenant_id', group_id: 'group_id' });\n\nconsole.log(response);\n```",
+      "## unassign_resource_role\n\n`client.iam.tenants.groups.unassignResourceRole(tenant_id: string, group_id: string, assignment_id: string, actor_user_id?: string): { convex_source_data: object; group_resource_role_assignment_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments/{assignment_id}`\n\nRemoves a group resource role assignment.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `assignment_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_resource_role_assignment_id: string; }`\n  Result of changing a group resource role assignment.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_resource_role_assignment_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.unassignResourceRole('assignment_id', { tenant_id: 'tenant_id', group_id: 'group_id' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.unassignResourceRole',
@@ -1128,25 +1178,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Adds a tenant member to a group.',
     stainlessPath: '(resource) iam.tenants.groups.members > (method) add',
     qualified: 'client.iam.tenants.groups.members.add',
-    params: [
-      'tenant_id: string;',
-      'group_id: string;',
-      'membership_id: string;',
-      'actor_token_identifier: string;',
-    ],
+    params: ['tenant_id: string;', 'group_id: string;', 'membership_id: string;', 'actor_user_id: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; membership_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; membership_id: string; }',
     markdown:
-      "## add\n\n`client.iam.tenants.groups.members.add(tenant_id: string, group_id: string, membership_id: string, actor_token_identifier: string): { convex_source_data: object; group_id: string; membership_id: string; }`\n\n**put** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}`\n\nAdds a tenant member to a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `membership_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; membership_id: string; }`\n  Result of changing a tenant group membership.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.members.add('membership_id', {\n  tenant_id: 'tenant_id',\n  group_id: 'group_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response);\n```",
+      "## add\n\n`client.iam.tenants.groups.members.add(tenant_id: string, group_id: string, membership_id: string, actor_user_id: string): { convex_source_data: object; group_id: string; membership_id: string; }`\n\n**put** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}`\n\nAdds a tenant member to a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; membership_id: string; }`\n  Result of changing a tenant group membership.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.groups.members.add('membership_id', {\n  tenant_id: 'tenant_id',\n  group_id: 'group_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.members.add',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.members.add('membership_id', {\n  tenant_id: 'tenant_id',\n  group_id: 'group_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.group_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.groups.members.add('membership_id', {\n  tenant_id: 'tenant_id',\n  group_id: 'group_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(response.group_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/members/$MEMBERSHIP_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/groups/$GROUP_ID/members/$MEMBERSHIP_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -1160,9 +1205,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.groups.members.list',
     params: ['tenant_id: string;', 'group_id: string;', 'limit?: number;', 'starting_after?: string;'],
     response:
-      "{ data: { created_at: string; group_membership_id: string; membership_id: string; source: 'system' | 'manual' | 'invite' | 'migration'; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; user_email: string; user_id: string; user_image: string; user_name: string; }[]; has_more: boolean; }",
+      "{ data: { created_at: string; group_membership_id: string; membership_id: string; source: 'system' | 'manual'; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; user_email: string; user_id: string; user_image: string; user_name: string; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.groups.members.list(tenant_id: string, group_id: string, limit?: number, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/members`\n\nLists the active members of one tenant group, newest first.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { created_at: string; group_membership_id: string; membership_id: string; source: 'system' | 'manual' | 'invite' | 'migration'; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; user_email: string; user_id: string; user_image: string; user_name: string; }[]; has_more: boolean; }`\n  Paginated members of a tenant group.\n\n  - `data: { created_at: string; group_membership_id: string; membership_id: string; source: 'system' | 'manual' | 'invite' | 'migration'; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; user_email: string; user_id: string; user_image: string; user_name: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst members = await client.iam.tenants.groups.members.list('group_id', { tenant_id: 'tenant_id' });\n\nconsole.log(members);\n```",
+      "## list\n\n`client.iam.tenants.groups.members.list(tenant_id: string, group_id: string, limit?: number, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/members`\n\nLists the active members of one tenant group, newest first.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { created_at: string; group_membership_id: string; membership_id: string; source: 'system' | 'manual'; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; user_email: string; user_id: string; user_image: string; user_name: string; }[]; has_more: boolean; }`\n  Paginated members of a tenant group.\n\n  - `data: { created_at: string; group_membership_id: string; membership_id: string; source: 'system' | 'manual'; status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed'; user_email: string; user_id: string; user_image: string; user_name: string; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst members = await client.iam.tenants.groups.members.list('group_id', { tenant_id: 'tenant_id' });\n\nconsole.log(members);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.members.list',
@@ -1183,16 +1228,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Removes a tenant member from a group.',
     stainlessPath: '(resource) iam.tenants.groups.members > (method) remove',
     qualified: 'client.iam.tenants.groups.members.remove',
-    params: [
-      'tenant_id: string;',
-      'group_id: string;',
-      'membership_id: string;',
-      'actor_token_identifier?: string;',
-    ],
+    params: ['tenant_id: string;', 'group_id: string;', 'membership_id: string;', 'actor_user_id?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; membership_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; membership_id: string; }',
     markdown:
-      "## remove\n\n`client.iam.tenants.groups.members.remove(tenant_id: string, group_id: string, membership_id: string, actor_token_identifier?: string): { convex_source_data: object; group_id: string; membership_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}`\n\nRemoves a tenant member from a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `membership_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; group_id: string; membership_id: string; }`\n  Result of changing a tenant group membership.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `group_id: string`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.iam.tenants.groups.members.remove('membership_id', { tenant_id: 'tenant_id', group_id: 'group_id' });\n\nconsole.log(member);\n```",
+      "## remove\n\n`client.iam.tenants.groups.members.remove(tenant_id: string, group_id: string, membership_id: string, actor_user_id?: string): { convex_source_data: object; group_id: string; membership_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}`\n\nRemoves a tenant member from a group.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `group_id: string`\n\n- `membership_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; group_id: string; membership_id: string; }`\n  Result of changing a tenant group membership.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `group_id: string`\n  - `membership_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst member = await client.iam.tenants.groups.members.remove('membership_id', { tenant_id: 'tenant_id', group_id: 'group_id' });\n\nconsole.log(member);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.groups.members.remove',
@@ -1216,25 +1256,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.roles.create',
     params: [
       'tenant_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'key: string;',
       'name: string;',
       'permission_keys: string[];',
       'description?: string;',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; is_app_scope: boolean; role_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; is_app_scope: boolean; role_id: string; }',
     markdown:
-      "## create\n\n`client.iam.tenants.roles.create(tenant_id: string, actor_token_identifier: string, key: string, name: string, permission_keys: string[], description?: string): { convex_source_data: object; is_app_scope: boolean; role_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/roles`\n\nCreates a tenant-scoped role with a permission set. Shared and app-scoped roles are managed via iam.jsonc, not this API.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `key: string`\n  Stable, unique key for the role within its scope.\n\n- `name: string`\n  Human-readable role name.\n\n- `permission_keys: string[]`\n  Permission keys from the deployment's IAM catalog granted by this role.\n\n- `description?: string`\n  Optional human-readable role description.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; is_app_scope: boolean; role_id: string; }`\n  Created IAM role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `is_app_scope: boolean`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.iam.tenants.roles.create('tenant_id', {\n  actor_token_identifier: 'x',\n  key: 'x',\n  name: 'x',\n  permission_keys: ['x'],\n});\n\nconsole.log(role);\n```",
+      "## create\n\n`client.iam.tenants.roles.create(tenant_id: string, actor_user_id: string, key: string, name: string, permission_keys: string[], description?: string): { convex_source_data: object; is_app_scope: boolean; role_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/roles`\n\nCreates a tenant-scoped role with a permission set. Shared and app-scoped roles are managed via iam.jsonc, not this API.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `key: string`\n  Stable, unique key for the role within its scope.\n\n- `name: string`\n  Human-readable role name.\n\n- `permission_keys: string[]`\n  Permission keys from the deployment's IAM catalog granted by this role.\n\n- `description?: string`\n  Optional human-readable role description.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; is_app_scope: boolean; role_id: string; }`\n  Created IAM role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `is_app_scope: boolean`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.iam.tenants.roles.create('tenant_id', {\n  actor_user_id: 'x',\n  key: 'x',\n  name: 'x',\n  permission_keys: ['x'],\n});\n\nconsole.log(role);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.roles.create',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst role = await client.iam.tenants.roles.create('tenant_id', {\n  actor_token_identifier: 'x',\n  key: 'x',\n  name: 'x',\n  permission_keys: ['x'],\n});\n\nconsole.log(role.role_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst role = await client.iam.tenants.roles.create('tenant_id', {\n  actor_user_id: 'x',\n  key: 'x',\n  name: 'x',\n  permission_keys: ['x'],\n});\n\nconsole.log(role.role_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/roles \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "key": "x",\n          "name": "x",\n          "permission_keys": [\n            "x"\n          ]\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/roles \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "key": "x",\n          "name": "x",\n          "permission_keys": [\n            "x"\n          ]\n        }\'',
       },
     },
   },
@@ -1301,24 +1341,24 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'tenant_id: string;',
       'role_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       'description?: string;',
       'name?: string;',
       'permission_keys?: string[];',
     ],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; is_app_scope: boolean; role_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; is_app_scope: boolean; role_id: string; }',
     markdown:
-      "## update\n\n`client.iam.tenants.roles.update(tenant_id: string, role_id: string, actor_token_identifier: string, description?: string, name?: string, permission_keys?: string[]): { convex_source_data: object; is_app_scope: boolean; role_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}/roles/{role_id}`\n\nUpdates a tenant-scoped role's name, description, or permission set. Shared and app-scoped roles are managed via iam.jsonc, not this API.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `role_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `description?: string`\n  Optional human-readable role description.\n\n- `name?: string`\n  New human-readable role name.\n\n- `permission_keys?: string[]`\n  Replacement permission set. Omit to leave the role's permissions unchanged.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; is_app_scope: boolean; role_id: string; }`\n  Result of changing an IAM role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `is_app_scope: boolean`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.iam.tenants.roles.update('role_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(role);\n```",
+      "## update\n\n`client.iam.tenants.roles.update(tenant_id: string, role_id: string, actor_user_id: string, description?: string, name?: string, permission_keys?: string[]): { convex_source_data: object; is_app_scope: boolean; role_id: string; }`\n\n**patch** `/v1/iam/tenants/{tenant_id}/roles/{role_id}`\n\nUpdates a tenant-scoped role's name, description, or permission set. Shared and app-scoped roles are managed via iam.jsonc, not this API.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `role_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `description?: string`\n  Optional human-readable role description.\n\n- `name?: string`\n  New human-readable role name.\n\n- `permission_keys?: string[]`\n  Replacement permission set. Omit to leave the role's permissions unchanged.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; is_app_scope: boolean; role_id: string; }`\n  Result of changing an IAM role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `is_app_scope: boolean`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.iam.tenants.roles.update('role_id', { tenant_id: 'tenant_id', actor_user_id: 'x' });\n\nconsole.log(role);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.roles.update',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst role = await client.iam.tenants.roles.update('role_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(role.role_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst role = await client.iam.tenants.roles.update('role_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(role.role_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/roles/$ROLE_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/roles/$ROLE_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -1331,11 +1371,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Permanently deletes a tenant-scoped role, cascading its permissions and assignments. Shared and app-scoped roles are managed via iam.jsonc, not this API.',
     stainlessPath: '(resource) iam.tenants.roles > (method) delete',
     qualified: 'client.iam.tenants.roles.delete',
-    params: ['tenant_id: string;', 'role_id: string;', 'actor_token_identifier?: string;'],
+    params: ['tenant_id: string;', 'role_id: string;', 'actor_user_id?: string;'],
     response:
-      '{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; role_id: string; }',
+      '{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; role_id: string; }',
     markdown:
-      "## delete\n\n`client.iam.tenants.roles.delete(tenant_id: string, role_id: string, actor_token_identifier?: string): { convex_source_data: object; role_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/roles/{role_id}`\n\nPermanently deletes a tenant-scoped role, cascading its permissions and assignments. Shared and app-scoped roles are managed via iam.jsonc, not this API.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `role_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }; role_id: string; }`\n  Deleted IAM role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; version: number; }`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.iam.tenants.roles.delete('role_id', { tenant_id: 'tenant_id' });\n\nconsole.log(role);\n```",
+      "## delete\n\n`client.iam.tenants.roles.delete(tenant_id: string, role_id: string, actor_user_id?: string): { convex_source_data: object; role_id: string; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/roles/{role_id}`\n\nPermanently deletes a tenant-scoped role, cascading its permissions and assignments. Shared and app-scoped roles are managed via iam.jsonc, not this API.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `role_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }; role_id: string; }`\n  Deleted IAM role.\n\n  - `convex_source_data: { changed: boolean; projection_ids: string[]; source_version: number; }`\n  - `role_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst role = await client.iam.tenants.roles.delete('role_id', { tenant_id: 'tenant_id' });\n\nconsole.log(role);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.roles.delete',
@@ -1392,23 +1432,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.accessRules.create',
     params: [
       'tenant_id: string;',
-      'actor_token_identifier: string;',
+      'actor_user_id: string;',
       "effect: 'allow' | 'deny';",
       "subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; };",
       'reason?: string;',
     ],
     response: '{ rule_id: string; }',
     markdown:
-      "## create\n\n`client.iam.tenants.accessRules.create(tenant_id: string, actor_token_identifier: string, effect: 'allow' | 'deny', subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }, reason?: string): { rule_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/access-rules`\n\nCreates an allow or deny rule for an email address or domain. The rule takes effect immediately for matching users.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n- `effect: 'allow' | 'deny'`\n  Whether matching users are allowed or denied entry.\n\n- `subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }`\n  Email or domain matched by the rule.\n\n- `reason?: string`\n  Optional administrative reason.\n\n### Returns\n\n- `{ rule_id: string; }`\n  Created tenant access rule.\n\n  - `rule_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst accessRule = await client.iam.tenants.accessRules.create('tenant_id', {\n  actor_token_identifier: 'x',\n  effect: 'allow',\n  subject: { type: 'email', value: 'dev@stainless.com' },\n});\n\nconsole.log(accessRule);\n```",
+      "## create\n\n`client.iam.tenants.accessRules.create(tenant_id: string, actor_user_id: string, effect: 'allow' | 'deny', subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }, reason?: string): { rule_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/access-rules`\n\nCreates an allow or deny rule for an email address or domain. The rule takes effect immediately for matching users.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n- `effect: 'allow' | 'deny'`\n  Whether matching users are allowed or denied entry.\n\n- `subject: { type: 'email'; value: string; } | { type: 'domain'; value: string; }`\n  Email or domain matched by the rule.\n\n- `reason?: string`\n  Optional administrative reason.\n\n### Returns\n\n- `{ rule_id: string; }`\n  Created tenant access rule.\n\n  - `rule_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst accessRule = await client.iam.tenants.accessRules.create('tenant_id', {\n  actor_user_id: 'x',\n  effect: 'allow',\n  subject: { type: 'email', value: 'dev@stainless.com' },\n});\n\nconsole.log(accessRule);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.accessRules.create',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst accessRule = await client.iam.tenants.accessRules.create('tenant_id', {\n  actor_token_identifier: 'x',\n  effect: 'allow',\n  subject: { type: 'email', value: 'dev@stainless.com' },\n});\n\nconsole.log(accessRule.rule_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst accessRule = await client.iam.tenants.accessRules.create('tenant_id', {\n  actor_user_id: 'x',\n  effect: 'allow',\n  subject: { type: 'email', value: 'dev@stainless.com' },\n});\n\nconsole.log(accessRule.rule_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/access-rules \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x",\n          "effect": "allow",\n          "subject": {\n            "type": "email",\n            "value": "dev@stainless.com"\n          }\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/access-rules \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x",\n          "effect": "allow",\n          "subject": {\n            "type": "email",\n            "value": "dev@stainless.com"\n          }\n        }\'',
       },
     },
   },
@@ -1420,19 +1460,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Archives an access rule so it no longer affects who can enter the tenant.',
     stainlessPath: '(resource) iam.tenants.access_rules > (method) archive',
     qualified: 'client.iam.tenants.accessRules.archive',
-    params: ['tenant_id: string;', 'rule_id: string;', 'actor_token_identifier: string;'],
+    params: ['tenant_id: string;', 'rule_id: string;', 'actor_user_id: string;'],
     response: '{ archived: boolean; rule_id: string; }',
     markdown:
-      "## archive\n\n`client.iam.tenants.accessRules.archive(tenant_id: string, rule_id: string, actor_token_identifier: string): { archived: boolean; rule_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive`\n\nArchives an access rule so it no longer affects who can enter the tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `rule_id: string`\n\n- `actor_token_identifier: string`\n  The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ archived: boolean; rule_id: string; }`\n  Archived tenant access rule.\n\n  - `archived: boolean`\n  - `rule_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.accessRules.archive('rule_id', { tenant_id: 'tenant_id', actor_token_identifier: 'x' });\n\nconsole.log(response);\n```",
+      "## archive\n\n`client.iam.tenants.accessRules.archive(tenant_id: string, rule_id: string, actor_user_id: string): { archived: boolean; rule_id: string; }`\n\n**post** `/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive`\n\nArchives an access rule so it no longer affects who can enter the tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `rule_id: string`\n\n- `actor_user_id: string`\n  The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend. Used for identity and audit only.\n\n### Returns\n\n- `{ archived: boolean; rule_id: string; }`\n  Archived tenant access rule.\n\n  - `archived: boolean`\n  - `rule_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.accessRules.archive('rule_id', { tenant_id: 'tenant_id', actor_user_id: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.accessRules.archive',
         example:
-          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.accessRules.archive('rule_id', {\n  tenant_id: 'tenant_id',\n  actor_token_identifier: 'x',\n});\n\nconsole.log(response.rule_id);",
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.iam.tenants.accessRules.archive('rule_id', {\n  tenant_id: 'tenant_id',\n  actor_user_id: 'x',\n});\n\nconsole.log(response.rule_id);",
       },
       http: {
         example:
-          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/access-rules/$RULE_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_token_identifier": "x"\n        }\'',
+          'curl https://api.hercules.app/v1/iam/tenants/$TENANT_ID/access-rules/$RULE_ID/archive \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "actor_user_id": "x"\n        }\'',
       },
     },
   },
@@ -1471,9 +1511,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.iam.tenants.invitations.list',
     params: ['tenant_id: string;', 'limit?: number;', 'starting_after?: string;'],
     response:
-      "{ data: { constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; created_at: string; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; max_uses: number; role_ids: string[]; tenant_id: string; use_count: number; }[]; has_more: boolean; }",
+      "{ data: { constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; created_at: string; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; link: string; max_uses: number; role_ids: string[]; tenant_id: string; use_count: number; }[]; has_more: boolean; }",
     markdown:
-      "## list\n\n`client.iam.tenants.invitations.list(tenant_id: string, limit?: number, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/invitations`\n\nLists active, unexpired invitation links in a tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; created_at: string; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; max_uses: number; role_ids: string[]; tenant_id: string; use_count: number; }[]; has_more: boolean; }`\n  Paginated active invitation links in one tenant.\n\n  - `data: { constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; created_at: string; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; max_uses: number; role_ids: string[]; tenant_id: string; use_count: number; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst invitations = await client.iam.tenants.invitations.list('tenant_id');\n\nconsole.log(invitations);\n```",
+      "## list\n\n`client.iam.tenants.invitations.list(tenant_id: string, limit?: number, starting_after?: string): { data: object[]; has_more: boolean; }`\n\n**get** `/v1/iam/tenants/{tenant_id}/invitations`\n\nLists active, unexpired invitation links in a tenant.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `limit?: number`\n  Maximum number of records to return. Defaults to 50.\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last item from the previous page.\n\n### Returns\n\n- `{ data: { constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; created_at: string; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; link: string; max_uses: number; role_ids: string[]; tenant_id: string; use_count: number; }[]; has_more: boolean; }`\n  Paginated active invitation links in one tenant.\n\n  - `data: { constraint: { type: 'email'; value: string; } | { type: 'domain'; value: string; }; created_at: string; delivery: { to_emails: string[]; from_email?: string; }; expires_at: string; invitation_id: string; link: string; max_uses: number; role_ids: string[]; tenant_id: string; use_count: number; }[]`\n  - `has_more: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst invitations = await client.iam.tenants.invitations.list('tenant_id');\n\nconsole.log(invitations);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.invitations.list',
@@ -1495,10 +1535,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Revokes a pending invitation. Access already granted by an accepted invitation is unaffected.',
     stainlessPath: '(resource) iam.tenants.invitations > (method) revoke',
     qualified: 'client.iam.tenants.invitations.revoke',
-    params: ['tenant_id: string;', 'invitation_id: string;', 'actor_token_identifier?: string;'],
+    params: ['tenant_id: string;', 'invitation_id: string;', 'actor_user_id?: string;'],
     response: '{ invitation_id: string; revoked: boolean; }',
     markdown:
-      "## revoke\n\n`client.iam.tenants.invitations.revoke(tenant_id: string, invitation_id: string, actor_token_identifier?: string): { invitation_id: string; revoked: boolean; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/invitations/{invitation_id}`\n\nRevokes a pending invitation. Access already granted by an accepted invitation is unaffected.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `invitation_id: string`\n\n- `actor_token_identifier?: string`\n  The signed-in end user's tokenIdentifier to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ invitation_id: string; revoked: boolean; }`\n  Revoked invitation.\n\n  - `invitation_id: string`\n  - `revoked: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.invitations.revoke('invitation_id', { tenant_id: 'tenant_id' });\n\nconsole.log(response);\n```",
+      "## revoke\n\n`client.iam.tenants.invitations.revoke(tenant_id: string, invitation_id: string, actor_user_id?: string): { invitation_id: string; revoked: boolean; }`\n\n**delete** `/v1/iam/tenants/{tenant_id}/invitations/{invitation_id}`\n\nRevokes a pending invitation. Access already granted by an accepted invitation is unaffected.\n\n### Parameters\n\n- `tenant_id: string`\n\n- `invitation_id: string`\n\n- `actor_user_id?: string`\n  The signed-in end user's ID to attribute the operation to that user, or omitted for service authority.\n\n### Returns\n\n- `{ invitation_id: string; revoked: boolean; }`\n  Revoked invitation.\n\n  - `invitation_id: string`\n  - `revoked: boolean`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.iam.tenants.invitations.revoke('invitation_id', { tenant_id: 'tenant_id' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.iam.tenants.invitations.revoke',
