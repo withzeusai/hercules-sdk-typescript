@@ -11,10 +11,7 @@ const client = new Hercules({
 describe('resource groups', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.iam.tenants.groups.create('tenant_id', {
-      actor_token_identifier: 'x',
-      name: 'x',
-    });
+    const responsePromise = client.iam.tenants.groups.create('tenant_id', { actor_user_id: 'x', name: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -27,7 +24,7 @@ describe('resource groups', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.iam.tenants.groups.create('tenant_id', {
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       name: 'x',
       description: 'description',
     });
@@ -37,7 +34,7 @@ describe('resource groups', () => {
   test.skip('update: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.update('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -52,7 +49,7 @@ describe('resource groups', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.iam.tenants.groups.update('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       description: 'description',
       name: 'x',
     });
@@ -98,7 +95,7 @@ describe('resource groups', () => {
   test.skip('delete: required and optional params', async () => {
     const response = await client.iam.tenants.groups.delete('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'actor_token_identifier',
+      actor_user_id: 'actor_user_id',
     });
   });
 
@@ -106,7 +103,7 @@ describe('resource groups', () => {
   test.skip('archive: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.archive('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -121,7 +118,7 @@ describe('resource groups', () => {
   test.skip('archive: required and optional params', async () => {
     const response = await client.iam.tenants.groups.archive('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
   });
 
@@ -129,9 +126,9 @@ describe('resource groups', () => {
   test.skip('assignResourceRole: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.assignResourceRole('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       external_id: 'x',
-      resource_type_id: 'x',
+      resource_type: { id: 'x' },
       role: { id: 'x' },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -147,9 +144,9 @@ describe('resource groups', () => {
   test.skip('assignResourceRole: required and optional params', async () => {
     const response = await client.iam.tenants.groups.assignResourceRole('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       external_id: 'x',
-      resource_type_id: 'x',
+      resource_type: { id: 'x' },
       role: { id: 'x' },
       expires_at: '2019-12-27T18:11:19.117Z',
     });
@@ -159,7 +156,7 @@ describe('resource groups', () => {
   test.skip('assignRole: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.assignRole('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       role: { id: 'x' },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -175,7 +172,7 @@ describe('resource groups', () => {
   test.skip('assignRole: required and optional params', async () => {
     const response = await client.iam.tenants.groups.assignRole('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       role: { id: 'x' },
       expires_at: '2019-12-27T18:11:19.117Z',
     });
@@ -248,7 +245,7 @@ describe('resource groups', () => {
   test.skip('unarchive: only required params', async () => {
     const responsePromise = client.iam.tenants.groups.unarchive('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -263,7 +260,7 @@ describe('resource groups', () => {
   test.skip('unarchive: required and optional params', async () => {
     const response = await client.iam.tenants.groups.unarchive('group_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
   });
 
@@ -287,7 +284,7 @@ describe('resource groups', () => {
     const response = await client.iam.tenants.groups.unassignResourceRole('assignment_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      actor_token_identifier: 'actor_token_identifier',
+      actor_user_id: 'actor_user_id',
     });
   });
 
@@ -311,7 +308,7 @@ describe('resource groups', () => {
     const response = await client.iam.tenants.groups.unassignRole('assignment_id', {
       tenant_id: 'tenant_id',
       group_id: 'group_id',
-      actor_token_identifier: 'actor_token_identifier',
+      actor_user_id: 'actor_user_id',
     });
   });
 });

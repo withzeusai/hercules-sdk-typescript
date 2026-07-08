@@ -12,7 +12,7 @@ describe('resource accessRules', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.iam.tenants.accessRules.create('tenant_id', {
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       effect: 'allow',
       subject: { type: 'email', value: 'dev@stainless.com' },
     });
@@ -28,7 +28,7 @@ describe('resource accessRules', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.iam.tenants.accessRules.create('tenant_id', {
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
       effect: 'allow',
       subject: { type: 'email', value: 'dev@stainless.com' },
       reason: 'reason',
@@ -69,7 +69,7 @@ describe('resource accessRules', () => {
   test.skip('archive: only required params', async () => {
     const responsePromise = client.iam.tenants.accessRules.archive('rule_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -84,7 +84,7 @@ describe('resource accessRules', () => {
   test.skip('archive: required and optional params', async () => {
     const response = await client.iam.tenants.accessRules.archive('rule_id', {
       tenant_id: 'tenant_id',
-      actor_token_identifier: 'x',
+      actor_user_id: 'x',
     });
   });
 });
