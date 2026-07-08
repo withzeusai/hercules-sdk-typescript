@@ -61,9 +61,9 @@ export class Groups extends APIResource {
     params: GroupDeleteParams,
     options?: RequestOptions,
   ): APIPromise<GroupDeleteResponse> {
-    const { tenant_id, actor_token_identifier } = params;
+    const { tenant_id, actor_user_id } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/groups/${groupID}`, {
-      query: { actor_token_identifier },
+      query: { actor_user_id },
       ...options,
     });
   }
@@ -174,10 +174,10 @@ export class Groups extends APIResource {
     params: GroupUnassignResourceRoleParams,
     options?: RequestOptions,
   ): APIPromise<GroupUnassignResourceRoleResponse> {
-    const { tenant_id, group_id, actor_token_identifier } = params;
+    const { tenant_id, group_id, actor_user_id } = params;
     return this._client.delete(
       path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/resource-role-assignments/${assignmentID}`,
-      { query: { actor_token_identifier }, ...options },
+      { query: { actor_user_id }, ...options },
     );
   }
 
@@ -189,10 +189,10 @@ export class Groups extends APIResource {
     params: GroupUnassignRoleParams,
     options?: RequestOptions,
   ): APIPromise<GroupUnassignRoleResponse> {
-    const { tenant_id, group_id, actor_token_identifier } = params;
+    const { tenant_id, group_id, actor_user_id } = params;
     return this._client.delete(
       path`/v1/iam/tenants/${tenant_id}/groups/${group_id}/role-assignments/${assignmentID}`,
-      { query: { actor_token_identifier }, ...options },
+      { query: { actor_user_id }, ...options },
     );
   }
 }
@@ -228,10 +228,11 @@ export namespace GroupCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -266,10 +267,11 @@ export namespace GroupUpdateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -326,7 +328,7 @@ export namespace GroupListResponse {
     /**
      * Group lifecycle status.
      */
-    status: 'active' | 'disabled';
+    status: 'active' | 'archived';
 
     /**
      * Tenant the group belongs to.
@@ -366,10 +368,11 @@ export namespace GroupDeleteResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -404,10 +407,11 @@ export namespace GroupArchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -442,10 +446,11 @@ export namespace GroupAssignResourceRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -480,10 +485,11 @@ export namespace GroupAssignRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -524,7 +530,7 @@ export interface GroupGetResponse {
   /**
    * Group lifecycle status.
    */
-  status: 'active' | 'disabled';
+  status: 'active' | 'archived';
 
   /**
    * Tenant the group belongs to.
@@ -657,10 +663,11 @@ export namespace GroupUnarchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -695,10 +702,11 @@ export namespace GroupUnassignResourceRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -733,19 +741,20 @@ export namespace GroupUnassignRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
 export interface GroupCreateParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Human-readable group name.
@@ -766,10 +775,10 @@ export interface GroupUpdateParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: Optional human-readable group description.
@@ -803,10 +812,10 @@ export interface GroupDeleteParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 export interface GroupArchiveParams {
@@ -817,10 +826,10 @@ export interface GroupArchiveParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 }
 
 export interface GroupAssignResourceRoleParams {
@@ -831,10 +840,10 @@ export interface GroupAssignResourceRoleParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: The app-defined external ID of the exact resource.
@@ -842,9 +851,11 @@ export interface GroupAssignResourceRoleParams {
   external_id: string;
 
   /**
-   * Body param: The resource type ID.
+   * Body param: Identifies exactly one IAM resource type by ID or stable key.
    */
-  resource_type_id: string;
+  resource_type:
+    | GroupAssignResourceRoleParams.IamResourceTypeIDReference
+    | GroupAssignResourceRoleParams.IamResourceTypeKeyReference;
 
   /**
    * Body param: Identifies exactly one IAM role by ID or stable key.
@@ -858,6 +869,20 @@ export interface GroupAssignResourceRoleParams {
 }
 
 export namespace GroupAssignResourceRoleParams {
+  export interface IamResourceTypeIDReference {
+    /**
+     * Existing IAM resource type ID.
+     */
+    id: string;
+  }
+
+  export interface IamResourceTypeKeyReference {
+    /**
+     * Stable resource type key from the deployment's IAM catalog (e.g. `app.project`).
+     */
+    key: string;
+  }
+
   export interface IamRoleIDReference {
     /**
      * Existing IAM role ID.
@@ -881,10 +906,10 @@ export interface GroupAssignRoleParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: Identifies exactly one IAM role by ID or stable key.
@@ -966,10 +991,10 @@ export interface GroupUnarchiveParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 }
 
 export interface GroupUnassignResourceRoleParams {
@@ -985,10 +1010,10 @@ export interface GroupUnassignResourceRoleParams {
   group_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 export interface GroupUnassignRoleParams {
@@ -1004,10 +1029,10 @@ export interface GroupUnassignRoleParams {
   group_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 Groups.Members = Members;

@@ -60,19 +60,20 @@ export namespace InvitationAcceptResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
 export interface InvitationAcceptParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend.
    */
-  actor_token_identifier: string;
+  actor_user_id: string;
 
   /**
    * Secret invitation token.

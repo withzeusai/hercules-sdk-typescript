@@ -39,6 +39,10 @@ import {
   MemberListRoleAssignmentsResponse,
   MemberRemoveParams,
   MemberRemoveResponse,
+  MemberReplaceResourceRolesParams,
+  MemberReplaceResourceRolesResponse,
+  MemberReplaceRolesParams,
+  MemberReplaceRolesResponse,
   MemberUnassignResourceRoleParams,
   MemberUnassignResourceRoleResponse,
   MemberUnassignRoleParams,
@@ -114,7 +118,7 @@ export class Tenants extends APIResource {
   }
 
   /**
-   * Updates a tenant's name, default role, or admission policy.
+   * Updates a tenant's name, default role, or access mode.
    */
   update(
     tenantID: string,
@@ -158,7 +162,7 @@ export class Tenants extends APIResource {
 
   /**
    * Evaluates whether the signed-in end user may enter the tenant and applies the
-   * result: entry mode `open` creates an active membership with the tenant default
+   * result: access mode `open` creates an active membership with the tenant default
    * role, `approval_required` creates a pending membership, and denials create
    * nothing. Call it after sign-in, before reading the user's access status. Safe to
    * repeat; an existing membership is returned unchanged.
@@ -265,10 +269,11 @@ export namespace TenantCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -303,10 +308,11 @@ export namespace TenantUpdateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -331,9 +337,10 @@ export namespace TenantListResponse {
    */
   export interface Data {
     /**
-     * The tenant's admission policy.
+     * The tenant's access mode (how it admits new members): open, allowlist-only,
+     * invitation-only, or approval-required.
      */
-    account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+    access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
     /**
      * Tenant creation timestamp.
@@ -358,7 +365,7 @@ export namespace TenantListResponse {
     /**
      * Tenant lifecycle status.
      */
-    status: 'active' | 'disabled';
+    status: 'active' | 'archived';
 
     /**
      * Tenant ID.
@@ -403,10 +410,11 @@ export namespace TenantArchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -532,11 +540,11 @@ export interface TenantEvaluateAccessResponse {
   /**
    * Why entry was denied.
    */
-  reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_disabled' | null;
+  reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived' | null;
 
   /**
    * Entry outcome: the user's membership status after evaluation, or `denied` when
-   * the tenant's admission policy rejects them and no membership exists.
+   * the tenant's access mode or access rules reject them and no membership exists.
    */
   status: 'active' | 'pending_approval' | 'denied';
 
@@ -567,10 +575,11 @@ export namespace TenantEvaluateAccessResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -579,9 +588,10 @@ export namespace TenantEvaluateAccessResponse {
  */
 export interface TenantGetResponse {
   /**
-   * The tenant's admission policy.
+   * The tenant's access mode (how it admits new members): open, allowlist-only,
+   * invitation-only, or approval-required.
    */
-  account_entry_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
   /**
    * Tenant creation timestamp.
@@ -606,7 +616,7 @@ export interface TenantGetResponse {
   /**
    * Tenant lifecycle status.
    */
-  status: 'active' | 'disabled';
+  status: 'active' | 'archived';
 
   /**
    * Tenant ID.
@@ -826,19 +836,20 @@ export namespace TenantUnarchiveResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
 export interface TenantCreateParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Human-readable tenant name.
@@ -846,7 +857,7 @@ export interface TenantCreateParams {
   name: string;
 
   /**
-   * Initial tenant admission policy. Defaults to `open`.
+   * Initial tenant access mode. Defaults to `open`.
    */
   access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
@@ -857,8 +868,8 @@ export interface TenantCreateParams {
 
   /**
    * The end user's ID (their OIDC subject) to grant the initial owner role. Required
-   * when using service authority (actor_token_identifier null); with user authority
-   * the signed-in user becomes the owner.
+   * when using service authority (actor_user_id null); with user authority the
+   * signed-in user becomes the owner.
    */
   owner_user_id?: string;
 }
@@ -881,13 +892,13 @@ export namespace TenantCreateParams {
 
 export interface TenantUpdateParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
-   * New tenant admission policy.
+   * New tenant access mode.
    */
   access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 
@@ -933,23 +944,23 @@ export interface TenantListParams {
   /**
    * Filter by tenant status.
    */
-  status?: 'active' | 'disabled';
+  status?: 'active' | 'archived';
 }
 
 export interface TenantArchiveParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 }
 
 export interface TenantCreateInvitationParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Optional signup constraint. Omit for an open link anyone can accept.
@@ -1052,10 +1063,10 @@ export namespace TenantCreateInvitationParams {
 
 export interface TenantEvaluateAccessParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend.
    */
-  actor_token_identifier: string;
+  actor_user_id: string;
 }
 
 export interface TenantListResourceRoleAssignmentsParams {
@@ -1081,9 +1092,15 @@ export interface TenantListResourceRoleAssignmentsParams {
   membership_id?: string;
 
   /**
-   * Filter to one resource type by ID.
+   * Filter to one resource type by ID. Not combinable with resource_type_key.
    */
   resource_type_id?: string;
+
+  /**
+   * Filter to one resource type by its catalog key (e.g. `app.project`). Not
+   * combinable with resource_type_id.
+   */
+  resource_type_key?: string;
 
   /**
    * Return only assignments of this role.
@@ -1127,10 +1144,10 @@ export interface TenantListRoleAssignmentsParams {
 
 export interface TenantUnarchiveParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 }
 
 Tenants.Members = Members;
@@ -1173,6 +1190,8 @@ export declare namespace Tenants {
     type MemberListResourceRoleAssignmentsResponse as MemberListResourceRoleAssignmentsResponse,
     type MemberListRoleAssignmentsResponse as MemberListRoleAssignmentsResponse,
     type MemberRemoveResponse as MemberRemoveResponse,
+    type MemberReplaceResourceRolesResponse as MemberReplaceResourceRolesResponse,
+    type MemberReplaceRolesResponse as MemberReplaceRolesResponse,
     type MemberUnassignResourceRoleResponse as MemberUnassignResourceRoleResponse,
     type MemberUnassignRoleResponse as MemberUnassignRoleResponse,
     type MemberUpdateStatusResponse as MemberUpdateStatusResponse,
@@ -1184,6 +1203,8 @@ export declare namespace Tenants {
     type MemberListResourceRoleAssignmentsParams as MemberListResourceRoleAssignmentsParams,
     type MemberListRoleAssignmentsParams as MemberListRoleAssignmentsParams,
     type MemberRemoveParams as MemberRemoveParams,
+    type MemberReplaceResourceRolesParams as MemberReplaceResourceRolesParams,
+    type MemberReplaceRolesParams as MemberReplaceRolesParams,
     type MemberUnassignResourceRoleParams as MemberUnassignResourceRoleParams,
     type MemberUnassignRoleParams as MemberUnassignRoleParams,
     type MemberUpdateStatusParams as MemberUpdateStatusParams,

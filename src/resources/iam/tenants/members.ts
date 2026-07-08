@@ -110,9 +110,45 @@ export class Members extends APIResource {
     params: MemberRemoveParams,
     options?: RequestOptions,
   ): APIPromise<MemberRemoveResponse> {
-    const { tenant_id, actor_token_identifier } = params;
+    const { tenant_id, actor_user_id } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/members/${membershipID}`, {
-      query: { actor_token_identifier },
+      query: { actor_user_id },
+      ...options,
+    });
+  }
+
+  /**
+   * Reconciles the member's direct role assignments on one exact resource to exactly
+   * the supplied set in one transaction: missing roles are assigned, surplus
+   * assignments removed, matching ones kept. Grants on other resources and via
+   * groups are untouched. Idempotent; prefer this over unassign-then-assign loops.
+   */
+  replaceResourceRoles(
+    membershipID: string,
+    params: MemberReplaceResourceRolesParams,
+    options?: RequestOptions,
+  ): APIPromise<MemberReplaceResourceRolesResponse> {
+    const { tenant_id, ...body } = params;
+    return this._client.put(
+      path`/v1/iam/tenants/${tenant_id}/members/${membershipID}/resource-role-assignments`,
+      { body, ...options },
+    );
+  }
+
+  /**
+   * Reconciles the member's direct tenant-wide role assignments to exactly the
+   * supplied set in one transaction: missing roles are assigned, surplus assignments
+   * removed, matching ones kept. Roles conferred via groups are untouched.
+   * Idempotent; prefer this over unassign-then-assign loops.
+   */
+  replaceRoles(
+    membershipID: string,
+    params: MemberReplaceRolesParams,
+    options?: RequestOptions,
+  ): APIPromise<MemberReplaceRolesResponse> {
+    const { tenant_id, ...body } = params;
+    return this._client.put(path`/v1/iam/tenants/${tenant_id}/members/${membershipID}/role-assignments`, {
+      body,
       ...options,
     });
   }
@@ -125,10 +161,10 @@ export class Members extends APIResource {
     params: MemberUnassignResourceRoleParams,
     options?: RequestOptions,
   ): APIPromise<MemberUnassignResourceRoleResponse> {
-    const { tenant_id, membership_id, actor_token_identifier } = params;
+    const { tenant_id, membership_id, actor_user_id } = params;
     return this._client.delete(
       path`/v1/iam/tenants/${tenant_id}/members/${membership_id}/resource-role-assignments/${assignmentID}`,
-      { query: { actor_token_identifier }, ...options },
+      { query: { actor_user_id }, ...options },
     );
   }
 
@@ -140,10 +176,10 @@ export class Members extends APIResource {
     params: MemberUnassignRoleParams,
     options?: RequestOptions,
   ): APIPromise<MemberUnassignRoleResponse> {
-    const { tenant_id, membership_id, actor_token_identifier } = params;
+    const { tenant_id, membership_id, actor_user_id } = params;
     return this._client.delete(
       path`/v1/iam/tenants/${tenant_id}/members/${membership_id}/role-assignments/${assignmentID}`,
-      { query: { actor_token_identifier }, ...options },
+      { query: { actor_user_id }, ...options },
     );
   }
 
@@ -199,10 +235,11 @@ export namespace MemberCreateResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -299,10 +336,11 @@ export namespace MemberAssignResourceRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -337,10 +375,11 @@ export namespace MemberAssignRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -514,10 +553,139 @@ export namespace MemberRemoveResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
+  }
+}
+
+/**
+ * Result of replacing a member's role assignments on one resource.
+ */
+export interface MemberReplaceResourceRolesResponse {
+  /**
+   * The member's direct role assignments on the resource after the replace.
+   */
+  assignments: Array<MemberReplaceResourceRolesResponse.Assignment>;
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: MemberReplaceResourceRolesResponse.ConvexSourceData;
+
+  /**
+   * The app-defined external ID of the exact resource.
+   */
+  external_id: string;
+
+  /**
+   * The member whose resource role assignments were replaced.
+   */
+  membership_id: string;
+
+  /**
+   * The resource type ID.
+   */
+  resource_type_id: string;
+}
+
+export namespace MemberReplaceResourceRolesResponse {
+  /**
+   * One direct role assignment held by the member.
+   */
+  export interface Assignment {
+    /**
+     * Role assignment ID.
+     */
+    assignment_id: string;
+
+    /**
+     * Assigned role ID.
+     */
+    role_id: string;
+  }
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
+     */
+    source_version: number;
+  }
+}
+
+/**
+ * Result of replacing a member's tenant-wide role assignments.
+ */
+export interface MemberReplaceRolesResponse {
+  /**
+   * The member's direct tenant-wide role assignments after the replace.
+   */
+  assignments: Array<MemberReplaceRolesResponse.Assignment>;
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: MemberReplaceRolesResponse.ConvexSourceData;
+
+  /**
+   * The member whose role assignments were replaced.
+   */
+  membership_id: string;
+}
+
+export namespace MemberReplaceRolesResponse {
+  /**
+   * One direct role assignment held by the member.
+   */
+  export interface Assignment {
+    /**
+     * Role assignment ID.
+     */
+    assignment_id: string;
+
+    /**
+     * Assigned role ID.
+     */
+    role_id: string;
+  }
+
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+
+    /**
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
+     */
+    source_version: number;
   }
 }
 
@@ -552,10 +720,11 @@ export namespace MemberUnassignResourceRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -590,10 +759,11 @@ export namespace MemberUnassignRoleResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
@@ -628,23 +798,23 @@ export namespace MemberUpdateStatusResponse {
     projection_ids: Array<string>;
 
     /**
-     * Deployment IAM state version after the operation. Before relying on Convex IAM
-     * mirror reads, wait for the projection to reach at least this version.
+     * The deployment's IAM source version after the operation. Before relying on
+     * Convex IAM mirror reads, wait for the projection to reach at least this source
+     * version.
      */
-    version: number;
+    source_version: number;
   }
 }
 
 export interface MemberCreateParams {
   /**
-   * The signed-in end user's Hercules Auth tokenIdentifier, passed unchanged by the
-   * trusted app backend. Used for identity and audit only.
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
+   * backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
-   * The end user's ID (their OIDC subject) to add to the tenant. Do not pass a token
-   * identifier.
+   * The end user's ID (their OIDC subject) to add to the tenant.
    */
   user_id: string;
 
@@ -712,10 +882,10 @@ export interface MemberAssignResourceRoleParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: The app-defined external ID of the exact resource.
@@ -723,9 +893,11 @@ export interface MemberAssignResourceRoleParams {
   external_id: string;
 
   /**
-   * Body param: The resource type ID.
+   * Body param: Identifies exactly one IAM resource type by ID or stable key.
    */
-  resource_type_id: string;
+  resource_type:
+    | MemberAssignResourceRoleParams.IamResourceTypeIDReference
+    | MemberAssignResourceRoleParams.IamResourceTypeKeyReference;
 
   /**
    * Body param: Identifies exactly one IAM role by ID or stable key.
@@ -741,6 +913,20 @@ export interface MemberAssignResourceRoleParams {
 }
 
 export namespace MemberAssignResourceRoleParams {
+  export interface IamResourceTypeIDReference {
+    /**
+     * Existing IAM resource type ID.
+     */
+    id: string;
+  }
+
+  export interface IamResourceTypeKeyReference {
+    /**
+     * Stable resource type key from the deployment's IAM catalog (e.g. `app.project`).
+     */
+    key: string;
+  }
+
   export interface IamRoleIDReference {
     /**
      * Existing IAM role ID.
@@ -764,10 +950,10 @@ export interface MemberAssignRoleParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: Identifies exactly one IAM role by ID or stable key.
@@ -849,10 +1035,113 @@ export interface MemberRemoveParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
+}
+
+export interface MemberReplaceResourceRolesParams {
+  /**
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
+   */
+  tenant_id: string;
+
+  /**
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
+   */
+  actor_user_id: string | null;
+
+  /**
+   * Body param: The app-defined external ID of the exact resource.
+   */
+  external_id: string;
+
+  /**
+   * Body param: Identifies exactly one IAM resource type by ID or stable key.
+   */
+  resource_type:
+    | MemberReplaceResourceRolesParams.IamResourceTypeIDReference
+    | MemberReplaceResourceRolesParams.IamResourceTypeKeyReference;
+
+  /**
+   * Body param: The complete desired set of the member's direct roles on this exact
+   * resource. Missing roles are assigned, surplus assignments are removed;
+   * assignments on other resources and via groups are untouched. An empty array
+   * removes every direct assignment on the resource.
+   */
+  roles: Array<
+    MemberReplaceResourceRolesParams.IamRoleIDReference | MemberReplaceResourceRolesParams.IamRoleKeyReference
+  >;
+}
+
+export namespace MemberReplaceResourceRolesParams {
+  export interface IamResourceTypeIDReference {
+    /**
+     * Existing IAM resource type ID.
+     */
+    id: string;
+  }
+
+  export interface IamResourceTypeKeyReference {
+    /**
+     * Stable resource type key from the deployment's IAM catalog (e.g. `app.project`).
+     */
+    key: string;
+  }
+
+  export interface IamRoleIDReference {
+    /**
+     * Existing IAM role ID.
+     */
+    id: string;
+  }
+
+  export interface IamRoleKeyReference {
+    /**
+     * Stable role key from the deployment's IAM catalog.
+     */
+    key: string;
+  }
+}
+
+export interface MemberReplaceRolesParams {
+  /**
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary
+   * tenant.
+   */
+  tenant_id: string;
+
+  /**
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
+   */
+  actor_user_id: string | null;
+
+  /**
+   * Body param: The complete desired set of the member's direct tenant-wide roles.
+   * Missing roles are assigned, surplus assignments are removed, and roles conferred
+   * via groups are untouched. An empty array removes every direct assignment.
+   */
+  roles: Array<MemberReplaceRolesParams.IamRoleIDReference | MemberReplaceRolesParams.IamRoleKeyReference>;
+}
+
+export namespace MemberReplaceRolesParams {
+  export interface IamRoleIDReference {
+    /**
+     * Existing IAM role ID.
+     */
+    id: string;
+  }
+
+  export interface IamRoleKeyReference {
+    /**
+     * Stable role key from the deployment's IAM catalog.
+     */
+    key: string;
+  }
 }
 
 export interface MemberUnassignResourceRoleParams {
@@ -864,16 +1153,15 @@ export interface MemberUnassignResourceRoleParams {
 
   /**
    * Path param: The user's tenant membership ID, as returned by IAM member reads. It
-   * identifies the user's membership in the tenant, not the user id. Do not pass a
-   * token identifier.
+   * identifies the user's membership in the tenant, not the user id.
    */
   membership_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 export interface MemberUnassignRoleParams {
@@ -885,16 +1173,15 @@ export interface MemberUnassignRoleParams {
 
   /**
    * Path param: The user's tenant membership ID, as returned by IAM member reads. It
-   * identifies the user's membership in the tenant, not the user id. Do not pass a
-   * token identifier.
+   * identifies the user's membership in the tenant, not the user id.
    */
   membership_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 export interface MemberUpdateStatusParams {
@@ -905,10 +1192,10 @@ export interface MemberUpdateStatusParams {
   tenant_id: string;
 
   /**
-   * Body param: The signed-in end user's Hercules Auth tokenIdentifier, passed
-   * unchanged by the trusted app backend. Used for identity and audit only.
+   * Body param: The signed-in end user's ID (their OIDC subject), asserted by the
+   * trusted app backend. Used for identity and audit only.
    */
-  actor_token_identifier: string | null;
+  actor_user_id: string | null;
 
   /**
    * Body param: New membership status.
@@ -926,6 +1213,8 @@ export declare namespace Members {
     type MemberListResourceRoleAssignmentsResponse as MemberListResourceRoleAssignmentsResponse,
     type MemberListRoleAssignmentsResponse as MemberListRoleAssignmentsResponse,
     type MemberRemoveResponse as MemberRemoveResponse,
+    type MemberReplaceResourceRolesResponse as MemberReplaceResourceRolesResponse,
+    type MemberReplaceRolesResponse as MemberReplaceRolesResponse,
     type MemberUnassignResourceRoleResponse as MemberUnassignResourceRoleResponse,
     type MemberUnassignRoleResponse as MemberUnassignRoleResponse,
     type MemberUpdateStatusResponse as MemberUpdateStatusResponse,
@@ -937,6 +1226,8 @@ export declare namespace Members {
     type MemberListResourceRoleAssignmentsParams as MemberListResourceRoleAssignmentsParams,
     type MemberListRoleAssignmentsParams as MemberListRoleAssignmentsParams,
     type MemberRemoveParams as MemberRemoveParams,
+    type MemberReplaceResourceRolesParams as MemberReplaceResourceRolesParams,
+    type MemberReplaceRolesParams as MemberReplaceRolesParams,
     type MemberUnassignResourceRoleParams as MemberUnassignResourceRoleParams,
     type MemberUnassignRoleParams as MemberUnassignRoleParams,
     type MemberUpdateStatusParams as MemberUpdateStatusParams,

@@ -506,10 +506,7 @@ describe('idempotency', () => {
       apiKey: 'My API Key',
       apiVersion: '2025-12-09',
     });
-    await client.iam.invitations.accept(
-      { actor_token_identifier: 'x', invitation_token: 'x' },
-      { idempotencyKey: 'my-idempotency-key' },
-    );
+    await client.analytics.query({ sql: 'x' }, { idempotencyKey: 'my-idempotency-key' });
   });
 });
 

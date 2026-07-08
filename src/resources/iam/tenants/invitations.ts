@@ -26,9 +26,9 @@ export class Invitations extends APIResource {
     params: InvitationRevokeParams,
     options?: RequestOptions,
   ): APIPromise<InvitationRevokeResponse> {
-    const { tenant_id, actor_token_identifier } = params;
+    const { tenant_id, actor_user_id } = params;
     return this._client.delete(path`/v1/iam/tenants/${tenant_id}/invitations/${invitationID}`, {
-      query: { actor_token_identifier },
+      query: { actor_user_id },
       ...options,
     });
   }
@@ -80,6 +80,13 @@ export namespace InvitationListResponse {
      * Invitation ID.
      */
     invitation_id: string;
+
+    /**
+     * The full shareable invitation link, re-derivable at any time. Null only for
+     * invitations created before links were stored or when the app's auth domain
+     * cannot be resolved.
+     */
+    link: string | null;
 
     /**
      * Signup cap, or null for unlimited.
@@ -184,10 +191,10 @@ export interface InvitationRevokeParams {
   tenant_id: string;
 
   /**
-   * Query param: The signed-in end user's tokenIdentifier to attribute the operation
-   * to that user, or omitted for service authority.
+   * Query param: The signed-in end user's ID to attribute the operation to that
+   * user, or omitted for service authority.
    */
-  actor_token_identifier?: string;
+  actor_user_id?: string;
 }
 
 export declare namespace Invitations {

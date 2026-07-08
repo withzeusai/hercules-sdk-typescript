@@ -1,6 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  Analytics,
+  type QueryResponse,
+  type Status,
+  type Table,
+  type AnalyticsListTablesResponse,
+  type AnalyticsQueryParams,
+} from './analytics';
+export {
   Commerce,
   type Currency,
   type CommerceCancelResponse,
