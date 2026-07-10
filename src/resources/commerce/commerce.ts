@@ -433,6 +433,14 @@ export interface CommerceCheckoutParams {
    * subscription group's configured default.
    */
   proration_behavior?: 'none' | 'prorate' | 'full_difference';
+
+  /**
+   * Override the free trial period for new subscriptions, in days (0-365). If not
+   * provided, uses the subscription group's configured trial period. Set to 0 to
+   * disable the group's trial for this checkout. Ignored when updating an existing
+   * subscription.
+   */
+  trial_period_days?: number;
 }
 
 export namespace CommerceCheckoutParams {

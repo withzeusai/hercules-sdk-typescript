@@ -84,6 +84,7 @@ describe('resource commerce', () => {
       plan_downgrade_behavior: 'immediate',
       promotion_code: 'promotion_code',
       proration_behavior: 'none',
+      trial_period_days: 0,
     });
   });
 });
