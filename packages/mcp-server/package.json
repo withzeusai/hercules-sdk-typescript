@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@cloudflare/cabidela": "^0.2.4",
-    "@hono/node-server": "^1.19.14",
+    "@hono/node-server": "^2.0.10",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@usehercules/sdk": "workspace:*",
     "@valtown/deno-http-worker": "^0.0.21",
