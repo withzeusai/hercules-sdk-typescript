@@ -184,6 +184,13 @@ export interface PurchasedCreateParams {
   autorenew?: boolean;
 
   /**
+   * Registry IDN table tag for internationalized domain names (e.g. 'ES', 'GREK').
+   * Required when the name's script maps to more than one of the registry's tables;
+   * the error response lists the valid options.
+   */
+  idn_language?: string;
+
+  /**
    * Stripe payment method ID. Falls back to the customer's default payment method.
    */
   payment_method_id?: string;

@@ -26,6 +26,7 @@ describe('resource purchased', () => {
     const response = await client.domains.purchased.create({
       domain_name: 'x',
       autorenew: true,
+      idn_language: 'x',
       payment_method_id: 'x',
       website_id: 'x',
       years: 1,
