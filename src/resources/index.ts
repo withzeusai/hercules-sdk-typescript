@@ -18,7 +18,13 @@ export {
   type CommerceCheckParams,
   type CommerceCheckoutParams,
 } from './commerce/commerce';
-export { Connectors, type ConnectorCredentialsResponse, type ConnectorCredentialsParams } from './connectors';
+export {
+  Connectors,
+  type ConnectorCredentialsResponse,
+  type ConnectorRequestResponse,
+  type ConnectorCredentialsParams,
+  type ConnectorRequestParams,
+} from './connectors';
 export { Content } from './content/content';
 export {
   Domains,

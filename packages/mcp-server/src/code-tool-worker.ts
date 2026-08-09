@@ -190,6 +190,7 @@ const fuse = new Fuse(
     'client.commerce.features.list',
     'client.commerce.features.update',
     'client.connectors.credentials',
+    'client.connectors.request',
     'client.content.collections.archive',
     'client.content.collections.create',
     'client.content.collections.get',

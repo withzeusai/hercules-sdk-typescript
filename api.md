@@ -292,10 +292,12 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/connectors.ts">ConnectorCredentialsResponse</a></code>
+- <code><a href="./src/resources/connectors.ts">ConnectorRequestResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/connectors/{slug}/credentials">client.connectors.<a href="./src/resources/connectors.ts">credentials</a>(slug, { ...params }) -> ConnectorCredentialsResponse</code>
+- <code title="post /v1/connectors/{slug}/request">client.connectors.<a href="./src/resources/connectors.ts">request</a>(slug, { ...params }) -> ConnectorRequestResponse</code>
 
 # Content
 

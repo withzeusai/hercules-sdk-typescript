@@ -503,6 +503,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/connectors/{slug}/credentials',
   },
   {
+    clientCallName: 'client.connectors.request',
+    fullyQualifiedName: 'connectors.request',
+    httpMethod: 'post',
+    httpPath: '/v1/connectors/{slug}/request',
+  },
+  {
     clientCallName: 'client.content.collections.create',
     fullyQualifiedName: 'content.collections.create',
     httpMethod: 'post',

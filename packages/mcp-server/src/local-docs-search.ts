@@ -2354,14 +2354,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'get',
     summary: 'Get Connector Credentials',
     description:
-      "Returns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one.",
+      "Returns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one. Connectors whose provider withholds the credential answer 409 — send requests through the connector request endpoint instead.",
     stainlessPath: '(resource) connectors > (method) credentials',
     qualified: 'client.connectors.credentials',
     params: ['slug: string;', 'connection_id?: string;'],
     response:
       "{ auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }",
     markdown:
-      "## credentials\n\n`client.connectors.credentials(slug: string, connection_id?: string): { auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }`\n\n**get** `/v1/connectors/{slug}/credentials`\n\nReturns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one.\n\n### Parameters\n\n- `slug: string`\n\n- `connection_id?: string`\n  ID of the connection (the linked credential) to read. When omitted, resolves the connection installed for the calling deployment. When set, the calling deployment must be linked to exactly this connection — unlinking it in the dashboard invalidates the ID.\n\n### Returns\n\n- `{ auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }`\n\n  - `auth_type: 'api_key' | 'oauth'`\n  - `connection_id: string`\n  - `delivery_mode: 'sdk'`\n  - `expires_at: string`\n  - `secrets: object`\n  - `slug: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.connectors.credentials('x');\n\nconsole.log(response);\n```",
+      "## credentials\n\n`client.connectors.credentials(slug: string, connection_id?: string): { auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }`\n\n**get** `/v1/connectors/{slug}/credentials`\n\nReturns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one. Connectors whose provider withholds the credential answer 409 — send requests through the connector request endpoint instead.\n\n### Parameters\n\n- `slug: string`\n\n- `connection_id?: string`\n  ID of the connection (the linked credential) to read. When omitted, resolves the connection installed for the calling deployment. When set, the calling deployment must be linked to exactly this connection — unlinking it in the dashboard invalidates the ID.\n\n### Returns\n\n- `{ auth_type: 'api_key' | 'oauth'; connection_id: string; delivery_mode: 'sdk'; expires_at: string; secrets: object; slug: string; }`\n\n  - `auth_type: 'api_key' | 'oauth'`\n  - `connection_id: string`\n  - `delivery_mode: 'sdk'`\n  - `expires_at: string`\n  - `secrets: object`\n  - `slug: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.connectors.credentials('x');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connectors.credentials',
@@ -2371,6 +2371,39 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.hercules.app/v1/connectors/$SLUG/credentials \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'request',
+    endpoint: '/v1/connectors/{slug}/request',
+    httpMethod: 'post',
+    summary: 'Send Connector Request',
+    description:
+      "Sends an HTTP request to a connector's provider API as one of the app's connected accounts, with credentials injected server-side — the app never handles the token. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. Answers 200 whenever the request reached the provider, with the provider's own status in the body.",
+    stainlessPath: '(resource) connectors > (method) request',
+    qualified: 'client.connectors.request',
+    params: [
+      'slug: string;',
+      'endpoint: string;',
+      "method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';",
+      'body?: object;',
+      'connection_id?: string;',
+      'headers?: object;',
+      'query?: object;',
+    ],
+    response: '{ connection_id: string; data: object; headers: object; slug: string; status: number; }',
+    markdown:
+      "## request\n\n`client.connectors.request(slug: string, endpoint: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', body?: object, connection_id?: string, headers?: object, query?: object): { connection_id: string; data: object; headers: object; slug: string; status: number; }`\n\n**post** `/v1/connectors/{slug}/request`\n\nSends an HTTP request to a connector's provider API as one of the app's connected accounts, with credentials injected server-side — the app never handles the token. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. Answers 200 whenever the request reached the provider, with the provider's own status in the body.\n\n### Parameters\n\n- `slug: string`\n\n- `endpoint: string`\n  Path on the provider's API, e.g. /me/accounts. Resolved against the provider's base URL. Absolute URLs and host-bearing paths are rejected.\n\n- `method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'`\n  HTTP method to call the provider with.\n\n- `body?: object`\n  JSON request body. Omit for GET and DELETE.\n\n- `connection_id?: string`\n  ID of the connection to send the request as. Required when several connections of this connector cover the calling deployment.\n\n- `headers?: object`\n  Extra request headers. Authentication headers are added by Hercules.\n\n- `query?: object`\n  Query-string parameters to append to the request.\n\n### Returns\n\n- `{ connection_id: string; data: object; headers: object; slug: string; status: number; }`\n\n  - `connection_id: string`\n  - `data: object`\n  - `headers: object`\n  - `slug: string`\n  - `status: number`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.connectors.request('x', { endpoint: 'x', method: 'GET' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connectors.request',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.connectors.request('x', { endpoint: 'x', method: 'GET' });\n\nconsole.log(response.connection_id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/connectors/$SLUG/request \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "endpoint": "x",\n          "method": "GET"\n        }\'',
       },
     },
   },

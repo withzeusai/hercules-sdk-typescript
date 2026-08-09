@@ -27,7 +27,13 @@ import {
   Status,
   Table,
 } from './resources/analytics';
-import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
+import {
+  ConnectorCredentialsParams,
+  ConnectorCredentialsResponse,
+  ConnectorRequestParams,
+  ConnectorRequestResponse,
+  Connectors,
+} from './resources/connectors';
 import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
 import {
   Commerce,
@@ -847,10 +853,14 @@ export class Hercules {
    */
   commerce: API.Commerce = new API.Commerce(this);
   /**
-   * Pull fresh credentials for SDK-delivery app connectors installed on the
-   * calling deployment. Requires a deployment-bound API key. When several
-   * connections of one connector cover the deployment, pass connection_id to
-   * select one.
+   * Use the app connectors installed on the calling deployment. Requires a
+   * deployment-bound API key. When several connections of one connector cover
+   * the deployment, pass connection_id to select one.
+   *
+   * Pull credentials with `credentials` and call the provider yourself. For
+   * connectors whose provider is reached through a broker that never
+   * discloses the token, `credentials` answers 409 and `request` sends the
+   * call instead, signed server-side.
    */
   connectors: API.Connectors = new API.Connectors(this);
   /**
@@ -918,7 +928,9 @@ export declare namespace Hercules {
   export {
     Connectors as Connectors,
     type ConnectorCredentialsResponse as ConnectorCredentialsResponse,
+    type ConnectorRequestResponse as ConnectorRequestResponse,
     type ConnectorCredentialsParams as ConnectorCredentialsParams,
+    type ConnectorRequestParams as ConnectorRequestParams,
   };
 
   export { Content as Content };

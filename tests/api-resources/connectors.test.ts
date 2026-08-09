@@ -28,4 +28,28 @@ describe('resource connectors', () => {
       client.connectors.credentials('x', { connection_id: 'x' }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Hercules.NotFoundError);
   });
+
+  // Mock server tests are disabled
+  test.skip('request: only required params', async () => {
+    const responsePromise = client.connectors.request('x', { endpoint: 'x', method: 'GET' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('request: required and optional params', async () => {
+    const response = await client.connectors.request('x', {
+      endpoint: 'x',
+      method: 'GET',
+      body: {},
+      connection_id: 'x',
+      headers: { foo: 'string' },
+      query: { foo: 'string' },
+    });
+  });
 });
