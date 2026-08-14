@@ -100,6 +100,12 @@ export interface ResourceListResponse {
   created: string;
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * Type of resource
    */
   type: 'feature';
@@ -135,6 +141,12 @@ export interface ResourceAttachResponse {
    * Array of attached resource objects
    */
   data: Array<ResourceAttachResponse.Data>;
+
+  /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
 }
 
 export namespace ResourceAttachResponse {
@@ -157,6 +169,12 @@ export namespace ResourceAttachResponse {
      * Timestamp when the resource was created
      */
     created: string;
+
+    /**
+     * Environment this response was served from. Sandbox data and live data never mix;
+     * the environment comes from the credential and the surface, not from the request.
+     */
+    environment: 'sandbox' | 'live';
 
     /**
      * Type of resource

@@ -114,6 +114,12 @@ export interface Variant {
   created: string;
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * Display name for the variant (e.g., Basic, Standard, Premium)
    */
   name: string;

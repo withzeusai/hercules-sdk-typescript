@@ -125,6 +125,12 @@ export interface Product {
   created: string;
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * Display name for the product (e.g., Pro, Business, Teams)
    */
   name: string;
@@ -224,6 +230,12 @@ export namespace Product {
     created: string;
 
     /**
+     * Environment this response was served from. Sandbox data and live data never mix;
+     * the environment comes from the credential and the surface, not from the request.
+     */
+    environment: 'sandbox' | 'live';
+
+    /**
      * Type of resource
      */
     type: 'feature';
@@ -270,6 +282,12 @@ export interface ProductCreateResponse {
    * Timestamp when the product was created
    */
   created: string;
+
+  /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
 
   /**
    * Display name for the product (e.g., Pro, Business, Teams)
@@ -375,6 +393,12 @@ export namespace ProductCreateResponse {
      * Timestamp when the resource was created
      */
     created: string;
+
+    /**
+     * Environment this response was served from. Sandbox data and live data never mix;
+     * the environment comes from the credential and the surface, not from the request.
+     */
+    environment: 'sandbox' | 'live';
 
     /**
      * Type of resource

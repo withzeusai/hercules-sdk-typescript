@@ -111,6 +111,12 @@ export interface Customer {
   created: string;
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * The customer's billing address
    */
   address?: CustomerAddress | null;
@@ -171,6 +177,12 @@ export interface CustomerAddress {
  */
 export interface CustomerBillingPortalResponse {
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * URL to redirect the customer to for the billing portal
    */
   url: string;
@@ -190,6 +202,12 @@ export interface CustomerGetResponse {
    * Timestamp when the customer was created
    */
   created: string;
+
+  /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
 
   /**
    * The customer's billing address

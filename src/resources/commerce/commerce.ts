@@ -272,6 +272,12 @@ export interface CommerceCancelResponse {
   cancellation_timing: 'immediate' | 'at_billing_period_end';
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * The subscription status
    */
   status: string;
@@ -286,6 +292,12 @@ export interface CommerceCancelResponse {
  * Check resource access response.
  */
 export interface CommerceCheckResponse {
+  /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
   /**
    * Whether the customer has access to the resource
    */
@@ -308,6 +320,12 @@ export interface CommerceCheckoutResponse {
    * for subscription changes (already applied)
    */
   action: 'checkout' | 'update';
+
+  /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
 
   /**
    * The checkout mode: subscription for recurring prices, payment for one-time

@@ -99,6 +99,12 @@ export interface Feature {
   description: string | null;
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * Human-readable name for the feature
    */
   name: string;

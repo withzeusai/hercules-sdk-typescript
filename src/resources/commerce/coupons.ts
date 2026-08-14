@@ -107,6 +107,12 @@ export interface Coupon {
   duration: 'once' | 'repeating' | 'forever';
 
   /**
+   * Environment this response was served from. Sandbox data and live data never mix;
+   * the environment comes from the credential and the surface, not from the request.
+   */
+  environment: 'sandbox' | 'live';
+
+  /**
    * Number of times this coupon has been successfully redeemed
    */
   times_redeemed: number;
