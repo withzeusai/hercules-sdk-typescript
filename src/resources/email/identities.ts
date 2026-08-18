@@ -73,7 +73,8 @@ export interface Identity {
   created_at: string;
 
   /**
-   * Whether a custom MAIL FROM domain is enabled for SPF alignment
+   * Deprecated: derived from `mail_from_subdomain`, which is the source of truth.
+   * True whenever a subdomain is set.
    */
   mail_from_enabled: boolean;
 
@@ -95,7 +96,7 @@ export interface Identity {
 
   /**
    * The subdomain prefix used for the custom MAIL FROM domain (e.g. 'mail' for
-   * mail.yourdomain.com)
+   * mail.yourdomain.com). Null when the identity uses the SES default MAIL FROM.
    */
   mail_from_subdomain?: string | null;
 
@@ -192,16 +193,17 @@ export declare namespace IdentityCreateParams {
     value: string;
 
     /**
-     * Enable a custom MAIL FROM domain for SPF alignment. When enabled, additional DNS
-     * records are required.
+     * Deprecated: pass `mail_from_subdomain: null` to use the SES default MAIL FROM
+     * instead. When false, it still overrides `mail_from_subdomain`.
      */
     mail_from_enabled?: boolean;
 
     /**
      * The subdomain prefix for the custom MAIL FROM domain (e.g. 'mail' for
-     * mail.yourdomain.com). Defaults to 'mail'.
+     * mail.yourdomain.com). Defaults to 'mail'; pass null to use the SES default MAIL
+     * FROM, which forfeits SPF alignment.
      */
-    mail_from_subdomain?: string;
+    mail_from_subdomain?: string | null;
   }
 }
 
