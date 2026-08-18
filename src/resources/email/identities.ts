@@ -103,6 +103,12 @@ export interface Identity {
    * DNS records required for verification (only present for domain identities)
    */
   verification_records?: Array<Identity.VerificationRecord> | null;
+
+  /**
+   * Deliverability warnings for this identity. Present on the create, retrieve, and
+   * list endpoints; a verified identity can still carry warnings.
+   */
+  warnings?: Array<Identity.Warning>;
 }
 
 export namespace Identity {
@@ -134,6 +140,28 @@ export namespace Identity {
      * The DNS record priority (for MX records)
      */
     priority?: number;
+  }
+
+  /**
+   * A deliverability problem that does not prevent sending but degrades delivery
+   */
+  export interface Warning {
+    /**
+     * Machine-readable identifier for the kind of warning. 'dmarc_unaligned' is
+     * resolved by verifying the domain; 'dmarc_public_domain' cannot be, because the
+     * domain belongs to a shared mailbox provider.
+     */
+    code: 'dmarc_unaligned' | 'dmarc_public_domain';
+
+    /**
+     * The sender domain the warning concerns
+     */
+    domain: string;
+
+    /**
+     * Human-readable explanation of the warning
+     */
+    message: string;
   }
 }
 
