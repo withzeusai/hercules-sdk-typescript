@@ -93,6 +93,7 @@ describe('resource variants', () => {
         'product_id',
         {
           active: true,
+          customer_id: 'cus_1234567890',
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',
@@ -116,6 +117,9 @@ describe('resource variants', () => {
 
   // Mock server tests are disabled
   test.skip('get: required and optional params', async () => {
-    const response = await client.commerce.products.variants.get('variant_id', { product_id: 'product_id' });
+    const response = await client.commerce.products.variants.get('variant_id', {
+      product_id: 'product_id',
+      customer_id: 'cus_1234567890',
+    });
   });
 });

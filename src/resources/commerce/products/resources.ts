@@ -212,6 +212,12 @@ export interface ResourceListParams extends CursorIDPageParams {
   active?: boolean;
 
   /**
+   * The customer this catalog is being read for. Used only to resolve their
+   * environment when they hold a test-mode grant; it never filters the results.
+   */
+  customer_id?: string;
+
+  /**
    * Filter by resource type
    */
   type?: 'feature';

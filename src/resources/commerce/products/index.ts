@@ -7,6 +7,7 @@ export {
   type ProductCreateParams,
   type ProductUpdateParams,
   type ProductListParams,
+  type ProductGetParams,
   type ProductsCursorIDPage,
 } from './products';
 export {

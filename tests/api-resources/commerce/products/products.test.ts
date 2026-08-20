@@ -90,6 +90,7 @@ describe('resource products', () => {
       client.commerce.products.list(
         {
           active: true,
+          customer_id: 'cus_1234567890',
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',
@@ -109,5 +110,17 @@ describe('resource products', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('get: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.commerce.products.get(
+        'product_id',
+        { customer_id: 'cus_1234567890' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Hercules.NotFoundError);
   });
 });

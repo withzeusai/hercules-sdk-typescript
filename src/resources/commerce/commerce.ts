@@ -37,6 +37,7 @@ import {
   Product,
   ProductCreateParams,
   ProductCreateResponse,
+  ProductGetParams,
   ProductListParams,
   ProductUpdateParams,
   Products,
@@ -517,6 +518,7 @@ export declare namespace Commerce {
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
+    type ProductGetParams as ProductGetParams,
   };
 
   export {

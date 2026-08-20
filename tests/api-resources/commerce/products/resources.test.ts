@@ -29,6 +29,7 @@ describe('resource resources', () => {
         'product_id',
         {
           active: true,
+          customer_id: 'cus_1234567890',
           ending_before: 'ending_before',
           limit: 1,
           starting_after: 'starting_after',

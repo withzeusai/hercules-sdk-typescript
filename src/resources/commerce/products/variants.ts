@@ -85,8 +85,11 @@ export class Variants extends APIResource {
    * ```
    */
   get(variantID: string, params: VariantGetParams, options?: RequestOptions): APIPromise<Variant> {
-    const { product_id } = params;
-    return this._client.get(path`/v1/commerce/products/${product_id}/variants/${variantID}`, options);
+    const { product_id, ...query } = params;
+    return this._client.get(path`/v1/commerce/products/${product_id}/variants/${variantID}`, {
+      query,
+      ...options,
+    });
   }
 }
 
@@ -372,13 +375,26 @@ export interface VariantListParams extends CursorIDPageParams {
    * Filter by active status
    */
   active?: boolean;
+
+  /**
+   * The customer this catalog is being read for. Used only to resolve their
+   * environment when they hold a test-mode grant; it never filters the results.
+   */
+  customer_id?: string;
 }
 
 export interface VariantGetParams {
   /**
-   * The unique identifier of the product
+   * Path param: The unique identifier of the product
    */
   product_id: string;
+
+  /**
+   * Query param: The customer this catalog is being read for. Used only to resolve
+   * their environment when they hold a test-mode grant; it never filters the
+   * results.
+   */
+  customer_id?: string;
 }
 
 export declare namespace Variants {

@@ -233,7 +233,7 @@ Methods:
 - <code title="post /v1/commerce/products">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">create</a>({ ...params }) -> ProductCreateResponse</code>
 - <code title="patch /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">update</a>(productID, { ...params }) -> Product</code>
 - <code title="get /v1/commerce/products">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">list</a>({ ...params }) -> ProductsCursorIDPage</code>
-- <code title="get /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">get</a>(productID) -> Product</code>
+- <code title="get /v1/commerce/products/{product_id}">client.commerce.products.<a href="./src/resources/commerce/products/products.ts">get</a>(productID, { ...params }) -> Product</code>
 
 ### Resources
 

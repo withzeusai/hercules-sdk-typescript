@@ -96,8 +96,12 @@ export class Products extends APIResource {
    * );
    * ```
    */
-  get(productID: string, options?: RequestOptions): APIPromise<Product> {
-    return this._client.get(path`/v1/commerce/products/${productID}`, options);
+  get(
+    productID: string,
+    query: ProductGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Product> {
+    return this._client.get(path`/v1/commerce/products/${productID}`, { query, ...options });
   }
 }
 
@@ -658,6 +662,20 @@ export interface ProductListParams extends CursorIDPageParams {
    * Filter by active status
    */
   active?: boolean;
+
+  /**
+   * The customer this catalog is being read for. Used only to resolve their
+   * environment when they hold a test-mode grant; it never filters the results.
+   */
+  customer_id?: string;
+}
+
+export interface ProductGetParams {
+  /**
+   * The customer this catalog is being read for. Used only to resolve their
+   * environment when they hold a test-mode grant; it never filters the results.
+   */
+  customer_id?: string;
 }
 
 Products.Resources = Resources;
@@ -671,6 +689,7 @@ export declare namespace Products {
     type ProductCreateParams as ProductCreateParams,
     type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
+    type ProductGetParams as ProductGetParams,
   };
 
   export {
