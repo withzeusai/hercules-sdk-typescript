@@ -3824,6 +3824,166 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'create',
+    endpoint: '/v1/email/suppressions',
+    httpMethod: 'post',
+    summary: 'Create Suppression',
+    description:
+      'Adds a recipient address to the suppression list. Later sends to it are rejected with `email_recipient_suppressed` before they reach the mail provider, so they cost nothing and cannot damage your sending reputation. Adding an address that is already suppressed succeeds and returns the existing entry. The suppression list belongs to the organization and applies to every app and sender identity it owns.',
+    stainlessPath: '(resource) email.suppressions > (method) create',
+    qualified: 'client.email.suppressions.create',
+    params: ['email: string;'],
+    response:
+      "{ id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }",
+    markdown:
+      "## create\n\n`client.email.suppressions.create(email: string): { id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }`\n\n**post** `/v1/email/suppressions`\n\nAdds a recipient address to the suppression list. Later sends to it are rejected with `email_recipient_suppressed` before they reach the mail provider, so they cost nothing and cannot damage your sending reputation. Adding an address that is already suppressed succeeds and returns the existing entry. The suppression list belongs to the organization and applies to every app and sender identity it owns.\n\n### Parameters\n\n- `email: string`\n  The recipient address to suppress\n\n### Returns\n\n- `{ id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }`\n  A recipient address your organization will not send to. The list is shared across every app and sender identity in the organization.\n\n  - `id: string`\n  - `created_at: string`\n  - `email: string`\n  - `origin: 'bounce' | 'complaint' | 'manual'`\n  - `source_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst suppression = await client.email.suppressions.create({ email: 'dev@stainless.com' });\n\nconsole.log(suppression);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.email.suppressions.create',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst suppression = await client.email.suppressions.create({ email: 'dev@stainless.com' });\n\nconsole.log(suppression.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/email/suppressions \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "email": "dev@stainless.com"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/email/suppressions',
+    httpMethod: 'get',
+    summary: 'List Suppressions',
+    description:
+      'Retrieves a paginated list of suppressed recipient addresses, newest first. Filter by `origin` to separate addresses you added yourself from those a bounce or a spam complaint added automatically. The suppression list belongs to the organization and applies to every app and sender identity it owns.',
+    stainlessPath: '(resource) email.suppressions > (method) list',
+    qualified: 'client.email.suppressions.list',
+    params: [
+      'ending_before?: string;',
+      'limit?: number;',
+      "origin?: 'bounce' | 'complaint' | 'manual';",
+      'query?: string;',
+      'starting_after?: string;',
+    ],
+    response:
+      "{ id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }",
+    markdown:
+      "## list\n\n`client.email.suppressions.list(ending_before?: string, limit?: number, origin?: 'bounce' | 'complaint' | 'manual', query?: string, starting_after?: string): { id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }`\n\n**get** `/v1/email/suppressions`\n\nRetrieves a paginated list of suppressed recipient addresses, newest first. Filter by `origin` to separate addresses you added yourself from those a bounce or a spam complaint added automatically. The suppression list belongs to the organization and applies to every app and sender identity it owns.\n\n### Parameters\n\n- `ending_before?: string`\n  Cursor for backward pagination. Pass the ID of the first suppression from the previous page.\n\n- `limit?: number`\n  Maximum number of suppressions to return (1-100)\n\n- `origin?: 'bounce' | 'complaint' | 'manual'`\n  Only return suppressions with this origin\n\n- `query?: string`\n  Only return suppressions whose address contains this text\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last suppression from the previous page.\n\n### Returns\n\n- `{ id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }`\n  A recipient address your organization will not send to. The list is shared across every app and sender identity in the organization.\n\n  - `id: string`\n  - `created_at: string`\n  - `email: string`\n  - `origin: 'bounce' | 'complaint' | 'manual'`\n  - `source_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\n// Automatically fetches more pages as needed.\nfor await (const suppression of client.email.suppressions.list()) {\n  console.log(suppression);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.email.suppressions.list',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const suppression of client.email.suppressions.list()) {\n  console.log(suppression.id);\n}",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/email/suppressions \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get',
+    endpoint: '/v1/email/suppressions/{suppression}',
+    httpMethod: 'get',
+    summary: 'Get Suppression',
+    description:
+      'Retrieves a single suppression by its ID or by the suppressed email address. The suppression list belongs to the organization and applies to every app and sender identity it owns.',
+    stainlessPath: '(resource) email.suppressions > (method) get',
+    qualified: 'client.email.suppressions.get',
+    params: ['suppression: string;'],
+    response:
+      "{ id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }",
+    markdown:
+      "## get\n\n`client.email.suppressions.get(suppression: string): { id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }`\n\n**get** `/v1/email/suppressions/{suppression}`\n\nRetrieves a single suppression by its ID or by the suppressed email address. The suppression list belongs to the organization and applies to every app and sender identity it owns.\n\n### Parameters\n\n- `suppression: string`\n\n### Returns\n\n- `{ id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }`\n  A recipient address your organization will not send to. The list is shared across every app and sender identity in the organization.\n\n  - `id: string`\n  - `created_at: string`\n  - `email: string`\n  - `origin: 'bounce' | 'complaint' | 'manual'`\n  - `source_id: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst suppression = await client.email.suppressions.get('x');\n\nconsole.log(suppression);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.email.suppressions.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst suppression = await client.email.suppressions.get('x');\n\nconsole.log(suppression.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/email/suppressions/$SUPPRESSION \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/email/suppressions/{suppression}',
+    httpMethod: 'delete',
+    summary: 'Remove Suppression',
+    description:
+      'Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.',
+    stainlessPath: '(resource) email.suppressions > (method) delete',
+    qualified: 'client.email.suppressions.delete',
+    params: ['suppression: string;'],
+    response: '{ id: string; deleted: boolean; email: string; }',
+    markdown:
+      "## delete\n\n`client.email.suppressions.delete(suppression: string): { id: string; deleted: boolean; email: string; }`\n\n**delete** `/v1/email/suppressions/{suppression}`\n\nRemoves an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.\n\n### Parameters\n\n- `suppression: string`\n\n### Returns\n\n- `{ id: string; deleted: boolean; email: string; }`\n  The outcome of removing one address from the suppression list\n\n  - `id: string`\n  - `deleted: boolean`\n  - `email: string`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst suppression = await client.email.suppressions.delete('x');\n\nconsole.log(suppression);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.email.suppressions.delete',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst suppression = await client.email.suppressions.delete('x');\n\nconsole.log(suppression.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/email/suppressions/$SUPPRESSION \\\n    -X DELETE \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'batch_add',
+    endpoint: '/v1/email/suppressions/batch/add',
+    httpMethod: 'post',
+    summary: 'Add Batch Suppressions',
+    description:
+      'Adds up to 100 recipient addresses to the suppression list in one call. Addresses that are already suppressed are returned unchanged rather than rejected, so an import can be retried safely. The suppression list belongs to the organization and applies to every app and sender identity it owns.',
+    stainlessPath: '(resource) email.suppressions > (method) batch_add',
+    qualified: 'client.email.suppressions.batchAdd',
+    params: ['emails: string[];'],
+    response:
+      "{ data: { id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }[]; }",
+    markdown:
+      "## batch_add\n\n`client.email.suppressions.batchAdd(emails: string[]): { data: suppression[]; }`\n\n**post** `/v1/email/suppressions/batch/add`\n\nAdds up to 100 recipient addresses to the suppression list in one call. Addresses that are already suppressed are returned unchanged rather than rejected, so an import can be retried safely. The suppression list belongs to the organization and applies to every app and sender identity it owns.\n\n### Parameters\n\n- `emails: string[]`\n  The recipient addresses to suppress (1-100)\n\n### Returns\n\n- `{ data: { id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }[]; }`\n  The suppressions created by a batch add\n\n  - `data: { id: string; created_at: string; email: string; origin: 'bounce' | 'complaint' | 'manual'; source_id: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.email.suppressions.batchAdd({ emails: ['dev@stainless.com'] });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.email.suppressions.batchAdd',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.email.suppressions.batchAdd({ emails: ['dev@stainless.com'] });\n\nconsole.log(response.data);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/email/suppressions/batch/add \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "emails": [\n            "dev@stainless.com"\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'batch_remove',
+    endpoint: '/v1/email/suppressions/batch/remove',
+    httpMethod: 'post',
+    summary: 'Remove Batch Suppressions',
+    description:
+      'Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.',
+    stainlessPath: '(resource) email.suppressions > (method) batch_remove',
+    qualified: 'client.email.suppressions.batchRemove',
+    params: ['emails?: string[];', 'ids?: string[];'],
+    response: '{ data: { id: string; deleted: boolean; email: string; }[]; }',
+    markdown:
+      "## batch_remove\n\n`client.email.suppressions.batchRemove(emails?: string[], ids?: string[]): { data: object[]; }`\n\n**post** `/v1/email/suppressions/batch/remove`\n\nRemoves up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.\n\n### Parameters\n\n- `emails?: string[]`\n  The addresses to remove (1-100). Omit when using 'ids'.\n\n- `ids?: string[]`\n  The suppression IDs to remove (1-100). Omit when using 'emails'.\n\n### Returns\n\n- `{ data: { id: string; deleted: boolean; email: string; }[]; }`\n  The suppressions removed by a batch remove\n\n  - `data: { id: string; deleted: boolean; email: string; }[]`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst response = await client.email.suppressions.batchRemove();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.email.suppressions.batchRemove',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.email.suppressions.batchRemove();\n\nconsole.log(response.data);",
+      },
+      http: {
+        example:
+          "curl https://api.hercules.app/v1/email/suppressions/batch/remove \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $HERCULES_API_KEY\" \\\n    -d '{}'",
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/v1/files',
     httpMethod: 'get',

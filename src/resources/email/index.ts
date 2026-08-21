@@ -18,3 +18,15 @@ export {
   type IdentityVerifyParams,
   type IdentitiesCursorIDPage,
 } from './identities';
+export {
+  Suppressions,
+  type Suppression,
+  type SuppressionDeleteResponse,
+  type SuppressionBatchAddResponse,
+  type SuppressionBatchRemoveResponse,
+  type SuppressionCreateParams,
+  type SuppressionListParams,
+  type SuppressionBatchAddParams,
+  type SuppressionBatchRemoveParams,
+  type SuppressionsCursorIDPage,
+} from './suppressions';

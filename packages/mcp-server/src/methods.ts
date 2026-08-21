@@ -809,6 +809,42 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/email/identities/{identity_id}/verify',
   },
   {
+    clientCallName: 'client.email.suppressions.create',
+    fullyQualifiedName: 'email.suppressions.create',
+    httpMethod: 'post',
+    httpPath: '/v1/email/suppressions',
+  },
+  {
+    clientCallName: 'client.email.suppressions.list',
+    fullyQualifiedName: 'email.suppressions.list',
+    httpMethod: 'get',
+    httpPath: '/v1/email/suppressions',
+  },
+  {
+    clientCallName: 'client.email.suppressions.delete',
+    fullyQualifiedName: 'email.suppressions.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/email/suppressions/{suppression}',
+  },
+  {
+    clientCallName: 'client.email.suppressions.batchAdd',
+    fullyQualifiedName: 'email.suppressions.batchAdd',
+    httpMethod: 'post',
+    httpPath: '/v1/email/suppressions/batch/add',
+  },
+  {
+    clientCallName: 'client.email.suppressions.batchRemove',
+    fullyQualifiedName: 'email.suppressions.batchRemove',
+    httpMethod: 'post',
+    httpPath: '/v1/email/suppressions/batch/remove',
+  },
+  {
+    clientCallName: 'client.email.suppressions.get',
+    fullyQualifiedName: 'email.suppressions.get',
+    httpMethod: 'get',
+    httpPath: '/v1/email/suppressions/{suppression}',
+  },
+  {
     clientCallName: 'client.files.list',
     fullyQualifiedName: 'files.list',
     httpMethod: 'get',

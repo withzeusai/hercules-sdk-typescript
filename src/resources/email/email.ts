@@ -10,6 +10,19 @@ import {
   IdentityListParams,
   IdentityVerifyParams,
 } from './identities';
+import * as SuppressionsAPI from './suppressions';
+import {
+  Suppression,
+  SuppressionBatchAddParams,
+  SuppressionBatchAddResponse,
+  SuppressionBatchRemoveParams,
+  SuppressionBatchRemoveResponse,
+  SuppressionCreateParams,
+  SuppressionDeleteResponse,
+  SuppressionListParams,
+  Suppressions,
+  SuppressionsCursorIDPage,
+} from './suppressions';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -21,6 +34,7 @@ import { path } from '../../internal/utils/path';
  */
 export class EmailResource extends APIResource {
   identities: IdentitiesAPI.Identities = new IdentitiesAPI.Identities(this._client);
+  suppressions: SuppressionsAPI.Suppressions = new SuppressionsAPI.Suppressions(this._client);
 
   /**
    * Retrieves a paginated list of sent emails. Returns email metadata including
@@ -318,6 +332,7 @@ export namespace EmailSendParams {
 }
 
 EmailResource.Identities = Identities;
+EmailResource.Suppressions = Suppressions;
 
 export declare namespace EmailResource {
   export {
@@ -337,5 +352,18 @@ export declare namespace EmailResource {
     type IdentityCreateParams as IdentityCreateParams,
     type IdentityListParams as IdentityListParams,
     type IdentityVerifyParams as IdentityVerifyParams,
+  };
+
+  export {
+    Suppressions as Suppressions,
+    type Suppression as Suppression,
+    type SuppressionDeleteResponse as SuppressionDeleteResponse,
+    type SuppressionBatchAddResponse as SuppressionBatchAddResponse,
+    type SuppressionBatchRemoveResponse as SuppressionBatchRemoveResponse,
+    type SuppressionsCursorIDPage as SuppressionsCursorIDPage,
+    type SuppressionCreateParams as SuppressionCreateParams,
+    type SuppressionListParams as SuppressionListParams,
+    type SuppressionBatchAddParams as SuppressionBatchAddParams,
+    type SuppressionBatchRemoveParams as SuppressionBatchRemoveParams,
   };
 }
