@@ -457,6 +457,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/email/suppressions.ts">Suppression</a></code>
+- <code><a href="./src/resources/email/suppressions.ts">SuppressionListResponse</a></code>
 - <code><a href="./src/resources/email/suppressions.ts">SuppressionDeleteResponse</a></code>
 - <code><a href="./src/resources/email/suppressions.ts">SuppressionBatchAddResponse</a></code>
 - <code><a href="./src/resources/email/suppressions.ts">SuppressionBatchRemoveResponse</a></code>
@@ -464,7 +465,7 @@ Types:
 Methods:
 
 - <code title="post /v1/email/suppressions">client.email.suppressions.<a href="./src/resources/email/suppressions.ts">create</a>({ ...params }) -> Suppression</code>
-- <code title="get /v1/email/suppressions">client.email.suppressions.<a href="./src/resources/email/suppressions.ts">list</a>({ ...params }) -> SuppressionsCursorIDPage</code>
+- <code title="get /v1/email/suppressions">client.email.suppressions.<a href="./src/resources/email/suppressions.ts">list</a>({ ...params }) -> SuppressionListResponse</code>
 - <code title="delete /v1/email/suppressions/{suppression}">client.email.suppressions.<a href="./src/resources/email/suppressions.ts">delete</a>(suppression) -> SuppressionDeleteResponse</code>
 - <code title="post /v1/email/suppressions/batch/add">client.email.suppressions.<a href="./src/resources/email/suppressions.ts">batchAdd</a>({ ...params }) -> SuppressionBatchAddResponse</code>
 - <code title="post /v1/email/suppressions/batch/remove">client.email.suppressions.<a href="./src/resources/email/suppressions.ts">batchRemove</a>({ ...params }) -> SuppressionBatchRemoveResponse</code>

@@ -20,8 +20,8 @@ import {
   SuppressionCreateParams,
   SuppressionDeleteResponse,
   SuppressionListParams,
+  SuppressionListResponse,
   Suppressions,
-  SuppressionsCursorIDPage,
 } from './suppressions';
 import { APIPromise } from '../../core/api-promise';
 import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
@@ -357,10 +357,10 @@ export declare namespace EmailResource {
   export {
     Suppressions as Suppressions,
     type Suppression as Suppression,
+    type SuppressionListResponse as SuppressionListResponse,
     type SuppressionDeleteResponse as SuppressionDeleteResponse,
     type SuppressionBatchAddResponse as SuppressionBatchAddResponse,
     type SuppressionBatchRemoveResponse as SuppressionBatchRemoveResponse,
-    type SuppressionsCursorIDPage as SuppressionsCursorIDPage,
     type SuppressionCreateParams as SuppressionCreateParams,
     type SuppressionListParams as SuppressionListParams,
     type SuppressionBatchAddParams as SuppressionBatchAddParams,

@@ -44,11 +44,9 @@ describe('resource suppressions', () => {
     await expect(
       client.email.suppressions.list(
         {
-          ending_before: 'ending_before',
+          cursor: 'cursor',
           limit: 1,
           origin: 'bounce',
-          query: 'x',
-          starting_after: 'starting_after',
         },
         { path: '/_stainless_unknown_path' },
       ),

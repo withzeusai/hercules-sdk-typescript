@@ -21,6 +21,7 @@ export {
 export {
   Suppressions,
   type Suppression,
+  type SuppressionListResponse,
   type SuppressionDeleteResponse,
   type SuppressionBatchAddResponse,
   type SuppressionBatchRemoveResponse,
@@ -28,5 +29,4 @@ export {
   type SuppressionListParams,
   type SuppressionBatchAddParams,
   type SuppressionBatchRemoveParams,
-  type SuppressionsCursorIDPage,
 } from './suppressions';

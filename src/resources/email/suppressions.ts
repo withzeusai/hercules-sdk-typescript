@@ -2,18 +2,15 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
-import { CursorIDPage, type CursorIDPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Suppressions extends APIResource {
   /**
-   * Adds a recipient address to the suppression list. Later sends to it are rejected
-   * with `email_recipient_suppressed` before they reach the mail provider, so they
-   * cost nothing and cannot damage your sending reputation. Adding an address that
-   * is already suppressed succeeds and returns the existing entry. The suppression
-   * list belongs to the organization and applies to every app and sender identity it
-   * owns.
+   * Adds a recipient address to the suppression list. SES drops later sends to it at
+   * send time, protecting your sending reputation. Adding an address that is already
+   * suppressed succeeds. The suppression list belongs to the organization and
+   * applies to every app and sender identity it owns.
    */
   create(body: SuppressionCreateParams, options?: RequestOptions): APIPromise<Suppression> {
     return this._client.post('/v1/email/suppressions', { body, ...options });
@@ -28,11 +25,8 @@ export class Suppressions extends APIResource {
   list(
     query: SuppressionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<SuppressionsCursorIDPage, Suppression> {
-    return this._client.getAPIList('/v1/email/suppressions', CursorIDPage<Suppression>, {
-      query,
-      ...options,
-    });
+  ): APIPromise<SuppressionListResponse> {
+    return this._client.get('/v1/email/suppressions', { query, ...options });
   }
 
   /**
@@ -84,15 +78,13 @@ export class Suppressions extends APIResource {
   }
 }
 
-export type SuppressionsCursorIDPage = CursorIDPage<Suppression>;
-
 /**
  * A recipient address your organization will not send to. The list is shared
  * across every app and sender identity in the organization.
  */
 export interface Suppression {
   /**
-   * Unique identifier for the suppression
+   * Identifier for the suppression — the suppressed email address
    */
   id: string;
 
@@ -113,11 +105,31 @@ export interface Suppression {
   origin: 'bounce' | 'complaint' | 'manual';
 
   /**
-   * The ID of the email whose bounce or complaint created this suppression. Null for
-   * a manually added address, and for an automatic suppression whose email record
-   * has since been deleted.
+   * The SES message id of the bounce or complaint that created this suppression.
+   * Null for a manually added address, and in list results (only a single lookup
+   * carries it).
    */
   source_id: string | null;
+}
+
+/**
+ * Paginated list of suppressed recipient addresses
+ */
+export interface SuppressionListResponse {
+  /**
+   * Array of suppression objects
+   */
+  data: Array<Suppression>;
+
+  /**
+   * Whether there are more suppressions available after this page
+   */
+  has_more: boolean;
+
+  /**
+   * Cursor to pass as `cursor` for the next page, or null when there are no more
+   */
+  next_cursor: string | null;
 }
 
 /**
@@ -191,16 +203,23 @@ export interface SuppressionCreateParams {
   email: string;
 }
 
-export interface SuppressionListParams extends CursorIDPageParams {
+export interface SuppressionListParams {
   /**
-   * Only return suppressions with this origin
+   * Opaque forward-pagination cursor. Pass the `next_cursor` from the previous page.
+   * Forward only — there is no backward pagination.
    */
-  origin?: 'bounce' | 'complaint' | 'manual';
+  cursor?: string;
 
   /**
-   * Only return suppressions whose address contains this text
+   * Maximum number of suppressions to return (1-100)
    */
-  query?: string;
+  limit?: number;
+
+  /**
+   * Only return suppressions with this origin. `manual` is not supported as a
+   * filter.
+   */
+  origin?: 'bounce' | 'complaint' | 'manual';
 }
 
 export interface SuppressionBatchAddParams {
@@ -217,7 +236,8 @@ export interface SuppressionBatchRemoveParams {
   emails?: Array<string>;
 
   /**
-   * The suppression IDs to remove (1-100). Omit when using 'emails'.
+   * The suppression IDs to remove (1-100); an ID is the suppressed address. Omit
+   * when using 'emails'.
    */
   ids?: Array<string>;
 }
@@ -225,10 +245,10 @@ export interface SuppressionBatchRemoveParams {
 export declare namespace Suppressions {
   export {
     type Suppression as Suppression,
+    type SuppressionListResponse as SuppressionListResponse,
     type SuppressionDeleteResponse as SuppressionDeleteResponse,
     type SuppressionBatchAddResponse as SuppressionBatchAddResponse,
     type SuppressionBatchRemoveResponse as SuppressionBatchRemoveResponse,
-    type SuppressionsCursorIDPage as SuppressionsCursorIDPage,
     type SuppressionCreateParams as SuppressionCreateParams,
     type SuppressionListParams as SuppressionListParams,
     type SuppressionBatchAddParams as SuppressionBatchAddParams,
