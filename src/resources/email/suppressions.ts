@@ -100,7 +100,9 @@ export interface Suppression {
 
   /**
    * How the address reached the list: 'bounce' for a permanent delivery failure,
-   * 'complaint' for a spam report, 'manual' for an address you added yourself
+   * 'complaint' for a spam report, 'manual' for an address you added yourself. List
+   * results never report 'manual' — a manually added address is listed as 'bounce'.
+   * Retrieve a single suppression to recover its true origin.
    */
   origin: 'bounce' | 'complaint' | 'manual';
 
