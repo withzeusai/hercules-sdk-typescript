@@ -141,6 +141,24 @@ export interface PushNotificationIdentifyParams {
    * Authenticated user ID to link the subscription to
    */
   userId: string;
+
+  /**
+   * Optional end-user identity snapshot supplied by the app. Hercules stores it only
+   * with this app's push subscription.
+   */
+  subscriber?: PushNotificationIdentifyParams.Subscriber;
+}
+
+export namespace PushNotificationIdentifyParams {
+  /**
+   * Optional end-user identity snapshot supplied by the app. Hercules stores it only
+   * with this app's push subscription.
+   */
+  export interface Subscriber {
+    displayName?: string;
+
+    email?: string;
+  }
 }
 
 export interface PushNotificationSendParams {
@@ -210,6 +228,12 @@ export interface PushNotificationSubscribeParams {
    * users.
    */
   visitorId: string;
+
+  /**
+   * Optional end-user identity snapshot supplied by the app. Hercules stores it only
+   * with this app's push subscription.
+   */
+  subscriber?: PushNotificationSubscribeParams.Subscriber;
 }
 
 export namespace PushNotificationSubscribeParams {
@@ -242,6 +266,16 @@ export namespace PushNotificationSubscribeParams {
        */
       p256dh: string;
     }
+  }
+
+  /**
+   * Optional end-user identity snapshot supplied by the app. Hercules stores it only
+   * with this app's push subscription.
+   */
+  export interface Subscriber {
+    displayName?: string;
+
+    email?: string;
   }
 }
 

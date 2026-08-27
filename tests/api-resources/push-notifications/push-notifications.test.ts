@@ -35,7 +35,11 @@ describe('resource pushNotifications', () => {
 
   // Mock server tests are disabled
   test.skip('identify: required and optional params', async () => {
-    const response = await client.pushNotifications.identify({ secret: 'x', userId: 'x' });
+    const response = await client.pushNotifications.identify({
+      secret: 'x',
+      userId: 'x',
+      subscriber: { displayName: 'x', email: 'dev@stainless.com' },
+    });
   });
 
   // Mock server tests are disabled
@@ -93,6 +97,7 @@ describe('resource pushNotifications', () => {
         expirationTime: 0,
       },
       visitorId: 'x',
+      subscriber: { displayName: 'x', email: 'dev@stainless.com' },
     });
   });
 
