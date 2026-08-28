@@ -497,6 +497,30 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/commerce/features/{feature_id}',
   },
   {
+    clientCallName: 'client.commerce.entitlements.create',
+    fullyQualifiedName: 'commerce.entitlements.create',
+    httpMethod: 'post',
+    httpPath: '/v1/commerce/entitlements',
+  },
+  {
+    clientCallName: 'client.commerce.entitlements.update',
+    fullyQualifiedName: 'commerce.entitlements.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/commerce/entitlements/{grant_id}',
+  },
+  {
+    clientCallName: 'client.commerce.entitlements.list',
+    fullyQualifiedName: 'commerce.entitlements.list',
+    httpMethod: 'get',
+    httpPath: '/v1/commerce/entitlements',
+  },
+  {
+    clientCallName: 'client.commerce.entitlements.get',
+    fullyQualifiedName: 'commerce.entitlements.get',
+    httpMethod: 'get',
+    httpPath: '/v1/commerce/entitlements/{grant_id}',
+  },
+  {
     clientCallName: 'client.connectors.credentials',
     fullyQualifiedName: 'connectors.credentials',
     httpMethod: 'get',

@@ -31,6 +31,15 @@ export {
   type CustomersCursorIDPage,
 } from './customers';
 export {
+  Entitlements,
+  type EntitlementGrant,
+  type EntitlementCreateParams,
+  type EntitlementUpdateParams,
+  type EntitlementListParams,
+  type EntitlementGetParams,
+  type EntitlementGrantsCursorIDPage,
+} from './entitlements';
+export {
   Features,
   type Feature,
   type FeatureCreateParams,

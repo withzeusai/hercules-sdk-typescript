@@ -23,6 +23,16 @@ import {
   Customers,
   CustomersCursorIDPage,
 } from './customers';
+import * as EntitlementsAPI from './entitlements';
+import {
+  EntitlementCreateParams,
+  EntitlementGetParams,
+  EntitlementGrant,
+  EntitlementGrantsCursorIDPage,
+  EntitlementListParams,
+  EntitlementUpdateParams,
+  Entitlements,
+} from './entitlements';
 import * as FeaturesAPI from './features';
 import {
   Feature,
@@ -54,6 +64,7 @@ export class Commerce extends APIResource {
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
   features: FeaturesAPI.Features = new FeaturesAPI.Features(this._client);
+  entitlements: EntitlementsAPI.Entitlements = new EntitlementsAPI.Entitlements(this._client);
 
   /**
    * Cancels a customer's subscription. By default, the subscription remains active
@@ -485,6 +496,7 @@ Commerce.Customers = Customers;
 Commerce.Products = Products;
 Commerce.Coupons = Coupons;
 Commerce.Features = Features;
+Commerce.Entitlements = Entitlements;
 
 export declare namespace Commerce {
   export {
@@ -537,5 +549,15 @@ export declare namespace Commerce {
     type FeatureCreateParams as FeatureCreateParams,
     type FeatureUpdateParams as FeatureUpdateParams,
     type FeatureListParams as FeatureListParams,
+  };
+
+  export {
+    Entitlements as Entitlements,
+    type EntitlementGrant as EntitlementGrant,
+    type EntitlementGrantsCursorIDPage as EntitlementGrantsCursorIDPage,
+    type EntitlementCreateParams as EntitlementCreateParams,
+    type EntitlementUpdateParams as EntitlementUpdateParams,
+    type EntitlementListParams as EntitlementListParams,
+    type EntitlementGetParams as EntitlementGetParams,
   };
 }

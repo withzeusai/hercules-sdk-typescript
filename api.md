@@ -287,6 +287,19 @@ Methods:
 - <code title="get /v1/commerce/features">client.commerce.features.<a href="./src/resources/commerce/features.ts">list</a>({ ...params }) -> FeaturesCursorIDPage</code>
 - <code title="get /v1/commerce/features/{feature_id}">client.commerce.features.<a href="./src/resources/commerce/features.ts">get</a>(featureID) -> Feature</code>
 
+## Entitlements
+
+Types:
+
+- <code><a href="./src/resources/commerce/entitlements.ts">EntitlementGrant</a></code>
+
+Methods:
+
+- <code title="post /v1/commerce/entitlements">client.commerce.entitlements.<a href="./src/resources/commerce/entitlements.ts">create</a>({ ...params }) -> EntitlementGrant</code>
+- <code title="patch /v1/commerce/entitlements/{grant_id}">client.commerce.entitlements.<a href="./src/resources/commerce/entitlements.ts">update</a>(grantID, { ...params }) -> EntitlementGrant</code>
+- <code title="get /v1/commerce/entitlements">client.commerce.entitlements.<a href="./src/resources/commerce/entitlements.ts">list</a>({ ...params }) -> EntitlementGrantsCursorIDPage</code>
+- <code title="get /v1/commerce/entitlements/{grant_id}">client.commerce.entitlements.<a href="./src/resources/commerce/entitlements.ts">get</a>(grantID, { ...params }) -> EntitlementGrant</code>
+
 # Connectors
 
 Types:

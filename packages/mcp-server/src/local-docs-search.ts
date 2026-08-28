@@ -2357,6 +2357,122 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list',
+    endpoint: '/v1/commerce/entitlements',
+    httpMethod: 'get',
+    summary: 'List Entitlement Grants',
+    description:
+      'Retrieves a paginated list of entitlement grants. Grants represent customer access to features from one-time purchases or manual grants.',
+    stainlessPath: '(resource) commerce.entitlements > (method) list',
+    qualified: 'client.commerce.entitlements.list',
+    params: [
+      'customer_id?: string;',
+      'ending_before?: string;',
+      'feature_id?: string;',
+      "grant_type?: 'purchase' | 'manual';",
+      'limit?: number;',
+      'starting_after?: string;',
+      "status?: 'active' | 'revoked';",
+    ],
+    response:
+      "{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }",
+    markdown:
+      "## list\n\n`client.commerce.entitlements.list(customer_id?: string, ending_before?: string, feature_id?: string, grant_type?: 'purchase' | 'manual', limit?: number, starting_after?: string, status?: 'active' | 'revoked'): { id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n\n**get** `/v1/commerce/entitlements`\n\nRetrieves a paginated list of entitlement grants. Grants represent customer access to features from one-time purchases or manual grants.\n\n### Parameters\n\n- `customer_id?: string`\n  Filter by customer external ID\n\n- `ending_before?: string`\n  Cursor for backward pagination. Pass the ID of the first grant from the previous page.\n\n- `feature_id?: string`\n  Filter by feature external ID\n\n- `grant_type?: 'purchase' | 'manual'`\n  Filter by grant type (purchase or manual)\n\n- `limit?: number`\n  Maximum number of grants to return (1-100)\n\n- `starting_after?: string`\n  Cursor for forward pagination. Pass the ID of the last grant from the previous page.\n\n- `status?: 'active' | 'revoked'`\n  Filter by grant status\n\n### Returns\n\n- `{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n  An entitlement grant represents a customer's access to a feature from a one-time purchase or manual grant.\n\n  - `id: string`\n  - `created: string`\n  - `customer_id: string`\n  - `environment: 'sandbox' | 'live'`\n  - `expires_at: string`\n  - `feature_id: string`\n  - `grant_type: 'purchase' | 'manual'`\n  - `product_id: string`\n  - `revoked_at: string`\n  - `status: 'active' | 'revoked'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\n// Automatically fetches more pages as needed.\nfor await (const entitlementGrant of client.commerce.entitlements.list()) {\n  console.log(entitlementGrant);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.commerce.entitlements.list',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const entitlementGrant of client.commerce.entitlements.list()) {\n  console.log(entitlementGrant.id);\n}",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/commerce/entitlements \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get',
+    endpoint: '/v1/commerce/entitlements/{grant_id}',
+    httpMethod: 'get',
+    summary: 'Get Entitlement Grant',
+    description: 'Retrieves an entitlement grant by ID.',
+    stainlessPath: '(resource) commerce.entitlements > (method) get',
+    qualified: 'client.commerce.entitlements.get',
+    params: ['grant_id: string;', 'customer_id?: string;'],
+    response:
+      "{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }",
+    markdown:
+      "## get\n\n`client.commerce.entitlements.get(grant_id: string, customer_id?: string): { id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n\n**get** `/v1/commerce/entitlements/{grant_id}`\n\nRetrieves an entitlement grant by ID.\n\n### Parameters\n\n- `grant_id: string`\n\n- `customer_id?: string`\n  The customer this catalog is being read for. Used only to resolve their environment when they hold a test-mode grant; it never filters the results.\n\n### Returns\n\n- `{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n  An entitlement grant represents a customer's access to a feature from a one-time purchase or manual grant.\n\n  - `id: string`\n  - `created: string`\n  - `customer_id: string`\n  - `environment: 'sandbox' | 'live'`\n  - `expires_at: string`\n  - `feature_id: string`\n  - `grant_type: 'purchase' | 'manual'`\n  - `product_id: string`\n  - `revoked_at: string`\n  - `status: 'active' | 'revoked'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst entitlementGrant = await client.commerce.entitlements.get('grant_id');\n\nconsole.log(entitlementGrant);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.commerce.entitlements.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst entitlementGrant = await client.commerce.entitlements.get('grant_id');\n\nconsole.log(entitlementGrant.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/commerce/entitlements/$GRANT_ID \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/commerce/entitlements',
+    httpMethod: 'post',
+    summary: 'Create Entitlement Grant',
+    description:
+      'Manually creates an entitlement grant for a customer. Use this to grant access to features outside of the normal purchase flow, such as promotional access or support compensations.',
+    stainlessPath: '(resource) commerce.entitlements > (method) create',
+    qualified: 'client.commerce.entitlements.create',
+    params: ['customer_id: string;', 'feature_id: string;', 'expires_at?: string;', 'product_id?: string;'],
+    response:
+      "{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }",
+    markdown:
+      "## create\n\n`client.commerce.entitlements.create(customer_id: string, feature_id: string, expires_at?: string, product_id?: string): { id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n\n**post** `/v1/commerce/entitlements`\n\nManually creates an entitlement grant for a customer. Use this to grant access to features outside of the normal purchase flow, such as promotional access or support compensations.\n\n### Parameters\n\n- `customer_id: string`\n  The external ID of the customer to grant entitlement to\n\n- `feature_id: string`\n  The external ID of the feature to grant\n\n- `expires_at?: string`\n  When the grant should expire (optional, null = never expires)\n\n- `product_id?: string`\n  The external ID of the product associated with this grant (optional, for audit purposes)\n\n### Returns\n\n- `{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n  An entitlement grant represents a customer's access to a feature from a one-time purchase or manual grant.\n\n  - `id: string`\n  - `created: string`\n  - `customer_id: string`\n  - `environment: 'sandbox' | 'live'`\n  - `expires_at: string`\n  - `feature_id: string`\n  - `grant_type: 'purchase' | 'manual'`\n  - `product_id: string`\n  - `revoked_at: string`\n  - `status: 'active' | 'revoked'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst entitlementGrant = await client.commerce.entitlements.create({ customer_id: 'x', feature_id: 'x' });\n\nconsole.log(entitlementGrant);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.commerce.entitlements.create',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst entitlementGrant = await client.commerce.entitlements.create({\n  customer_id: 'x',\n  feature_id: 'x',\n});\n\nconsole.log(entitlementGrant.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/commerce/entitlements \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $HERCULES_API_KEY" \\\n    -d \'{\n          "customer_id": "x",\n          "feature_id": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/commerce/entitlements/{grant_id}',
+    httpMethod: 'patch',
+    summary: 'Update Entitlement Grant',
+    description:
+      "Updates an entitlement grant. Use status: 'revoked' to void a grant and remove customer access.",
+    stainlessPath: '(resource) commerce.entitlements > (method) update',
+    qualified: 'client.commerce.entitlements.update',
+    params: [
+      'grant_id: string;',
+      'customer_id?: string;',
+      'expires_at?: string;',
+      "status?: 'active' | 'revoked';",
+    ],
+    response:
+      "{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }",
+    markdown:
+      "## update\n\n`client.commerce.entitlements.update(grant_id: string, customer_id?: string, expires_at?: string, status?: 'active' | 'revoked'): { id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n\n**patch** `/v1/commerce/entitlements/{grant_id}`\n\nUpdates an entitlement grant. Use status: 'revoked' to void a grant and remove customer access.\n\n### Parameters\n\n- `grant_id: string`\n\n- `customer_id?: string`\n  The customer this catalog is being read for. Used only to resolve their environment when they hold a test-mode grant; it never filters the results.\n\n- `expires_at?: string`\n  Update when the grant expires. Set to null to remove expiration.\n\n- `status?: 'active' | 'revoked'`\n  Update the status of the grant. Set to 'revoked' to void the entitlement.\n\n### Returns\n\n- `{ id: string; created: string; customer_id: string; environment: 'sandbox' | 'live'; expires_at: string; feature_id: string; grant_type: 'purchase' | 'manual'; product_id: string; revoked_at: string; status: 'active' | 'revoked'; }`\n  An entitlement grant represents a customer's access to a feature from a one-time purchase or manual grant.\n\n  - `id: string`\n  - `created: string`\n  - `customer_id: string`\n  - `environment: 'sandbox' | 'live'`\n  - `expires_at: string`\n  - `feature_id: string`\n  - `grant_type: 'purchase' | 'manual'`\n  - `product_id: string`\n  - `revoked_at: string`\n  - `status: 'active' | 'revoked'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst entitlementGrant = await client.commerce.entitlements.update('grant_id');\n\nconsole.log(entitlementGrant);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.commerce.entitlements.update',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst entitlementGrant = await client.commerce.entitlements.update('grant_id');\n\nconsole.log(entitlementGrant.id);",
+      },
+      http: {
+        example:
+          "curl https://api.hercules.app/v1/commerce/entitlements/$GRANT_ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $HERCULES_API_KEY\" \\\n    -d '{}'",
+      },
+    },
+  },
+  {
     name: 'credentials',
     endpoint: '/v1/connectors/{slug}/credentials',
     httpMethod: 'get',
