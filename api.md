@@ -204,6 +204,16 @@ Methods:
 - <code title="post /v1/commerce/check">client.commerce.<a href="./src/resources/commerce/commerce.ts">check</a>({ ...params }) -> CommerceCheckResponse</code>
 - <code title="post /v1/commerce/checkout">client.commerce.<a href="./src/resources/commerce/commerce.ts">checkout</a>({ ...params }) -> CommerceCheckoutResponse</code>
 
+## CheckoutSessions
+
+Types:
+
+- <code><a href="./src/resources/commerce/checkout-sessions.ts">CheckoutSession</a></code>
+
+Methods:
+
+- <code title="get /v1/commerce/checkout-sessions/{checkout_session_id}">client.commerce.checkoutSessions.<a href="./src/resources/commerce/checkout-sessions.ts">get</a>(checkoutSessionID, { ...params }) -> CheckoutSession</code>
+
 ## Customers
 
 Types:

@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CheckoutSessionsAPI from './checkout-sessions';
+import { CheckoutSession, CheckoutSessionGetParams, CheckoutSessions } from './checkout-sessions';
 import * as CouponsAPI from './coupons';
 import {
   Coupon,
@@ -60,6 +62,9 @@ import { RequestOptions } from '../../internal/request-options';
  * Commerce APIs are currently in beta.
  */
 export class Commerce extends APIResource {
+  checkoutSessions: CheckoutSessionsAPI.CheckoutSessions = new CheckoutSessionsAPI.CheckoutSessions(
+    this._client,
+  );
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
   coupons: CouponsAPI.Coupons = new CouponsAPI.Coupons(this._client);
@@ -492,6 +497,7 @@ export namespace CommerceCheckoutParams {
   }
 }
 
+Commerce.CheckoutSessions = CheckoutSessions;
 Commerce.Customers = Customers;
 Commerce.Products = Products;
 Commerce.Coupons = Coupons;
@@ -507,6 +513,12 @@ export declare namespace Commerce {
     type CommerceCancelParams as CommerceCancelParams,
     type CommerceCheckParams as CommerceCheckParams,
     type CommerceCheckoutParams as CommerceCheckoutParams,
+  };
+
+  export {
+    CheckoutSessions as CheckoutSessions,
+    type CheckoutSession as CheckoutSession,
+    type CheckoutSessionGetParams as CheckoutSessionGetParams,
   };
 
   export {

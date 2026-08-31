@@ -353,6 +353,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/commerce/checkout',
   },
   {
+    clientCallName: 'client.commerce.checkoutSessions.get',
+    fullyQualifiedName: 'commerce.checkoutSessions.get',
+    httpMethod: 'get',
+    httpPath: '/v1/commerce/checkout-sessions/{checkout_session_id}',
+  },
+  {
     clientCallName: 'client.commerce.customers.create',
     fullyQualifiedName: 'commerce.customers.create',
     httpMethod: 'post',

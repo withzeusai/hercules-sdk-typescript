@@ -1644,6 +1644,32 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'get',
+    endpoint: '/v1/commerce/checkout-sessions/{checkout_session_id}',
+    httpMethod: 'get',
+    summary: 'Get Checkout Session',
+    description:
+      'Retrieve current payment and session status for a customer of this app. Call from your backend before fulfilling an order; do not trust the success redirect. A complete session can still be unpaid, including delayed payment methods. Test-mode payments must not fulfill live orders.',
+    stainlessPath: '(resource) commerce.checkout_sessions > (method) get',
+    qualified: 'client.commerce.checkoutSessions.get',
+    params: ['checkout_session_id: string;', 'customer_id: string;'],
+    response:
+      "{ id: string; amount_total: number; currency: string; customer_id: string; environment: 'sandbox' | 'live'; mode: 'payment' | 'subscription' | 'setup'; payment_status: 'paid' | 'unpaid' | 'no_payment_required'; status: 'open' | 'complete' | 'expired'; }",
+    markdown:
+      "## get\n\n`client.commerce.checkoutSessions.get(checkout_session_id: string, customer_id: string): { id: string; amount_total: number; currency: currency; customer_id: string; environment: 'sandbox' | 'live'; mode: 'payment' | 'subscription' | 'setup'; payment_status: 'paid' | 'unpaid' | 'no_payment_required'; status: 'open' | 'complete' | 'expired'; }`\n\n**get** `/v1/commerce/checkout-sessions/{checkout_session_id}`\n\nRetrieve current payment and session status for a customer of this app. Call from your backend before fulfilling an order; do not trust the success redirect. A complete session can still be unpaid, including delayed payment methods. Test-mode payments must not fulfill live orders.\n\n### Parameters\n\n- `checkout_session_id: string`\n\n- `customer_id: string`\n  The customer who owns this checkout session\n\n### Returns\n\n- `{ id: string; amount_total: number; currency: string; customer_id: string; environment: 'sandbox' | 'live'; mode: 'payment' | 'subscription' | 'setup'; payment_status: 'paid' | 'unpaid' | 'no_payment_required'; status: 'open' | 'complete' | 'expired'; }`\n  Current Stripe checkout state. A complete session is not necessarily paid. Verify payment_status server-side and match the stored session, customer, amount, currency, and environment before fulfilling an order. A success redirect alone is not payment verification.\n\n  - `id: string`\n  - `amount_total: number`\n  - `currency: string`\n  - `customer_id: string`\n  - `environment: 'sandbox' | 'live'`\n  - `mode: 'payment' | 'subscription' | 'setup'`\n  - `payment_status: 'paid' | 'unpaid' | 'no_payment_required'`\n  - `status: 'open' | 'complete' | 'expired'`\n\n### Example\n\n```typescript\nimport Hercules from '@usehercules/sdk';\n\nconst client = new Hercules();\n\nconst checkoutSession = await client.commerce.checkoutSessions.get('x', { customer_id: 'cus_1234567890' });\n\nconsole.log(checkoutSession);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.commerce.checkoutSessions.get',
+        example:
+          "import Hercules from '@usehercules/sdk';\n\nconst client = new Hercules({\n  apiVersion: '2025-12-09',\n  apiKey: process.env['HERCULES_API_KEY'], // This is the default and can be omitted\n});\n\nconst checkoutSession = await client.commerce.checkoutSessions.get('x', {\n  customer_id: 'cus_1234567890',\n});\n\nconsole.log(checkoutSession.id);",
+      },
+      http: {
+        example:
+          'curl https://api.hercules.app/v1/commerce/checkout-sessions/$CHECKOUT_SESSION_ID \\\n    -H "Authorization: Bearer $HERCULES_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/v1/commerce/customers',
     httpMethod: 'get',

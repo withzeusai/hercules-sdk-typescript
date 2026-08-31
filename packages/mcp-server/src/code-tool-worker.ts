@@ -165,6 +165,7 @@ const fuse = new Fuse(
     'client.commerce.cancel',
     'client.commerce.check',
     'client.commerce.checkout',
+    'client.commerce.checkoutSessions.get',
     'client.commerce.customers.billingPortal',
     'client.commerce.customers.create',
     'client.commerce.customers.get',
