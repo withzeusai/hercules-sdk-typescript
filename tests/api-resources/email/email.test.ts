@@ -90,6 +90,7 @@ describe('resource email', () => {
       headers: { foo: 'string' },
       html: 'html',
       reply_to: 'dev@stainless.com',
+      reply_to_email_id: 'x',
       tags: [{ name: 'name', value: 'value' }],
       text: 'text',
     });

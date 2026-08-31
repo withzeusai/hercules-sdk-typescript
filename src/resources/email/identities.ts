@@ -79,6 +79,11 @@ export interface Identity {
   mail_from_enabled: boolean;
 
   /**
+   * Inbound email configuration for this identity
+   */
+  receiving: Identity.Receiving;
+
+  /**
    * The verification status of the identity
    */
   status: 'pending' | 'verified' | 'failed';
@@ -113,6 +118,68 @@ export interface Identity {
 }
 
 export namespace Identity {
+  /**
+   * Inbound email configuration for this identity
+   */
+  export interface Receiving {
+    /**
+     * Whether receiving setup is permitted for this organization and the platform is
+     * ready for setup. Separate from domain DNS status; not a live delivery-health
+     * check.
+     */
+    available: boolean;
+
+    /**
+     * Whether receiving has been enabled for this domain
+     */
+    enabled: boolean;
+
+    /**
+     * DNS records required for receiving. Empty while receiving is disabled or setup
+     * is unavailable.
+     */
+    records: Array<Receiving.Record>;
+
+    /**
+     * Disabled, or the latest receiving MX verification result: pending, verified, or
+     * failed. Pending or failed MX checks do not disable an enabled receiving
+     * assignment.
+     */
+    status: 'disabled' | 'pending' | 'verified' | 'failed';
+  }
+
+  export namespace Receiving {
+    /**
+     * A DNS record required for domain verification
+     */
+    export interface Record {
+      /**
+       * The DNS record name/host
+       */
+      name: string;
+
+      /**
+       * Verification status of this individual record
+       */
+      status: 'pending' | 'verified' | 'failed';
+
+      /**
+       * The DNS record type
+       */
+      type: 'TXT' | 'CNAME' | 'MX';
+
+      /**
+       * The DNS record value
+       */
+      value: string;
+
+      /**
+       * The DNS record priority (for MX records)
+       */
+      priority?: number;
+    }
+  }
+
   /**
    * A DNS record required for domain verification
    */

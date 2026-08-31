@@ -56,7 +56,14 @@ export class EmailResource extends APIResource {
 
   /**
    * Sends a single email. The sender address must be a verified identity for this
-   * website.
+   * website. Optionally pass reply_to_email_id to thread a reply to a received email
+   * in this app and organization. Sender, recipients, subject, body, and attachments
+   * remain explicit; nothing is copied from the source. In-Reply-To and References
+   * are generated and cannot be supplied as custom headers (case-insensitive).
+   * References retains at most 20 valid, unique IDs and 870 characters, including
+   * the source Message-ID; malformed ancestors are omitted and oldest ancestry is
+   * trimmed. Without References, a single valid stored In-Reply-To is used as
+   * ancestry.
    */
   send(body: EmailSendParams, options?: RequestOptions): APIPromise<EmailSendResponse> {
     return this._client.post('/v1/email', { body, ...options });
@@ -289,7 +296,8 @@ export interface EmailSendParams {
   cc?: string | Array<string>;
 
   /**
-   * Custom email headers as key-value pairs
+   * Custom email headers as key-value pairs. Maximum 15, or 13 for replies to
+   * reserve two headers for threading.
    */
   headers?: { [key: string]: string };
 
@@ -302,6 +310,15 @@ export interface EmailSendParams {
    * Reply-to email address(es)
    */
   reply_to?: string | Array<string>;
+
+  /**
+   * Hercules received-email ID to reply to, not an RFC Message-ID or SES ID. Must
+   * belong to this app and organization, be non-quarantined, and have a passing
+   * virus verdict and a supported Message-ID. Only threading headers are generated;
+   * sender, recipients, subject, body, and any attachments must be supplied
+   * explicitly.
+   */
+  reply_to_email_id?: string;
 
   /**
    * Custom metadata tags for the email (max 50)
