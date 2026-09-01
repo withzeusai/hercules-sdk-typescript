@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../../resource';
 import { APIPromise } from '../../../../api-promise';
-import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../../core/pagination';
 import type { RequestOptions } from '../../../../internal/request-options';
 import { path as __scalarPath } from '../../../../internal/utils/path';
 
@@ -42,26 +41,22 @@ export class Members extends APIResource {
    * @param {string} groupID - The unique identifier of the tenant group.
    * @param {MemberListParams} params - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamGroupMembersCursorIDPage, MemberListResponse>} The group member page
+   * @returns {APIPromise<MemberListResponse>} The group member page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.groups.members.list('groupId', {
+   * const member = await client.iam.tenants.groups.members.list('groupId', {
    *   tenant_id: 'tenantId',
+   *   limit: 50,
    * });
    * ```
    */
-  list(
-    groupID: string,
-    params: MemberListParams,
-    options?: RequestOptions,
-  ): PagePromise<IamGroupMembersCursorIDPage, MemberListResponse> {
+  list(groupID: string, params: MemberListParams, options?: RequestOptions): APIPromise<MemberListResponse> {
     const { tenant_id, ...query } = params;
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenant_id}/groups/${groupID}/members`,
-      CursorIDPage<MemberListResponse>,
-      { query, ...options },
-    );
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenant_id}/groups/${groupID}/members`, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -145,57 +140,78 @@ export namespace MemberAddResponse {
   }
 }
 
-export interface MemberListParams extends CursorIDPageParams {
+export interface MemberListParams {
   /**
-   * The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary tenant.
    */
   tenant_id: string;
+  /**
+   * Query param: Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Query param: Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 }
 
 export interface MemberListResponse {
   /**
-   * The group membership ID (the link between a tenant membership and a group).
-   * @minLength 1
+   * Group member page.
    */
-  group_membership_id: string;
+  data: Array<MemberListResponse.Data>;
   /**
-   * The user's tenant membership ID that belongs to the group.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  membership_id: string;
-  /**
-   * The member's Hercules Auth user id (the end user's OIDC subject).
-   */
-  user_id: string;
-  /**
-   * Tenant user lifecycle status.
-   */
-  status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
-  /**
-   * How the member was added to the group.
-   */
-  source: 'system' | 'manual';
-  /**
-   * The member's display name, if known.
-   */
-  user_name: string | null;
-  /**
-   * The member's email address, if known.
-   */
-  user_email: string | null;
-  /**
-   * The member's avatar URL, if any.
-   */
-  user_image: string | null;
-  /**
-   * When the member was added to the group.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamGroupMembersCursorIDPage = CursorIDPage<MemberListResponse>;
+export namespace MemberListResponse {
+  export interface Data {
+    /**
+     * The group membership ID (the link between a tenant membership and a group).
+     * @minLength 1
+     */
+    group_membership_id: string;
+    /**
+     * The user's tenant membership ID that belongs to the group.
+     * @minLength 1
+     */
+    membership_id: string;
+    /**
+     * The member's Hercules Auth user id (the end user's OIDC subject).
+     */
+    user_id: string;
+    /**
+     * Tenant user lifecycle status.
+     */
+    status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
+    /**
+     * How the member was added to the group.
+     */
+    source: 'system' | 'manual';
+    /**
+     * The member's display name, if known.
+     */
+    user_name: string | null;
+    /**
+     * The member's email address, if known.
+     */
+    user_email: string | null;
+    /**
+     * The member's avatar URL, if any.
+     */
+    user_image: string | null;
+    /**
+     * When the member was added to the group.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 
 export interface MemberRemoveParams {
   /**
@@ -252,7 +268,6 @@ export declare namespace Members {
     type MemberAddResponse as MemberAddResponse,
     type MemberListResponse as MemberListResponse,
     type MemberRemoveResponse as MemberRemoveResponse,
-    type IamGroupMembersCursorIDPage as IamGroupMembersCursorIDPage,
     type MemberAddParams as MemberAddParams,
     type MemberListParams as MemberListParams,
     type MemberRemoveParams as MemberRemoveParams,

@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../../resource';
 import { APIPromise } from '../../../../api-promise';
-import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../../core/pagination';
 import type { RequestOptions } from '../../../../internal/request-options';
 import { path as __scalarPath } from '../../../../internal/utils/path';
 import * as MembersAPI from './members';
@@ -11,7 +10,6 @@ import {
   type MemberAddResponse,
   type MemberListResponse,
   type MemberRemoveResponse,
-  type IamGroupMembersCursorIDPage,
   type MemberAddParams,
   type MemberListParams,
   type MemberRemoveParams,
@@ -50,23 +48,21 @@ export class Groups extends APIResource {
    * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
    * @param {GroupListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamGroupsCursorIDPage, GroupListResponse>} The tenant group page
+   * @returns {APIPromise<GroupListResponse>} The tenant group page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.groups.list('tenantId');
+   * const group = await client.iam.tenants.groups.list('tenantId', {
+   *   limit: 50,
+   * });
    * ```
    */
   list(
     tenantID: string,
     query: GroupListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamGroupsCursorIDPage, GroupListResponse> {
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenantID}/groups`,
-      CursorIDPage<GroupListResponse>,
-      { query, ...options },
-    );
+  ): APIPromise<GroupListResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}/groups`, { query, ...options });
   }
 
   /**
@@ -265,12 +261,13 @@ export class Groups extends APIResource {
    * @param {string} groupID - The unique identifier of the tenant group.
    * @param {GroupListRoleAssignmentsParams} params - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamGroupRoleAssignmentsCursorIDPage, GroupListRoleAssignmentsResponse>} The group role assignment page
+   * @returns {APIPromise<GroupListRoleAssignmentsResponse>} The group role assignment page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.groups.listRoleAssignments('groupId', {
+   * const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
    *   tenant_id: 'tenantId',
+   *   limit: 50,
    * });
    * ```
    */
@@ -278,13 +275,12 @@ export class Groups extends APIResource {
     groupID: string,
     params: GroupListRoleAssignmentsParams,
     options?: RequestOptions,
-  ): PagePromise<IamGroupRoleAssignmentsCursorIDPage, GroupListRoleAssignmentsResponse> {
+  ): APIPromise<GroupListRoleAssignmentsResponse> {
     const { tenant_id, ...query } = params;
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenant_id}/groups/${groupID}/role-assignments`,
-      CursorIDPage<GroupListRoleAssignmentsResponse>,
-      { query, ...options },
-    );
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenant_id}/groups/${groupID}/role-assignments`, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -356,12 +352,13 @@ export class Groups extends APIResource {
    * @param {string} groupID - The unique identifier of the tenant group.
    * @param {GroupListResourceRoleAssignmentsParams} params - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamGroupResourceRoleAssignmentsCursorIDPage, GroupListResourceRoleAssignmentsResponse>} The group resource role assignment page
+   * @returns {APIPromise<GroupListResourceRoleAssignmentsResponse>} The group resource role assignment page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
+   * const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
    *   tenant_id: 'tenantId',
+   *   limit: 50,
    * });
    * ```
    */
@@ -369,11 +366,10 @@ export class Groups extends APIResource {
     groupID: string,
     params: GroupListResourceRoleAssignmentsParams,
     options?: RequestOptions,
-  ): PagePromise<IamGroupResourceRoleAssignmentsCursorIDPage, GroupListResourceRoleAssignmentsResponse> {
+  ): APIPromise<GroupListResourceRoleAssignmentsResponse> {
     const { tenant_id, ...query } = params;
-    return this._client.getAPIList(
+    return this._client.get(
       __scalarPath`/v1/iam/tenants/${tenant_id}/groups/${groupID}/resource-role-assignments`,
-      CursorIDPage<GroupListResourceRoleAssignmentsResponse>,
       { query, ...options },
     );
   }
@@ -429,50 +425,72 @@ export namespace GroupCreateResponse {
   }
 }
 
-export interface GroupListParams extends CursorIDPageParams {}
+export interface GroupListParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+}
 
 export interface GroupListResponse {
   /**
-   * Group ID.
-   * @minLength 1
+   * Group page.
    */
-  group_id: string;
+  data: Array<GroupListResponse.Data>;
   /**
-   * Tenant the group belongs to.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  tenant_id: string;
-  /**
-   * Human-readable group name.
-   */
-  name: string;
-  /**
-   * Group description, if any.
-   */
-  description: string | null;
-  /**
-   * Group lifecycle status.
-   */
-  status: 'active' | 'archived';
-  /**
-   * Whether the group is archived.
-   */
-  archived: boolean;
-  /**
-   * Archive timestamp when archived.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  archived_at: string | null;
-  /**
-   * Group creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamGroupsCursorIDPage = CursorIDPage<GroupListResponse>;
+export namespace GroupListResponse {
+  export interface Data {
+    /**
+     * Group ID.
+     * @minLength 1
+     */
+    group_id: string;
+    /**
+     * Tenant the group belongs to.
+     * @minLength 1
+     */
+    tenant_id: string;
+    /**
+     * Human-readable group name.
+     */
+    name: string;
+    /**
+     * Group description, if any.
+     */
+    description: string | null;
+    /**
+     * Group lifecycle status.
+     */
+    status: 'active' | 'archived';
+    /**
+     * Whether the group is archived.
+     */
+    archived: boolean;
+    /**
+     * Archive timestamp when archived.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    archived_at: string | null;
+    /**
+     * Group creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 
 export interface GroupGetParams {
   /**
@@ -822,39 +840,60 @@ export namespace GroupUnassignRoleResponse {
   }
 }
 
-export interface GroupListRoleAssignmentsParams extends CursorIDPageParams {
+export interface GroupListRoleAssignmentsParams {
   /**
-   * The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary tenant.
    */
   tenant_id: string;
+  /**
+   * Query param: Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Query param: Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 }
 
 export interface GroupListRoleAssignmentsResponse {
   /**
-   * The group role assignment ID.
-   * @minLength 1
+   * Group role assignment page.
    */
-  group_role_assignment_id: string;
+  data: Array<GroupListRoleAssignmentsResponse.Data>;
   /**
-   * The assigned role ID.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  role_id: string;
-  /**
-   * Assignment expiry, or null if permanent.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  expires_at: string | null;
-  /**
-   * Assignment creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamGroupRoleAssignmentsCursorIDPage = CursorIDPage<GroupListRoleAssignmentsResponse>;
+export namespace GroupListRoleAssignmentsResponse {
+  export interface Data {
+    /**
+     * The group role assignment ID.
+     * @minLength 1
+     */
+    group_role_assignment_id: string;
+    /**
+     * The assigned role ID.
+     * @minLength 1
+     */
+    role_id: string;
+    /**
+     * Assignment expiry, or null if permanent.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    expires_at: string | null;
+    /**
+     * Assignment creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 
 export interface GroupAssignResourceRoleParams {
   /**
@@ -1003,49 +1042,69 @@ export namespace GroupUnassignResourceRoleResponse {
   }
 }
 
-export interface GroupListResourceRoleAssignmentsParams extends CursorIDPageParams {
+export interface GroupListResourceRoleAssignmentsParams {
   /**
-   * The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary tenant.
    */
   tenant_id: string;
+  /**
+   * Query param: Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Query param: Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 }
 
 export interface GroupListResourceRoleAssignmentsResponse {
   /**
-   * The group resource role assignment ID.
-   * @minLength 1
+   * Group resource role assignment page.
    */
-  group_resource_role_assignment_id: string;
+  data: Array<GroupListResourceRoleAssignmentsResponse.Data>;
   /**
-   * The assigned role ID.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  role_id: string;
-  /**
-   * The resource type the assignment targets.
-   * @minLength 1
-   */
-  resource_type_id: string;
-  /**
-   * The exact resource's app-defined external ID.
-   */
-  external_id: string;
-  /**
-   * Assignment expiry, or null if permanent.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  expires_at: string | null;
-  /**
-   * Assignment creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamGroupResourceRoleAssignmentsCursorIDPage =
-  CursorIDPage<GroupListResourceRoleAssignmentsResponse>;
+export namespace GroupListResourceRoleAssignmentsResponse {
+  export interface Data {
+    /**
+     * The group resource role assignment ID.
+     * @minLength 1
+     */
+    group_resource_role_assignment_id: string;
+    /**
+     * The assigned role ID.
+     * @minLength 1
+     */
+    role_id: string;
+    /**
+     * The resource type the assignment targets.
+     * @minLength 1
+     */
+    resource_type_id: string;
+    /**
+     * The exact resource's app-defined external ID.
+     */
+    external_id: string;
+    /**
+     * Assignment expiry, or null if permanent.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    expires_at: string | null;
+    /**
+     * Assignment creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 Groups.Members = Members;
 
 export declare namespace Groups {
@@ -1063,9 +1122,6 @@ export declare namespace Groups {
     type GroupAssignResourceRoleResponse as GroupAssignResourceRoleResponse,
     type GroupUnassignResourceRoleResponse as GroupUnassignResourceRoleResponse,
     type GroupListResourceRoleAssignmentsResponse as GroupListResourceRoleAssignmentsResponse,
-    type IamGroupsCursorIDPage as IamGroupsCursorIDPage,
-    type IamGroupRoleAssignmentsCursorIDPage as IamGroupRoleAssignmentsCursorIDPage,
-    type IamGroupResourceRoleAssignmentsCursorIDPage as IamGroupResourceRoleAssignmentsCursorIDPage,
     type GroupCreateParams as GroupCreateParams,
     type GroupListParams as GroupListParams,
     type GroupGetParams as GroupGetParams,
@@ -1086,7 +1142,6 @@ export declare namespace Groups {
     type MemberAddResponse as MemberAddResponse,
     type MemberListResponse as MemberListResponse,
     type MemberRemoveResponse as MemberRemoveResponse,
-    type IamGroupMembersCursorIDPage as IamGroupMembersCursorIDPage,
     type MemberAddParams as MemberAddParams,
     type MemberListParams as MemberListParams,
     type MemberRemoveParams as MemberRemoveParams,
