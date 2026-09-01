@@ -1,24 +1,24 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  PushNotifications,
-  type PushNotificationEnableResponse,
-  type PushNotificationIdentifyResponse,
-  type PushNotificationSendResponse,
-  type PushNotificationSubscribeResponse,
-  type PushNotificationUnsubscribeResponse,
-  type PushNotificationIdentifyParams,
-  type PushNotificationSendParams,
-  type PushNotificationSubscribeParams,
-  type PushNotificationUnsubscribeParams,
+export { PushNotifications } from './push-notifications';
+export type {
+  PushNotificationEnableResponse,
+  PushNotificationSubscribeParams,
+  PushNotificationSubscribeResponse,
+  PushNotificationUnsubscribeParams,
+  PushNotificationUnsubscribeResponse,
+  PushNotificationIdentifyParams,
+  PushNotificationIdentifyResponse,
+  PushNotificationSendParams,
+  PushNotificationSendResponse,
 } from './push-notifications';
-export {
-  Topics,
-  type TopicListResponse,
-  type TopicSubscribeResponse,
-  type TopicUnsubscribeResponse,
-  type TopicListParams,
-  type TopicSubscribeParams,
-  type TopicUnsubscribeParams,
-  type TopicListResponsesCursorIDPage,
+export { Topics } from './topics';
+export type {
+  TopicSubscribeParams,
+  TopicSubscribeResponse,
+  TopicUnsubscribeParams,
+  TopicUnsubscribeResponse,
+  TopicListParams,
+  TopicListResponse,
+  PushNotificationTopicsCursorIDPage,
 } from './topics';

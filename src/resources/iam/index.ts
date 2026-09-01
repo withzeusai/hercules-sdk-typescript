@@ -1,26 +1,30 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
 export { Iam } from './iam';
-export { Invitations, type InvitationAcceptResponse, type InvitationAcceptParams } from './invitations';
-export {
-  Tenants,
-  type TenantCreateResponse,
-  type TenantUpdateResponse,
-  type TenantListResponse,
-  type TenantArchiveResponse,
-  type TenantCreateInvitationResponse,
-  type TenantEvaluateAccessResponse,
-  type TenantGetResponse,
-  type TenantListResourceRoleAssignmentsResponse,
-  type TenantListRoleAssignmentsResponse,
-  type TenantUnarchiveResponse,
-  type TenantCreateParams,
-  type TenantUpdateParams,
-  type TenantListParams,
-  type TenantArchiveParams,
-  type TenantCreateInvitationParams,
-  type TenantEvaluateAccessParams,
-  type TenantListResourceRoleAssignmentsParams,
-  type TenantListRoleAssignmentsParams,
-  type TenantUnarchiveParams,
-} from './tenants/index';
+export { Invitations } from './invitations';
+export type { InvitationAcceptParams, InvitationAcceptResponse } from './invitations';
+export { Tenants } from './tenants/tenants';
+export type {
+  TenantListParams,
+  TenantListResponse,
+  IamTenantsCursorIDPage,
+  TenantCreateParams,
+  TenantCreateResponse,
+  TenantGetResponse,
+  TenantUpdateParams,
+  TenantUpdateResponse,
+  TenantArchiveParams,
+  TenantArchiveResponse,
+  TenantUnarchiveParams,
+  TenantUnarchiveResponse,
+  TenantEvaluateAccessParams,
+  TenantEvaluateAccessResponse,
+  TenantCreateInvitationParams,
+  TenantCreateInvitationResponse,
+  TenantListRoleAssignmentsParams,
+  TenantListRoleAssignmentsResponse,
+  IamRoleAssignmentsCursorIDPage,
+  TenantListResourceRoleAssignmentsParams,
+  TenantListResourceRoleAssignmentsResponse,
+  IamResourceRoleAssignmentsCursorIDPage,
+} from './tenants/tenants';

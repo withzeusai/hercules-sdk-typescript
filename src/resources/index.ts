@@ -1,57 +1,64 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  Analytics,
-  type QueryResponse,
-  type Status,
-  type Table,
-  type AnalyticsListTablesResponse,
-  type AnalyticsQueryParams,
+export { Analytics } from './analytics';
+export type {
+  QueryResponse,
+  Table,
+  Status,
+  AnalyticsQueryParams,
+  AnalyticsListTablesResponse,
 } from './analytics';
-export {
-  Commerce,
-  type Currency,
-  type CommerceCancelResponse,
-  type CommerceCheckResponse,
-  type CommerceCheckoutResponse,
-  type CommerceCancelParams,
-  type CommerceCheckParams,
-  type CommerceCheckoutParams,
-} from './commerce/commerce';
-export { Connectors, type ConnectorCredentialsResponse, type ConnectorCredentialsParams } from './connectors';
-export { Content } from './content/content';
-export {
-  Domains,
-  type Domain,
-  type DomainAvailability,
-  type DomainCheckAvailabilityResponse,
-  type DomainSearchResponse,
-  type DomainListParams,
-  type DomainCheckAvailabilityParams,
-  type DomainSearchParams,
-  type DomainsCursorIDPage,
-} from './domains/domains';
-export {
-  EmailResource,
-  type Attachment,
-  type Email,
-  type EmailGetResponse,
-  type EmailSendResponse,
-  type EmailListParams,
-  type EmailSendParams,
-  type EmailsCursorIDPage,
-} from './email/email';
-export { Files, type File, type Upload, type FileListParams, type FilesCursorIDPage } from './files';
 export { Iam } from './iam/iam';
-export {
-  PushNotifications,
-  type PushNotificationEnableResponse,
-  type PushNotificationIdentifyResponse,
-  type PushNotificationSendResponse,
-  type PushNotificationSubscribeResponse,
-  type PushNotificationUnsubscribeResponse,
-  type PushNotificationIdentifyParams,
-  type PushNotificationSendParams,
-  type PushNotificationSubscribeParams,
-  type PushNotificationUnsubscribeParams,
+export { Commerce } from './commerce/commerce';
+export type {
+  Currency,
+  CommerceCheckoutParams,
+  CommerceCheckoutResponse,
+  CommerceCancelParams,
+  CommerceCancelResponse,
+  CommerceCheckParams,
+  CommerceCheckResponse,
+} from './commerce/commerce';
+export { Connectors } from './connectors';
+export type {
+  ConnectorCredentialsParams,
+  ConnectorCredentialsResponse,
+  ConnectorRequestParams,
+  ConnectorRequestResponse,
+} from './connectors';
+export { Content } from './content/content';
+export { Domains } from './domains/domains';
+export type {
+  Domain,
+  DomainAvailability,
+  DomainListParams,
+  DomainsCursorIDPage,
+  DomainCheckAvailabilityParams,
+  DomainCheckAvailabilityResponse,
+  DomainSearchParams,
+  DomainSearchResponse,
+} from './domains/domains';
+export { EmailResource } from './email/email';
+export type {
+  Email,
+  Attachment,
+  EmailSendParams,
+  EmailSendResponse,
+  EmailListParams,
+  EmailsCursorIDPage,
+  EmailGetResponse,
+} from './email/email';
+export { Files } from './files';
+export type { File, Upload, FileListParams, FilesCursorIDPage } from './files';
+export { PushNotifications } from './push-notifications/push-notifications';
+export type {
+  PushNotificationEnableResponse,
+  PushNotificationSubscribeParams,
+  PushNotificationSubscribeResponse,
+  PushNotificationUnsubscribeParams,
+  PushNotificationUnsubscribeResponse,
+  PushNotificationIdentifyParams,
+  PushNotificationIdentifyResponse,
+  PushNotificationSendParams,
+  PushNotificationSendResponse,
 } from './push-notifications/push-notifications';

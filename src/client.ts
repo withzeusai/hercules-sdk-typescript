@@ -1,106 +1,122 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-import type { RequestInit, RequestInfo, BodyInit } from './internal/builtin-types';
-import type { HTTPMethod, PromiseOrValue, MergedRequestInit, FinalizedRequestInit } from './internal/types';
+import { APIPromise, type APIResponseProps } from './api-promise';
+import {
+  PagePromise,
+  type AbstractPage,
+  type CursorIDPageParams,
+  CursorIDPageResponse,
+} from './core/pagination';
+import * as Pagination from './core/pagination';
+import * as Errors from './error';
 import { uuid4 } from './internal/utils/uuid';
-import { validatePositiveInteger, isAbsoluteURL, safeJSON } from './internal/utils/values';
+import { validatePositiveInteger, isAbsoluteURL, safeJSON, isEmptyObj } from './internal/utils/values';
 import { sleep } from './internal/utils/sleep';
-export type { Logger, LogLevel } from './internal/utils/log';
 import { castToError, isAbortError } from './internal/errors';
-import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
-import { stringifyQuery } from './internal/utils/query';
-import { VERSION } from './version';
-import * as Errors from './core/error';
-import * as Pagination from './core/pagination';
-import { AbstractPage, type CursorIDPageParams, CursorIDPageResponse } from './core/pagination';
-import * as Uploads from './core/uploads';
-import * as API from './resources/index';
-import { APIPromise } from './core/api-promise';
-import {
-  Analytics,
-  AnalyticsListTablesResponse,
-  AnalyticsQueryParams,
-  QueryResponse,
-  Status,
-  Table,
-} from './resources/analytics';
-import { ConnectorCredentialsParams, ConnectorCredentialsResponse, Connectors } from './resources/connectors';
-import { File, FileListParams, Files, FilesCursorIDPage, Upload } from './resources/files';
-import {
-  Commerce,
-  CommerceCancelParams,
-  CommerceCancelResponse,
-  CommerceCheckParams,
-  CommerceCheckResponse,
-  CommerceCheckoutParams,
-  CommerceCheckoutResponse,
-  Currency,
-} from './resources/commerce/commerce';
-import { Content } from './resources/content/content';
-import {
-  Domain,
-  DomainAvailability,
-  DomainCheckAvailabilityParams,
-  DomainCheckAvailabilityResponse,
-  DomainListParams,
-  DomainSearchParams,
-  DomainSearchResponse,
-  Domains,
-  DomainsCursorIDPage,
-} from './resources/domains/domains';
-import {
-  Attachment,
-  Email,
-  EmailGetResponse,
-  EmailListParams,
-  EmailResource,
-  EmailSendParams,
-  EmailSendResponse,
-  EmailsCursorIDPage,
-} from './resources/email/email';
-import { Iam } from './resources/iam/iam';
-import {
-  PushNotificationEnableResponse,
-  PushNotificationIdentifyParams,
-  PushNotificationIdentifyResponse,
-  PushNotificationSendParams,
-  PushNotificationSendResponse,
-  PushNotificationSubscribeParams,
-  PushNotificationSubscribeResponse,
-  PushNotificationUnsubscribeParams,
-  PushNotificationUnsubscribeResponse,
-  PushNotifications,
-} from './resources/push-notifications/push-notifications';
-import { type Fetch } from './internal/builtin-types';
-import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
-import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import { readEnv } from './internal/utils/env';
 import {
-  type LogLevel,
-  type Logger,
   formatRequestDetails,
   loggerFor,
   parseLogLevel,
+  type LogLevel,
+  type Logger,
 } from './internal/utils/log';
-import { isEmptyObj } from './internal/utils/values';
+export type { Logger, LogLevel } from './internal/utils/log';
+import type { RequestInit, RequestInfo, BodyInit, Fetch } from './internal/builtin-types';
+import { buildHeaders, type HeadersLike, type NullableHeaders } from './internal/headers';
+import type { FinalRequestOptions, RequestOptions } from './internal/request-options';
+import type { HTTPMethod, FinalizedRequestInit, MergedRequestInit, PromiseOrValue } from './internal/types';
+import { stringifyQuery } from './internal/utils/query';
+import { toFile } from './core/uploads';
+import { VERSION } from './version';
+import {
+  Analytics,
+  type QueryResponse,
+  type Table,
+  type Status,
+  type AnalyticsListTablesResponse,
+  type AnalyticsQueryParams,
+} from './resources/analytics';
+import { Iam } from './resources/iam/iam';
+import {
+  Commerce,
+  type Currency,
+  type CommerceCheckoutResponse,
+  type CommerceCancelResponse,
+  type CommerceCheckResponse,
+  type CommerceCheckoutParams,
+  type CommerceCancelParams,
+  type CommerceCheckParams,
+} from './resources/commerce/commerce';
+import {
+  Connectors,
+  type ConnectorCredentialsResponse,
+  type ConnectorRequestResponse,
+  type ConnectorCredentialsParams,
+  type ConnectorRequestParams,
+} from './resources/connectors';
+import { Content } from './resources/content/content';
+import {
+  Domains,
+  type Domain,
+  type DomainAvailability,
+  type DomainsCursorIDPage,
+  type DomainCheckAvailabilityResponse,
+  type DomainSearchResponse,
+  type DomainListParams,
+  type DomainCheckAvailabilityParams,
+  type DomainSearchParams,
+} from './resources/domains/domains';
+import {
+  EmailResource,
+  type Email,
+  type Attachment,
+  type EmailSendResponse,
+  type EmailsCursorIDPage,
+  type EmailGetResponse,
+  type EmailSendParams,
+  type EmailListParams,
+} from './resources/email/email';
+import {
+  Files,
+  type File,
+  type Upload,
+  type FilesCursorIDPage,
+  type FileListParams,
+} from './resources/files';
+import {
+  PushNotifications,
+  type PushNotificationEnableResponse,
+  type PushNotificationSubscribeResponse,
+  type PushNotificationUnsubscribeResponse,
+  type PushNotificationIdentifyResponse,
+  type PushNotificationSendResponse,
+  type PushNotificationSubscribeParams,
+  type PushNotificationUnsubscribeParams,
+  type PushNotificationIdentifyParams,
+  type PushNotificationSendParams,
+} from './resources/push-notifications/push-notifications';
 
-export type ApiVersion = '2025-12-09';
+export type AuthTokenProvider = () => string | Promise<string>;
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['HERCULES_API_KEY'].
+   * The token used for authentication.
    */
-  apiKey?: string | null | undefined;
+  apiKey?: string | AuthTokenProvider | null | undefined;
 
-  apiVersion: ApiVersion;
+  /**
+   * Value sent as the Hercules-Version header.
+   */
+  apiVersion?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['HERCULES_BASE_URL'].
+   * Defaults to process.env["HERCULES_BASE_URL"].
    */
   baseURL?: string | null | undefined;
 
@@ -114,6 +130,7 @@ export interface ClientOptions {
    * @unit milliseconds
    */
   timeout?: number | undefined;
+
   /**
    * Additional `RequestInit` options to be passed to `fetch` calls.
    * Properties will be overridden by per-request `fetchOptions`.
@@ -154,7 +171,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['HERCULES_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env["HERCULES_LOG"] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -166,12 +183,14 @@ export interface ClientOptions {
   logger?: Logger | undefined;
 }
 
+export type HerculesOptions = ClientOptions;
+
 /**
  * API Client for interfacing with the Hercules API.
  */
 export class Hercules {
-  apiKey: string | null;
-  apiVersion: ApiVersion;
+  apiKey: string | AuthTokenProvider | null;
+  apiVersion: string;
 
   baseURL: string;
   maxRetries: number;
@@ -179,18 +198,19 @@ export class Hercules {
   logger: Logger;
   logLevel: LogLevel | undefined;
   fetchOptions: MergedRequestInit | undefined;
-
   private fetch: Fetch;
   #encoder: Opts.RequestEncoder;
   protected idempotencyHeader?: string;
+  private _baseURLOverridden: boolean;
+  private _defaultBaseURL: string;
   private _options: ClientOptions;
 
   /**
    * API Client for interfacing with the Hercules API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['HERCULES_API_KEY'] ?? null]
-   * @param {string | undefined} [opts.apiVersion=2025-12-09]
-   * @param {string} [opts.baseURL=process.env['HERCULES_BASE_URL'] ?? https://api.hercules.app] - Override the default base URL for the API.
+   * @param {string | AuthTokenProvider | null | undefined} [opts.apiKey=process.env["HERCULES_API_KEY"] ?? null]
+   * @param {string | undefined} [opts.apiVersion=process.env["HERCULES_API_VERSION"] ?? "2025-12-09"]
+   * @param {string} [opts.baseURL=process.env["HERCULES_BASE_URL"] ?? https://api.hercules.app] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -201,17 +221,18 @@ export class Hercules {
   constructor({
     baseURL = readEnv('HERCULES_BASE_URL'),
     apiKey = readEnv('HERCULES_API_KEY') ?? null,
-    apiVersion,
+    apiVersion = readEnv('HERCULES_API_VERSION') ?? '2025-12-09',
     ...opts
-  }: ClientOptions & { apiVersion: ApiVersion }) {
+  }: ClientOptions = {}) {
     const options: ClientOptions = {
       apiKey,
       apiVersion,
       ...opts,
-      baseURL: baseURL || `https://api.hercules.app`,
+      baseURL: baseURL || 'https://api.hercules.app',
     };
-
-    this.baseURL = options.baseURL!;
+    const baseURLOverridden = baseURL !== null && baseURL !== undefined && baseURL !== '';
+    const defaultBaseURL = 'https://api.hercules.app';
+    this.baseURL = options.baseURL || defaultBaseURL;
     this.timeout = options.timeout ?? Hercules.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
@@ -219,7 +240,7 @@ export class Hercules {
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('HERCULES_LOG'), "process.env['HERCULES_LOG']", this) ??
+      parseLogLevel(readEnv('HERCULES_LOG'), 'process.env["HERCULES_LOG"]', this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -238,20 +259,19 @@ export class Hercules {
       options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
     }
 
-    this._options = options;
+    this._options = { ...options, baseURL: baseURLOverridden ? this.baseURL : undefined };
+    this._baseURLOverridden = baseURLOverridden;
+    this._defaultBaseURL = defaultBaseURL;
     this.idempotencyHeader = 'Idempotency-Key';
 
     this.apiKey = apiKey;
     this.apiVersion = apiVersion;
   }
 
-  /**
-   * Create a new client instance re-using the same options given to the current client with optional overriding.
-   */
   withOptions(options: Partial<ClientOptions>): this {
-    const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
+    const client = new (this.constructor as new (props: ClientOptions) => this)({
       ...this._options,
-      baseURL: this.baseURL,
+      ...(this.#baseURLOverridden() ? { baseURL: this.baseURL } : {}),
       maxRetries: this.maxRetries,
       timeout: this.timeout,
       logger: this.logger,
@@ -265,35 +285,13 @@ export class Hercules {
     return client;
   }
 
-  /**
-   * Check whether the base URL is set to its default.
-   */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.hercules.app';
+    // A named environment selects a default URL; only explicit overrides should bypass per-request defaults.
+    return this._baseURLOverridden || this.baseURL !== this._defaultBaseURL;
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
     return this._options.defaultQuery;
-  }
-
-  protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.apiKey && values.get('authorization')) {
-      return;
-    }
-    if (nulls.has('authorization')) {
-      return;
-    }
-
-    throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
-    );
-  }
-
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.apiKey == null) {
-      return undefined;
-    }
-    return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
   protected stringifyQuery(query: object | Record<string, unknown>): string {
@@ -305,12 +303,12 @@ export class Hercules {
   }
 
   protected defaultIdempotencyKey(): string {
-    return `stainless-node-retry-${uuid4()}`;
+    return `scalar-node-retry-${uuid4()}`;
   }
 
   protected makeStatusError(
     status: number,
-    error: Object,
+    error: object | undefined,
     message: string | undefined,
     headers: Headers,
   ): Errors.APIError {
@@ -323,10 +321,13 @@ export class Hercules {
     defaultBaseURL?: string | undefined,
   ): string {
     const baseURL = (!this.#baseURLOverridden() && defaultBaseURL) || this.baseURL;
-    const url =
-      isAbsoluteURL(path) ?
-        new URL(path)
-      : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
+    // Guarantee exactly one "/" between baseURL and path so that bases without a trailing slash
+    // and paths without a leading slash do not fuse into a malformed URL (e.g. ".../v1" + "widgets").
+    const url = isAbsoluteURL(path)
+      ? new URL(path)
+      : new URL(
+          (baseURL.endsWith('/') ? baseURL : baseURL + '/') + (path.startsWith('/') ? path.slice(1) : path),
+        );
 
     const defaultQuery = this.defaultQuery();
     const pathQuery = Object.fromEntries(url.searchParams);
@@ -384,7 +385,7 @@ export class Hercules {
   ): APIPromise<Rsp> {
     return this.request(
       Promise.resolve(opts).then((opts) => {
-        return { method, path, ...opts };
+        return { method, path, ...opts } as FinalRequestOptions;
       }),
     );
   }
@@ -553,28 +554,29 @@ export class Hercules {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
-  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+  // Public escape hatch for list endpoints the spec does not describe: the page type parameter
+  // defaults so `getAPIList<Item>(path, MyPage)` needs only the item type, and the page argument
+  // is a bare constructor so a hand-rolled page class need not restate the runtime page
+  // constructor's parameter types.
+  getAPIList<Item, Page extends AbstractPage<Item> = AbstractPage<Item>>(
     path: string,
-    Page: new (...args: any[]) => PageClass,
-    opts?: PromiseOrValue<RequestOptions>,
-  ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(
-      Page,
-      opts && 'then' in opts ?
-        opts.then((opts) => ({ method: 'get', path, ...opts }))
-      : { method: 'get', path, ...opts },
-    );
+    Page: new (...args: any[]) => Page,
+    options?: PromiseOrValue<RequestOptions>,
+    method: FinalRequestOptions['method'] = 'get',
+  ): PagePromise<Page, Item> {
+    // List endpoints are usually GET, but a body-located cursor scheme rides a POST body, so the
+    // caller passes the operation's actual verb. The method is preserved across auto-advanced
+    // pages because `nextPageRequestOptions` spreads the stored request options (incl. `method`).
+    const requestOptions = Promise.resolve(options).then((opts) => ({ ...opts, method, path }));
+    return this.requestAPIList<Item, Page>(Page, requestOptions);
   }
 
-  requestAPIList<
-    Item = unknown,
-    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
-  >(
-    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+  requestAPIList<Item = unknown, Page extends AbstractPage<Item> = AbstractPage<Item>>(
+    Page: new (...args: ConstructorParameters<typeof AbstractPage>) => Page,
     options: PromiseOrValue<FinalRequestOptions>,
-  ): Pagination.PagePromise<PageClass, Item> {
-    const request = this.makeRequest(options, null, undefined);
-    return new Pagination.PagePromise<PageClass, Item>(this as any as Hercules, request, Page);
+  ): PagePromise<Page, Item> {
+    // `Item` is passed explicitly because the page constructor carries no slot to infer it from.
+    return new PagePromise<Page, Item>(this, this.makeRequest(options, null, undefined), Page);
   }
 
   async fetchWithTimeout(
@@ -664,9 +666,18 @@ export class Hercules {
       }
     }
 
-    // If the API asks us to wait a certain amount of time, just do what it
-    // says, but otherwise calculate a default
-    if (timeoutMillis === undefined) {
+    // If the API asks us to wait a certain amount of time, just do what it says,
+    // but cap server-provided delays at 60s so an oversized or malformed Retry-After
+    // (e.g. `retry-after-ms: 999999999`, a past HTTP-date, or a value that Date.parse
+    // failed on) cannot block retries for an unbounded amount of time. Otherwise fall
+    // back to the default exponential-backoff calculation.
+    const maxRetryAfterMillis = 60 * 1000;
+    if (
+      timeoutMillis === undefined ||
+      !Number.isFinite(timeoutMillis) ||
+      timeoutMillis <= 0 ||
+      timeoutMillis > maxRetryAfterMillis
+    ) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
@@ -701,7 +712,16 @@ export class Hercules {
     if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
     options.timeout = options.timeout ?? this.timeout;
     const { bodyHeaders, body } = this.buildBody({ options });
-    const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
+    // Headers read the caller's own options, not the copy defaulted above: `X-Scalar-Timeout`
+    // reports an explicit per-request timeout, and the idempotency key written back here has to
+    // land where the retry can see it.
+    const reqHeaders = await this.buildHeaders({
+      options: inputOptions,
+      method,
+      bodyHeaders,
+      retryCount,
+      url,
+    });
 
     const req: FinalizedRequestInit = {
       method,
@@ -709,11 +729,12 @@ export class Hercules {
       ...(options.signal && { signal: options.signal }),
       ...((globalThis as any).ReadableStream &&
         body instanceof (globalThis as any).ReadableStream && { duplex: 'half' }),
-      ...(body && { body }),
+      // `buildBody` already collapses no-body into `undefined`; here we only need to drop that
+      // sentinel. A truthiness spread would also strip an intentional empty-string body.
+      ...(body !== undefined && { body }),
       ...((this.fetchOptions as any) ?? {}),
       ...((options.fetchOptions as any) ?? {}),
     };
-
     return { req, url, timeout: options.timeout };
   }
 
@@ -722,11 +743,13 @@ export class Hercules {
     method,
     bodyHeaders,
     retryCount,
+    url,
   }: {
     options: FinalRequestOptions;
     method: HTTPMethod;
     bodyHeaders: HeadersLike;
     retryCount: number;
+    url: string;
   }): Promise<Headers> {
     let idempotencyHeaders: HeadersLike = {};
     if (this.idempotencyHeader && method !== 'get') {
@@ -739,8 +762,8 @@ export class Hercules {
       {
         Accept: 'application/json',
         'User-Agent': this.getUserAgent(),
-        'X-Stainless-Retry-Count': String(retryCount),
-        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
+        'X-Scalar-Retry-Count': String(retryCount),
+        ...(options.timeout ? { 'X-Scalar-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
         'Hercules-Version': this.apiVersion,
       },
@@ -749,8 +772,9 @@ export class Hercules {
       bodyHeaders,
       options.headers,
     ]);
+    appendAuthCookies(headers.values, await this.authCookiesAsync());
 
-    this.validateHeaders(headers);
+    this.validateAuth(url, headers.values, options);
 
     return headers.values;
   }
@@ -761,19 +785,15 @@ export class Hercules {
     return () => controller.abort();
   }
 
-  private buildBody({ options }: { options: FinalRequestOptions }): {
+  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
-    const { body, headers: rawHeaders } = options;
-    if (!body) {
-      // A resource method always passes a `body` key when its operation defines a
-      // request body, even if the caller omitted an optional body param. Keep the
-      // content-type for those, and only elide it for operations with no body at
-      // all (e.g. GET/DELETE).
-      if (body == null && 'body' in options) {
-        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
-      }
+    // Skip only `null`/`undefined` so an intentional empty-string (or 0/false) payload still
+    // reaches the encoder. A plain `!body` check would silently drop those falsy-but-valid bodies,
+    // and `null` must be excluded here too because the iterator check below uses `in`, which
+    // throws on null.
+    if (body == null) {
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -782,9 +802,12 @@ export class Hercules {
       ArrayBuffer.isView(body) ||
       body instanceof ArrayBuffer ||
       body instanceof DataView ||
-      (typeof body === 'string' &&
-        // Preserve legacy string encoding behavior for now
-        headers.values.has('content-type')) ||
+      // Always pass strings through verbatim. The previous guard required a caller-set
+      // `content-type` and otherwise fell through to `FallbackEncoder`, which JSON.stringifies
+      // the value and labels it `application/json` — silently quoting plain-text payloads and
+      // mislabeling them as JSON. fetch defaults a string body to `text/plain;charset=UTF-8`
+      // when no `content-type` is set, which is a safer default than misclaiming JSON.
+      typeof body === 'string' ||
       // `Blob` is superset of `File`
       ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
       // `FormData` -> `multipart/form-data`
@@ -814,6 +837,69 @@ export class Hercules {
     }
   }
 
+  protected validateAuth(url: string, headers: Headers, options: FinalRequestOptions): void {
+    if (headers.has('Authorization')) return;
+    if (headerExplicitlyOmitted(options.headers, 'Authorization')) return;
+    throw new Errors.AuthenticationError(
+      401,
+      undefined,
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+      headers,
+    );
+  }
+
+  authHeadersSync(): Record<string, string> {
+    const headers: Record<string, string> = {};
+    const apiKey = this.resolveAuthOptionSync('apiKey', this.apiKey);
+    if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+    return headers;
+  }
+
+  webSocketAuthHeaders(): Record<string, string> {
+    const apiKey = this.resolveAuthOptionSync('apiKey', this.apiKey);
+    if (apiKey) return { Authorization: `Bearer ${apiKey}` };
+    return {};
+  }
+
+  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    const apiKey = await this.resolveAuthOption('apiKey', this.apiKey);
+    if (apiKey == null) {
+      return undefined;
+    }
+    return buildHeaders([{ Authorization: `Bearer ${apiKey}` }]);
+  }
+
+  private async authQueryAsync(): Promise<Record<string, string>> {
+    const query: Record<string, string> = {};
+    return query;
+  }
+
+  private async authCookiesAsync(): Promise<Record<string, string>> {
+    const cookies: Record<string, string> = {};
+    return cookies;
+  }
+
+  private async resolveAuthOption(
+    optionName: string,
+    value: string | AuthTokenProvider | null | undefined,
+  ): Promise<string | undefined> {
+    if (value == null) return undefined;
+    const token = typeof value === 'function' ? await value() : value;
+    if (!token) throw new Errors.HerculesError(`Expected '${optionName}' to resolve to a non-empty string.`);
+    return token;
+  }
+
+  private resolveAuthOptionSync(
+    optionName: string,
+    value: string | AuthTokenProvider | null | undefined,
+  ): string | undefined {
+    if (value == null) return undefined;
+    const token = typeof value === 'function' ? value() : value;
+    if (typeof token !== 'string' || !token)
+      throw new Errors.HerculesError(`Expected '${optionName}' to resolve to a non-empty string.`);
+    return token;
+  }
+
   static Hercules = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
@@ -831,52 +917,17 @@ export class Hercules {
   static PermissionDeniedError = Errors.PermissionDeniedError;
   static UnprocessableEntityError = Errors.UnprocessableEntityError;
 
-  static toFile = Uploads.toFile;
+  static toFile = toFile;
 
-  /**
-   * (Beta) Query the app's analytics replica with read-only SQL, list the
-   * replicated tables and their columns, and check replication status.
-   */
-  analytics: API.Analytics = new API.Analytics(this);
-  /**
-   * Manage IAM tenants, members, groups, roles, access rules, invitations,
-   * and tenant-wide / resource role assignments. Requires an API key with the
-   * IAM administration permission.
-   */
-  iam: API.Iam = new API.Iam(this);
-  /**
-   * Commerce APIs are currently in beta.
-   */
-  commerce: API.Commerce = new API.Commerce(this);
-  /**
-   * Pull fresh credentials for SDK-delivery app connectors installed on the
-   * calling deployment. Requires a deployment-bound API key. When several
-   * connections of one connector cover the deployment, pass connection_id to
-   * select one.
-   */
-  connectors: API.Connectors = new API.Connectors(this);
-  /**
-   * (Beta) Manage content collections, fields, entries, assets, locales, and releases.
-   */
-  content: API.Content = new API.Content(this);
-  /**
-   * Manage custom domains linked to a website, check domain availability,
-   * purchase and register new domains, and list previously purchased domains.
-   */
-  domains: API.Domains = new API.Domains(this);
-  /**
-   * Send transactional emails, send batch emails, and retrieve sent email
-   * history with delivery status tracking.
-   */
-  email: API.EmailResource = new API.EmailResource(this);
-  /**
-   * Upload, retrieve, and list files and media associated with a website.
-   * Upload is a two-step process: first call create to get an upload URL,
-   * then PUT the file content to that URL. The PUT response returns the
-   * completed MediaFile object. No separate complete call is needed.
-   */
-  files: API.Files = new API.Files(this);
-  pushNotifications: API.PushNotifications = new API.PushNotifications(this);
+  analytics: Analytics = new Analytics(this);
+  iam: Iam = new Iam(this);
+  commerce: Commerce = new Commerce(this);
+  connectors: Connectors = new Connectors(this);
+  content: Content = new Content(this);
+  domains: Domains = new Domains(this);
+  email: EmailResource = new EmailResource(this);
+  files: Files = new Files(this);
+  pushNotifications: PushNotifications = new PushNotifications(this);
 }
 
 Hercules.Analytics = Analytics;
@@ -898,8 +949,8 @@ export declare namespace Hercules {
   export {
     Analytics as Analytics,
     type QueryResponse as QueryResponse,
-    type Status as Status,
     type Table as Table,
+    type Status as Status,
     type AnalyticsListTablesResponse as AnalyticsListTablesResponse,
     type AnalyticsQueryParams as AnalyticsQueryParams,
   };
@@ -909,18 +960,20 @@ export declare namespace Hercules {
   export {
     Commerce as Commerce,
     type Currency as Currency,
+    type CommerceCheckoutResponse as CommerceCheckoutResponse,
     type CommerceCancelResponse as CommerceCancelResponse,
     type CommerceCheckResponse as CommerceCheckResponse,
-    type CommerceCheckoutResponse as CommerceCheckoutResponse,
+    type CommerceCheckoutParams as CommerceCheckoutParams,
     type CommerceCancelParams as CommerceCancelParams,
     type CommerceCheckParams as CommerceCheckParams,
-    type CommerceCheckoutParams as CommerceCheckoutParams,
   };
 
   export {
     Connectors as Connectors,
     type ConnectorCredentialsResponse as ConnectorCredentialsResponse,
+    type ConnectorRequestResponse as ConnectorRequestResponse,
     type ConnectorCredentialsParams as ConnectorCredentialsParams,
+    type ConnectorRequestParams as ConnectorRequestParams,
   };
 
   export { Content as Content };
@@ -929,9 +982,9 @@ export declare namespace Hercules {
     Domains as Domains,
     type Domain as Domain,
     type DomainAvailability as DomainAvailability,
+    type DomainsCursorIDPage as DomainsCursorIDPage,
     type DomainCheckAvailabilityResponse as DomainCheckAvailabilityResponse,
     type DomainSearchResponse as DomainSearchResponse,
-    type DomainsCursorIDPage as DomainsCursorIDPage,
     type DomainListParams as DomainListParams,
     type DomainCheckAvailabilityParams as DomainCheckAvailabilityParams,
     type DomainSearchParams as DomainSearchParams,
@@ -939,13 +992,13 @@ export declare namespace Hercules {
 
   export {
     EmailResource as EmailResource,
-    type Attachment as Attachment,
     type Email as Email,
-    type EmailGetResponse as EmailGetResponse,
+    type Attachment as Attachment,
     type EmailSendResponse as EmailSendResponse,
     type EmailsCursorIDPage as EmailsCursorIDPage,
-    type EmailListParams as EmailListParams,
+    type EmailGetResponse as EmailGetResponse,
     type EmailSendParams as EmailSendParams,
+    type EmailListParams as EmailListParams,
   };
 
   export {
@@ -959,13 +1012,34 @@ export declare namespace Hercules {
   export {
     PushNotifications as PushNotifications,
     type PushNotificationEnableResponse as PushNotificationEnableResponse,
-    type PushNotificationIdentifyResponse as PushNotificationIdentifyResponse,
-    type PushNotificationSendResponse as PushNotificationSendResponse,
     type PushNotificationSubscribeResponse as PushNotificationSubscribeResponse,
     type PushNotificationUnsubscribeResponse as PushNotificationUnsubscribeResponse,
-    type PushNotificationIdentifyParams as PushNotificationIdentifyParams,
-    type PushNotificationSendParams as PushNotificationSendParams,
+    type PushNotificationIdentifyResponse as PushNotificationIdentifyResponse,
+    type PushNotificationSendResponse as PushNotificationSendResponse,
     type PushNotificationSubscribeParams as PushNotificationSubscribeParams,
     type PushNotificationUnsubscribeParams as PushNotificationUnsubscribeParams,
+    type PushNotificationIdentifyParams as PushNotificationIdentifyParams,
+    type PushNotificationSendParams as PushNotificationSendParams,
   };
 }
+
+const headerExplicitlyOmitted = (source: HeadersLike | undefined, name: string): boolean => {
+  if (!source || Array.isArray(source) || source instanceof Headers) return false;
+  const target = name.toLowerCase();
+  return Object.entries(source).some(([key, value]) => key.toLowerCase() === target && value === null);
+};
+
+const appendAuthCookies = (headers: Headers, cookies: Record<string, string>): void => {
+  for (const [name, value] of Object.entries(cookies)) {
+    if (cookieHeaderHas(headers.get('Cookie'), name)) continue;
+    const cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+    const existing = headers.get('Cookie');
+    headers.set('Cookie', existing ? existing + '; ' + cookie : cookie);
+  }
+};
+
+const cookieHeaderHas = (value: string | null, name: string): boolean => {
+  if (!value) return false;
+  const target = encodeURIComponent(name) + '=';
+  return value.split(';').some((cookie) => cookie.trim().startsWith(target));
+};

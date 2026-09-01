@@ -1,37 +1,37 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-import { APIResource } from '../../core/resource';
+import { APIResource } from '../../resource';
+import { APIPromise } from '../../api-promise';
+import type { RequestOptions } from '../../internal/request-options';
 import * as InvitationsAPI from './invitations';
-import { InvitationAcceptParams, InvitationAcceptResponse, Invitations } from './invitations';
+import { Invitations, type InvitationAcceptResponse, type InvitationAcceptParams } from './invitations';
 import * as TenantsAPI from './tenants/tenants';
 import {
-  TenantArchiveParams,
-  TenantArchiveResponse,
-  TenantCreateInvitationParams,
-  TenantCreateInvitationResponse,
-  TenantCreateParams,
-  TenantCreateResponse,
-  TenantEvaluateAccessParams,
-  TenantEvaluateAccessResponse,
-  TenantGetResponse,
-  TenantListParams,
-  TenantListResourceRoleAssignmentsParams,
-  TenantListResourceRoleAssignmentsResponse,
-  TenantListResponse,
-  TenantListRoleAssignmentsParams,
-  TenantListRoleAssignmentsResponse,
-  TenantUnarchiveParams,
-  TenantUnarchiveResponse,
-  TenantUpdateParams,
-  TenantUpdateResponse,
   Tenants,
+  type TenantListResponse,
+  type TenantCreateResponse,
+  type TenantGetResponse,
+  type TenantUpdateResponse,
+  type TenantArchiveResponse,
+  type TenantUnarchiveResponse,
+  type TenantEvaluateAccessResponse,
+  type TenantCreateInvitationResponse,
+  type TenantListRoleAssignmentsResponse,
+  type TenantListResourceRoleAssignmentsResponse,
+  type IamTenantsCursorIDPage,
+  type IamRoleAssignmentsCursorIDPage,
+  type IamResourceRoleAssignmentsCursorIDPage,
+  type TenantListParams,
+  type TenantCreateParams,
+  type TenantUpdateParams,
+  type TenantArchiveParams,
+  type TenantUnarchiveParams,
+  type TenantEvaluateAccessParams,
+  type TenantCreateInvitationParams,
+  type TenantListRoleAssignmentsParams,
+  type TenantListResourceRoleAssignmentsParams,
 } from './tenants/tenants';
 
-/**
- * Manage IAM tenants, members, groups, roles, access rules, invitations,
- * and tenant-wide / resource role assignments. Requires an API key with the
- * IAM administration permission.
- */
 export class Iam extends APIResource {
   invitations: InvitationsAPI.Invitations = new InvitationsAPI.Invitations(this._client);
   tenants: TenantsAPI.Tenants = new TenantsAPI.Tenants(this._client);
@@ -49,24 +49,27 @@ export declare namespace Iam {
 
   export {
     Tenants as Tenants,
-    type TenantCreateResponse as TenantCreateResponse,
-    type TenantUpdateResponse as TenantUpdateResponse,
     type TenantListResponse as TenantListResponse,
-    type TenantArchiveResponse as TenantArchiveResponse,
-    type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
-    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantCreateResponse as TenantCreateResponse,
     type TenantGetResponse as TenantGetResponse,
-    type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
-    type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
+    type TenantUpdateResponse as TenantUpdateResponse,
+    type TenantArchiveResponse as TenantArchiveResponse,
     type TenantUnarchiveResponse as TenantUnarchiveResponse,
+    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
+    type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
+    type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
+    type IamTenantsCursorIDPage as IamTenantsCursorIDPage,
+    type IamRoleAssignmentsCursorIDPage as IamRoleAssignmentsCursorIDPage,
+    type IamResourceRoleAssignmentsCursorIDPage as IamResourceRoleAssignmentsCursorIDPage,
+    type TenantListParams as TenantListParams,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
-    type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
-    type TenantCreateInvitationParams as TenantCreateInvitationParams,
-    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
-    type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
-    type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,
+    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
+    type TenantCreateInvitationParams as TenantCreateInvitationParams,
+    type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
+    type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
   };
 }

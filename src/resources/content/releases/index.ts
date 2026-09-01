@@ -1,13 +1,14 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export { Items, type ItemAddParams, type ItemRemoveParams } from './items';
-export {
-  Releases,
-  type Release,
-  type ReleaseItem,
-  type ReleaseCreateParams,
-  type ReleaseUpdateParams,
-  type ReleaseListParams,
-  type ReleaseScheduleParams,
-  type ReleasesCursorIDPage,
+export { Releases } from './releases';
+export type {
+  Release,
+  ReleaseItem,
+  ReleaseListParams,
+  ReleasesCursorIDPage,
+  ReleaseCreateParams,
+  ReleaseUpdateParams,
+  ReleaseScheduleParams,
 } from './releases';
+export { Items } from './items';
+export type { ItemAddParams, ItemRemoveParams } from './items';

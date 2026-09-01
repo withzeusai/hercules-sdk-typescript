@@ -1,103 +1,118 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-import { APIResource } from '../../../core/resource';
-import * as AccessRulesAPI from './access-rules';
-import {
-  AccessRuleArchiveParams,
-  AccessRuleArchiveResponse,
-  AccessRuleCreateParams,
-  AccessRuleCreateResponse,
-  AccessRuleListParams,
-  AccessRuleListResponse,
-  AccessRules,
-} from './access-rules';
-import * as AuditEventsAPI from './audit-events';
-import { AuditEventListParams, AuditEventListResponse, AuditEvents } from './audit-events';
-import * as InvitationsAPI from './invitations';
-import {
-  InvitationListParams,
-  InvitationListResponse,
-  InvitationRevokeParams,
-  InvitationRevokeResponse,
-  Invitations,
-} from './invitations';
+import { APIResource } from '../../../resource';
+import { APIPromise } from '../../../api-promise';
+import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../core/pagination';
+import type { RequestOptions } from '../../../internal/request-options';
+import { path as __scalarPath } from '../../../internal/utils/path';
 import * as MembersAPI from './members';
 import {
-  MemberAssignResourceRoleParams,
-  MemberAssignResourceRoleResponse,
-  MemberAssignRoleParams,
-  MemberAssignRoleResponse,
-  MemberCreateParams,
-  MemberCreateResponse,
-  MemberGetParams,
-  MemberGetResponse,
-  MemberListParams,
-  MemberListResourceRoleAssignmentsParams,
-  MemberListResourceRoleAssignmentsResponse,
-  MemberListResponse,
-  MemberListRoleAssignmentsParams,
-  MemberListRoleAssignmentsResponse,
-  MemberRemoveParams,
-  MemberRemoveResponse,
-  MemberReplaceResourceRolesParams,
-  MemberReplaceResourceRolesResponse,
-  MemberReplaceRolesParams,
-  MemberReplaceRolesResponse,
-  MemberUnassignResourceRoleParams,
-  MemberUnassignResourceRoleResponse,
-  MemberUnassignRoleParams,
-  MemberUnassignRoleResponse,
-  MemberUpdateStatusParams,
-  MemberUpdateStatusResponse,
   Members,
+  type MemberCreateResponse,
+  type MemberListResponse,
+  type MemberGetResponse,
+  type MemberUpdateStatusResponse,
+  type MemberRemoveResponse,
+  type MemberAssignRoleResponse,
+  type MemberReplaceRolesResponse,
+  type MemberUnassignRoleResponse,
+  type MemberListRoleAssignmentsResponse,
+  type MemberAssignResourceRoleResponse,
+  type MemberReplaceResourceRolesResponse,
+  type MemberUnassignResourceRoleResponse,
+  type MemberListResourceRoleAssignmentsResponse,
+  type IamMembersCursorIDPage,
+  type IamMemberRoleAssignmentsCursorIDPage,
+  type IamMemberResourceRoleAssignmentsCursorIDPage,
+  type MemberCreateParams,
+  type MemberListParams,
+  type MemberGetParams,
+  type MemberUpdateStatusParams,
+  type MemberRemoveParams,
+  type MemberAssignRoleParams,
+  type MemberReplaceRolesParams,
+  type MemberUnassignRoleParams,
+  type MemberListRoleAssignmentsParams,
+  type MemberAssignResourceRoleParams,
+  type MemberReplaceResourceRolesParams,
+  type MemberUnassignResourceRoleParams,
+  type MemberListResourceRoleAssignmentsParams,
 } from './members';
-import * as RolesAPI from './roles';
-import {
-  RoleCreateParams,
-  RoleCreateResponse,
-  RoleDeleteParams,
-  RoleDeleteResponse,
-  RoleGetParams,
-  RoleGetResponse,
-  RoleListParams,
-  RoleListResponse,
-  RoleUpdateParams,
-  RoleUpdateResponse,
-  Roles,
-} from './roles';
 import * as GroupsAPI from './groups/groups';
 import {
-  GroupArchiveParams,
-  GroupArchiveResponse,
-  GroupAssignResourceRoleParams,
-  GroupAssignResourceRoleResponse,
-  GroupAssignRoleParams,
-  GroupAssignRoleResponse,
-  GroupCreateParams,
-  GroupCreateResponse,
-  GroupDeleteParams,
-  GroupDeleteResponse,
-  GroupGetParams,
-  GroupGetResponse,
-  GroupListParams,
-  GroupListResourceRoleAssignmentsParams,
-  GroupListResourceRoleAssignmentsResponse,
-  GroupListResponse,
-  GroupListRoleAssignmentsParams,
-  GroupListRoleAssignmentsResponse,
-  GroupUnarchiveParams,
-  GroupUnarchiveResponse,
-  GroupUnassignResourceRoleParams,
-  GroupUnassignResourceRoleResponse,
-  GroupUnassignRoleParams,
-  GroupUnassignRoleResponse,
-  GroupUpdateParams,
-  GroupUpdateResponse,
   Groups,
+  type GroupCreateResponse,
+  type GroupListResponse,
+  type GroupGetResponse,
+  type GroupUpdateResponse,
+  type GroupDeleteResponse,
+  type GroupArchiveResponse,
+  type GroupUnarchiveResponse,
+  type GroupAssignRoleResponse,
+  type GroupUnassignRoleResponse,
+  type GroupListRoleAssignmentsResponse,
+  type GroupAssignResourceRoleResponse,
+  type GroupUnassignResourceRoleResponse,
+  type GroupListResourceRoleAssignmentsResponse,
+  type IamGroupsCursorIDPage,
+  type IamGroupRoleAssignmentsCursorIDPage,
+  type IamGroupResourceRoleAssignmentsCursorIDPage,
+  type GroupCreateParams,
+  type GroupListParams,
+  type GroupGetParams,
+  type GroupUpdateParams,
+  type GroupDeleteParams,
+  type GroupArchiveParams,
+  type GroupUnarchiveParams,
+  type GroupAssignRoleParams,
+  type GroupUnassignRoleParams,
+  type GroupListRoleAssignmentsParams,
+  type GroupAssignResourceRoleParams,
+  type GroupUnassignResourceRoleParams,
+  type GroupListResourceRoleAssignmentsParams,
 } from './groups/groups';
-import { APIPromise } from '../../../core/api-promise';
-import { RequestOptions } from '../../../internal/request-options';
-import { path } from '../../../internal/utils/path';
+import * as RolesAPI from './roles';
+import {
+  Roles,
+  type RoleCreateResponse,
+  type RoleListResponse,
+  type RoleGetResponse,
+  type RoleUpdateResponse,
+  type RoleDeleteResponse,
+  type IamRolesCursorIDPage,
+  type RoleCreateParams,
+  type RoleListParams,
+  type RoleGetParams,
+  type RoleUpdateParams,
+  type RoleDeleteParams,
+} from './roles';
+import * as AccessRulesAPI from './access-rules';
+import {
+  AccessRules,
+  type AccessRuleListResponse,
+  type AccessRuleCreateResponse,
+  type AccessRuleArchiveResponse,
+  type IamAccessRulesCursorIDPage,
+  type AccessRuleListParams,
+  type AccessRuleCreateParams,
+  type AccessRuleArchiveParams,
+} from './access-rules';
+import * as AuditEventsAPI from './audit-events';
+import {
+  AuditEvents,
+  type AuditEventListResponse,
+  type IamAuditEventsCursorIDPage,
+  type AuditEventListParams,
+} from './audit-events';
+import * as InvitationsAPI from './invitations';
+import {
+  Invitations,
+  type InvitationListResponse,
+  type InvitationRevokeResponse,
+  type IamInvitationsCursorIDPage,
+  type InvitationListParams,
+  type InvitationRevokeParams,
+} from './invitations';
 
 export class Tenants extends APIResource {
   members: MembersAPI.Members = new MembersAPI.Members(this._client);
@@ -108,768 +123,301 @@ export class Tenants extends APIResource {
   invitations: InvitationsAPI.Invitations = new InvitationsAPI.Invitations(this._client);
 
   /**
-   * Creates a tenant and assigns its initial owner. The signed-in user becomes the
-   * owner unless trusted server code specifies another user. The initial owner is
-   * granted the seeded owner role. The default role (for later members) defaults to
-   * the seeded member role and must not be an app-scoped role.
-   */
-  create(body: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
-    return this._client.post('/v1/iam/tenants', { body, ...options });
-  }
-
-  /**
-   * Updates a tenant's name, default role, or access mode.
-   */
-  update(
-    tenantID: string,
-    body: TenantUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<TenantUpdateResponse> {
-    return this._client.patch(path`/v1/iam/tenants/${tenantID}`, { body, ...options });
-  }
-
-  /**
    * Lists the deployment's IAM tenants, primary tenant first.
+   *
+   * @param {TenantListParams} [query] - The parameters to send with the request.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {PagePromise<IamTenantsCursorIDPage, TenantListResponse>} The IAM tenant page
+   *
+   * @example
+   * ```ts
+   * const page = await client.iam.tenants.list();
+   * ```
    */
   list(
     query: TenantListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<TenantListResponse> {
-    return this._client.get('/v1/iam/tenants', { query, ...options });
-  }
-
-  /**
-   * Archives a non-primary tenant and blocks its access without deleting its data.
-   */
-  archive(
-    tenantID: string,
-    body: TenantArchiveParams,
-    options?: RequestOptions,
-  ): APIPromise<TenantArchiveResponse> {
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/archive`, { body, ...options });
-  }
-
-  /**
-   * Creates an invitation that confers tenant-wide roles when accepted.
-   */
-  createInvitation(
-    tenantID: string,
-    body: TenantCreateInvitationParams,
-    options?: RequestOptions,
-  ): APIPromise<TenantCreateInvitationResponse> {
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/invitations`, { body, ...options });
-  }
-
-  /**
-   * Evaluates whether the signed-in end user may enter the tenant and applies the
-   * result: access mode `open` creates an active membership with the tenant default
-   * role, `approval_required` creates a pending membership, and denials create
-   * nothing. Call it after sign-in, before reading the user's access status. Safe to
-   * repeat; an existing membership is returned unchanged.
-   */
-  evaluateAccess(
-    tenantID: string,
-    body: TenantEvaluateAccessParams,
-    options?: RequestOptions,
-  ): APIPromise<TenantEvaluateAccessResponse> {
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/evaluate-access`, { body, ...options });
-  }
-
-  /**
-   * Returns one IAM tenant by ID. Pass `primary` for the deployment's primary
-   * tenant.
-   */
-  get(tenantID: string, options?: RequestOptions): APIPromise<TenantGetResponse> {
-    return this._client.get(path`/v1/iam/tenants/${tenantID}`, options);
-  }
-
-  /**
-   * Lists resource role assignments in a tenant, newest first. Filter by resource
-   * type and external ID to find who has a role on one exact resource, or by member,
-   * group, or role.
-   */
-  listResourceRoleAssignments(
-    tenantID: string,
-    query: TenantListResourceRoleAssignmentsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TenantListResourceRoleAssignmentsResponse> {
-    return this._client.get(path`/v1/iam/tenants/${tenantID}/resource-role-assignments`, {
+  ): PagePromise<IamTenantsCursorIDPage, TenantListResponse> {
+    return this._client.getAPIList('/v1/iam/tenants', CursorIDPage<TenantListResponse>, {
       query,
       ...options,
     });
   }
 
   /**
-   * Lists tenant-wide role assignments in a tenant, newest first. Filter by member,
-   * group, or role.
+   * Creates a tenant and assigns its initial owner. The signed-in user becomes the owner unless trusted server code specifies another user. The initial owner is granted the seeded owner role. The default role (for later members) defaults to the seeded member role and must not be an app-scoped role.
+   *
+   * @param {TenantCreateParams} body - The request body to send.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantCreateResponse>} The created IAM tenant
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.create({
+   *   actor_user_id: 'x',
+   *   name: 'x',
+   * });
+   * ```
    */
-  listRoleAssignments(
+  create(body: TenantCreateParams, options?: RequestOptions): APIPromise<TenantCreateResponse> {
+    return this._client.post('/v1/iam/tenants', { body, ...options });
+  }
+
+  /**
+   * Returns one IAM tenant by ID. Pass `primary` for the deployment's primary tenant.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantGetResponse>} The IAM tenant
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.get('tenantId');
+   * ```
+   */
+  get(tenantID: string, options?: RequestOptions): APIPromise<TenantGetResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}`, options);
+  }
+
+  /**
+   * Updates a tenant's name, default role, or access mode.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {TenantUpdateParams} body - The request body to send.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantUpdateResponse>} The updated IAM tenant settings
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.update('tenantId', {
+   *   actor_user_id: 'x',
+   * });
+   * ```
+   */
+  update(
     tenantID: string,
-    query: TenantListRoleAssignmentsParams | null | undefined = {},
+    body: TenantUpdateParams,
     options?: RequestOptions,
-  ): APIPromise<TenantListRoleAssignmentsResponse> {
-    return this._client.get(path`/v1/iam/tenants/${tenantID}/role-assignments`, { query, ...options });
+  ): APIPromise<TenantUpdateResponse> {
+    return this._client.patch(__scalarPath`/v1/iam/tenants/${tenantID}`, { body, ...options });
+  }
+
+  /**
+   * Archives a non-primary tenant and blocks its access without deleting its data.
+   *
+   * @param {string} tenantID - The exact non-primary tenant ID. The `primary` tenant is not valid for archive or unarchive.
+   * @param {TenantArchiveParams} body - The request body to send.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantArchiveResponse>} The archived IAM tenant
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.archive('tenantId', {
+   *   actor_user_id: 'x',
+   * });
+   * ```
+   */
+  archive(
+    tenantID: string,
+    body: TenantArchiveParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantArchiveResponse> {
+    return this._client.post(__scalarPath`/v1/iam/tenants/${tenantID}/archive`, { body, ...options });
   }
 
   /**
    * Restores an archived tenant and re-enables access through its existing data.
+   *
+   * @param {string} tenantID - The exact non-primary tenant ID. The `primary` tenant is not valid for archive or unarchive.
+   * @param {TenantUnarchiveParams} body - The request body to send.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantUnarchiveResponse>} The unarchived IAM tenant
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.unarchive('tenantId', {
+   *   actor_user_id: 'x',
+   * });
+   * ```
    */
   unarchive(
     tenantID: string,
     body: TenantUnarchiveParams,
     options?: RequestOptions,
   ): APIPromise<TenantUnarchiveResponse> {
-    return this._client.post(path`/v1/iam/tenants/${tenantID}/unarchive`, { body, ...options });
+    return this._client.post(__scalarPath`/v1/iam/tenants/${tenantID}/unarchive`, { body, ...options });
+  }
+
+  /**
+   * Evaluates whether the signed-in end user may enter the tenant and applies the result: access mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {TenantEvaluateAccessParams} body - The request body to send.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantEvaluateAccessResponse>} The tenant entry decision
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.evaluateAccess('tenantId', {
+   *   actor_user_id: 'x',
+   * });
+   * ```
+   */
+  evaluateAccess(
+    tenantID: string,
+    body: TenantEvaluateAccessParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantEvaluateAccessResponse> {
+    return this._client.post(__scalarPath`/v1/iam/tenants/${tenantID}/evaluate-access`, { body, ...options });
+  }
+
+  /**
+   * Creates an invitation that confers tenant-wide roles when accepted.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {TenantCreateInvitationParams} body - The request body to send.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {APIPromise<TenantCreateInvitationResponse>} The created invitation
+   *
+   * @example
+   * ```ts
+   * const tenant = await client.iam.tenants.createInvitation('tenantId', {
+   *   actor_user_id: 'x',
+   * });
+   * ```
+   */
+  createInvitation(
+    tenantID: string,
+    body: TenantCreateInvitationParams,
+    options?: RequestOptions,
+  ): APIPromise<TenantCreateInvitationResponse> {
+    return this._client.post(__scalarPath`/v1/iam/tenants/${tenantID}/invitations`, { body, ...options });
+  }
+
+  /**
+   * Lists tenant-wide role assignments in a tenant, newest first. Filter by member, group, or role.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {TenantListRoleAssignmentsParams} [query] - The parameters to send with the request.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {PagePromise<IamRoleAssignmentsCursorIDPage, TenantListRoleAssignmentsResponse>} The tenant role assignment page
+   *
+   * @example
+   * ```ts
+   * const page = await client.iam.tenants.listRoleAssignments('tenantId');
+   * ```
+   */
+  listRoleAssignments(
+    tenantID: string,
+    query: TenantListRoleAssignmentsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<IamRoleAssignmentsCursorIDPage, TenantListRoleAssignmentsResponse> {
+    return this._client.getAPIList(
+      __scalarPath`/v1/iam/tenants/${tenantID}/role-assignments`,
+      CursorIDPage<TenantListRoleAssignmentsResponse>,
+      { query, ...options },
+    );
+  }
+
+  /**
+   * Lists resource role assignments in a tenant, newest first. Filter by resource type and external ID to find who has a role on one exact resource, or by member, group, or role.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {TenantListResourceRoleAssignmentsParams} [query] - The parameters to send with the request.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {PagePromise<IamResourceRoleAssignmentsCursorIDPage, TenantListResourceRoleAssignmentsResponse>} The tenant resource role assignment page
+   *
+   * @example
+   * ```ts
+   * const page = await client.iam.tenants.listResourceRoleAssignments('tenantId');
+   * ```
+   */
+  listResourceRoleAssignments(
+    tenantID: string,
+    query: TenantListResourceRoleAssignmentsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<IamResourceRoleAssignmentsCursorIDPage, TenantListResourceRoleAssignmentsResponse> {
+    return this._client.getAPIList(
+      __scalarPath`/v1/iam/tenants/${tenantID}/resource-role-assignments`,
+      CursorIDPage<TenantListResourceRoleAssignmentsResponse>,
+      { query, ...options },
+    );
   }
 }
 
-/**
- * Created IAM tenant.
- */
-export interface TenantCreateResponse {
+export interface TenantListParams extends CursorIDPageParams {
   /**
-   * Synchronization metadata for Convex IAM projections.
+   * Filter by tenant status.
    */
-  convex_source_data: TenantCreateResponse.ConvexSourceData;
-
-  /**
-   * Hercules IAM identifier.
-   */
-  default_role_id: string | null;
-
-  /**
-   * Whether this result replays a previous request with the same idempotency key.
-   */
-  idempotent: boolean;
-
-  /**
-   * Hercules IAM identifier.
-   */
-  membership_id: string | null;
-
-  /**
-   * Created tenant ID.
-   */
-  tenant_id: string;
+  status?: 'active' | 'archived';
 }
 
-export namespace TenantCreateResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * The deployment's IAM source version after the operation. Before relying on
-     * Convex IAM mirror reads, wait for the projection to reach at least this source
-     * version.
-     */
-    source_version: number;
-  }
-}
-
-/**
- * Result of an IAM tenant mutation.
- */
-export interface TenantUpdateResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: TenantUpdateResponse.ConvexSourceData;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-}
-
-export namespace TenantUpdateResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * The deployment's IAM source version after the operation. Before relying on
-     * Convex IAM mirror reads, wait for the projection to reach at least this source
-     * version.
-     */
-    source_version: number;
-  }
-}
-
-/**
- * Paginated IAM tenants.
- */
 export interface TenantListResponse {
   /**
-   * Tenant page.
-   */
-  data: Array<TenantListResponse.Data>;
-
-  /**
-   * Whether more records are available after this page.
-   */
-  has_more: boolean;
-}
-
-export namespace TenantListResponse {
-  /**
-   * One IAM tenant.
-   */
-  export interface Data {
-    /**
-     * The tenant's access mode (how it admits new members): open, allowlist-only,
-     * invitation-only, or approval-required.
-     */
-    access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-    /**
-     * Tenant creation timestamp.
-     */
-    created_at: string;
-
-    /**
-     * Hercules IAM identifier.
-     */
-    default_role_id: string | null;
-
-    /**
-     * Whether this is the deployment's primary tenant.
-     */
-    is_primary_tenant: boolean;
-
-    /**
-     * Human-readable tenant name.
-     */
-    name: string;
-
-    /**
-     * Tenant lifecycle status.
-     */
-    status: 'active' | 'archived';
-
-    /**
-     * Tenant ID.
-     */
-    tenant_id: string;
-
-    /**
-     * Tenant last-updated timestamp.
-     */
-    updated_at: string;
-  }
-}
-
-/**
- * Result of an IAM tenant mutation.
- */
-export interface TenantArchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: TenantArchiveResponse.ConvexSourceData;
-
-  /**
-   * Tenant changed by the operation.
+   * Tenant ID.
+   * @minLength 1
    */
   tenant_id: string;
-}
-
-export namespace TenantArchiveResponse {
   /**
-   * Synchronization metadata for Convex IAM projections.
+   * Human-readable tenant name.
    */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * The deployment's IAM source version after the operation. Before relying on
-     * Convex IAM mirror reads, wait for the projection to reach at least this source
-     * version.
-     */
-    source_version: number;
-  }
-}
-
-/**
- * Created invitation link.
- */
-export interface TenantCreateInvitationResponse {
-  /**
-   * One-time secret invitation token embedded in the link. Stored only as a hash.
-   */
-  token: string;
-
-  /**
-   * Optional signup constraint. Omit for an open link anyone can accept.
-   */
-  constraint:
-    | TenantCreateInvitationResponse.IamInvitationEmailConstraint
-    | TenantCreateInvitationResponse.IamInvitationDomainConstraint
-    | null;
-
-  /**
-   * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation to each recipient. Omit delivery entirely for a manual link you share
-   * yourself.
-   */
-  delivery: TenantCreateInvitationResponse.Delivery | null;
-
-  /**
-   * Invitation expiry timestamp, or null if it never expires.
-   */
-  expires_at: string | null;
-
-  /**
-   * Created invitation ID.
-   */
-  invitation_id: string;
-
-  /**
-   * The full invitation link to share: the app's auth domain + /invite/{token}. Send
-   * this to the invitee.
-   */
-  link: string;
-
-  /**
-   * Effective signup cap, or null for unlimited.
-   */
-  max_uses: number | null;
-
-  /**
-   * The app-relative path the user is sent to after accepting, or null.
-   */
-  redirect_path: string | null;
-
-  /**
-   * Number of users who have accepted so far (0 at creation).
-   */
-  use_count: number;
-}
-
-export namespace TenantCreateInvitationResponse {
-  export interface IamInvitationEmailConstraint {
-    /**
-     * Only this exact email address may accept.
-     */
-    type: 'email';
-
-    /**
-     * The invited email address.
-     */
-    value: string;
-  }
-
-  export interface IamInvitationDomainConstraint {
-    /**
-     * Any address in this email domain may accept.
-     */
-    type: 'domain';
-
-    /**
-     * The allowed email domain, e.g. acme.com.
-     */
-    value: string;
-  }
-
-  /**
-   * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation to each recipient. Omit delivery entirely for a manual link you share
-   * yourself.
-   */
-  export interface Delivery {
-    /**
-     * Recipients the invitation email is sent to.
-     */
-    to_emails: Array<string>;
-
-    /**
-     * Sender address the invitation is emailed from. Null or omitted uses the verified
-     * sender configured in Auth branding.
-     */
-    from_email?: string | null;
-  }
-}
-
-/**
- * Tenant entry decision for one end user.
- */
-export interface TenantEvaluateAccessResponse {
-  /**
-   * Whether the user has an active membership in the tenant now.
-   */
-  allowed: boolean;
-
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: TenantEvaluateAccessResponse.ConvexSourceData;
-
-  /**
-   * Hercules IAM identifier.
-   */
-  membership_id: string | null;
-
-  /**
-   * Why entry was denied.
-   */
-  reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived' | null;
-
-  /**
-   * Entry outcome: the user's membership status after evaluation, or `denied` when
-   * the tenant's access mode or access rules reject them and no membership exists.
-   */
-  status: 'active' | 'pending_approval' | 'denied';
-
-  /**
-   * Tenant evaluated for entry.
-   */
-  tenant_id: string;
-
-  /**
-   * The end user's ID (their OIDC subject) that was evaluated.
-   */
-  user_id: string;
-}
-
-export namespace TenantEvaluateAccessResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * The deployment's IAM source version after the operation. Before relying on
-     * Convex IAM mirror reads, wait for the projection to reach at least this source
-     * version.
-     */
-    source_version: number;
-  }
-}
-
-/**
- * One IAM tenant.
- */
-export interface TenantGetResponse {
-  /**
-   * The tenant's access mode (how it admits new members): open, allowlist-only,
-   * invitation-only, or approval-required.
-   */
-  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
-  /**
-   * Tenant creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Hercules IAM identifier.
-   */
-  default_role_id: string | null;
-
+  name: string;
   /**
    * Whether this is the deployment's primary tenant.
    */
   is_primary_tenant: boolean;
-
-  /**
-   * Human-readable tenant name.
-   */
-  name: string;
-
   /**
    * Tenant lifecycle status.
    */
   status: 'active' | 'archived';
-
   /**
-   * Tenant ID.
+   * The tenant's access mode (how it admits new members): open, allowlist-only, invitation-only, or approval-required.
    */
-  tenant_id: string;
-
+  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  /**
+   * The tenant's default role ID, if set.
+   * @minLength 1
+   */
+  default_role_id: string | null;
+  /**
+   * Tenant creation timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  created_at: string;
   /**
    * Tenant last-updated timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
    */
   updated_at: string;
 }
 
-/**
- * Paginated resource role assignments.
- */
-export interface TenantListResourceRoleAssignmentsResponse {
-  /**
-   * Resource role assignment page.
-   */
-  data: Array<TenantListResourceRoleAssignmentsResponse.Data>;
-
-  /**
-   * Whether more records are available after this page.
-   */
-  has_more: boolean;
-}
-
-export namespace TenantListResourceRoleAssignmentsResponse {
-  /**
-   * One resource role assignment.
-   */
-  export interface Data {
-    /**
-     * Assignment creation timestamp.
-     */
-    created_at: string;
-
-    /**
-     * Assignment expiry, or null if permanent.
-     */
-    expires_at: string | null;
-
-    /**
-     * The exact resource's app-defined external ID.
-     */
-    external_id: string;
-
-    /**
-     * The resource type the assignment targets.
-     */
-    resource_type_id: string;
-
-    /**
-     * The assigned role ID.
-     */
-    role_id: string;
-
-    /**
-     * The assignment's subject and its prefixed assignment ID.
-     */
-    subject: Data.IamResourceRoleAssignmentMemberSubject | Data.IamResourceRoleAssignmentGroupSubject;
-
-    /**
-     * Tenant the assignment belongs to.
-     */
-    tenant_id: string;
-  }
-
-  export namespace Data {
-    export interface IamResourceRoleAssignmentMemberSubject {
-      /**
-       * The member resource role assignment ID.
-       */
-      member_resource_role_assignment_id: string;
-
-      /**
-       * The user's tenant membership ID holding the role.
-       */
-      membership_id: string;
-
-      /**
-       * A tenant member holds the role on the resource.
-       */
-      type: 'member';
-    }
-
-    export interface IamResourceRoleAssignmentGroupSubject {
-      /**
-       * The group holding the role.
-       */
-      group_id: string;
-
-      /**
-       * The group resource role assignment ID.
-       */
-      group_resource_role_assignment_id: string;
-
-      /**
-       * A group holds the role on the resource.
-       */
-      type: 'group';
-    }
-  }
-}
-
-/**
- * Paginated tenant-wide role assignments.
- */
-export interface TenantListRoleAssignmentsResponse {
-  /**
-   * Role assignment page.
-   */
-  data: Array<TenantListRoleAssignmentsResponse.Data>;
-
-  /**
-   * Whether more records are available after this page.
-   */
-  has_more: boolean;
-}
-
-export namespace TenantListRoleAssignmentsResponse {
-  /**
-   * One tenant-wide role assignment.
-   */
-  export interface Data {
-    /**
-     * Assignment creation timestamp.
-     */
-    created_at: string;
-
-    /**
-     * Assignment expiry, or null if permanent.
-     */
-    expires_at: string | null;
-
-    /**
-     * The assigned role ID.
-     */
-    role_id: string;
-
-    /**
-     * The assignment's subject and its prefixed assignment ID.
-     */
-    subject: Data.IamRoleAssignmentMemberSubject | Data.IamRoleAssignmentGroupSubject;
-
-    /**
-     * Tenant the assignment belongs to.
-     */
-    tenant_id: string;
-  }
-
-  export namespace Data {
-    export interface IamRoleAssignmentMemberSubject {
-      /**
-       * The member role assignment ID.
-       */
-      member_role_assignment_id: string;
-
-      /**
-       * The user's tenant membership ID holding the role.
-       */
-      membership_id: string;
-
-      /**
-       * A tenant member holds the role.
-       */
-      type: 'member';
-    }
-
-    export interface IamRoleAssignmentGroupSubject {
-      /**
-       * The group holding the role.
-       */
-      group_id: string;
-
-      /**
-       * The group role assignment ID.
-       */
-      group_role_assignment_id: string;
-
-      /**
-       * A group holds the role.
-       */
-      type: 'group';
-    }
-  }
-}
-
-/**
- * Result of an IAM tenant mutation.
- */
-export interface TenantUnarchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  convex_source_data: TenantUnarchiveResponse.ConvexSourceData;
-
-  /**
-   * Tenant changed by the operation.
-   */
-  tenant_id: string;
-}
-
-export namespace TenantUnarchiveResponse {
-  /**
-   * Synchronization metadata for Convex IAM projections.
-   */
-  export interface ConvexSourceData {
-    /**
-     * Whether persisted IAM source data changed.
-     */
-    changed: boolean;
-
-    /**
-     * Convex deployment IDs whose IAM mirrors will receive the updated state.
-     */
-    projection_ids: Array<string>;
-
-    /**
-     * The deployment's IAM source version after the operation. Before relying on
-     * Convex IAM mirror reads, wait for the projection to reach at least this source
-     * version.
-     */
-    source_version: number;
-  }
-}
+export type IamTenantsCursorIDPage = CursorIDPage<TenantListResponse>;
 
 export interface TenantCreateParams {
   /**
-   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
-   * backend. Used for identity and audit only.
+   * The signed-in end user's ID to attribute the write to that user, or null to attribute it to the service API key.
+   * @minLength 1
    */
   actor_user_id: string | null;
-
   /**
    * Human-readable tenant name.
+   * @minLength 1
+   * @maxLength 255
    */
   name: string;
-
   /**
    * Initial tenant access mode. Defaults to `open`.
    */
   access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
   /**
    * Identifies exactly one IAM role by ID or stable key.
    */
   default_role?: TenantCreateParams.IamRoleIDReference | TenantCreateParams.IamRoleKeyReference;
-
   /**
-   * The end user's ID (their OIDC subject) to grant the initial owner role. Required
-   * when using service authority (actor_user_id null); with user authority the
-   * signed-in user becomes the owner.
+   * The end user's ID (their OIDC subject) to grant the initial owner role. Required when using service authority (actor_user_id null); with user authority the signed-in user becomes the owner.
+   * @minLength 1
    */
   owner_user_id?: string;
 }
@@ -878,6 +426,7 @@ export namespace TenantCreateParams {
   export interface IamRoleIDReference {
     /**
      * Existing IAM role ID.
+     * @minLength 1
      */
     id: string;
   }
@@ -885,38 +434,126 @@ export namespace TenantCreateParams {
   export interface IamRoleKeyReference {
     /**
      * Stable role key from the deployment's IAM catalog.
+     * @minLength 1
+     * @maxLength 255
      */
     key: string;
   }
 }
 
+export interface TenantCreateResponse {
+  /**
+   * Created tenant ID.
+   * @minLength 1
+   */
+  tenant_id: string;
+  /**
+   * The tenant default role ID.
+   * @minLength 1
+   */
+  default_role_id: string | null;
+  /**
+   * The owner's tenant membership ID, created with the tenant.
+   * @minLength 1
+   */
+  membership_id: string | null;
+  /**
+   * Whether this result replays a previous request with the same idempotency key.
+   */
+  idempotent: boolean;
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantCreateResponse.ConvexSourceData;
+}
+
+export namespace TenantCreateResponse {
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+    /**
+     * The deployment's IAM source version after the operation. Before relying on Convex IAM mirror reads, wait for the projection to reach at least this source version.
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+    source_version: number;
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+  }
+}
+
+export interface TenantGetResponse {
+  /**
+   * Tenant ID.
+   * @minLength 1
+   */
+  tenant_id: string;
+  /**
+   * Human-readable tenant name.
+   */
+  name: string;
+  /**
+   * Whether this is the deployment's primary tenant.
+   */
+  is_primary_tenant: boolean;
+  /**
+   * Tenant lifecycle status.
+   */
+  status: 'active' | 'archived';
+  /**
+   * The tenant's access mode (how it admits new members): open, allowlist-only, invitation-only, or approval-required.
+   */
+  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+  /**
+   * The tenant's default role ID, if set.
+   * @minLength 1
+   */
+  default_role_id: string | null;
+  /**
+   * Tenant creation timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  created_at: string;
+  /**
+   * Tenant last-updated timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  updated_at: string;
+}
+
 export interface TenantUpdateParams {
   /**
-   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
-   * backend. Used for identity and audit only.
+   * The signed-in end user's ID to attribute the write to that user, or null to attribute it to the service API key.
+   * @minLength 1
    */
   actor_user_id: string | null;
-
   /**
-   * New tenant access mode.
+   * New tenant name.
+   * @minLength 1
+   * @maxLength 255
    */
-  access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-
+  name?: string;
   /**
    * Identifies exactly one IAM role by ID or stable key.
    */
   default_role?: TenantUpdateParams.IamRoleIDReference | TenantUpdateParams.IamRoleKeyReference;
-
   /**
-   * New tenant name.
+   * New tenant access mode.
    */
-  name?: string;
+  access_mode?: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
 }
 
 export namespace TenantUpdateParams {
   export interface IamRoleIDReference {
     /**
      * Existing IAM role ID.
+     * @minLength 1
      */
     id: string;
   }
@@ -924,94 +561,254 @@ export namespace TenantUpdateParams {
   export interface IamRoleKeyReference {
     /**
      * Stable role key from the deployment's IAM catalog.
+     * @minLength 1
+     * @maxLength 255
      */
     key: string;
   }
 }
 
-export interface TenantListParams {
+export interface TenantUpdateResponse {
   /**
-   * Maximum number of records to return. Defaults to 50.
+   * Tenant changed by the operation.
+   * @minLength 1
    */
-  limit?: number;
+  tenant_id: string;
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantUpdateResponse.ConvexSourceData;
+}
 
-  /**
-   * Cursor for forward pagination. Pass the ID of the last item from the previous
-   * page.
-   */
-  starting_after?: string;
-
-  /**
-   * Filter by tenant status.
-   */
-  status?: 'active' | 'archived';
+export namespace TenantUpdateResponse {
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+    /**
+     * The deployment's IAM source version after the operation. Before relying on Convex IAM mirror reads, wait for the projection to reach at least this source version.
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+    source_version: number;
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+  }
 }
 
 export interface TenantArchiveParams {
   /**
-   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
-   * backend. Used for identity and audit only.
+   * The signed-in end user's ID to attribute the write to that user, or null to attribute it to the service API key.
+   * @minLength 1
    */
   actor_user_id: string | null;
 }
 
-export interface TenantCreateInvitationParams {
+export interface TenantArchiveResponse {
   /**
-   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
-   * backend. Used for identity and audit only.
+   * Tenant changed by the operation.
+   * @minLength 1
+   */
+  tenant_id: string;
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantArchiveResponse.ConvexSourceData;
+}
+
+export namespace TenantArchiveResponse {
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+    /**
+     * The deployment's IAM source version after the operation. Before relying on Convex IAM mirror reads, wait for the projection to reach at least this source version.
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+    source_version: number;
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+  }
+}
+
+export interface TenantUnarchiveParams {
+  /**
+   * The signed-in end user's ID to attribute the write to that user, or null to attribute it to the service API key.
+   * @minLength 1
    */
   actor_user_id: string | null;
+}
 
+export interface TenantUnarchiveResponse {
+  /**
+   * Tenant changed by the operation.
+   * @minLength 1
+   */
+  tenant_id: string;
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantUnarchiveResponse.ConvexSourceData;
+}
+
+export namespace TenantUnarchiveResponse {
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+    /**
+     * The deployment's IAM source version after the operation. Before relying on Convex IAM mirror reads, wait for the projection to reach at least this source version.
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+    source_version: number;
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+  }
+}
+
+export interface TenantEvaluateAccessParams {
+  /**
+   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app backend.
+   * @minLength 1
+   */
+  actor_user_id: string;
+}
+
+export interface TenantEvaluateAccessResponse {
+  /**
+   * Tenant evaluated for entry.
+   * @minLength 1
+   */
+  tenant_id: string;
+  /**
+   * The end user's ID (their OIDC subject) that was evaluated.
+   * @minLength 1
+   */
+  user_id: string;
+  /**
+   * Whether the user has an active membership in the tenant now.
+   */
+  allowed: boolean;
+  /**
+   * Entry outcome: the user's membership status after evaluation, or `denied` when the tenant's access mode or access rules reject them and no membership exists.
+   */
+  status: 'active' | 'pending_approval' | 'denied';
+  /**
+   * Why entry was denied, or null when the user has a membership.
+   */
+  reason: 'deny_rule' | 'not_allowlisted' | 'invite_only' | 'tenant_archived' | null;
+  /**
+   * The user's tenant membership ID, or null when entry was denied.
+   * @minLength 1
+   */
+  membership_id: string | null;
+  /**
+   * Synchronization metadata for Convex IAM projections.
+   */
+  convex_source_data: TenantEvaluateAccessResponse.ConvexSourceData;
+}
+
+export namespace TenantEvaluateAccessResponse {
+  export interface ConvexSourceData {
+    /**
+     * Whether persisted IAM source data changed.
+     */
+    changed: boolean;
+    /**
+     * The deployment's IAM source version after the operation. Before relying on Convex IAM mirror reads, wait for the projection to reach at least this source version.
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+    source_version: number;
+    /**
+     * Convex deployment IDs whose IAM mirrors will receive the updated state.
+     */
+    projection_ids: Array<string>;
+  }
+}
+
+export interface TenantCreateInvitationParams {
+  /**
+   * The signed-in end user's ID to attribute the write to that user, or null to attribute it to the service API key.
+   * @minLength 1
+   */
+  actor_user_id: string | null;
+  /**
+   * Tenant-wide roles conferred when the invitation is accepted. Omit to confer the tenant's default role instead.
+   * @maxItems 20
+   */
+  roles?: Array<
+    TenantCreateInvitationParams.IamRoleIDReference | TenantCreateInvitationParams.IamRoleKeyReference
+  >;
   /**
    * Optional signup constraint. Omit for an open link anyone can accept.
    */
   constraint?:
     | TenantCreateInvitationParams.IamInvitationEmailConstraint
     | TenantCreateInvitationParams.IamInvitationDomainConstraint;
-
   /**
-   * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation to each recipient. Omit delivery entirely for a manual link you share
-   * yourself.
-   */
-  delivery?: TenantCreateInvitationParams.Delivery;
-
-  /**
-   * Invitation expiry timestamp. Omit for the default of 30 days from creation; pass
-   * null for a link that never expires.
-   */
-  expires_at?: string | null;
-
-  /**
-   * Maximum number of users who may accept. Omit for the default: 1 for an email
-   * constraint, otherwise unlimited.
+   * Maximum number of users who may accept. Omit for the default: 1 for an email constraint, otherwise unlimited.
+   * @minimum 1
+   * @maximum 9007199254740991
    */
   max_uses?: number;
-
   /**
-   * App-relative path the user is sent to after accepting (e.g. /welcome). Must
-   * start with a single '/'; composed with the app's own origin.
+   * Optional email delivery, independent of the signup constraint. Sends the invitation to each recipient. Omit delivery entirely for a manual link you share yourself.
+   */
+  delivery?: TenantCreateInvitationParams.Delivery;
+  /**
+   * App-relative path the user is sent to after accepting (e.g. /welcome). Must start with a single '/'; composed with the app's own origin.
+   * @minLength 1
+   * @maxLength 2048
    */
   redirect_path?: string;
-
   /**
-   * Tenant-wide roles conferred when the invitation is accepted. Omit to confer the
-   * tenant's default role instead.
+   * Invitation expiry timestamp. Omit for the default of 30 days from creation; pass null for a link that never expires.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
    */
-  roles?: Array<
-    TenantCreateInvitationParams.IamRoleIDReference | TenantCreateInvitationParams.IamRoleKeyReference
-  >;
+  expires_at?: string | null;
 }
 
 export namespace TenantCreateInvitationParams {
+  export interface IamRoleIDReference {
+    /**
+     * Existing IAM role ID.
+     * @minLength 1
+     */
+    id: string;
+  }
+
+  export interface IamRoleKeyReference {
+    /**
+     * Stable role key from the deployment's IAM catalog.
+     * @minLength 1
+     * @maxLength 255
+     */
+    key: string;
+  }
+
   export interface IamInvitationEmailConstraint {
     /**
      * Only this exact email address may accept.
      */
     type: 'email';
-
     /**
      * The invited email address.
+     * @format email
+     * @maxLength 255
+     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
      */
     value: string;
   }
@@ -1021,135 +818,324 @@ export namespace TenantCreateInvitationParams {
      * Any address in this email domain may accept.
      */
     type: 'domain';
-
     /**
      * The allowed email domain, e.g. acme.com.
+     * @minLength 1
+     * @maxLength 255
      */
     value: string;
   }
 
-  /**
-   * Optional email delivery, independent of the signup constraint. Sends the
-   * invitation to each recipient. Omit delivery entirely for a manual link you share
-   * yourself.
-   */
   export interface Delivery {
     /**
      * Recipients the invitation email is sent to.
+     * @minItems 1
+     * @maxItems 50
      */
     to_emails: Array<string>;
-
     /**
-     * Sender address the invitation is emailed from. Null or omitted uses the verified
-     * sender configured in Auth branding.
+     * Sender address the invitation is emailed from. Null or omitted uses the verified sender configured in Auth branding.
+     * @format email
+     * @maxLength 255
+     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
      */
     from_email?: string | null;
   }
+}
 
-  export interface IamRoleIDReference {
+export interface TenantCreateInvitationResponse {
+  /**
+   * Created invitation ID.
+   * @minLength 1
+   */
+  invitation_id: string;
+  /**
+   * The full invitation link to share: the app's auth domain + /invite/{token}. Send this to the invitee.
+   */
+  link: string;
+  /**
+   * One-time secret invitation token embedded in the link. Stored only as a hash.
+   */
+  token: string;
+  /**
+   * Signup constraint, or null for an open link.
+   */
+  constraint:
+    | TenantCreateInvitationResponse.IamInvitationEmailConstraint
+    | TenantCreateInvitationResponse.IamInvitationDomainConstraint
+    | null;
+  /**
+   * Effective signup cap, or null for unlimited.
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  max_uses: number | null;
+  /**
+   * Number of users who have accepted so far (0 at creation).
+   * @minimum -9007199254740991
+   * @maximum 9007199254740991
+   */
+  use_count: number;
+  /**
+   * Email delivery config, or null for a manual link.
+   */
+  delivery: TenantCreateInvitationResponse.Delivery | null;
+  /**
+   * The app-relative path the user is sent to after accepting, or null.
+   */
+  redirect_path: string | null;
+  /**
+   * Invitation expiry timestamp, or null if it never expires.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  expires_at: string | null;
+}
+
+export namespace TenantCreateInvitationResponse {
+  export interface IamInvitationEmailConstraint {
     /**
-     * Existing IAM role ID.
+     * Only this exact email address may accept.
      */
-    id: string;
+    type: 'email';
+    /**
+     * The invited email address.
+     * @format email
+     * @maxLength 255
+     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     */
+    value: string;
   }
 
-  export interface IamRoleKeyReference {
+  export interface IamInvitationDomainConstraint {
     /**
-     * Stable role key from the deployment's IAM catalog.
+     * Any address in this email domain may accept.
      */
-    key: string;
+    type: 'domain';
+    /**
+     * The allowed email domain, e.g. acme.com.
+     * @minLength 1
+     * @maxLength 255
+     */
+    value: string;
+  }
+
+  export interface Delivery {
+    /**
+     * Recipients the invitation email is sent to.
+     * @minItems 1
+     * @maxItems 50
+     */
+    to_emails: Array<string>;
+    /**
+     * Sender address the invitation is emailed from. Null or omitted uses the verified sender configured in Auth branding.
+     * @format email
+     * @maxLength 255
+     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     */
+    from_email?: string | null;
   }
 }
 
-export interface TenantEvaluateAccessParams {
-  /**
-   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
-   * backend.
-   */
-  actor_user_id: string;
-}
-
-export interface TenantListResourceRoleAssignmentsParams {
-  /**
-   * Filter to one exact resource's external ID. Pair with a resource type to find
-   * who has a role on that resource.
-   */
-  external_id?: string;
-
-  /**
-   * Return only this group's assignments.
-   */
-  group_id?: string;
-
-  /**
-   * Maximum number of records to return. Defaults to 50.
-   */
-  limit?: number;
-
+export interface TenantListRoleAssignmentsParams extends CursorIDPageParams {
   /**
    * Return only this tenant membership's assignments.
+   * @minLength 1
    */
   membership_id?: string;
+  /**
+   * Return only this group's assignments.
+   * @minLength 1
+   */
+  group_id?: string;
+  /**
+   * Return only assignments of this role.
+   * @minLength 1
+   */
+  role_id?: string;
+}
 
+export interface TenantListRoleAssignmentsResponse {
+  /**
+   * Tenant the assignment belongs to.
+   * @minLength 1
+   */
+  tenant_id: string;
+  /**
+   * The assignment's subject and its prefixed assignment ID.
+   */
+  subject:
+    | TenantListRoleAssignmentsResponse.IamRoleAssignmentMemberSubject
+    | TenantListRoleAssignmentsResponse.IamRoleAssignmentGroupSubject;
+  /**
+   * The assigned role ID.
+   * @minLength 1
+   */
+  role_id: string;
+  /**
+   * Assignment expiry, or null if permanent.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  expires_at: string | null;
+  /**
+   * Assignment creation timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  created_at: string;
+}
+
+export namespace TenantListRoleAssignmentsResponse {
+  export interface IamRoleAssignmentMemberSubject {
+    /**
+     * A tenant member holds the role.
+     */
+    type: 'member';
+    /**
+     * The user's tenant membership ID holding the role.
+     * @minLength 1
+     */
+    membership_id: string;
+    /**
+     * The member role assignment ID.
+     * @minLength 1
+     */
+    member_role_assignment_id: string;
+  }
+
+  export interface IamRoleAssignmentGroupSubject {
+    /**
+     * A group holds the role.
+     */
+    type: 'group';
+    /**
+     * The group holding the role.
+     * @minLength 1
+     */
+    group_id: string;
+    /**
+     * The group role assignment ID.
+     * @minLength 1
+     */
+    group_role_assignment_id: string;
+  }
+}
+
+export type IamRoleAssignmentsCursorIDPage = CursorIDPage<TenantListRoleAssignmentsResponse>;
+
+export interface TenantListResourceRoleAssignmentsParams extends CursorIDPageParams {
   /**
    * Filter to one resource type by ID. Not combinable with resource_type_key.
+   * @minLength 1
    */
   resource_type_id?: string;
-
   /**
-   * Filter to one resource type by its catalog key (e.g. `app.project`). Not
-   * combinable with resource_type_id.
+   * Filter to one resource type by its catalog key (e.g. `app.project`). Not combinable with resource_type_id.
+   * @minLength 1
+   * @maxLength 255
    */
   resource_type_key?: string;
-
   /**
-   * Return only assignments of this role.
+   * Filter to one exact resource's external ID. Pair with a resource type to find who has a role on that resource.
+   * @minLength 1
+   * @maxLength 255
    */
-  role_id?: string;
-
-  /**
-   * Cursor for forward pagination. Pass the ID of the last item from the previous
-   * page.
-   */
-  starting_after?: string;
-}
-
-export interface TenantListRoleAssignmentsParams {
-  /**
-   * Return only this group's assignments.
-   */
-  group_id?: string;
-
-  /**
-   * Maximum number of records to return. Defaults to 50.
-   */
-  limit?: number;
-
+  external_id?: string;
   /**
    * Return only this tenant membership's assignments.
+   * @minLength 1
    */
   membership_id?: string;
-
+  /**
+   * Return only this group's assignments.
+   * @minLength 1
+   */
+  group_id?: string;
   /**
    * Return only assignments of this role.
+   * @minLength 1
    */
   role_id?: string;
-
-  /**
-   * Cursor for forward pagination. Pass the ID of the last item from the previous
-   * page.
-   */
-  starting_after?: string;
 }
 
-export interface TenantUnarchiveParams {
+export interface TenantListResourceRoleAssignmentsResponse {
   /**
-   * The signed-in end user's ID (their OIDC subject), asserted by the trusted app
-   * backend. Used for identity and audit only.
+   * Tenant the assignment belongs to.
+   * @minLength 1
    */
-  actor_user_id: string | null;
+  tenant_id: string;
+  /**
+   * The assignment's subject and its prefixed assignment ID.
+   */
+  subject:
+    | TenantListResourceRoleAssignmentsResponse.IamResourceRoleAssignmentMemberSubject
+    | TenantListResourceRoleAssignmentsResponse.IamResourceRoleAssignmentGroupSubject;
+  /**
+   * The assigned role ID.
+   * @minLength 1
+   */
+  role_id: string;
+  /**
+   * The resource type the assignment targets.
+   * @minLength 1
+   */
+  resource_type_id: string;
+  /**
+   * The exact resource's app-defined external ID.
+   */
+  external_id: string;
+  /**
+   * Assignment expiry, or null if permanent.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  expires_at: string | null;
+  /**
+   * Assignment creation timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  created_at: string;
 }
 
+export namespace TenantListResourceRoleAssignmentsResponse {
+  export interface IamResourceRoleAssignmentMemberSubject {
+    /**
+     * A tenant member holds the role on the resource.
+     */
+    type: 'member';
+    /**
+     * The user's tenant membership ID holding the role.
+     * @minLength 1
+     */
+    membership_id: string;
+    /**
+     * The member resource role assignment ID.
+     * @minLength 1
+     */
+    member_resource_role_assignment_id: string;
+  }
+
+  export interface IamResourceRoleAssignmentGroupSubject {
+    /**
+     * A group holds the role on the resource.
+     */
+    type: 'group';
+    /**
+     * The group holding the role.
+     * @minLength 1
+     */
+    group_id: string;
+    /**
+     * The group resource role assignment ID.
+     * @minLength 1
+     */
+    group_resource_role_assignment_id: string;
+  }
+}
+
+export type IamResourceRoleAssignmentsCursorIDPage = CursorIDPage<TenantListResourceRoleAssignmentsResponse>;
 Tenants.Members = Members;
 Tenants.Groups = Groups;
 Tenants.Roles = Roles;
@@ -1159,114 +1145,126 @@ Tenants.Invitations = Invitations;
 
 export declare namespace Tenants {
   export {
-    type TenantCreateResponse as TenantCreateResponse,
-    type TenantUpdateResponse as TenantUpdateResponse,
     type TenantListResponse as TenantListResponse,
-    type TenantArchiveResponse as TenantArchiveResponse,
-    type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
-    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantCreateResponse as TenantCreateResponse,
     type TenantGetResponse as TenantGetResponse,
-    type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
-    type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
+    type TenantUpdateResponse as TenantUpdateResponse,
+    type TenantArchiveResponse as TenantArchiveResponse,
     type TenantUnarchiveResponse as TenantUnarchiveResponse,
+    type TenantEvaluateAccessResponse as TenantEvaluateAccessResponse,
+    type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
+    type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
+    type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
+    type IamTenantsCursorIDPage as IamTenantsCursorIDPage,
+    type IamRoleAssignmentsCursorIDPage as IamRoleAssignmentsCursorIDPage,
+    type IamResourceRoleAssignmentsCursorIDPage as IamResourceRoleAssignmentsCursorIDPage,
+    type TenantListParams as TenantListParams,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
-    type TenantListParams as TenantListParams,
     type TenantArchiveParams as TenantArchiveParams,
-    type TenantCreateInvitationParams as TenantCreateInvitationParams,
-    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
-    type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
-    type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
     type TenantUnarchiveParams as TenantUnarchiveParams,
+    type TenantEvaluateAccessParams as TenantEvaluateAccessParams,
+    type TenantCreateInvitationParams as TenantCreateInvitationParams,
+    type TenantListRoleAssignmentsParams as TenantListRoleAssignmentsParams,
+    type TenantListResourceRoleAssignmentsParams as TenantListResourceRoleAssignmentsParams,
   };
 
   export {
     Members as Members,
     type MemberCreateResponse as MemberCreateResponse,
     type MemberListResponse as MemberListResponse,
-    type MemberAssignResourceRoleResponse as MemberAssignResourceRoleResponse,
-    type MemberAssignRoleResponse as MemberAssignRoleResponse,
     type MemberGetResponse as MemberGetResponse,
-    type MemberListResourceRoleAssignmentsResponse as MemberListResourceRoleAssignmentsResponse,
-    type MemberListRoleAssignmentsResponse as MemberListRoleAssignmentsResponse,
-    type MemberRemoveResponse as MemberRemoveResponse,
-    type MemberReplaceResourceRolesResponse as MemberReplaceResourceRolesResponse,
-    type MemberReplaceRolesResponse as MemberReplaceRolesResponse,
-    type MemberUnassignResourceRoleResponse as MemberUnassignResourceRoleResponse,
-    type MemberUnassignRoleResponse as MemberUnassignRoleResponse,
     type MemberUpdateStatusResponse as MemberUpdateStatusResponse,
+    type MemberRemoveResponse as MemberRemoveResponse,
+    type MemberAssignRoleResponse as MemberAssignRoleResponse,
+    type MemberReplaceRolesResponse as MemberReplaceRolesResponse,
+    type MemberUnassignRoleResponse as MemberUnassignRoleResponse,
+    type MemberListRoleAssignmentsResponse as MemberListRoleAssignmentsResponse,
+    type MemberAssignResourceRoleResponse as MemberAssignResourceRoleResponse,
+    type MemberReplaceResourceRolesResponse as MemberReplaceResourceRolesResponse,
+    type MemberUnassignResourceRoleResponse as MemberUnassignResourceRoleResponse,
+    type MemberListResourceRoleAssignmentsResponse as MemberListResourceRoleAssignmentsResponse,
+    type IamMembersCursorIDPage as IamMembersCursorIDPage,
+    type IamMemberRoleAssignmentsCursorIDPage as IamMemberRoleAssignmentsCursorIDPage,
+    type IamMemberResourceRoleAssignmentsCursorIDPage as IamMemberResourceRoleAssignmentsCursorIDPage,
     type MemberCreateParams as MemberCreateParams,
     type MemberListParams as MemberListParams,
-    type MemberAssignResourceRoleParams as MemberAssignResourceRoleParams,
-    type MemberAssignRoleParams as MemberAssignRoleParams,
     type MemberGetParams as MemberGetParams,
-    type MemberListResourceRoleAssignmentsParams as MemberListResourceRoleAssignmentsParams,
-    type MemberListRoleAssignmentsParams as MemberListRoleAssignmentsParams,
-    type MemberRemoveParams as MemberRemoveParams,
-    type MemberReplaceResourceRolesParams as MemberReplaceResourceRolesParams,
-    type MemberReplaceRolesParams as MemberReplaceRolesParams,
-    type MemberUnassignResourceRoleParams as MemberUnassignResourceRoleParams,
-    type MemberUnassignRoleParams as MemberUnassignRoleParams,
     type MemberUpdateStatusParams as MemberUpdateStatusParams,
+    type MemberRemoveParams as MemberRemoveParams,
+    type MemberAssignRoleParams as MemberAssignRoleParams,
+    type MemberReplaceRolesParams as MemberReplaceRolesParams,
+    type MemberUnassignRoleParams as MemberUnassignRoleParams,
+    type MemberListRoleAssignmentsParams as MemberListRoleAssignmentsParams,
+    type MemberAssignResourceRoleParams as MemberAssignResourceRoleParams,
+    type MemberReplaceResourceRolesParams as MemberReplaceResourceRolesParams,
+    type MemberUnassignResourceRoleParams as MemberUnassignResourceRoleParams,
+    type MemberListResourceRoleAssignmentsParams as MemberListResourceRoleAssignmentsParams,
   };
 
   export {
     Groups as Groups,
     type GroupCreateResponse as GroupCreateResponse,
-    type GroupUpdateResponse as GroupUpdateResponse,
     type GroupListResponse as GroupListResponse,
+    type GroupGetResponse as GroupGetResponse,
+    type GroupUpdateResponse as GroupUpdateResponse,
     type GroupDeleteResponse as GroupDeleteResponse,
     type GroupArchiveResponse as GroupArchiveResponse,
-    type GroupAssignResourceRoleResponse as GroupAssignResourceRoleResponse,
-    type GroupAssignRoleResponse as GroupAssignRoleResponse,
-    type GroupGetResponse as GroupGetResponse,
-    type GroupListResourceRoleAssignmentsResponse as GroupListResourceRoleAssignmentsResponse,
-    type GroupListRoleAssignmentsResponse as GroupListRoleAssignmentsResponse,
     type GroupUnarchiveResponse as GroupUnarchiveResponse,
-    type GroupUnassignResourceRoleResponse as GroupUnassignResourceRoleResponse,
+    type GroupAssignRoleResponse as GroupAssignRoleResponse,
     type GroupUnassignRoleResponse as GroupUnassignRoleResponse,
+    type GroupListRoleAssignmentsResponse as GroupListRoleAssignmentsResponse,
+    type GroupAssignResourceRoleResponse as GroupAssignResourceRoleResponse,
+    type GroupUnassignResourceRoleResponse as GroupUnassignResourceRoleResponse,
+    type GroupListResourceRoleAssignmentsResponse as GroupListResourceRoleAssignmentsResponse,
+    type IamGroupsCursorIDPage as IamGroupsCursorIDPage,
+    type IamGroupRoleAssignmentsCursorIDPage as IamGroupRoleAssignmentsCursorIDPage,
+    type IamGroupResourceRoleAssignmentsCursorIDPage as IamGroupResourceRoleAssignmentsCursorIDPage,
     type GroupCreateParams as GroupCreateParams,
-    type GroupUpdateParams as GroupUpdateParams,
     type GroupListParams as GroupListParams,
+    type GroupGetParams as GroupGetParams,
+    type GroupUpdateParams as GroupUpdateParams,
     type GroupDeleteParams as GroupDeleteParams,
     type GroupArchiveParams as GroupArchiveParams,
-    type GroupAssignResourceRoleParams as GroupAssignResourceRoleParams,
-    type GroupAssignRoleParams as GroupAssignRoleParams,
-    type GroupGetParams as GroupGetParams,
-    type GroupListResourceRoleAssignmentsParams as GroupListResourceRoleAssignmentsParams,
-    type GroupListRoleAssignmentsParams as GroupListRoleAssignmentsParams,
     type GroupUnarchiveParams as GroupUnarchiveParams,
-    type GroupUnassignResourceRoleParams as GroupUnassignResourceRoleParams,
+    type GroupAssignRoleParams as GroupAssignRoleParams,
     type GroupUnassignRoleParams as GroupUnassignRoleParams,
+    type GroupListRoleAssignmentsParams as GroupListRoleAssignmentsParams,
+    type GroupAssignResourceRoleParams as GroupAssignResourceRoleParams,
+    type GroupUnassignResourceRoleParams as GroupUnassignResourceRoleParams,
+    type GroupListResourceRoleAssignmentsParams as GroupListResourceRoleAssignmentsParams,
   };
 
   export {
     Roles as Roles,
     type RoleCreateResponse as RoleCreateResponse,
-    type RoleUpdateResponse as RoleUpdateResponse,
     type RoleListResponse as RoleListResponse,
-    type RoleDeleteResponse as RoleDeleteResponse,
     type RoleGetResponse as RoleGetResponse,
+    type RoleUpdateResponse as RoleUpdateResponse,
+    type RoleDeleteResponse as RoleDeleteResponse,
+    type IamRolesCursorIDPage as IamRolesCursorIDPage,
     type RoleCreateParams as RoleCreateParams,
-    type RoleUpdateParams as RoleUpdateParams,
     type RoleListParams as RoleListParams,
-    type RoleDeleteParams as RoleDeleteParams,
     type RoleGetParams as RoleGetParams,
+    type RoleUpdateParams as RoleUpdateParams,
+    type RoleDeleteParams as RoleDeleteParams,
   };
 
   export {
     AccessRules as AccessRules,
-    type AccessRuleCreateResponse as AccessRuleCreateResponse,
     type AccessRuleListResponse as AccessRuleListResponse,
+    type AccessRuleCreateResponse as AccessRuleCreateResponse,
     type AccessRuleArchiveResponse as AccessRuleArchiveResponse,
-    type AccessRuleCreateParams as AccessRuleCreateParams,
+    type IamAccessRulesCursorIDPage as IamAccessRulesCursorIDPage,
     type AccessRuleListParams as AccessRuleListParams,
+    type AccessRuleCreateParams as AccessRuleCreateParams,
     type AccessRuleArchiveParams as AccessRuleArchiveParams,
   };
 
   export {
     AuditEvents as AuditEvents,
     type AuditEventListResponse as AuditEventListResponse,
+    type IamAuditEventsCursorIDPage as IamAuditEventsCursorIDPage,
     type AuditEventListParams as AuditEventListParams,
   };
 
@@ -1274,6 +1272,7 @@ export declare namespace Tenants {
     Invitations as Invitations,
     type InvitationListResponse as InvitationListResponse,
     type InvitationRevokeResponse as InvitationRevokeResponse,
+    type IamInvitationsCursorIDPage as IamInvitationsCursorIDPage,
     type InvitationListParams as InvitationListParams,
     type InvitationRevokeParams as InvitationRevokeParams,
   };

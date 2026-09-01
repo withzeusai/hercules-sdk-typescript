@@ -1,116 +1,99 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-import { APIResource } from '../../../core/resource';
-import { APIPromise } from '../../../core/api-promise';
-import { RequestOptions } from '../../../internal/request-options';
-import { path } from '../../../internal/utils/path';
+import { APIResource } from '../../../resource';
+import { APIPromise } from '../../../api-promise';
+import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../core/pagination';
+import type { RequestOptions } from '../../../internal/request-options';
+import { path as __scalarPath } from '../../../internal/utils/path';
 
 export class AuditEvents extends APIResource {
   /**
    * Lists IAM audit events for a tenant, newest first.
+   *
+   * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * @param {AuditEventListParams} [query] - The parameters to send with the request.
+   * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
+   * @returns {PagePromise<IamAuditEventsCursorIDPage, AuditEventListResponse>} The tenant IAM audit event page
+   *
+   * @example
+   * ```ts
+   * const page = await client.iam.tenants.auditEvents.list('tenantId');
+   * ```
    */
   list(
     tenantID: string,
     query: AuditEventListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AuditEventListResponse> {
-    return this._client.get(path`/v1/iam/tenants/${tenantID}/audit-events`, { query, ...options });
+  ): PagePromise<IamAuditEventsCursorIDPage, AuditEventListResponse> {
+    return this._client.getAPIList(
+      __scalarPath`/v1/iam/tenants/${tenantID}/audit-events`,
+      CursorIDPage<AuditEventListResponse>,
+      { query, ...options },
+    );
   }
 }
 
-/**
- * Paginated tenant IAM audit events.
- */
-export interface AuditEventListResponse {
-  /**
-   * Audit event page.
-   */
-  data: Array<AuditEventListResponse.Data>;
-
-  /**
-   * Whether more records are available after this page.
-   */
-  has_more: boolean;
-}
-
-export namespace AuditEventListResponse {
-  /**
-   * One tenant IAM audit event.
-   */
-  export interface Data {
-    /**
-     * Stable audit action key.
-     */
-    action: string;
-
-    /**
-     * The actor that produced the event.
-     */
-    actor_type: 'system' | 'platform_user' | 'app_user' | 'agent' | 'service';
-
-    /**
-     * Audit event ID.
-     */
-    audit_event_id: string;
-
-    /**
-     * Audit event creation timestamp.
-     */
-    created_at: string;
-
-    /**
-     * Additional structured audit metadata.
-     */
-    metadata: { [key: string]: unknown } | null;
-
-    /**
-     * Audit operation outcome.
-     */
-    outcome: 'success' | 'denied' | 'failure';
-
-    /**
-     * Stable reason code when recorded.
-     */
-    reason_code: string | null;
-
-    /**
-     * Target ID.
-     */
-    target_id: string;
-
-    /**
-     * Target type.
-     */
-    target_type: string;
-
-    /**
-     * Hercules IAM identifier.
-     */
-    tenant_id: string | null;
-  }
-}
-
-export interface AuditEventListParams {
+export interface AuditEventListParams extends CursorIDPageParams {
   /**
    * Return events strictly before this timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
    */
   before?: string;
-
-  /**
-   * Maximum number of records to return. Defaults to 50.
-   */
-  limit?: number;
-
-  /**
-   * Cursor for forward pagination. Pass the ID of the last item from the previous
-   * page.
-   */
-  starting_after?: string;
 }
 
+export interface AuditEventListResponse {
+  /**
+   * Audit event ID.
+   * @minLength 1
+   */
+  audit_event_id: string;
+  /**
+   * Tenant attribution when present.
+   * @minLength 1
+   */
+  tenant_id: string | null;
+  /**
+   * The actor that produced the event.
+   */
+  actor_type: 'system' | 'platform_user' | 'app_user' | 'agent' | 'service';
+  /**
+   * Stable audit action key.
+   */
+  action: string;
+  /**
+   * Target type.
+   */
+  target_type: string;
+  /**
+   * Target ID.
+   */
+  target_id: string;
+  /**
+   * Audit operation outcome.
+   */
+  outcome: 'success' | 'denied' | 'failure';
+  /**
+   * Stable reason code when recorded.
+   */
+  reason_code: string | null;
+  /**
+   * Additional structured audit metadata.
+   */
+  metadata: Record<string, unknown> | null;
+  /**
+   * Audit event creation timestamp.
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  created_at: string;
+}
+
+export type IamAuditEventsCursorIDPage = CursorIDPage<AuditEventListResponse>;
 export declare namespace AuditEvents {
   export {
     type AuditEventListResponse as AuditEventListResponse,
+    type IamAuditEventsCursorIDPage as IamAuditEventsCursorIDPage,
     type AuditEventListParams as AuditEventListParams,
   };
 }
