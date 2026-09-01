@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../resource';
 import { APIPromise } from '../../../api-promise';
-import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../core/pagination';
 import type { RequestOptions } from '../../../internal/request-options';
 import { path as __scalarPath } from '../../../internal/utils/path';
 
@@ -35,23 +34,21 @@ export class Roles extends APIResource {
    * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
    * @param {RoleListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamRolesCursorIDPage, RoleListResponse>} The tenant role page
+   * @returns {APIPromise<RoleListResponse>} The tenant role page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.roles.list('tenantId');
+   * const role = await client.iam.tenants.roles.list('tenantId', {
+   *   limit: 50,
+   * });
    * ```
    */
   list(
     tenantID: string,
     query: RoleListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamRolesCursorIDPage, RoleListResponse> {
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenantID}/roles`,
-      CursorIDPage<RoleListResponse>,
-      { query, ...options },
-    );
+  ): APIPromise<RoleListResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}/roles`, { query, ...options });
   }
 
   /**
@@ -186,7 +183,17 @@ export namespace RoleCreateResponse {
   }
 }
 
-export interface RoleListParams extends CursorIDPageParams {
+export interface RoleListParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
   /**
    * Return only the role with this stable key, resolved within the tenant scope.
    * @minLength 1
@@ -197,52 +204,63 @@ export interface RoleListParams extends CursorIDPageParams {
 
 export interface RoleListResponse {
   /**
-   * Role ID.
-   * @minLength 1
+   * Role page.
    */
-  role_id: string;
+  data: Array<RoleListResponse.Data>;
   /**
-   * Owning tenant ID for a tenant-scoped role, or null for a shared or app-scoped role.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  tenant_id: string | null;
-  /**
-   * Stable role key.
-   */
-  key: string;
-  /**
-   * Human-readable role name.
-   */
-  name: string;
-  /**
-   * Role description, if any.
-   */
-  description: string | null;
-  /**
-   * Whether the role is app-scoped.
-   */
-  is_app_scope: boolean;
-  /**
-   * Permissions granted by the role.
-   */
-  permissions: Array<RoleListResponse.Permission>;
+  has_more: boolean;
 }
 
 export namespace RoleListResponse {
-  export interface Permission {
+  export interface Data {
     /**
-     * Permission ID.
+     * Role ID.
      * @minLength 1
      */
-    permission_id: string;
+    role_id: string;
     /**
-     * Stable permission key.
+     * Owning tenant ID for a tenant-scoped role, or null for a shared or app-scoped role.
+     * @minLength 1
+     */
+    tenant_id: string | null;
+    /**
+     * Stable role key.
      */
     key: string;
+    /**
+     * Human-readable role name.
+     */
+    name: string;
+    /**
+     * Role description, if any.
+     */
+    description: string | null;
+    /**
+     * Whether the role is app-scoped.
+     */
+    is_app_scope: boolean;
+    /**
+     * Permissions granted by the role.
+     */
+    permissions: Array<Data.Permission>;
+  }
+
+  export namespace Data {
+    export interface Permission {
+      /**
+       * Permission ID.
+       * @minLength 1
+       */
+      permission_id: string;
+      /**
+       * Stable permission key.
+       */
+      key: string;
+    }
   }
 }
-
-export type IamRolesCursorIDPage = CursorIDPage<RoleListResponse>;
 
 export interface RoleGetParams {
   /**
@@ -420,7 +438,6 @@ export declare namespace Roles {
     type RoleGetResponse as RoleGetResponse,
     type RoleUpdateResponse as RoleUpdateResponse,
     type RoleDeleteResponse as RoleDeleteResponse,
-    type IamRolesCursorIDPage as IamRolesCursorIDPage,
     type RoleCreateParams as RoleCreateParams,
     type RoleListParams as RoleListParams,
     type RoleGetParams as RoleGetParams,

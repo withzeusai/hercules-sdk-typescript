@@ -7,7 +7,6 @@ export { Tenants } from './tenants/tenants';
 export type {
   TenantListParams,
   TenantListResponse,
-  IamTenantsCursorIDPage,
   TenantCreateParams,
   TenantCreateResponse,
   TenantGetResponse,
@@ -23,8 +22,6 @@ export type {
   TenantCreateInvitationResponse,
   TenantListRoleAssignmentsParams,
   TenantListRoleAssignmentsResponse,
-  IamRoleAssignmentsCursorIDPage,
   TenantListResourceRoleAssignmentsParams,
   TenantListResourceRoleAssignmentsResponse,
-  IamResourceRoleAssignmentsCursorIDPage,
 } from './tenants/tenants';

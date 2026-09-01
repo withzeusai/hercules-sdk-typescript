@@ -4,7 +4,6 @@ export { Tenants } from './tenants';
 export type {
   TenantListParams,
   TenantListResponse,
-  IamTenantsCursorIDPage,
   TenantCreateParams,
   TenantCreateResponse,
   TenantGetResponse,
@@ -20,10 +19,8 @@ export type {
   TenantCreateInvitationResponse,
   TenantListRoleAssignmentsParams,
   TenantListRoleAssignmentsResponse,
-  IamRoleAssignmentsCursorIDPage,
   TenantListResourceRoleAssignmentsParams,
   TenantListResourceRoleAssignmentsResponse,
-  IamResourceRoleAssignmentsCursorIDPage,
 } from './tenants';
 export { Members } from './members';
 export type {
@@ -31,7 +28,6 @@ export type {
   MemberCreateResponse,
   MemberListParams,
   MemberListResponse,
-  IamMembersCursorIDPage,
   MemberGetParams,
   MemberGetResponse,
   MemberUpdateStatusParams,
@@ -46,7 +42,6 @@ export type {
   MemberUnassignRoleResponse,
   MemberListRoleAssignmentsParams,
   MemberListRoleAssignmentsResponse,
-  IamMemberRoleAssignmentsCursorIDPage,
   MemberAssignResourceRoleParams,
   MemberAssignResourceRoleResponse,
   MemberReplaceResourceRolesParams,
@@ -55,7 +50,6 @@ export type {
   MemberUnassignResourceRoleResponse,
   MemberListResourceRoleAssignmentsParams,
   MemberListResourceRoleAssignmentsResponse,
-  IamMemberResourceRoleAssignmentsCursorIDPage,
 } from './members';
 export { Groups } from './groups/groups';
 export type {
@@ -63,7 +57,6 @@ export type {
   GroupCreateResponse,
   GroupListParams,
   GroupListResponse,
-  IamGroupsCursorIDPage,
   GroupGetParams,
   GroupGetResponse,
   GroupUpdateParams,
@@ -80,14 +73,12 @@ export type {
   GroupUnassignRoleResponse,
   GroupListRoleAssignmentsParams,
   GroupListRoleAssignmentsResponse,
-  IamGroupRoleAssignmentsCursorIDPage,
   GroupAssignResourceRoleParams,
   GroupAssignResourceRoleResponse,
   GroupUnassignResourceRoleParams,
   GroupUnassignResourceRoleResponse,
   GroupListResourceRoleAssignmentsParams,
   GroupListResourceRoleAssignmentsResponse,
-  IamGroupResourceRoleAssignmentsCursorIDPage,
 } from './groups/groups';
 export { Roles } from './roles';
 export type {
@@ -95,7 +86,6 @@ export type {
   RoleCreateResponse,
   RoleListParams,
   RoleListResponse,
-  IamRolesCursorIDPage,
   RoleGetParams,
   RoleGetResponse,
   RoleUpdateParams,
@@ -107,23 +97,17 @@ export { AccessRules } from './access-rules';
 export type {
   AccessRuleListParams,
   AccessRuleListResponse,
-  IamAccessRulesCursorIDPage,
   AccessRuleCreateParams,
   AccessRuleCreateResponse,
   AccessRuleArchiveParams,
   AccessRuleArchiveResponse,
 } from './access-rules';
 export { AuditEvents } from './audit-events';
-export type {
-  AuditEventListParams,
-  AuditEventListResponse,
-  IamAuditEventsCursorIDPage,
-} from './audit-events';
+export type { AuditEventListParams, AuditEventListResponse } from './audit-events';
 export { Invitations } from './invitations';
 export type {
   InvitationListParams,
   InvitationListResponse,
-  IamInvitationsCursorIDPage,
   InvitationRevokeParams,
   InvitationRevokeResponse,
 } from './invitations';

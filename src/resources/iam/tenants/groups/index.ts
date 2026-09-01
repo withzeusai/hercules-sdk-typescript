@@ -6,7 +6,6 @@ export type {
   GroupCreateResponse,
   GroupListParams,
   GroupListResponse,
-  IamGroupsCursorIDPage,
   GroupGetParams,
   GroupGetResponse,
   GroupUpdateParams,
@@ -23,14 +22,12 @@ export type {
   GroupUnassignRoleResponse,
   GroupListRoleAssignmentsParams,
   GroupListRoleAssignmentsResponse,
-  IamGroupRoleAssignmentsCursorIDPage,
   GroupAssignResourceRoleParams,
   GroupAssignResourceRoleResponse,
   GroupUnassignResourceRoleParams,
   GroupUnassignResourceRoleResponse,
   GroupListResourceRoleAssignmentsParams,
   GroupListResourceRoleAssignmentsResponse,
-  IamGroupResourceRoleAssignmentsCursorIDPage,
 } from './groups';
 export { Members } from './members';
 export type {
@@ -38,7 +35,6 @@ export type {
   MemberAddResponse,
   MemberListParams,
   MemberListResponse,
-  IamGroupMembersCursorIDPage,
   MemberRemoveParams,
   MemberRemoveResponse,
 } from './members';

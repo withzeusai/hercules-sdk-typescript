@@ -103,7 +103,9 @@ const cases: {
     path: '/v1/iam/tenants',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.list();
+      const tenant = await client.iam.tenants.list({
+        limit: 50,
+      });
     },
   },
 
@@ -113,7 +115,9 @@ const cases: {
     path: '/v1/iam/tenants',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.list({
+      const tenant = await client.iam.tenants.list({
+        starting_after: 'startingAfter',
+        limit: 50,
         status: 'active',
       });
     },
@@ -262,7 +266,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/role-assignments',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.listRoleAssignments('tenantId');
+      const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
+        limit: 50,
+      });
     },
   },
 
@@ -272,7 +278,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/role-assignments',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.listRoleAssignments('tenantId', {
+      const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
         membership_id: 'membershipId',
         group_id: 'groupId',
         role_id: 'roleId',
@@ -286,7 +294,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/resource-role-assignments',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.listResourceRoleAssignments('tenantId');
+      const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
+        limit: 50,
+      });
     },
   },
 
@@ -296,7 +306,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/resource-role-assignments',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
+      const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
         resource_type_id: 'resourceTypeId',
         resource_type_key: 'resourceTypeKey',
         external_id: 'externalId',
@@ -343,7 +355,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/members',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.members.list('tenantId');
+      const member = await client.iam.tenants.members.list('tenantId', {
+        limit: 50,
+      });
     },
   },
 
@@ -353,7 +367,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/members',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.members.list('tenantId', {
+      const member = await client.iam.tenants.members.list('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
         status: 'active',
         role_id: 'roleId',
         user_id: 'userId',
@@ -487,9 +503,25 @@ const cases: {
     operation: 'listRoleAssignments',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.members.listRoleAssignments('membershipId', {
+      const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
         tenant_id: 'tenantId',
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'listRoleAssignments',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
+    label: 'all params',
+    run: async () => {
+      const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
+        tenant_id: 'tenantId',
+        starting_after: 'startingAfter',
+        limit: 50,
       });
     },
   },
@@ -583,9 +615,25 @@ const cases: {
     operation: 'listResourceRoleAssignments',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
+      const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
         tenant_id: 'tenantId',
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'listResourceRoleAssignments',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
+    label: 'all params',
+    run: async () => {
+      const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
+        tenant_id: 'tenantId',
+        starting_after: 'startingAfter',
+        limit: 50,
       });
     },
   },
@@ -621,8 +669,24 @@ const cases: {
     operation: 'list',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/groups',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.groups.list('tenantId');
+      const group = await client.iam.tenants.groups.list('tenantId', {
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'list',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/groups',
+    label: 'all params',
+    run: async () => {
+      const group = await client.iam.tenants.groups.list('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
+      });
     },
   },
 
@@ -778,9 +842,25 @@ const cases: {
     operation: 'listRoleAssignments',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.groups.listRoleAssignments('groupId', {
+      const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
         tenant_id: 'tenantId',
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'listRoleAssignments',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments',
+    label: 'all params',
+    run: async () => {
+      const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
+        tenant_id: 'tenantId',
+        starting_after: 'startingAfter',
+        limit: 50,
       });
     },
   },
@@ -857,9 +937,25 @@ const cases: {
     operation: 'listResourceRoleAssignments',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
+      const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
         tenant_id: 'tenantId',
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'listResourceRoleAssignments',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments',
+    label: 'all params',
+    run: async () => {
+      const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
+        tenant_id: 'tenantId',
+        starting_after: 'startingAfter',
+        limit: 50,
       });
     },
   },
@@ -881,9 +977,25 @@ const cases: {
     operation: 'list',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.groups.members.list('groupId', {
+      const member = await client.iam.tenants.groups.members.list('groupId', {
         tenant_id: 'tenantId',
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'list',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members',
+    label: 'all params',
+    run: async () => {
+      const member = await client.iam.tenants.groups.members.list('groupId', {
+        tenant_id: 'tenantId',
+        starting_after: 'startingAfter',
+        limit: 50,
       });
     },
   },
@@ -952,7 +1064,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/roles',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.roles.list('tenantId');
+      const role = await client.iam.tenants.roles.list('tenantId', {
+        limit: 50,
+      });
     },
   },
 
@@ -962,7 +1076,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/roles',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.roles.list('tenantId', {
+      const role = await client.iam.tenants.roles.list('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
         key: 'key',
       });
     },
@@ -1039,7 +1155,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/access-rules',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.accessRules.list('tenantId');
+      const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
+        limit: 50,
+      });
     },
   },
 
@@ -1049,7 +1167,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/access-rules',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.accessRules.list('tenantId', {
+      const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
         effect: 'allow',
         subject_type: 'email',
         include_archived: 'includeArchived',
@@ -1110,7 +1230,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/audit-events',
     label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.auditEvents.list('tenantId');
+      const auditEvent = await client.iam.tenants.auditEvents.list('tenantId', {
+        limit: 50,
+      });
     },
   },
 
@@ -1120,7 +1242,9 @@ const cases: {
     path: '/v1/iam/tenants/{tenant_id}/audit-events',
     label: 'all params',
     run: async () => {
-      const page = await client.iam.tenants.auditEvents.list('tenantId', {
+      const auditEvent = await client.iam.tenants.auditEvents.list('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
         before: '2024-01-01T00:00:00.000Z',
       });
     },
@@ -1130,8 +1254,24 @@ const cases: {
     operation: 'list',
     method: 'GET',
     path: '/v1/iam/tenants/{tenant_id}/invitations',
+    label: 'required params',
     run: async () => {
-      const page = await client.iam.tenants.invitations.list('tenantId');
+      const invitation = await client.iam.tenants.invitations.list('tenantId', {
+        limit: 50,
+      });
+    },
+  },
+
+  {
+    operation: 'list',
+    method: 'GET',
+    path: '/v1/iam/tenants/{tenant_id}/invitations',
+    label: 'all params',
+    run: async () => {
+      const invitation = await client.iam.tenants.invitations.list('tenantId', {
+        starting_after: 'startingAfter',
+        limit: 50,
+      });
     },
   },
 

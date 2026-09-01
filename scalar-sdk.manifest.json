@@ -13114,21 +13114,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_tenant",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -14480,21 +14465,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_role_assignment",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -14701,21 +14671,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_resource_role_assignment",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -15076,21 +15031,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_member",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -16257,21 +16197,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_member_role_assignment",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -16981,21 +16906,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_member_resource_role_assignment",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -17326,21 +17236,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_group",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -18675,21 +18570,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_group_role_assignment",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -19213,21 +19093,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_group_resource_role_assignment",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -19570,21 +19435,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_group_member",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -20100,21 +19950,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_role",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -20790,21 +20625,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_access_rule",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -21317,21 +21137,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_audit_event",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {
@@ -21490,21 +21295,6 @@
         }
       ],
       "responseLinks": [],
-      "pagination": {
-        "style": "cursor",
-        "itemsField": "data",
-        "cursorParam": "starting_after",
-        "cursorFields": [],
-        "cursorParams": [
-          "starting_after",
-          "ending_before"
-        ],
-        "responseLocation": "body",
-        "itemModel": {
-          "name": "iam_invitation",
-          "publicAliases": []
-        }
-      },
       "transport": "http"
     },
     {

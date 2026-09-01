@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../resource';
 import { APIPromise } from '../../../api-promise';
-import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../core/pagination';
 import type { RequestOptions } from '../../../internal/request-options';
 import { path as __scalarPath } from '../../../internal/utils/path';
 
@@ -37,23 +36,21 @@ export class Members extends APIResource {
    * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
    * @param {MemberListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamMembersCursorIDPage, MemberListResponse>} The tenant member page
+   * @returns {APIPromise<MemberListResponse>} The tenant member page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.members.list('tenantId');
+   * const member = await client.iam.tenants.members.list('tenantId', {
+   *   limit: 50,
+   * });
    * ```
    */
   list(
     tenantID: string,
     query: MemberListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamMembersCursorIDPage, MemberListResponse> {
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenantID}/members`,
-      CursorIDPage<MemberListResponse>,
-      { query, ...options },
-    );
+  ): APIPromise<MemberListResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}/members`, { query, ...options });
   }
 
   /**
@@ -230,12 +227,13 @@ export class Members extends APIResource {
    * @param {string} membershipID - The user's tenant membership ID, as returned by IAM member reads. It identifies the user's membership in the tenant, not the user id.
    * @param {MemberListRoleAssignmentsParams} params - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamMemberRoleAssignmentsCursorIDPage, MemberListRoleAssignmentsResponse>} The member role assignment page
+   * @returns {APIPromise<MemberListRoleAssignmentsResponse>} The member role assignment page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.members.listRoleAssignments('membershipId', {
+   * const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
    *   tenant_id: 'tenantId',
+   *   limit: 50,
    * });
    * ```
    */
@@ -243,11 +241,10 @@ export class Members extends APIResource {
     membershipID: string,
     params: MemberListRoleAssignmentsParams,
     options?: RequestOptions,
-  ): PagePromise<IamMemberRoleAssignmentsCursorIDPage, MemberListRoleAssignmentsResponse> {
+  ): APIPromise<MemberListRoleAssignmentsResponse> {
     const { tenant_id, ...query } = params;
-    return this._client.getAPIList(
+    return this._client.get(
       __scalarPath`/v1/iam/tenants/${tenant_id}/members/${membershipID}/role-assignments`,
-      CursorIDPage<MemberListRoleAssignmentsResponse>,
       { query, ...options },
     );
   }
@@ -354,12 +351,13 @@ export class Members extends APIResource {
    * @param {string} membershipID - The user's tenant membership ID, as returned by IAM member reads. It identifies the user's membership in the tenant, not the user id.
    * @param {MemberListResourceRoleAssignmentsParams} params - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamMemberResourceRoleAssignmentsCursorIDPage, MemberListResourceRoleAssignmentsResponse>} The member resource role assignment page
+   * @returns {APIPromise<MemberListResourceRoleAssignmentsResponse>} The member resource role assignment page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
+   * const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
    *   tenant_id: 'tenantId',
+   *   limit: 50,
    * });
    * ```
    */
@@ -367,11 +365,10 @@ export class Members extends APIResource {
     membershipID: string,
     params: MemberListResourceRoleAssignmentsParams,
     options?: RequestOptions,
-  ): PagePromise<IamMemberResourceRoleAssignmentsCursorIDPage, MemberListResourceRoleAssignmentsResponse> {
+  ): APIPromise<MemberListResourceRoleAssignmentsResponse> {
     const { tenant_id, ...query } = params;
-    return this._client.getAPIList(
+    return this._client.get(
       __scalarPath`/v1/iam/tenants/${tenant_id}/members/${membershipID}/resource-role-assignments`,
-      CursorIDPage<MemberListResourceRoleAssignmentsResponse>,
       { query, ...options },
     );
   }
@@ -453,7 +450,17 @@ export namespace MemberCreateResponse {
   }
 }
 
-export interface MemberListParams extends CursorIDPageParams {
+export interface MemberListParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
   /**
    * Filter by membership status.
    */
@@ -472,44 +479,55 @@ export interface MemberListParams extends CursorIDPageParams {
 
 export interface MemberListResponse {
   /**
-   * The user's tenant membership ID.
-   * @minLength 1
+   * Member page.
    */
-  membership_id: string;
+  data: Array<MemberListResponse.Data>;
   /**
-   * Tenant the member belongs to.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  tenant_id: string;
-  /**
-   * The member's Hercules Auth user id (the end user's OIDC subject).
-   */
-  user_id: string;
-  /**
-   * Tenant user lifecycle status.
-   */
-  status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
-  /**
-   * The member's display name, if known.
-   */
-  user_name: string | null;
-  /**
-   * The member's email address, if known.
-   */
-  user_email: string | null;
-  /**
-   * The member's avatar URL, if any.
-   */
-  user_image: string | null;
-  /**
-   * Membership creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamMembersCursorIDPage = CursorIDPage<MemberListResponse>;
+export namespace MemberListResponse {
+  export interface Data {
+    /**
+     * The user's tenant membership ID.
+     * @minLength 1
+     */
+    membership_id: string;
+    /**
+     * Tenant the member belongs to.
+     * @minLength 1
+     */
+    tenant_id: string;
+    /**
+     * The member's Hercules Auth user id (the end user's OIDC subject).
+     */
+    user_id: string;
+    /**
+     * Tenant user lifecycle status.
+     */
+    status: 'active' | 'blocked' | 'suspended' | 'pending_approval' | 'removed';
+    /**
+     * The member's display name, if known.
+     */
+    user_name: string | null;
+    /**
+     * The member's email address, if known.
+     */
+    user_email: string | null;
+    /**
+     * The member's avatar URL, if any.
+     */
+    user_image: string | null;
+    /**
+     * Membership creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 
 export interface MemberGetParams {
   /**
@@ -848,39 +866,60 @@ export namespace MemberUnassignRoleResponse {
   }
 }
 
-export interface MemberListRoleAssignmentsParams extends CursorIDPageParams {
+export interface MemberListRoleAssignmentsParams {
   /**
-   * The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary tenant.
    */
   tenant_id: string;
+  /**
+   * Query param: Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Query param: Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 }
 
 export interface MemberListRoleAssignmentsResponse {
   /**
-   * The member role assignment ID.
-   * @minLength 1
+   * Member role assignment page.
    */
-  member_role_assignment_id: string;
+  data: Array<MemberListRoleAssignmentsResponse.Data>;
   /**
-   * The assigned role ID.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  role_id: string;
-  /**
-   * Assignment expiry, or null if permanent.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  expires_at: string | null;
-  /**
-   * Assignment creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamMemberRoleAssignmentsCursorIDPage = CursorIDPage<MemberListRoleAssignmentsResponse>;
+export namespace MemberListRoleAssignmentsResponse {
+  export interface Data {
+    /**
+     * The member role assignment ID.
+     * @minLength 1
+     */
+    member_role_assignment_id: string;
+    /**
+     * The assigned role ID.
+     * @minLength 1
+     */
+    role_id: string;
+    /**
+     * Assignment expiry, or null if permanent.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    expires_at: string | null;
+    /**
+     * Assignment creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 
 export interface MemberAssignResourceRoleParams {
   /**
@@ -1157,49 +1196,69 @@ export namespace MemberUnassignResourceRoleResponse {
   }
 }
 
-export interface MemberListResourceRoleAssignmentsParams extends CursorIDPageParams {
+export interface MemberListResourceRoleAssignmentsParams {
   /**
-   * The tenant ID. Pass `primary` to target the deployment's primary tenant.
+   * Path param: The tenant ID. Pass `primary` to target the deployment's primary tenant.
    */
   tenant_id: string;
+  /**
+   * Query param: Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Query param: Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 }
 
 export interface MemberListResourceRoleAssignmentsResponse {
   /**
-   * The member resource role assignment ID.
-   * @minLength 1
+   * Member resource role assignment page.
    */
-  member_resource_role_assignment_id: string;
+  data: Array<MemberListResourceRoleAssignmentsResponse.Data>;
   /**
-   * The assigned role ID.
-   * @minLength 1
+   * Whether more records are available after this page.
    */
-  role_id: string;
-  /**
-   * The resource type the assignment targets.
-   * @minLength 1
-   */
-  resource_type_id: string;
-  /**
-   * The exact resource's app-defined external ID.
-   */
-  external_id: string;
-  /**
-   * Assignment expiry, or null if permanent.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  expires_at: string | null;
-  /**
-   * Assignment creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
-export type IamMemberResourceRoleAssignmentsCursorIDPage =
-  CursorIDPage<MemberListResourceRoleAssignmentsResponse>;
+export namespace MemberListResourceRoleAssignmentsResponse {
+  export interface Data {
+    /**
+     * The member resource role assignment ID.
+     * @minLength 1
+     */
+    member_resource_role_assignment_id: string;
+    /**
+     * The assigned role ID.
+     * @minLength 1
+     */
+    role_id: string;
+    /**
+     * The resource type the assignment targets.
+     * @minLength 1
+     */
+    resource_type_id: string;
+    /**
+     * The exact resource's app-defined external ID.
+     */
+    external_id: string;
+    /**
+     * Assignment expiry, or null if permanent.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    expires_at: string | null;
+    /**
+     * Assignment creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+  }
+}
 export declare namespace Members {
   export {
     type MemberCreateResponse as MemberCreateResponse,
@@ -1215,9 +1274,6 @@ export declare namespace Members {
     type MemberReplaceResourceRolesResponse as MemberReplaceResourceRolesResponse,
     type MemberUnassignResourceRoleResponse as MemberUnassignResourceRoleResponse,
     type MemberListResourceRoleAssignmentsResponse as MemberListResourceRoleAssignmentsResponse,
-    type IamMembersCursorIDPage as IamMembersCursorIDPage,
-    type IamMemberRoleAssignmentsCursorIDPage as IamMemberRoleAssignmentsCursorIDPage,
-    type IamMemberResourceRoleAssignmentsCursorIDPage as IamMemberResourceRoleAssignmentsCursorIDPage,
     type MemberCreateParams as MemberCreateParams,
     type MemberListParams as MemberListParams,
     type MemberGetParams as MemberGetParams,

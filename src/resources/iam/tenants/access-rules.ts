@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../resource';
 import { APIPromise } from '../../../api-promise';
-import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../core/pagination';
 import type { RequestOptions } from '../../../internal/request-options';
 import { path as __scalarPath } from '../../../internal/utils/path';
 
@@ -13,23 +12,21 @@ export class AccessRules extends APIResource {
    * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
    * @param {AccessRuleListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamAccessRulesCursorIDPage, AccessRuleListResponse>} The tenant access rule page
+   * @returns {APIPromise<AccessRuleListResponse>} The tenant access rule page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.accessRules.list('tenantId');
+   * const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
+   *   limit: 50,
+   * });
    * ```
    */
   list(
     tenantID: string,
     query: AccessRuleListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamAccessRulesCursorIDPage, AccessRuleListResponse> {
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenantID}/access-rules`,
-      CursorIDPage<AccessRuleListResponse>,
-      { query, ...options },
-    );
+  ): APIPromise<AccessRuleListResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}/access-rules`, { query, ...options });
   }
 
   /**
@@ -89,7 +86,17 @@ export class AccessRules extends APIResource {
   }
 }
 
-export interface AccessRuleListParams extends CursorIDPageParams {
+export interface AccessRuleListParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
   /**
    * Filter by rule effect.
    */
@@ -106,72 +113,81 @@ export interface AccessRuleListParams extends CursorIDPageParams {
 
 export interface AccessRuleListResponse {
   /**
-   * Access rule ID.
-   * @minLength 1
+   * Access rule page.
    */
-  rule_id: string;
+  data: Array<AccessRuleListResponse.Data>;
   /**
-   * Whether matching users are allowed or denied entry.
+   * Whether more records are available after this page.
    */
-  effect: 'allow' | 'deny';
-  /**
-   * Email or domain matched by the rule.
-   */
-  subject:
-    | AccessRuleListResponse.IamAccessRuleEmailSubject
-    | AccessRuleListResponse.IamAccessRuleDomainSubject;
-  /**
-   * Administrative reason for the rule.
-   */
-  reason: string | null;
-  /**
-   * Whether the rule is archived.
-   */
-  archived: boolean;
-  /**
-   * Archive timestamp when archived.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  archived_at: string | null;
-  /**
-   * Rule creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
 export namespace AccessRuleListResponse {
-  export interface IamAccessRuleEmailSubject {
+  export interface Data {
     /**
-     * Match one exact email address.
+     * Access rule ID.
+     * @minLength 1
      */
-    type: 'email';
+    rule_id: string;
     /**
-     * Exact email address matched by the rule.
-     * @format email
-     * @maxLength 255
-     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     * Whether matching users are allowed or denied entry.
      */
-    value: string;
+    effect: 'allow' | 'deny';
+    /**
+     * Email or domain matched by the rule.
+     */
+    subject: Data.IamAccessRuleEmailSubject | Data.IamAccessRuleDomainSubject;
+    /**
+     * Administrative reason for the rule.
+     */
+    reason: string | null;
+    /**
+     * Whether the rule is archived.
+     */
+    archived: boolean;
+    /**
+     * Archive timestamp when archived.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    archived_at: string | null;
+    /**
+     * Rule creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
   }
 
-  export interface IamAccessRuleDomainSubject {
-    /**
-     * Match every address in one email domain.
-     */
-    type: 'domain';
-    /**
-     * Email domain matched by the rule.
-     * @minLength 1
-     * @maxLength 255
-     */
-    value: string;
+  export namespace Data {
+    export interface IamAccessRuleEmailSubject {
+      /**
+       * Match one exact email address.
+       */
+      type: 'email';
+      /**
+       * Exact email address matched by the rule.
+       * @format email
+       * @maxLength 255
+       * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+       */
+      value: string;
+    }
+
+    export interface IamAccessRuleDomainSubject {
+      /**
+       * Match every address in one email domain.
+       */
+      type: 'domain';
+      /**
+       * Email domain matched by the rule.
+       * @minLength 1
+       * @maxLength 255
+       */
+      value: string;
+    }
   }
 }
-
-export type IamAccessRulesCursorIDPage = CursorIDPage<AccessRuleListResponse>;
 
 export interface AccessRuleCreateParams {
   /**
@@ -261,7 +277,6 @@ export declare namespace AccessRules {
     type AccessRuleListResponse as AccessRuleListResponse,
     type AccessRuleCreateResponse as AccessRuleCreateResponse,
     type AccessRuleArchiveResponse as AccessRuleArchiveResponse,
-    type IamAccessRulesCursorIDPage as IamAccessRulesCursorIDPage,
     type AccessRuleListParams as AccessRuleListParams,
     type AccessRuleCreateParams as AccessRuleCreateParams,
     type AccessRuleArchiveParams as AccessRuleArchiveParams,

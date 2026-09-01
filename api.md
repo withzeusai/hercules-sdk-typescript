@@ -286,7 +286,9 @@ Lists the deployment's IAM tenants, primary tenant first.
 | Response | [`TenantListResponse`](./src/resources/iam/tenants/tenants.ts) |
 
 ```ts
-const page = await client.iam.tenants.list();
+const tenant = await client.iam.tenants.list({
+  limit: 50,
+});
 ```
 
 #### Create tenant
@@ -402,7 +404,9 @@ Lists tenant-wide role assignments in a tenant, newest first. Filter by member, 
 | Response | [`TenantListRoleAssignmentsResponse`](./src/resources/iam/tenants/tenants.ts) |
 
 ```ts
-const page = await client.iam.tenants.listRoleAssignments('tenantId');
+const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
+  limit: 50,
+});
 ```
 
 #### List tenant resource role assignments
@@ -415,7 +419,9 @@ Lists resource role assignments in a tenant, newest first. Filter by resource ty
 | Response | [`TenantListResourceRoleAssignmentsResponse`](./src/resources/iam/tenants/tenants.ts) |
 
 ```ts
-const page = await client.iam.tenants.listResourceRoleAssignments('tenantId');
+const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
+  limit: 50,
+});
 ```
 
 #### `Iam Tenants Members`
@@ -446,7 +452,9 @@ Lists a tenant's members, newest first. Filter by status, by a role the member d
 | Response | [`MemberListResponse`](./src/resources/iam/tenants/members.ts) |
 
 ```ts
-const page = await client.iam.tenants.members.list('tenantId');
+const member = await client.iam.tenants.members.list('tenantId', {
+  limit: 50,
+});
 ```
 
 ##### Get tenant member
@@ -558,8 +566,9 @@ Lists the tenant-wide role assignments held by one member, newest first.
 | Response | [`MemberListRoleAssignmentsResponse`](./src/resources/iam/tenants/members.ts) |
 
 ```ts
-const page = await client.iam.tenants.members.listRoleAssignments('membershipId', {
+const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
   tenant_id: 'tenantId',
+  limit: 50,
 });
 ```
 
@@ -633,8 +642,9 @@ Lists the resource role assignments held by one member, newest first.
 | Response | [`MemberListResourceRoleAssignmentsResponse`](./src/resources/iam/tenants/members.ts) |
 
 ```ts
-const page = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
+const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
   tenant_id: 'tenantId',
+  limit: 50,
 });
 ```
 
@@ -666,7 +676,9 @@ Lists a tenant's groups, newest first.
 | Response | [`GroupListResponse`](./src/resources/iam/tenants/groups/groups.ts) |
 
 ```ts
-const page = await client.iam.tenants.groups.list('tenantId');
+const group = await client.iam.tenants.groups.list('tenantId', {
+  limit: 50,
+});
 ```
 
 ##### Get tenant group
@@ -792,8 +804,9 @@ Lists the tenant-wide role assignments held by one group, newest first.
 | Response | [`GroupListRoleAssignmentsResponse`](./src/resources/iam/tenants/groups/groups.ts) |
 
 ```ts
-const page = await client.iam.tenants.groups.listRoleAssignments('groupId', {
+const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
   tenant_id: 'tenantId',
+  limit: 50,
 });
 ```
 
@@ -846,8 +859,9 @@ Lists the resource role assignments held by one group, newest first.
 | Response | [`GroupListResourceRoleAssignmentsResponse`](./src/resources/iam/tenants/groups/groups.ts) |
 
 ```ts
-const page = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
+const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
   tenant_id: 'tenantId',
+  limit: 50,
 });
 ```
 
@@ -880,8 +894,9 @@ Lists the active members of one tenant group, newest first.
 | Response | [`MemberListResponse`](./src/resources/iam/tenants/groups/members.ts) |
 
 ```ts
-const page = await client.iam.tenants.groups.members.list('groupId', {
+const member = await client.iam.tenants.groups.members.list('groupId', {
   tenant_id: 'tenantId',
+  limit: 50,
 });
 ```
 
@@ -931,7 +946,9 @@ Lists the roles visible to a tenant: its tenant-scoped roles plus the deployment
 | Response | [`RoleListResponse`](./src/resources/iam/tenants/roles.ts) |
 
 ```ts
-const page = await client.iam.tenants.roles.list('tenantId');
+const role = await client.iam.tenants.roles.list('tenantId', {
+  limit: 50,
+});
 ```
 
 ##### Get tenant role
@@ -992,7 +1009,9 @@ Lists email and domain rules that allow or deny entry to a tenant. Active rules 
 | Response | [`AccessRuleListResponse`](./src/resources/iam/tenants/access-rules.ts) |
 
 ```ts
-const page = await client.iam.tenants.accessRules.list('tenantId');
+const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
+  limit: 50,
+});
 ```
 
 ##### Create tenant access rule
@@ -1043,7 +1062,9 @@ Lists IAM audit events for a tenant, newest first.
 | Response | [`AuditEventListResponse`](./src/resources/iam/tenants/audit-events.ts) |
 
 ```ts
-const page = await client.iam.tenants.auditEvents.list('tenantId');
+const auditEvent = await client.iam.tenants.auditEvents.list('tenantId', {
+  limit: 50,
+});
 ```
 
 #### `Iam Tenants Invitations`
@@ -1058,7 +1079,9 @@ Lists active, unexpired invitation links in a tenant.
 | Response | [`InvitationListResponse`](./src/resources/iam/tenants/invitations.ts) |
 
 ```ts
-const page = await client.iam.tenants.invitations.list('tenantId');
+const invitation = await client.iam.tenants.invitations.list('tenantId', {
+  limit: 50,
+});
 ```
 
 ##### Revoke invitation

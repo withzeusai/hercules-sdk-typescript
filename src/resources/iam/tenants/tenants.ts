@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../../resource';
 import { APIPromise } from '../../../api-promise';
-import { CursorIDPage, type CursorIDPageParams, type PagePromise } from '../../../core/pagination';
 import type { RequestOptions } from '../../../internal/request-options';
 import { path as __scalarPath } from '../../../internal/utils/path';
 import * as MembersAPI from './members';
@@ -21,9 +20,6 @@ import {
   type MemberReplaceResourceRolesResponse,
   type MemberUnassignResourceRoleResponse,
   type MemberListResourceRoleAssignmentsResponse,
-  type IamMembersCursorIDPage,
-  type IamMemberRoleAssignmentsCursorIDPage,
-  type IamMemberResourceRoleAssignmentsCursorIDPage,
   type MemberCreateParams,
   type MemberListParams,
   type MemberGetParams,
@@ -54,9 +50,6 @@ import {
   type GroupAssignResourceRoleResponse,
   type GroupUnassignResourceRoleResponse,
   type GroupListResourceRoleAssignmentsResponse,
-  type IamGroupsCursorIDPage,
-  type IamGroupRoleAssignmentsCursorIDPage,
-  type IamGroupResourceRoleAssignmentsCursorIDPage,
   type GroupCreateParams,
   type GroupListParams,
   type GroupGetParams,
@@ -79,7 +72,6 @@ import {
   type RoleGetResponse,
   type RoleUpdateResponse,
   type RoleDeleteResponse,
-  type IamRolesCursorIDPage,
   type RoleCreateParams,
   type RoleListParams,
   type RoleGetParams,
@@ -92,24 +84,17 @@ import {
   type AccessRuleListResponse,
   type AccessRuleCreateResponse,
   type AccessRuleArchiveResponse,
-  type IamAccessRulesCursorIDPage,
   type AccessRuleListParams,
   type AccessRuleCreateParams,
   type AccessRuleArchiveParams,
 } from './access-rules';
 import * as AuditEventsAPI from './audit-events';
-import {
-  AuditEvents,
-  type AuditEventListResponse,
-  type IamAuditEventsCursorIDPage,
-  type AuditEventListParams,
-} from './audit-events';
+import { AuditEvents, type AuditEventListResponse, type AuditEventListParams } from './audit-events';
 import * as InvitationsAPI from './invitations';
 import {
   Invitations,
   type InvitationListResponse,
   type InvitationRevokeResponse,
-  type IamInvitationsCursorIDPage,
   type InvitationListParams,
   type InvitationRevokeParams,
 } from './invitations';
@@ -127,21 +112,20 @@ export class Tenants extends APIResource {
    *
    * @param {TenantListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamTenantsCursorIDPage, TenantListResponse>} The IAM tenant page
+   * @returns {APIPromise<TenantListResponse>} The IAM tenant page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.list();
+   * const tenant = await client.iam.tenants.list({
+   *   limit: 50,
+   * });
    * ```
    */
   list(
     query: TenantListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamTenantsCursorIDPage, TenantListResponse> {
-    return this._client.getAPIList('/v1/iam/tenants', CursorIDPage<TenantListResponse>, {
-      query,
-      ...options,
-    });
+  ): APIPromise<TenantListResponse> {
+    return this._client.get('/v1/iam/tenants', { query, ...options });
   }
 
   /**
@@ -300,23 +284,24 @@ export class Tenants extends APIResource {
    * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
    * @param {TenantListRoleAssignmentsParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamRoleAssignmentsCursorIDPage, TenantListRoleAssignmentsResponse>} The tenant role assignment page
+   * @returns {APIPromise<TenantListRoleAssignmentsResponse>} The tenant role assignment page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.listRoleAssignments('tenantId');
+   * const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
+   *   limit: 50,
+   * });
    * ```
    */
   listRoleAssignments(
     tenantID: string,
     query: TenantListRoleAssignmentsParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamRoleAssignmentsCursorIDPage, TenantListRoleAssignmentsResponse> {
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenantID}/role-assignments`,
-      CursorIDPage<TenantListRoleAssignmentsResponse>,
-      { query, ...options },
-    );
+  ): APIPromise<TenantListRoleAssignmentsResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}/role-assignments`, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -325,27 +310,38 @@ export class Tenants extends APIResource {
    * @param {string} tenantID - The tenant ID. Pass `primary` to target the deployment's primary tenant.
    * @param {TenantListResourceRoleAssignmentsParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
-   * @returns {PagePromise<IamResourceRoleAssignmentsCursorIDPage, TenantListResourceRoleAssignmentsResponse>} The tenant resource role assignment page
+   * @returns {APIPromise<TenantListResourceRoleAssignmentsResponse>} The tenant resource role assignment page
    *
    * @example
    * ```ts
-   * const page = await client.iam.tenants.listResourceRoleAssignments('tenantId');
+   * const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
+   *   limit: 50,
+   * });
    * ```
    */
   listResourceRoleAssignments(
     tenantID: string,
     query: TenantListResourceRoleAssignmentsParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<IamResourceRoleAssignmentsCursorIDPage, TenantListResourceRoleAssignmentsResponse> {
-    return this._client.getAPIList(
-      __scalarPath`/v1/iam/tenants/${tenantID}/resource-role-assignments`,
-      CursorIDPage<TenantListResourceRoleAssignmentsResponse>,
-      { query, ...options },
-    );
+  ): APIPromise<TenantListResourceRoleAssignmentsResponse> {
+    return this._client.get(__scalarPath`/v1/iam/tenants/${tenantID}/resource-role-assignments`, {
+      query,
+      ...options,
+    });
   }
 }
 
-export interface TenantListParams extends CursorIDPageParams {
+export interface TenantListParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
   /**
    * Filter by tenant status.
    */
@@ -354,46 +350,57 @@ export interface TenantListParams extends CursorIDPageParams {
 
 export interface TenantListResponse {
   /**
-   * Tenant ID.
-   * @minLength 1
+   * Tenant page.
    */
-  tenant_id: string;
+  data: Array<TenantListResponse.Data>;
   /**
-   * Human-readable tenant name.
+   * Whether more records are available after this page.
    */
-  name: string;
-  /**
-   * Whether this is the deployment's primary tenant.
-   */
-  is_primary_tenant: boolean;
-  /**
-   * Tenant lifecycle status.
-   */
-  status: 'active' | 'archived';
-  /**
-   * The tenant's access mode (how it admits new members): open, allowlist-only, invitation-only, or approval-required.
-   */
-  access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
-  /**
-   * The tenant's default role ID, if set.
-   * @minLength 1
-   */
-  default_role_id: string | null;
-  /**
-   * Tenant creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
-  /**
-   * Tenant last-updated timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  updated_at: string;
+  has_more: boolean;
 }
 
-export type IamTenantsCursorIDPage = CursorIDPage<TenantListResponse>;
+export namespace TenantListResponse {
+  export interface Data {
+    /**
+     * Tenant ID.
+     * @minLength 1
+     */
+    tenant_id: string;
+    /**
+     * Human-readable tenant name.
+     */
+    name: string;
+    /**
+     * Whether this is the deployment's primary tenant.
+     */
+    is_primary_tenant: boolean;
+    /**
+     * Tenant lifecycle status.
+     */
+    status: 'active' | 'archived';
+    /**
+     * The tenant's access mode (how it admits new members): open, allowlist-only, invitation-only, or approval-required.
+     */
+    access_mode: 'open' | 'allowlisted_only' | 'invite_only' | 'approval_required';
+    /**
+     * The tenant's default role ID, if set.
+     * @minLength 1
+     */
+    default_role_id: string | null;
+    /**
+     * Tenant creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
+    /**
+     * Tenant last-updated timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    updated_at: string;
+  }
+}
 
 export interface TenantCreateParams {
   /**
@@ -937,7 +944,17 @@ export namespace TenantCreateInvitationResponse {
   }
 }
 
-export interface TenantListRoleAssignmentsParams extends CursorIDPageParams {
+export interface TenantListRoleAssignmentsParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
   /**
    * Return only this tenant membership's assignments.
    * @minLength 1
@@ -957,74 +974,93 @@ export interface TenantListRoleAssignmentsParams extends CursorIDPageParams {
 
 export interface TenantListRoleAssignmentsResponse {
   /**
-   * Tenant the assignment belongs to.
-   * @minLength 1
+   * Role assignment page.
    */
-  tenant_id: string;
+  data: Array<TenantListRoleAssignmentsResponse.Data>;
   /**
-   * The assignment's subject and its prefixed assignment ID.
+   * Whether more records are available after this page.
    */
-  subject:
-    | TenantListRoleAssignmentsResponse.IamRoleAssignmentMemberSubject
-    | TenantListRoleAssignmentsResponse.IamRoleAssignmentGroupSubject;
-  /**
-   * The assigned role ID.
-   * @minLength 1
-   */
-  role_id: string;
-  /**
-   * Assignment expiry, or null if permanent.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  expires_at: string | null;
-  /**
-   * Assignment creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
 export namespace TenantListRoleAssignmentsResponse {
-  export interface IamRoleAssignmentMemberSubject {
+  export interface Data {
     /**
-     * A tenant member holds the role.
-     */
-    type: 'member';
-    /**
-     * The user's tenant membership ID holding the role.
+     * Tenant the assignment belongs to.
      * @minLength 1
      */
-    membership_id: string;
+    tenant_id: string;
     /**
-     * The member role assignment ID.
+     * The assignment's subject and its prefixed assignment ID.
+     */
+    subject: Data.IamRoleAssignmentMemberSubject | Data.IamRoleAssignmentGroupSubject;
+    /**
+     * The assigned role ID.
      * @minLength 1
      */
-    member_role_assignment_id: string;
+    role_id: string;
+    /**
+     * Assignment expiry, or null if permanent.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    expires_at: string | null;
+    /**
+     * Assignment creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
   }
 
-  export interface IamRoleAssignmentGroupSubject {
-    /**
-     * A group holds the role.
-     */
-    type: 'group';
-    /**
-     * The group holding the role.
-     * @minLength 1
-     */
-    group_id: string;
-    /**
-     * The group role assignment ID.
-     * @minLength 1
-     */
-    group_role_assignment_id: string;
+  export namespace Data {
+    export interface IamRoleAssignmentMemberSubject {
+      /**
+       * A tenant member holds the role.
+       */
+      type: 'member';
+      /**
+       * The user's tenant membership ID holding the role.
+       * @minLength 1
+       */
+      membership_id: string;
+      /**
+       * The member role assignment ID.
+       * @minLength 1
+       */
+      member_role_assignment_id: string;
+    }
+
+    export interface IamRoleAssignmentGroupSubject {
+      /**
+       * A group holds the role.
+       */
+      type: 'group';
+      /**
+       * The group holding the role.
+       * @minLength 1
+       */
+      group_id: string;
+      /**
+       * The group role assignment ID.
+       * @minLength 1
+       */
+      group_role_assignment_id: string;
+    }
   }
 }
 
-export type IamRoleAssignmentsCursorIDPage = CursorIDPage<TenantListRoleAssignmentsResponse>;
-
-export interface TenantListResourceRoleAssignmentsParams extends CursorIDPageParams {
+export interface TenantListResourceRoleAssignmentsParams {
+  /**
+   * Cursor for forward pagination. Pass the ID of the last item from the previous page.
+   */
+  starting_after?: string;
+  /**
+   * Maximum number of records to return. Defaults to 50.
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
   /**
    * Filter to one resource type by ID. Not combinable with resource_type_key.
    * @minLength 1
@@ -1061,81 +1097,90 @@ export interface TenantListResourceRoleAssignmentsParams extends CursorIDPagePar
 
 export interface TenantListResourceRoleAssignmentsResponse {
   /**
-   * Tenant the assignment belongs to.
-   * @minLength 1
+   * Resource role assignment page.
    */
-  tenant_id: string;
+  data: Array<TenantListResourceRoleAssignmentsResponse.Data>;
   /**
-   * The assignment's subject and its prefixed assignment ID.
+   * Whether more records are available after this page.
    */
-  subject:
-    | TenantListResourceRoleAssignmentsResponse.IamResourceRoleAssignmentMemberSubject
-    | TenantListResourceRoleAssignmentsResponse.IamResourceRoleAssignmentGroupSubject;
-  /**
-   * The assigned role ID.
-   * @minLength 1
-   */
-  role_id: string;
-  /**
-   * The resource type the assignment targets.
-   * @minLength 1
-   */
-  resource_type_id: string;
-  /**
-   * The exact resource's app-defined external ID.
-   */
-  external_id: string;
-  /**
-   * Assignment expiry, or null if permanent.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  expires_at: string | null;
-  /**
-   * Assignment creation timestamp.
-   * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-   */
-  created_at: string;
+  has_more: boolean;
 }
 
 export namespace TenantListResourceRoleAssignmentsResponse {
-  export interface IamResourceRoleAssignmentMemberSubject {
+  export interface Data {
     /**
-     * A tenant member holds the role on the resource.
-     */
-    type: 'member';
-    /**
-     * The user's tenant membership ID holding the role.
+     * Tenant the assignment belongs to.
      * @minLength 1
      */
-    membership_id: string;
+    tenant_id: string;
     /**
-     * The member resource role assignment ID.
+     * The assignment's subject and its prefixed assignment ID.
+     */
+    subject: Data.IamResourceRoleAssignmentMemberSubject | Data.IamResourceRoleAssignmentGroupSubject;
+    /**
+     * The assigned role ID.
      * @minLength 1
      */
-    member_resource_role_assignment_id: string;
+    role_id: string;
+    /**
+     * The resource type the assignment targets.
+     * @minLength 1
+     */
+    resource_type_id: string;
+    /**
+     * The exact resource's app-defined external ID.
+     */
+    external_id: string;
+    /**
+     * Assignment expiry, or null if permanent.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    expires_at: string | null;
+    /**
+     * Assignment creation timestamp.
+     * @format date-time
+     * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+     */
+    created_at: string;
   }
 
-  export interface IamResourceRoleAssignmentGroupSubject {
-    /**
-     * A group holds the role on the resource.
-     */
-    type: 'group';
-    /**
-     * The group holding the role.
-     * @minLength 1
-     */
-    group_id: string;
-    /**
-     * The group resource role assignment ID.
-     * @minLength 1
-     */
-    group_resource_role_assignment_id: string;
+  export namespace Data {
+    export interface IamResourceRoleAssignmentMemberSubject {
+      /**
+       * A tenant member holds the role on the resource.
+       */
+      type: 'member';
+      /**
+       * The user's tenant membership ID holding the role.
+       * @minLength 1
+       */
+      membership_id: string;
+      /**
+       * The member resource role assignment ID.
+       * @minLength 1
+       */
+      member_resource_role_assignment_id: string;
+    }
+
+    export interface IamResourceRoleAssignmentGroupSubject {
+      /**
+       * A group holds the role on the resource.
+       */
+      type: 'group';
+      /**
+       * The group holding the role.
+       * @minLength 1
+       */
+      group_id: string;
+      /**
+       * The group resource role assignment ID.
+       * @minLength 1
+       */
+      group_resource_role_assignment_id: string;
+    }
   }
 }
-
-export type IamResourceRoleAssignmentsCursorIDPage = CursorIDPage<TenantListResourceRoleAssignmentsResponse>;
 Tenants.Members = Members;
 Tenants.Groups = Groups;
 Tenants.Roles = Roles;
@@ -1155,9 +1200,6 @@ export declare namespace Tenants {
     type TenantCreateInvitationResponse as TenantCreateInvitationResponse,
     type TenantListRoleAssignmentsResponse as TenantListRoleAssignmentsResponse,
     type TenantListResourceRoleAssignmentsResponse as TenantListResourceRoleAssignmentsResponse,
-    type IamTenantsCursorIDPage as IamTenantsCursorIDPage,
-    type IamRoleAssignmentsCursorIDPage as IamRoleAssignmentsCursorIDPage,
-    type IamResourceRoleAssignmentsCursorIDPage as IamResourceRoleAssignmentsCursorIDPage,
     type TenantListParams as TenantListParams,
     type TenantCreateParams as TenantCreateParams,
     type TenantUpdateParams as TenantUpdateParams,
@@ -1184,9 +1226,6 @@ export declare namespace Tenants {
     type MemberReplaceResourceRolesResponse as MemberReplaceResourceRolesResponse,
     type MemberUnassignResourceRoleResponse as MemberUnassignResourceRoleResponse,
     type MemberListResourceRoleAssignmentsResponse as MemberListResourceRoleAssignmentsResponse,
-    type IamMembersCursorIDPage as IamMembersCursorIDPage,
-    type IamMemberRoleAssignmentsCursorIDPage as IamMemberRoleAssignmentsCursorIDPage,
-    type IamMemberResourceRoleAssignmentsCursorIDPage as IamMemberResourceRoleAssignmentsCursorIDPage,
     type MemberCreateParams as MemberCreateParams,
     type MemberListParams as MemberListParams,
     type MemberGetParams as MemberGetParams,
@@ -1217,9 +1256,6 @@ export declare namespace Tenants {
     type GroupAssignResourceRoleResponse as GroupAssignResourceRoleResponse,
     type GroupUnassignResourceRoleResponse as GroupUnassignResourceRoleResponse,
     type GroupListResourceRoleAssignmentsResponse as GroupListResourceRoleAssignmentsResponse,
-    type IamGroupsCursorIDPage as IamGroupsCursorIDPage,
-    type IamGroupRoleAssignmentsCursorIDPage as IamGroupRoleAssignmentsCursorIDPage,
-    type IamGroupResourceRoleAssignmentsCursorIDPage as IamGroupResourceRoleAssignmentsCursorIDPage,
     type GroupCreateParams as GroupCreateParams,
     type GroupListParams as GroupListParams,
     type GroupGetParams as GroupGetParams,
@@ -1242,7 +1278,6 @@ export declare namespace Tenants {
     type RoleGetResponse as RoleGetResponse,
     type RoleUpdateResponse as RoleUpdateResponse,
     type RoleDeleteResponse as RoleDeleteResponse,
-    type IamRolesCursorIDPage as IamRolesCursorIDPage,
     type RoleCreateParams as RoleCreateParams,
     type RoleListParams as RoleListParams,
     type RoleGetParams as RoleGetParams,
@@ -1255,7 +1290,6 @@ export declare namespace Tenants {
     type AccessRuleListResponse as AccessRuleListResponse,
     type AccessRuleCreateResponse as AccessRuleCreateResponse,
     type AccessRuleArchiveResponse as AccessRuleArchiveResponse,
-    type IamAccessRulesCursorIDPage as IamAccessRulesCursorIDPage,
     type AccessRuleListParams as AccessRuleListParams,
     type AccessRuleCreateParams as AccessRuleCreateParams,
     type AccessRuleArchiveParams as AccessRuleArchiveParams,
@@ -1264,7 +1298,6 @@ export declare namespace Tenants {
   export {
     AuditEvents as AuditEvents,
     type AuditEventListResponse as AuditEventListResponse,
-    type IamAuditEventsCursorIDPage as IamAuditEventsCursorIDPage,
     type AuditEventListParams as AuditEventListParams,
   };
 
@@ -1272,7 +1305,6 @@ export declare namespace Tenants {
     Invitations as Invitations,
     type InvitationListResponse as InvitationListResponse,
     type InvitationRevokeResponse as InvitationRevokeResponse,
-    type IamInvitationsCursorIDPage as IamInvitationsCursorIDPage,
     type InvitationListParams as InvitationListParams,
     type InvitationRevokeParams as InvitationRevokeParams,
   };
