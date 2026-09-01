@@ -1,5 +1,41 @@
 # Changelog
 
+## [2.0.0-next](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.15.13...v2.0.0-next) (2026-09-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** 14 breaking changes to the SDK surface.
+    - Operation `iam.tenants.list` is no longer paginated.
+    - Operation `iam.tenants.listRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.listResourceRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.members.list` is no longer paginated.
+    - Operation `iam.tenants.members.listRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.members.listResourceRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.groups.list` is no longer paginated.
+    - Operation `iam.tenants.groups.listRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.groups.listResourceRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.groups.members.list` is no longer paginated.
+    - Operation `iam.tenants.roles.list` is no longer paginated.
+    - Operation `iam.tenants.accessRules.list` is no longer paginated.
+    - Operation `iam.tenants.auditEvents.list` is no longer paginated.
+    - Operation `iam.tenants.invitations.list` is no longer paginated.
+
+### Features
+
+* **api:** initial SDK generation ([3e9d607](https://github.com/withzeusai/hercules-sdk-typescript/commit/3e9d6078794e7215497975aa8f798af9ef9247b7))
+* **api:** remove pagination of iam.tenants.list (+13 more changes) ([efaf25f](https://github.com/withzeusai/hercules-sdk-typescript/commit/efaf25fafcbe153291822e66087f7fe68a6d3bf2))
+
+
+### Bug Fixes
+
+* **deps:** patch SDK security findings ([976c410](https://github.com/withzeusai/hercules-sdk-typescript/commit/976c410eb7c3ecb77763ca4868671d896b8db048))
+
+
+### Chores
+
+* **api:** update generated SDK content ([ab6d223](https://github.com/withzeusai/hercules-sdk-typescript/commit/ab6d22316202815a897248d28c07c3891e7defae))
+
 ## 1.15.13 (2026-07-10)
 
 Full Changelog: [v1.15.12...v1.15.13](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.15.12...v1.15.13)
