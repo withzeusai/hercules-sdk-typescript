@@ -87,7 +87,7 @@ export class Suppressions extends APIResource {
    * @example
    * ```ts
    * const suppression = await client.email.suppressions.batchAdd({
-   *   emails: [],
+   *   emails: ['user@example.com'],
    * });
    * ```
    */

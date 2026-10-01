@@ -79,7 +79,12 @@ export class Commerce extends APIResource {
    * ```ts
    * const commerce = await client.commerce.checkout({
    *   customer_id: 'cus_1234567890',
-   *   line_items: [],
+   *   line_items: [
+   *     {
+   *       variant_id: 'var_1234567890',
+   *       quantity: 1,
+   *     },
+   *   ],
    *   success_url: 'https://example.com',
    * });
    * ```

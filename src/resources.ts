@@ -1,8 +1,6 @@
 // File generated from our OpenAPI spec by Scalar. See README.md for details.
 
 export {
-  Analytics,
-  Iam,
   Commerce,
   Connectors,
   Content,
@@ -12,11 +10,6 @@ export {
   PushNotifications,
 } from './resources/index';
 export type {
-  QueryResponse,
-  Table,
-  Status,
-  AnalyticsQueryParams,
-  AnalyticsListTablesResponse,
   Currency,
   CommerceCheckoutParams,
   CommerceCheckoutResponse,

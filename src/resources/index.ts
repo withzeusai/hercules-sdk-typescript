@@ -1,14 +1,5 @@
 // File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export { Analytics } from './analytics';
-export type {
-  QueryResponse,
-  Table,
-  Status,
-  AnalyticsQueryParams,
-  AnalyticsListTablesResponse,
-} from './analytics';
-export { Iam } from './iam/iam';
 export { Commerce } from './commerce/commerce';
 export type {
   Currency,

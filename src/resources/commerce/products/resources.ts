@@ -44,7 +44,7 @@ export class Resources extends APIResource {
    * @example
    * ```ts
    * const resource = await client.commerce.products.resources.attach('productId', {
-   *   resource_ids: [],
+   *   resource_ids: [''],
    * });
    * ```
    */
@@ -70,7 +70,7 @@ export class Resources extends APIResource {
    * @example
    * ```ts
    * await client.commerce.products.resources.detach('productId', {
-   *   resource_ids: [],
+   *   resource_ids: [''],
    * });
    * ```
    */

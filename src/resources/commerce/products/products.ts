@@ -83,7 +83,12 @@ export class Products extends APIResource {
    * ```ts
    * const product = await client.commerce.products.create({
    *   name: 'x',
-   *   variants: [],
+   *   variants: [
+   *     {
+   *       name: 'x',
+   *       unit_amount: 0,
+   *     },
+   *   ],
    * });
    * ```
    */

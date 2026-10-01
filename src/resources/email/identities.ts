@@ -164,6 +164,10 @@ export namespace Identity {
      */
     status: 'disabled' | 'pending' | 'verified' | 'failed';
     /**
+     * Addresses accepted at this exact domain. Null accepts every address. Matching is case-insensitive and a base address also accepts its +tags. Subdomains are configured as separate domain identities.
+     */
+    recipients: Array<string> | null;
+    /**
      * DNS records required for receiving. Empty while receiving is disabled or setup is unavailable.
      */
     records: Array<Receiving.Record>;
