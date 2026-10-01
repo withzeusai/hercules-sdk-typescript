@@ -21,6 +21,7 @@ import {
   formatRequestDetails,
   loggerFor,
   parseLogLevel,
+  redactUrl,
   type LogLevel,
   type Logger,
 } from './internal/utils/log';
@@ -32,15 +33,6 @@ import type { HTTPMethod, FinalizedRequestInit, MergedRequestInit, PromiseOrValu
 import { stringifyQuery } from './internal/utils/query';
 import { toFile } from './core/uploads';
 import { VERSION } from './version';
-import {
-  Analytics,
-  type QueryResponse,
-  type Table,
-  type Status,
-  type AnalyticsListTablesResponse,
-  type AnalyticsQueryParams,
-} from './resources/analytics';
-import { Iam } from './resources/iam/iam';
 import {
   Commerce,
   type Currency,
@@ -299,7 +291,7 @@ export class Hercules {
   }
 
   private getUserAgent(): string {
-    return `${this.constructor.name}/JS ${VERSION}`;
+    return `Hercules/JS ${VERSION}`;
   }
 
   protected defaultIdempotencyKey(): string {
@@ -485,7 +477,7 @@ export class Hercules {
       throw new Errors.APIConnectionError({ cause: response });
     }
 
-    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${redactUrl(url)} ${
       response.ok ? 'succeeded' : 'failed'
     } with status ${response.status} in ${headersTime - startTime}ms`;
 
@@ -587,7 +579,8 @@ export class Hercules {
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
     const abort = this._makeAbort(controller);
-    if (signal) signal.addEventListener('abort', abort, { once: true });
+    if (signal?.aborted) abort();
+    else if (signal) signal.addEventListener('abort', abort, { once: true });
 
     const timeout = setTimeout(abort, ms);
 
@@ -608,7 +601,7 @@ export class Hercules {
     }
 
     try {
-      // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
+      // use undefined this binding; fetch errors if bound to something else in browsers and edge runtimes / workers
       return await this.fetch.call(undefined, url, fetchOptions);
     } finally {
       clearTimeout(timeout);
@@ -796,18 +789,20 @@ export class Hercules {
     if (body == null) {
       return { bodyHeaders: undefined, body: undefined };
     }
-    const headers = buildHeaders([rawHeaders]);
+    // A `content-type` from either header bag says how the body is already encoded; the request's
+    // own wins over the client-wide default, as it does on the wire.
+    const headers = buildHeaders([this._options.defaultHeaders, rawHeaders]);
     if (
       // Pass raw type verbatim
       ArrayBuffer.isView(body) ||
       body instanceof ArrayBuffer ||
       body instanceof DataView ||
-      // Always pass strings through verbatim. The previous guard required a caller-set
-      // `content-type` and otherwise fell through to `FallbackEncoder`, which JSON.stringifies
-      // the value and labels it `application/json` — silently quoting plain-text payloads and
-      // mislabeling them as JSON. fetch defaults a string body to `text/plain;charset=UTF-8`
-      // when no `content-type` is set, which is a safer default than misclaiming JSON.
-      typeof body === 'string' ||
+      // A string is only already-encoded when something has said what it is encoded as.
+      // Generated call sites state the declared request media type, so a `text/plain` or
+      // ndjson payload reaches the wire byte-for-byte. A string with no `content-type` came
+      // from a body the document declared as JSON — `{ "type": "string" }` — and encoding it
+      // below is what puts the quotes the server parses for around it.
+      (typeof body === 'string' && headers.values.has('content-type')) ||
       // `Blob` is superset of `File`
       ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
       // `FormData` -> `multipart/form-data`
@@ -919,8 +914,6 @@ export class Hercules {
 
   static toFile = toFile;
 
-  analytics: Analytics = new Analytics(this);
-  iam: Iam = new Iam(this);
   commerce: Commerce = new Commerce(this);
   connectors: Connectors = new Connectors(this);
   content: Content = new Content(this);
@@ -930,8 +923,6 @@ export class Hercules {
   pushNotifications: PushNotifications = new PushNotifications(this);
 }
 
-Hercules.Analytics = Analytics;
-Hercules.Iam = Iam;
 Hercules.Commerce = Commerce;
 Hercules.Connectors = Connectors;
 Hercules.Content = Content;
@@ -945,17 +936,6 @@ export declare namespace Hercules {
 
   export import CursorIDPage = Pagination.CursorIDPage;
   export { type CursorIDPageParams as CursorIDPageParams, type CursorIDPageResponse as CursorIDPageResponse };
-
-  export {
-    Analytics as Analytics,
-    type QueryResponse as QueryResponse,
-    type Table as Table,
-    type Status as Status,
-    type AnalyticsListTablesResponse as AnalyticsListTablesResponse,
-    type AnalyticsQueryParams as AnalyticsQueryParams,
-  };
-
-  export { Iam as Iam };
 
   export {
     Commerce as Commerce,

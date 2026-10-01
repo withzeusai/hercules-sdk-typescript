@@ -130,6 +130,9 @@ export interface Customer {
    * The customer's phone number
    */
   phone?: string | null;
+  /**
+   * The customer's billing address
+   */
   address?: CustomerAddress | null;
 }
 
@@ -250,6 +253,9 @@ export interface CustomerGetResponse {
    * The customer's phone number
    */
   phone?: string | null;
+  /**
+   * The customer's billing address
+   */
   address?: CustomerAddress | null;
 }
 

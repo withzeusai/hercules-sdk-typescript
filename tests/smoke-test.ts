@@ -16,7 +16,7 @@ import { writeFileSync } from 'node:fs';
 import Hercules from '@usehercules/sdk';
 
 // One shared client runs every case.
-const client = new Hercules();
+const client = new Hercules({ maxRetries: 2, timeout: 10_000 });
 
 // The result of running one case, collected for the JSON report or the printed table.
 type SmokeResult = {
@@ -42,1265 +42,6 @@ const cases: {
   run: () => Promise<unknown>;
 }[] = [
   {
-    operation: 'query',
-    method: 'POST',
-    path: '/v1/analytics/query',
-    label: 'required params',
-    run: async () => {
-      const query = await client.analytics.query({
-        sql: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'query',
-    method: 'POST',
-    path: '/v1/analytics/query',
-    label: 'all params',
-    run: async () => {
-      const query = await client.analytics.query({
-        sql: 'x',
-        params: {},
-        timeout_ms: 0,
-      });
-    },
-  },
-
-  {
-    operation: 'listTables',
-    method: 'GET',
-    path: '/v1/analytics/tables',
-    run: async () => {
-      const analytics = await client.analytics.listTables();
-    },
-  },
-
-  {
-    operation: 'status',
-    method: 'GET',
-    path: '/v1/analytics/status',
-    run: async () => {
-      const status = await client.analytics.status();
-    },
-  },
-
-  {
-    operation: 'accept',
-    method: 'POST',
-    path: '/v1/iam/invitations/accept',
-    run: async () => {
-      const invitation = await client.iam.invitations.accept({
-        actor_user_id: 'x',
-        invitation_token: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants',
-    label: 'required params',
-    run: async () => {
-      const tenant = await client.iam.tenants.list({
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants',
-    label: 'all params',
-    run: async () => {
-      const tenant = await client.iam.tenants.list({
-        starting_after: 'startingAfter',
-        limit: 50,
-        status: 'active',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants',
-    label: 'required params',
-    run: async () => {
-      const tenant = await client.iam.tenants.create({
-        actor_user_id: 'x',
-        name: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants',
-    label: 'all params',
-    run: async () => {
-      const tenant = await client.iam.tenants.create({
-        actor_user_id: 'x',
-        name: 'x',
-        access_mode: 'open',
-        default_role: {
-          id: 'x',
-        },
-        owner_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'get',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}',
-    run: async () => {
-      const tenant = await client.iam.tenants.get('tenantId');
-    },
-  },
-
-  {
-    operation: 'update',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}',
-    label: 'required params',
-    run: async () => {
-      const tenant = await client.iam.tenants.update('tenantId', {
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'update',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}',
-    label: 'all params',
-    run: async () => {
-      const tenant = await client.iam.tenants.update('tenantId', {
-        actor_user_id: 'x',
-        name: 'x',
-        default_role: {
-          id: 'x',
-        },
-        access_mode: 'open',
-      });
-    },
-  },
-
-  {
-    operation: 'archive',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/archive',
-    run: async () => {
-      const tenant = await client.iam.tenants.archive('tenantId', {
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'unarchive',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/unarchive',
-    run: async () => {
-      const tenant = await client.iam.tenants.unarchive('tenantId', {
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'evaluateAccess',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/evaluate-access',
-    run: async () => {
-      const tenant = await client.iam.tenants.evaluateAccess('tenantId', {
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'createInvitation',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/invitations',
-    label: 'required params',
-    run: async () => {
-      const tenant = await client.iam.tenants.createInvitation('tenantId', {
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'createInvitation',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/invitations',
-    label: 'all params',
-    run: async () => {
-      const tenant = await client.iam.tenants.createInvitation('tenantId', {
-        actor_user_id: 'x',
-        roles: [],
-        constraint: {
-          type: 'email',
-          value: 'user@example.com',
-        },
-        max_uses: 0,
-        delivery: {
-          to_emails: [],
-        },
-        redirect_path: 'x',
-        expires_at: '2024-01-01T00:00:00.000Z',
-      });
-    },
-  },
-
-  {
-    operation: 'listRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/role-assignments',
-    label: 'required params',
-    run: async () => {
-      const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'listRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/role-assignments',
-    label: 'all params',
-    run: async () => {
-      const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-        membership_id: 'membershipId',
-        group_id: 'groupId',
-        role_id: 'roleId',
-      });
-    },
-  },
-
-  {
-    operation: 'listResourceRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/resource-role-assignments',
-    label: 'required params',
-    run: async () => {
-      const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'listResourceRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/resource-role-assignments',
-    label: 'all params',
-    run: async () => {
-      const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-        resource_type_id: 'resourceTypeId',
-        resource_type_key: 'resourceTypeKey',
-        external_id: 'externalId',
-        membership_id: 'membershipId',
-        group_id: 'groupId',
-        role_id: 'roleId',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/members',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.create('tenantId', {
-        actor_user_id: 'x',
-        user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/members',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.create('tenantId', {
-        actor_user_id: 'x',
-        user_id: 'x',
-        status: 'active',
-        role: {
-          id: 'x',
-        },
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.list('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.list('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-        status: 'active',
-        role_id: 'roleId',
-        user_id: 'userId',
-      });
-    },
-  },
-
-  {
-    operation: 'get',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}',
-    run: async () => {
-      const member = await client.iam.tenants.members.get('membershipId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'updateStatus',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}',
-    run: async () => {
-      const member = await client.iam.tenants.members.updateStatus('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        status: 'active',
-      });
-    },
-  },
-
-  {
-    operation: 'remove',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.remove('membershipId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'remove',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.remove('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'assignRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.assignRole('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-      });
-    },
-  },
-
-  {
-    operation: 'assignRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.assignRole('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-        expires_at: '2024-01-01T00:00:00.000Z',
-      });
-    },
-  },
-
-  {
-    operation: 'replaceRoles',
-    method: 'PUT',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
-    run: async () => {
-      const member = await client.iam.tenants.members.replaceRoles('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        roles: [],
-      });
-    },
-  },
-
-  {
-    operation: 'unassignRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments/{assignment_id}',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.unassignRole('assignmentId', {
-        tenant_id: 'tenantId',
-        membership_id: 'membershipId',
-      });
-    },
-  },
-
-  {
-    operation: 'unassignRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments/{assignment_id}',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.unassignRole('assignmentId', {
-        tenant_id: 'tenantId',
-        membership_id: 'membershipId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'listRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
-        tenant_id: 'tenantId',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'listRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
-        tenant_id: 'tenantId',
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'assignResourceRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.assignResourceRole('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-        resource_type: {
-          id: 'x',
-        },
-        external_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'assignResourceRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.assignResourceRole('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-        resource_type: {
-          id: 'x',
-        },
-        external_id: 'x',
-        expires_at: '2024-01-01T00:00:00.000Z',
-      });
-    },
-  },
-
-  {
-    operation: 'replaceResourceRoles',
-    method: 'PUT',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
-    run: async () => {
-      const member = await client.iam.tenants.members.replaceResourceRoles('membershipId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        resource_type: {
-          id: 'x',
-        },
-        external_id: 'x',
-        roles: [],
-      });
-    },
-  },
-
-  {
-    operation: 'unassignResourceRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments/{assignment_id}',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.unassignResourceRole('assignmentId', {
-        tenant_id: 'tenantId',
-        membership_id: 'membershipId',
-      });
-    },
-  },
-
-  {
-    operation: 'unassignResourceRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments/{assignment_id}',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.unassignResourceRole('assignmentId', {
-        tenant_id: 'tenantId',
-        membership_id: 'membershipId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'listResourceRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
-        tenant_id: 'tenantId',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'listResourceRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
-        tenant_id: 'tenantId',
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.create('tenantId', {
-        actor_user_id: 'x',
-        name: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.create('tenantId', {
-        actor_user_id: 'x',
-        name: 'x',
-        description: '',
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.list('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.list('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'get',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
-    run: async () => {
-      const group = await client.iam.tenants.groups.get('groupId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'update',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.update('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'update',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.update('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        name: 'x',
-        description: '',
-      });
-    },
-  },
-
-  {
-    operation: 'delete',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.delete('groupId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'delete',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.delete('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'archive',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/archive',
-    run: async () => {
-      const group = await client.iam.tenants.groups.archive('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'unarchive',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive',
-    run: async () => {
-      const group = await client.iam.tenants.groups.unarchive('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'assignRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.assignRole('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-      });
-    },
-  },
-
-  {
-    operation: 'assignRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.assignRole('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-        expires_at: '2024-01-01T00:00:00.000Z',
-      });
-    },
-  },
-
-  {
-    operation: 'unassignRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments/{assignment_id}',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.unassignRole('assignmentId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-      });
-    },
-  },
-
-  {
-    operation: 'unassignRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments/{assignment_id}',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.unassignRole('assignmentId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'listRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
-        tenant_id: 'tenantId',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'listRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
-        tenant_id: 'tenantId',
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'assignResourceRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.assignResourceRole('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-        resource_type: {
-          id: 'x',
-        },
-        external_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'assignResourceRole',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.assignResourceRole('groupId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        role: {
-          id: 'x',
-        },
-        resource_type: {
-          id: 'x',
-        },
-        external_id: 'x',
-        expires_at: '2024-01-01T00:00:00.000Z',
-      });
-    },
-  },
-
-  {
-    operation: 'unassignResourceRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments/{assignment_id}',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.unassignResourceRole('assignmentId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-      });
-    },
-  },
-
-  {
-    operation: 'unassignResourceRole',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments/{assignment_id}',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.unassignResourceRole('assignmentId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'listResourceRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments',
-    label: 'required params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
-        tenant_id: 'tenantId',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'listResourceRoleAssignments',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments',
-    label: 'all params',
-    run: async () => {
-      const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
-        tenant_id: 'tenantId',
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'add',
-    method: 'PUT',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}',
-    run: async () => {
-      const member = await client.iam.tenants.groups.members.add('membershipId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.groups.members.list('groupId', {
-        tenant_id: 'tenantId',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.groups.members.list('groupId', {
-        tenant_id: 'tenantId',
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'remove',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}',
-    label: 'required params',
-    run: async () => {
-      const member = await client.iam.tenants.groups.members.remove('membershipId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-      });
-    },
-  },
-
-  {
-    operation: 'remove',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}',
-    label: 'all params',
-    run: async () => {
-      const member = await client.iam.tenants.groups.members.remove('membershipId', {
-        tenant_id: 'tenantId',
-        group_id: 'groupId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/roles',
-    label: 'required params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.create('tenantId', {
-        actor_user_id: 'x',
-        key: 'x',
-        name: 'x',
-        permission_keys: [],
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/roles',
-    label: 'all params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.create('tenantId', {
-        actor_user_id: 'x',
-        key: 'x',
-        name: 'x',
-        description: '',
-        permission_keys: [],
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/roles',
-    label: 'required params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.list('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/roles',
-    label: 'all params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.list('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-        key: 'key',
-      });
-    },
-  },
-
-  {
-    operation: 'get',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
-    run: async () => {
-      const role = await client.iam.tenants.roles.get('roleId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'update',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
-    label: 'required params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.update('roleId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'update',
-    method: 'PATCH',
-    path: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
-    label: 'all params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.update('roleId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-        name: 'x',
-        description: '',
-        permission_keys: [],
-      });
-    },
-  },
-
-  {
-    operation: 'delete',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
-    label: 'required params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.delete('roleId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'delete',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/roles/{role_id}',
-    label: 'all params',
-    run: async () => {
-      const role = await client.iam.tenants.roles.delete('roleId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/access-rules',
-    label: 'required params',
-    run: async () => {
-      const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/access-rules',
-    label: 'all params',
-    run: async () => {
-      const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-        effect: 'allow',
-        subject_type: 'email',
-        include_archived: 'includeArchived',
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/access-rules',
-    label: 'required params',
-    run: async () => {
-      const accessRule = await client.iam.tenants.accessRules.create('tenantId', {
-        actor_user_id: 'x',
-        effect: 'allow',
-        subject: {
-          type: 'email',
-          value: 'user@example.com',
-        },
-      });
-    },
-  },
-
-  {
-    operation: 'create',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/access-rules',
-    label: 'all params',
-    run: async () => {
-      const accessRule = await client.iam.tenants.accessRules.create('tenantId', {
-        actor_user_id: 'x',
-        effect: 'allow',
-        subject: {
-          type: 'email',
-          value: 'user@example.com',
-        },
-        reason: '',
-      });
-    },
-  },
-
-  {
-    operation: 'archive',
-    method: 'POST',
-    path: '/v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive',
-    run: async () => {
-      const accessRule = await client.iam.tenants.accessRules.archive('ruleId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'x',
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/audit-events',
-    label: 'required params',
-    run: async () => {
-      const auditEvent = await client.iam.tenants.auditEvents.list('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/audit-events',
-    label: 'all params',
-    run: async () => {
-      const auditEvent = await client.iam.tenants.auditEvents.list('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-        before: '2024-01-01T00:00:00.000Z',
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/invitations',
-    label: 'required params',
-    run: async () => {
-      const invitation = await client.iam.tenants.invitations.list('tenantId', {
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'list',
-    method: 'GET',
-    path: '/v1/iam/tenants/{tenant_id}/invitations',
-    label: 'all params',
-    run: async () => {
-      const invitation = await client.iam.tenants.invitations.list('tenantId', {
-        starting_after: 'startingAfter',
-        limit: 50,
-      });
-    },
-  },
-
-  {
-    operation: 'revoke',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/invitations/{invitation_id}',
-    label: 'required params',
-    run: async () => {
-      const invitation = await client.iam.tenants.invitations.revoke('invitationId', {
-        tenant_id: 'tenantId',
-      });
-    },
-  },
-
-  {
-    operation: 'revoke',
-    method: 'DELETE',
-    path: '/v1/iam/tenants/{tenant_id}/invitations/{invitation_id}',
-    label: 'all params',
-    run: async () => {
-      const invitation = await client.iam.tenants.invitations.revoke('invitationId', {
-        tenant_id: 'tenantId',
-        actor_user_id: 'actorUserId',
-      });
-    },
-  },
-
-  {
     operation: 'checkout',
     method: 'POST',
     path: '/v1/commerce/checkout',
@@ -1308,7 +49,12 @@ const cases: {
     run: async () => {
       const commerce = await client.commerce.checkout({
         customer_id: 'cus_1234567890',
-        line_items: [],
+        line_items: [
+          {
+            variant_id: 'var_1234567890',
+            quantity: 1,
+          },
+        ],
         success_url: 'https://example.com',
       });
     },
@@ -1322,7 +68,12 @@ const cases: {
     run: async () => {
       const commerce = await client.commerce.checkout({
         customer_id: 'cus_1234567890',
-        line_items: [],
+        line_items: [
+          {
+            variant_id: 'var_1234567890',
+            quantity: 1,
+          },
+        ],
         success_url: 'https://example.com',
         cancel_url: 'https://example.com',
         promotion_code: '',
@@ -1536,7 +287,12 @@ const cases: {
     run: async () => {
       const product = await client.commerce.products.create({
         name: 'x',
-        variants: [],
+        variants: [
+          {
+            name: 'x',
+            unit_amount: 0,
+          },
+        ],
       });
     },
   },
@@ -1552,10 +308,20 @@ const cases: {
         name: 'x',
         description: 'x',
         subscription_group_id: '',
-        media: [],
-        tags: [],
+        media: [
+          {
+            cdn_file_id: '',
+            type: 'image',
+          },
+        ],
+        tags: [''],
         metadata: {},
-        variants: [],
+        variants: [
+          {
+            name: 'x',
+            unit_amount: 0,
+          },
+        ],
       });
     },
   },
@@ -1580,8 +346,13 @@ const cases: {
         name: '',
         description: '',
         subscription_group_id: '',
-        media: [],
-        tags: [],
+        media: [
+          {
+            cdn_file_id: '',
+            type: 'image',
+          },
+        ],
+        tags: [''],
         metadata: {},
         active: false,
       });
@@ -1618,7 +389,7 @@ const cases: {
     path: '/v1/commerce/products/{product_id}/resources',
     run: async () => {
       const resource = await client.commerce.products.resources.attach('productId', {
-        resource_ids: [],
+        resource_ids: [''],
       });
     },
   },
@@ -1629,7 +400,7 @@ const cases: {
     path: '/v1/commerce/products/{product_id}/resources',
     run: async () => {
       await client.commerce.products.resources.detach('productId', {
-        resource_ids: [],
+        resource_ids: [''],
       });
     },
   },
@@ -1705,7 +476,12 @@ const cases: {
         id: 'var_1234567890',
         name: 'x',
         description: '',
-        media: [],
+        media: [
+          {
+            cdn_file_id: '',
+            type: 'image',
+          },
+        ],
         metadata: {},
         unit_amount: 0,
         currency: 'USD',
@@ -1739,7 +515,12 @@ const cases: {
         product_id: 'productId',
         name: '',
         description: '',
-        media: [],
+        media: [
+          {
+            cdn_file_id: '',
+            type: 'image',
+          },
+        ],
         metadata: {},
         active: false,
       });
@@ -1800,12 +581,12 @@ const cases: {
         code: 'LAUNCH20',
         id: 'coupon_1234567890',
         name: '',
-        percent_off: 0,
-        amount_off: 0,
+        percent_off: 1,
+        amount_off: 1,
         currency: 'USD',
         duration: 'once',
-        duration_in_months: 0,
-        max_redemptions: 0,
+        duration_in_months: 1,
+        max_redemptions: 1,
         redeem_by: '2024-01-01T00:00:00.000Z',
       });
     },
@@ -2021,17 +802,6 @@ const cases: {
     operation: 'credentials',
     method: 'GET',
     path: '/v1/connectors/{slug}/credentials',
-    label: 'required params',
-    run: async () => {
-      const connector = await client.connectors.credentials('slug');
-    },
-  },
-
-  {
-    operation: 'credentials',
-    method: 'GET',
-    path: '/v1/connectors/{slug}/credentials',
-    label: 'all params',
     run: async () => {
       const connector = await client.connectors.credentials('slug', {
         connection_id: 'connectionId',
@@ -2048,6 +818,7 @@ const cases: {
       const connector = await client.connectors.request('slug', {
         endpoint: 'x',
         method: 'GET',
+        connection_id: 'x',
       });
     },
   },
@@ -2212,9 +983,9 @@ const cases: {
           min: 0,
           max: 0,
           pattern: '',
-          allowed_values: [],
-          allowed_collections: [],
-          allowed_mime_types: [],
+          allowed_values: [''],
+          allowed_collections: [''],
+          allowed_mime_types: [''],
           array_item_type: 'text',
           default_value: {},
         },
@@ -2748,7 +1519,7 @@ const cases: {
     path: '/v1/domains/check-availability',
     run: async () => {
       const domain = await client.domains.checkAvailability({
-        domains: [],
+        domains: [''],
       });
     },
   },
@@ -2773,7 +1544,7 @@ const cases: {
     run: async () => {
       const domain = await client.domains.search({
         keyword: 'x',
-        tld_filter: [],
+        tld_filter: [''],
       });
     },
   },
@@ -2886,8 +1657,18 @@ const cases: {
         reply_to: 'user@example.com',
         reply_to_email_id: 'x',
         headers: {},
-        attachments: [],
-        tags: [],
+        attachments: [
+          {
+            filename: 'x',
+            content: '',
+          },
+        ],
+        tags: [
+          {
+            name: 'x',
+            value: 'x',
+          },
+        ],
       });
     },
   },
@@ -3041,7 +1822,7 @@ const cases: {
     path: '/v1/email/suppressions/batch/add',
     run: async () => {
       const suppression = await client.email.suppressions.batchAdd({
-        emails: [],
+        emails: ['user@example.com'],
       });
     },
   },
@@ -3063,8 +1844,8 @@ const cases: {
     label: 'all params',
     run: async () => {
       const suppression = await client.email.suppressions.batchRemove({
-        emails: [],
-        ids: [],
+        emails: ['user@example.com'],
+        ids: ['x'],
       });
     },
   },
@@ -3125,13 +1906,6 @@ const cases: {
     run: async () => {
       const pushNotification = await client.pushNotifications.subscribe({
         visitorId: 'x',
-        subscription: {
-          endpoint: 'https://example.com',
-          keys: {
-            p256dh: 'x',
-            auth: 'x',
-          },
-        },
       });
     },
   },
@@ -3151,6 +1925,10 @@ const cases: {
             p256dh: 'x',
             auth: 'x',
           },
+        },
+        nativeDevice: {
+          platform: 'ios',
+          token: '',
         },
       });
     },
@@ -3213,8 +1991,8 @@ const cases: {
     label: 'all params',
     run: async () => {
       const pushNotification = await client.pushNotifications.send({
-        visitorIds: [],
-        topics: [],
+        visitorIds: [''],
+        topics: [''],
         title: 'x',
         body: '',
         icon: 'https://example.com',
@@ -3234,7 +2012,7 @@ const cases: {
     run: async () => {
       const topic = await client.pushNotifications.topics.subscribe({
         visitorId: 'x',
-        topics: [],
+        topics: ['x'],
       });
     },
   },
@@ -3246,7 +2024,7 @@ const cases: {
     run: async () => {
       const topic = await client.pushNotifications.topics.unsubscribe({
         visitorId: 'x',
-        topics: [],
+        topics: ['x'],
       });
     },
   },
@@ -3262,6 +2040,17 @@ const cases: {
     },
   },
 ];
+
+/**
+ * How many cases run at once, capped at the number of cases there are.
+ *
+ * SCALAR_SMOKE_CONCURRENCY overrides the default; anything unparseable falls back to it.
+ */
+const smokeConcurrency = (caseCount: number): number => {
+  const override = Number.parseInt(process.env['SCALAR_SMOKE_CONCURRENCY'] ?? '', 10);
+  const limit = Number.isInteger(override) && override > 0 ? override : 32;
+  return Math.min(limit, caseCount);
+};
 
 const main = async (): Promise<void> => {
   // SCALAR_SMOKE_FILTER (comma-separated) keeps only cases whose operation name or path matches
@@ -3280,10 +2069,18 @@ const main = async (): Promise<void> => {
         )
       : cases;
 
-  // Run every selected case concurrently. Promise.allSettled means one failing operation never
-  // blocks the others, so a single run reports the status of every endpoint.
-  const settled = await Promise.allSettled(
-    selected.map(async (testCase): Promise<SmokeResult> => {
+  // Run the selected cases under a bounded worker pool rather than all at once. A large SDK has
+  // hundreds of operations, and firing every request together exceeds what the client's transport
+  // keeps connections for while the runner is already busy with other targets. Each worker pulls
+  // the next index off a shared cursor and writes into a pre-sized array, so results stay in case
+  // order however the workers interleave. The per-case body catches everything and never rejects,
+  // so one failing operation still cannot block the others.
+  const results: SmokeResult[] = new Array<SmokeResult>(selected.length);
+  let cursor = 0;
+  const runNext = async (): Promise<void> => {
+    for (let index = cursor++; index < selected.length; index = cursor++) {
+      const testCase = selected[index];
+      if (!testCase) continue;
       const startedAt = Date.now();
       // `label` distinguishes the required-params run from the all-params run of the same
       // operation; it is omitted entirely when the operation contributed only one case.
@@ -3295,28 +2092,20 @@ const main = async (): Promise<void> => {
       };
       try {
         await testCase.run();
-        return { ...identity, status: 'passed', durationMs: Date.now() - startedAt };
+        results[index] = { ...identity, status: 'passed', durationMs: Date.now() - startedAt };
       } catch (error) {
         // Prefer the stack so a failure points at the failing SDK call; fall back to the message.
         const message = error instanceof Error ? (error.stack ?? error.message) : String(error);
-        return { ...identity, status: 'failed', durationMs: Date.now() - startedAt, error: message };
-      }
-    }),
-  );
-
-  // allSettled never rejects, but defensively map any rejected slot to a failed result.
-  const results: SmokeResult[] = settled.map((result) =>
-    result.status === 'fulfilled'
-      ? result.value
-      : {
-          operation: 'unknown',
-          method: '',
-          path: '',
+        results[index] = {
+          ...identity,
           status: 'failed',
-          durationMs: 0,
-          error: String(result.reason),
-        },
-  );
+          durationMs: Date.now() - startedAt,
+          error: message,
+        };
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: smokeConcurrency(selected.length) }, runNext));
   const failed = results.filter((result) => result.status === 'failed');
 
   // With SCALAR_SMOKE_REPORT set, write a machine-readable report; otherwise print a table.
