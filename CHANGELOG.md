@@ -1,5 +1,156 @@
 # Changelog
 
+## [1.17.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.16.0...v1.17.0) (2026-10-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** 134 breaking changes to the SDK surface.
+    - query param `connection_id` on `connectors.credentials` is now required.
+    - Body field `connection_id` on `connectors.request` is now required.
+    - Removed operation `analytics.query` (`POST /v1/analytics/query`).
+    - Removed operation `analytics.listTables` (`GET /v1/analytics/tables`).
+    - Removed operation `analytics.status` (`GET /v1/analytics/status`).
+    - Removed operation `iam.invitations.accept` (`POST /v1/iam/invitations/accept`).
+    - Removed operation `iam.tenants.list` (`GET /v1/iam/tenants`).
+    - Removed operation `iam.tenants.create` (`POST /v1/iam/tenants`).
+    - Removed operation `iam.tenants.get` (`GET /v1/iam/tenants/{tenant_id}`).
+    - Removed operation `iam.tenants.update` (`PATCH /v1/iam/tenants/{tenant_id}`).
+    - Removed operation `iam.tenants.archive` (`POST /v1/iam/tenants/{tenant_id}/archive`).
+    - Removed operation `iam.tenants.unarchive` (`POST /v1/iam/tenants/{tenant_id}/unarchive`).
+    - Removed operation `iam.tenants.evaluateAccess` (`POST /v1/iam/tenants/{tenant_id}/evaluate-access`).
+    - Removed operation `iam.tenants.createInvitation` (`POST /v1/iam/tenants/{tenant_id}/invitations`).
+    - Removed operation `iam.tenants.listRoleAssignments` (`GET /v1/iam/tenants/{tenant_id}/role-assignments`).
+    - Removed operation `iam.tenants.listResourceRoleAssignments` (`GET /v1/iam/tenants/{tenant_id}/resource-role-assignments`).
+    - Removed operation `iam.tenants.members.create` (`POST /v1/iam/tenants/{tenant_id}/members`).
+    - Removed operation `iam.tenants.members.list` (`GET /v1/iam/tenants/{tenant_id}/members`).
+    - Removed operation `iam.tenants.members.get` (`GET /v1/iam/tenants/{tenant_id}/members/{membership_id}`).
+    - Removed operation `iam.tenants.members.updateStatus` (`PATCH /v1/iam/tenants/{tenant_id}/members/{membership_id}`).
+    - Removed operation `iam.tenants.members.remove` (`DELETE /v1/iam/tenants/{tenant_id}/members/{membership_id}`).
+    - Removed operation `iam.tenants.members.assignRole` (`POST /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments`).
+    - Removed operation `iam.tenants.members.replaceRoles` (`PUT /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments`).
+    - Removed operation `iam.tenants.members.unassignRole` (`DELETE /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments/{assignment_id}`).
+    - Removed operation `iam.tenants.members.listRoleAssignments` (`GET /v1/iam/tenants/{tenant_id}/members/{membership_id}/role-assignments`).
+    - Removed operation `iam.tenants.members.assignResourceRole` (`POST /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments`).
+    - Removed operation `iam.tenants.members.replaceResourceRoles` (`PUT /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments`).
+    - Removed operation `iam.tenants.members.unassignResourceRole` (`DELETE /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments/{assignment_id}`).
+    - Removed operation `iam.tenants.members.listResourceRoleAssignments` (`GET /v1/iam/tenants/{tenant_id}/members/{membership_id}/resource-role-assignments`).
+    - Removed operation `iam.tenants.groups.create` (`POST /v1/iam/tenants/{tenant_id}/groups`).
+    - Removed operation `iam.tenants.groups.list` (`GET /v1/iam/tenants/{tenant_id}/groups`).
+    - Removed operation `iam.tenants.groups.get` (`GET /v1/iam/tenants/{tenant_id}/groups/{group_id}`).
+    - Removed operation `iam.tenants.groups.update` (`PATCH /v1/iam/tenants/{tenant_id}/groups/{group_id}`).
+    - Removed operation `iam.tenants.groups.delete` (`DELETE /v1/iam/tenants/{tenant_id}/groups/{group_id}`).
+    - Removed operation `iam.tenants.groups.archive` (`POST /v1/iam/tenants/{tenant_id}/groups/{group_id}/archive`).
+    - Removed operation `iam.tenants.groups.unarchive` (`POST /v1/iam/tenants/{tenant_id}/groups/{group_id}/unarchive`).
+    - Removed operation `iam.tenants.groups.assignRole` (`POST /v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments`).
+    - Removed operation `iam.tenants.groups.unassignRole` (`DELETE /v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments/{assignment_id}`).
+    - Removed operation `iam.tenants.groups.listRoleAssignments` (`GET /v1/iam/tenants/{tenant_id}/groups/{group_id}/role-assignments`).
+    - Removed operation `iam.tenants.groups.assignResourceRole` (`POST /v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments`).
+    - Removed operation `iam.tenants.groups.unassignResourceRole` (`DELETE /v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments/{assignment_id}`).
+    - Removed operation `iam.tenants.groups.listResourceRoleAssignments` (`GET /v1/iam/tenants/{tenant_id}/groups/{group_id}/resource-role-assignments`).
+    - Removed operation `iam.tenants.groups.members.add` (`PUT /v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}`).
+    - Removed operation `iam.tenants.groups.members.list` (`GET /v1/iam/tenants/{tenant_id}/groups/{group_id}/members`).
+    - Removed operation `iam.tenants.groups.members.remove` (`DELETE /v1/iam/tenants/{tenant_id}/groups/{group_id}/members/{membership_id}`).
+    - Removed operation `iam.tenants.roles.create` (`POST /v1/iam/tenants/{tenant_id}/roles`).
+    - Removed operation `iam.tenants.roles.list` (`GET /v1/iam/tenants/{tenant_id}/roles`).
+    - Removed operation `iam.tenants.roles.get` (`GET /v1/iam/tenants/{tenant_id}/roles/{role_id}`).
+    - Removed operation `iam.tenants.roles.update` (`PATCH /v1/iam/tenants/{tenant_id}/roles/{role_id}`).
+    - Removed operation `iam.tenants.roles.delete` (`DELETE /v1/iam/tenants/{tenant_id}/roles/{role_id}`).
+    - Removed operation `iam.tenants.accessRules.list` (`GET /v1/iam/tenants/{tenant_id}/access-rules`).
+    - Removed operation `iam.tenants.accessRules.create` (`POST /v1/iam/tenants/{tenant_id}/access-rules`).
+    - Removed operation `iam.tenants.accessRules.archive` (`POST /v1/iam/tenants/{tenant_id}/access-rules/{rule_id}/archive`).
+    - Removed operation `iam.tenants.auditEvents.list` (`GET /v1/iam/tenants/{tenant_id}/audit-events`).
+    - Removed operation `iam.tenants.invitations.list` (`GET /v1/iam/tenants/{tenant_id}/invitations`).
+    - Removed operation `iam.tenants.invitations.revoke` (`DELETE /v1/iam/tenants/{tenant_id}/invitations/{invitation_id}`).
+    - Property `checkout_session.amount_total` type changed from `integer | null` to `integer | null`.
+    - Property `commerce_checkout_line_item.quantity` type changed from `integer` to `integer`.
+    - Property `commerce_checkout_request.trial_period_days` type changed from `integer` to `integer`.
+    - Property `coupon.amount_off` type changed from `integer | null` to `integer | null`.
+    - Property `coupon.duration_in_months` type changed from `integer | null` to `integer | null`.
+    - Property `coupon.max_redemptions` type changed from `integer | null` to `integer | null`.
+    - Property `coupon.times_redeemed` type changed from `integer` to `integer`.
+    - Property `commerce_recurring.interval_count` type changed from `integer` to `integer`.
+    - Property `variant.unit_amount` type changed from `integer` to `integer`.
+    - Property `commerce_media_input.display_order` type changed from `integer` to `integer`.
+    - Property `create_commerce_product_variant_input.unit_amount` type changed from `integer` to `integer`.
+    - Property `create_commerce_product_variant_request.unit_amount` type changed from `integer` to `integer`.
+    - Removed required property `connector_credentials_response.delivery_mode`.
+    - Property `connector_request_body.connection_id` is now required.
+    - Property `field.display_order` type changed from `integer` to `integer`.
+    - Property `collection.version` type changed from `integer` to `integer`.
+    - Property `create_content_field_request.display_order` type changed from `integer` to `integer`.
+    - Property `update_content_field_request.display_order` type changed from `integer` to `integer`.
+    - Property `entry.version` type changed from `integer` to `integer`.
+    - Property `update_content_entry_request.version` type changed from `integer` to `integer`.
+    - Property `asset.size` type changed from `integer` to `integer`.
+    - Property `asset.width` type changed from `integer | null` to `integer | null`.
+    - Property `asset.height` type changed from `integer | null` to `integer | null`.
+    - Property `create_content_asset_request.size` type changed from `integer` to `integer`.
+    - Property `create_content_asset_request.width` type changed from `integer` to `integer`.
+    - Property `create_content_asset_request.height` type changed from `integer` to `integer`.
+    - Property `purchased_domain.years` type changed from `integer` to `integer`.
+    - Added required property `email_identity_receiving.recipients`.
+    - Property `email_identity_receiving.records` type changed from `Array<object>` to `Array<object>`.
+    - Property `identity.verification_records` type changed from `Array<object> | null` to `Array<object> | null`.
+    - Property `send_email_request.tags` type changed from `Array<object>` to `Array<object>`.
+    - Property `file.size` type changed from `integer` to `integer`.
+    - Removed schema `iam_convex_source_data`.
+    - Removed schema `iam_problem_code`.
+    - Removed schema `iam_problem_details`.
+    - Removed schema `iam_problem`.
+    - Removed schema `iam_role_id_reference`.
+    - Removed schema `iam_role_key_reference`.
+    - Removed schema `iam_role_reference`.
+    - Removed schema `iam_tenant_create_request`.
+    - Removed schema `iam_tenant`.
+    - Removed schema `iam_member_role_assignment_item`.
+    - Removed schema `iam_resource_type_id_reference`.
+    - Removed schema `iam_resource_type_key_reference`.
+    - Removed schema `iam_resource_type_reference`.
+    - Removed schema `iam_member`.
+    - Removed schema `iam_member_role_assignment`.
+    - Removed schema `iam_member_resource_role_assignment`.
+    - Removed schema `iam_group`.
+    - Removed schema `iam_group_member`.
+    - Removed schema `iam_group_role_assignment`.
+    - Removed schema `iam_group_resource_role_assignment`.
+    - Removed schema `iam_role_permission_ref`.
+    - Removed schema `iam_role`.
+    - Removed schema `iam_role_permission_detail`.
+    - Removed schema `iam_role_detail`.
+    - Removed schema `iam_role_assignment_member_subject`.
+    - Removed schema `iam_role_assignment_group_subject`.
+    - Removed schema `iam_role_assignment`.
+    - Removed schema `iam_resource_role_assignment_member_subject`.
+    - Removed schema `iam_resource_role_assignment_group_subject`.
+    - Removed schema `iam_resource_role_assignment`.
+    - Removed schema `iam_invitation_email_constraint`.
+    - Removed schema `iam_invitation_domain_constraint`.
+    - Removed schema `iam_invitation_constraint`.
+    - Removed schema `iam_invitation_delivery`.
+    - Removed schema `iam_invitation`.
+    - Removed schema `iam_access_rule_email_subject`.
+    - Removed schema `iam_access_rule_domain_subject`.
+    - Removed schema `iam_access_rule_subject`.
+    - Removed schema `iam_access_rule`.
+    - Removed schema `iam_audit_event`.
+    - Removed schema `analytics_column`.
+    - Removed schema `analytics_query_stats`.
+    - Removed schema `query_response`.
+    - Removed schema `table`.
+    - Removed schema `analytics_tables_response`.
+    - Removed schema `status`.
+
+### Features
+
+* **api:** update SDK surface (136 changes) ([49b8325](https://github.com/withzeusai/hercules-sdk-typescript/commit/49b8325a2fad562978d82d34752eb9552df31fa4))
+
+
+### Chores
+
+* release 1.17.0 ([f13ae08](https://github.com/withzeusai/hercules-sdk-typescript/commit/f13ae08989d22fb8b3d2ca0b46572453d97b18cc))
+* release 1.17.0 ([7144ca3](https://github.com/withzeusai/hercules-sdk-typescript/commit/7144ca31131e526c0d1d434d5b5b6f07f9037ec3))
+
 ## [1.16.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.15.13...v1.16.0) (2026-10-01)
 
 
