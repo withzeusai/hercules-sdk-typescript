@@ -1,0 +1,4 @@
+{
+  "name": "@usehercules/sdk",
+  "exports": "./index.ts"
+}
