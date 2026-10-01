@@ -7,28 +7,30 @@ import { path as __scalarPath } from '../internal/utils/path';
 
 export class Connectors extends APIResource {
   /**
-   * Returns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one. Connectors whose provider withholds the credential answer 409 — send requests through the connector request endpoint instead.
+   * Returns fresh credentials for the named connection of a connector, refreshing the OAuth access token on demand. Requires a deployment-bound API key, and the connection must be installed for the calling deployment. Secrets are keyed by role: access_token, api_key, or a credential field key. Errors carry a code: connector_not_installed (404), connection_not_linked (404), connector_not_connected (409), credentials_unavailable (409, reconnect in the dashboard), connector_brokered (409, use the request endpoint).
    *
    * @param {string} slug - The connector's catalog slug.
-   * @param {ConnectorCredentialsParams} [query] - The parameters to send with the request.
+   * @param {ConnectorCredentialsParams} query - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
    * @returns {APIPromise<ConnectorCredentialsResponse>} The connector's secret values and their expiry
    *
    * @example
    * ```ts
-   * const connector = await client.connectors.credentials('slug');
+   * const connector = await client.connectors.credentials('slug', {
+   *   connection_id: 'connectionId',
+   * });
    * ```
    */
   credentials(
     slug: string,
-    query: ConnectorCredentialsParams | null | undefined = {},
+    query: ConnectorCredentialsParams,
     options?: RequestOptions,
   ): APIPromise<ConnectorCredentialsResponse> {
     return this._client.get(__scalarPath`/v1/connectors/${slug}/credentials`, { query, ...options });
   }
 
   /**
-   * Sends an HTTP request to a connector's provider API as one of the app's connected accounts, with credentials injected server-side — the app never handles the token. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. Answers 200 whenever the request reached the provider, with the provider's own status in the body.
+   * Sends an HTTP request to a connector's provider API as the named connection, with credentials added server-side; the app never handles the token. Requires a deployment-bound API key, and the connection must be installed for the calling deployment. Answers 200 whenever the request reached the provider, with the provider's own status in the body. Errors carry a code: connector_not_installed (404), connection_not_linked (404), connector_not_connected (409), connector_not_brokered (400, use the credentials endpoint), provider_unreachable (502).
    *
    * @param {string} slug - The connector's catalog slug.
    * @param {ConnectorRequestParams} body - The request body to send.
@@ -40,6 +42,7 @@ export class Connectors extends APIResource {
    * const connector = await client.connectors.request('slug', {
    *   endpoint: 'x',
    *   method: 'GET',
+   *   connection_id: 'x',
    * });
    * ```
    */
@@ -54,11 +57,11 @@ export class Connectors extends APIResource {
 
 export interface ConnectorCredentialsParams {
   /**
-   * ID of the connection (the linked credential) to read. When omitted, resolves the connection installed for the calling deployment. When set, the calling deployment must be linked to exactly this connection — unlinking it in the dashboard invalidates the ID.
+   * ID of the connection (the linked credential) to read. Always required, so an app never silently moves to a different connection when a second one is linked. The calling deployment must be linked to exactly this connection; unlinking it in the dashboard invalidates the ID.
    * @minLength 1
    * @maxLength 50
    */
-  connection_id?: string;
+  connection_id: string;
 }
 
 export interface ConnectorCredentialsResponse {
@@ -75,11 +78,7 @@ export interface ConnectorCredentialsResponse {
    */
   auth_type: 'api_key' | 'oauth';
   /**
-   * The connector's credential delivery mode.
-   */
-  delivery_mode: 'sdk';
-  /**
-   * Secret values keyed by their env-style names (e.g. GOOGLE_ACCESS_TOKEN).
+   * Secret values keyed by role: access_token for OAuth, api_key for a single pasted key, or the field key of a multi-field credential (e.g. access_key_id). Never includes a refresh token.
    */
   secrets: Record<string, string>;
   /**
@@ -100,6 +99,12 @@ export interface ConnectorRequestParams {
    */
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   /**
+   * ID of the connection to send the request as. Always required, so an app never silently moves to a different connection when a second one is linked.
+   * @minLength 1
+   * @maxLength 50
+   */
+  connection_id: string;
+  /**
    * JSON request body. Omit for GET and DELETE.
    */
   body?: unknown;
@@ -111,12 +116,6 @@ export interface ConnectorRequestParams {
    * Extra request headers. Authentication headers are added by Hercules.
    */
   headers?: Record<string, string>;
-  /**
-   * ID of the connection to send the request as. Required when several connections of this connector cover the calling deployment.
-   * @minLength 1
-   * @maxLength 50
-   */
-  connection_id?: string;
 }
 
 export interface ConnectorRequestResponse {

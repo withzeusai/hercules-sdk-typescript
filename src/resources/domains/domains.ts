@@ -48,7 +48,7 @@ export class Domains extends APIResource {
    * @example
    * ```ts
    * const domain = await client.domains.checkAvailability({
-   *   domains: [],
+   *   domains: [''],
    * });
    * ```
    */
@@ -107,7 +107,7 @@ export interface Domain {
    */
   updated: string;
   /**
-   * Cloudflare verification status (e.g., 'active', 'pending')
+   * Cloudflare verification status (e.g., 'active', 'pending'), or 'released' when the hostname was disconnected and must be reconnected from the dashboard
    */
   status?: string;
   /**

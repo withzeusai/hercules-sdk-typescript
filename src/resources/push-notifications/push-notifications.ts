@@ -34,7 +34,7 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Registers a push subscription with the provided visitorId. Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint to handle re-subscriptions. Returns a secret for subscription ownership.
+   * Registers a push subscription with the provided visitorId: a Web Push `subscription` from a browser, or a `nativeDevice` APNs token from the Hercules iOS app. Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
    *
    * @param {PushNotificationSubscribeParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -44,13 +44,6 @@ export class PushNotifications extends APIResource {
    * ```ts
    * const pushNotification = await client.pushNotifications.subscribe({
    *   visitorId: 'x',
-   *   subscription: {
-   *     endpoint: 'https://example.com',
-   *     keys: {
-   *       p256dh: 'x',
-   *       auth: 'x',
-   *     },
-   *   },
    * });
    * ```
    */
@@ -105,7 +98,7 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Sends push notifications to specified visitors and/or topics. Specify visitorIds, topics, or both (combined as union). Omit both to broadcast to all subscribers.
+   * Sends push notifications to specified visitors and/or topics. Specify visitorIds, topics, or both (combined as union). Omit both to broadcast to all subscribers. Recipient lists above 100 are delivered in the background and reported as `queued`. Limited to 120 sends per minute per app, 6 of which may be broadcasts.
    *
    * @param {PushNotificationSendParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -139,16 +132,34 @@ export interface PushNotificationSubscribeParams {
    */
   visitorId: string;
   /**
-   * Web Push subscription object from pushManager.subscribe()
-   */
-  subscription: PushNotificationSubscribeParams.Subscription;
-  /**
    * Optional end-user identity snapshot supplied by the app. Hercules stores it only with this app's push subscription.
    */
   subscriber?: PushNotificationSubscribeParams.Subscriber;
+  /**
+   * Web Push subscription object from pushManager.subscribe()
+   */
+  subscription?: PushNotificationSubscribeParams.Subscription;
+  /**
+   * Native device registration from the Hercules iOS app. Notifications reach it through Apple Push Notification service using the APNs key uploaded in the app's App Store settings.
+   */
+  nativeDevice?: PushNotificationSubscribeParams.NativeDevice;
 }
 
 export namespace PushNotificationSubscribeParams {
+  export interface Subscriber {
+    /**
+     * @minLength 1
+     * @maxLength 255
+     */
+    displayName?: string;
+    /**
+     * @format email
+     * @maxLength 255
+     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     */
+    email?: string;
+  }
+
   export interface Subscription {
     /**
      * Push service endpoint URL
@@ -179,18 +190,16 @@ export namespace PushNotificationSubscribeParams {
     }
   }
 
-  export interface Subscriber {
+  export interface NativeDevice {
     /**
-     * @minLength 1
-     * @maxLength 255
+     * Native platform the device token was issued for
      */
-    displayName?: string;
+    platform: 'ios';
     /**
-     * @format email
-     * @maxLength 255
-     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     * APNs device token as hex, from the Capacitor PushNotifications `registration` event
+     * @pattern ^[0-9a-fA-F]{64,200}$
      */
-    email?: string;
+    token: string;
   }
 }
 
@@ -321,6 +330,10 @@ export interface PushNotificationSendResponse {
    * Number of notifications that failed to send
    */
   failed: number;
+  /**
+   * Number of recipients handed to background delivery. Present only when the recipient list was too large to deliver within the request; `sent` and `failed` are then 0 and per-recipient results are not reported.
+   */
+  queued?: number;
 }
 PushNotifications.Topics = Topics;
 

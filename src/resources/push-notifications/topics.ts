@@ -17,7 +17,7 @@ export class Topics extends APIResource {
    * ```ts
    * const topic = await client.pushNotifications.topics.subscribe({
    *   visitorId: 'x',
-   *   topics: [],
+   *   topics: ['x'],
    * });
    * ```
    */
@@ -36,7 +36,7 @@ export class Topics extends APIResource {
    * ```ts
    * const topic = await client.pushNotifications.topics.unsubscribe({
    *   visitorId: 'x',
-   *   topics: [],
+   *   topics: ['x'],
    * });
    * ```
    */

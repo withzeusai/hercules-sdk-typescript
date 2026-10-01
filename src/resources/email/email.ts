@@ -158,7 +158,7 @@ export interface EmailSendParams {
    */
   from: string;
   /**
-   * Recipient email address(es). Maximum 50.
+   * Recipient email address(es). At most 50 across to, cc, and bcc combined.
    */
   to: string | Array<string>;
   /**
@@ -211,14 +211,14 @@ export interface EmailSendParams {
 export namespace EmailSendParams {
   export interface Tag {
     /**
-     * The name of the tag
+     * The name of the tag. ASCII letters, numbers, underscores, and dashes only (max 256 characters).
      * @minLength 1
      * @maxLength 256
-     * @pattern ^[A-Za-z0-9_.@-]+$
+     * @pattern ^[A-Za-z0-9_-]+$
      */
     name: string;
     /**
-     * The value of the tag
+     * The value of the tag. ASCII letters, numbers, underscores, dashes, periods, and at signs only (max 256 characters).
      * @minLength 1
      * @maxLength 256
      * @pattern ^[A-Za-z0-9_.@-]+$

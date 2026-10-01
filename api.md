@@ -4,71 +4,6 @@ Complete reference of every operation, grouped by resource. See [the README](./R
 
 ## Contents
 
-- [`Analytics`](#analytics)
-  - [Run Analytics Query](#run-analytics-query)
-  - [List Analytics Tables](#list-analytics-tables)
-  - [Get Analytics Status](#get-analytics-status)
-- [`Iam`](#iam)
-  - [`Iam Invitations`](#iam-invitations)
-    - [Accept invitation](#accept-invitation)
-  - [`Iam Tenants`](#iam-tenants)
-    - [List tenants](#list-tenants)
-    - [Create tenant](#create-tenant)
-    - [Get tenant](#get-tenant)
-    - [Update tenant](#update-tenant)
-    - [Archive tenant](#archive-tenant)
-    - [Unarchive tenant](#unarchive-tenant)
-    - [Evaluate tenant access](#evaluate-tenant-access)
-    - [Create invitation](#create-invitation)
-    - [List tenant role assignments](#list-tenant-role-assignments)
-    - [List tenant resource role assignments](#list-tenant-resource-role-assignments)
-    - [`Iam Tenants Members`](#iam-tenants-members)
-      - [Add tenant member](#add-tenant-member)
-      - [List tenant members](#list-tenant-members)
-      - [Get tenant member](#get-tenant-member)
-      - [Update tenant member status](#update-tenant-member-status)
-      - [Remove tenant member](#remove-tenant-member)
-      - [Assign tenant role to member](#assign-tenant-role-to-member)
-      - [Replace member tenant roles](#replace-member-tenant-roles)
-      - [Unassign tenant role from member](#unassign-tenant-role-from-member)
-      - [List a member's tenant role assignments](#list-a-members-tenant-role-assignments)
-      - [Assign resource role to member](#assign-resource-role-to-member)
-      - [Replace member resource roles](#replace-member-resource-roles)
-      - [Unassign resource role from member](#unassign-resource-role-from-member)
-      - [List a member's resource role assignments](#list-a-members-resource-role-assignments)
-    - [`Iam Tenants Groups`](#iam-tenants-groups)
-      - [Create tenant group](#create-tenant-group)
-      - [List tenant groups](#list-tenant-groups)
-      - [Get tenant group](#get-tenant-group)
-      - [Update tenant group](#update-tenant-group)
-      - [Delete tenant group](#delete-tenant-group)
-      - [Archive tenant group](#archive-tenant-group)
-      - [Unarchive tenant group](#unarchive-tenant-group)
-      - [Assign tenant role to group](#assign-tenant-role-to-group)
-      - [Unassign tenant role from group](#unassign-tenant-role-from-group)
-      - [List a group's tenant role assignments](#list-a-groups-tenant-role-assignments)
-      - [Assign resource role to group](#assign-resource-role-to-group)
-      - [Unassign resource role from group](#unassign-resource-role-from-group)
-      - [List a group's resource role assignments](#list-a-groups-resource-role-assignments)
-      - [`Iam Tenants Groups Members`](#iam-tenants-groups-members)
-        - [Add tenant group member](#add-tenant-group-member)
-        - [List a group's members](#list-a-groups-members)
-        - [Remove tenant group member](#remove-tenant-group-member)
-    - [`Iam Tenants Roles`](#iam-tenants-roles)
-      - [Create role](#create-role)
-      - [List tenant roles](#list-tenant-roles)
-      - [Get tenant role](#get-tenant-role)
-      - [Update role](#update-role)
-      - [Delete role](#delete-role)
-    - [`Iam Tenants AccessRules`](#iam-tenants-accessrules)
-      - [List tenant access rules](#list-tenant-access-rules)
-      - [Create tenant access rule](#create-tenant-access-rule)
-      - [Archive tenant access rule](#archive-tenant-access-rule)
-    - [`Iam Tenants AuditEvents`](#iam-tenants-auditevents)
-      - [List tenant audit events](#list-tenant-audit-events)
-    - [`Iam Tenants Invitations`](#iam-tenants-invitations)
-      - [List tenant invitations](#list-tenant-invitations)
-      - [Revoke invitation](#revoke-invitation)
 - [`Commerce`](#commerce)
   - [Create Checkout Session](#create-checkout-session)
   - [Cancel Subscription](#cancel-subscription)
@@ -206,899 +141,6 @@ const client = new Hercules({
 });
 ```
 
-## `Analytics`
-
-(Beta) Query the app's analytics replica with read-only SQL, list the
-replicated tables and their columns, and check replication status.
-
-### Run Analytics Query
-
-Executes a single read-only SQL statement against the app's analytics replica and returns rows with column metadata and execution stats.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`AnalyticsQueryParams`](./src/resources/analytics.ts) |
-| Response | [`QueryResponse`](./src/resources/analytics.ts) |
-
-```ts
-const query = await client.analytics.query({
-  sql: 'x',
-});
-```
-
-### List Analytics Tables
-
-Retrieves the replicated tables and their column types, along with the replica's last sync time.
-
-| Direction | Type |
-| --- | --- |
-| Response | [`AnalyticsListTablesResponse`](./src/resources/analytics.ts) |
-
-```ts
-const analytics = await client.analytics.listTables();
-```
-
-### Get Analytics Status
-
-Reports whether analytics is enabled for the app, the replication state, last sync time, and replica storage size.
-
-| Direction | Type |
-| --- | --- |
-| Response | [`Status`](./src/resources/analytics.ts) |
-
-```ts
-const status = await client.analytics.status();
-```
-
-## `Iam`
-
-Manage IAM tenants, members, groups, roles, access rules, invitations,
-and tenant-wide / resource role assignments. Requires an API key with the
-IAM administration permission.
-
-### `Iam Invitations`
-
-#### Accept invitation
-
-Accepts a pending invitation as the signed-in end user and materializes its tenant-wide role assignments.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`InvitationAcceptParams`](./src/resources/iam/invitations.ts) |
-| Response | [`InvitationAcceptResponse`](./src/resources/iam/invitations.ts) |
-
-```ts
-const invitation = await client.iam.invitations.accept({
-  actor_user_id: 'x',
-  invitation_token: 'x',
-});
-```
-
-### `Iam Tenants`
-
-#### List tenants
-
-Lists the deployment's IAM tenants, primary tenant first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantListParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantListResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.list({
-  limit: 50,
-});
-```
-
-#### Create tenant
-
-Creates a tenant and assigns its initial owner. The signed-in user becomes the owner unless trusted server code specifies another user. The initial owner is granted the seeded owner role. The default role (for later members) defaults to the seeded member role and must not be an app-scoped role.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantCreateParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantCreateResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.create({
-  actor_user_id: 'x',
-  name: 'x',
-});
-```
-
-#### Get tenant
-
-Returns one IAM tenant by ID. Pass `primary` for the deployment's primary tenant.
-
-| Direction | Type |
-| --- | --- |
-| Response | [`TenantGetResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.get('tenantId');
-```
-
-#### Update tenant
-
-Updates a tenant's name, default role, or access mode.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantUpdateParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantUpdateResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.update('tenantId', {
-  actor_user_id: 'x',
-});
-```
-
-#### Archive tenant
-
-Archives a non-primary tenant and blocks its access without deleting its data.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantArchiveParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantArchiveResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.archive('tenantId', {
-  actor_user_id: 'x',
-});
-```
-
-#### Unarchive tenant
-
-Restores an archived tenant and re-enables access through its existing data.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantUnarchiveParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantUnarchiveResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.unarchive('tenantId', {
-  actor_user_id: 'x',
-});
-```
-
-#### Evaluate tenant access
-
-Evaluates whether the signed-in end user may enter the tenant and applies the result: access mode `open` creates an active membership with the tenant default role, `approval_required` creates a pending membership, and denials create nothing. Call it after sign-in, before reading the user's access status. Safe to repeat; an existing membership is returned unchanged.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantEvaluateAccessParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantEvaluateAccessResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.evaluateAccess('tenantId', {
-  actor_user_id: 'x',
-});
-```
-
-#### Create invitation
-
-Creates an invitation that confers tenant-wide roles when accepted.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantCreateInvitationParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantCreateInvitationResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.createInvitation('tenantId', {
-  actor_user_id: 'x',
-});
-```
-
-#### List tenant role assignments
-
-Lists tenant-wide role assignments in a tenant, newest first. Filter by member, group, or role.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantListRoleAssignmentsParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantListRoleAssignmentsResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.listRoleAssignments('tenantId', {
-  limit: 50,
-});
-```
-
-#### List tenant resource role assignments
-
-Lists resource role assignments in a tenant, newest first. Filter by resource type and external ID to find who has a role on one exact resource, or by member, group, or role.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`TenantListResourceRoleAssignmentsParams`](./src/resources/iam/tenants/tenants.ts) |
-| Response | [`TenantListResourceRoleAssignmentsResponse`](./src/resources/iam/tenants/tenants.ts) |
-
-```ts
-const tenant = await client.iam.tenants.listResourceRoleAssignments('tenantId', {
-  limit: 50,
-});
-```
-
-#### `Iam Tenants Members`
-
-##### Add tenant member
-
-Adds an end user to the tenant, optionally with a role.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberCreateParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberCreateResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.create('tenantId', {
-  actor_user_id: 'x',
-  user_id: 'x',
-});
-```
-
-##### List tenant members
-
-Lists a tenant's members, newest first. Filter by status, by a role the member directly holds, or by the member's Hercules Auth user id.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberListParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberListResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.list('tenantId', {
-  limit: 50,
-});
-```
-
-##### Get tenant member
-
-Returns one tenant member by their membership ID.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberGetParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberGetResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.get('membershipId', {
-  tenant_id: 'tenantId',
-});
-```
-
-##### Update tenant member status
-
-Approves, suspends, blocks, reactivates, or removes a tenant member.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberUpdateStatusParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberUpdateStatusResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.updateStatus('membershipId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  status: 'active',
-});
-```
-
-##### Remove tenant member
-
-Removes a member from the tenant. The component treats a removed member as denied.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberRemoveParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberRemoveResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.remove('membershipId', {
-  tenant_id: 'tenantId',
-});
-```
-
-##### Assign tenant role to member
-
-Assigns a tenant-wide role to a member.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberAssignRoleParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberAssignRoleResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.assignRole('membershipId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  role: {
-    id: 'x',
-  },
-});
-```
-
-##### Replace member tenant roles
-
-Reconciles the member's direct tenant-wide role assignments to exactly the supplied set in one transaction: missing roles are assigned, surplus assignments removed, matching ones kept. Roles conferred via groups are untouched. Idempotent; prefer this over unassign-then-assign loops.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberReplaceRolesParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberReplaceRolesResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.replaceRoles('membershipId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  roles: [],
-});
-```
-
-##### Unassign tenant role from member
-
-Removes a tenant-wide role assignment.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberUnassignRoleParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberUnassignRoleResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.unassignRole('assignmentId', {
-  tenant_id: 'tenantId',
-  membership_id: 'membershipId',
-});
-```
-
-##### List a member's tenant role assignments
-
-Lists the tenant-wide role assignments held by one member, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberListRoleAssignmentsParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberListRoleAssignmentsResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.listRoleAssignments('membershipId', {
-  tenant_id: 'tenantId',
-  limit: 50,
-});
-```
-
-##### Assign resource role to member
-
-Assigns a role to a member on one exact resource.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberAssignResourceRoleParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberAssignResourceRoleResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.assignResourceRole('membershipId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  role: {
-    id: 'x',
-  },
-  resource_type: {
-    id: 'x',
-  },
-  external_id: 'x',
-});
-```
-
-##### Replace member resource roles
-
-Reconciles the member's direct role assignments on one exact resource to exactly the supplied set in one transaction: missing roles are assigned, surplus assignments removed, matching ones kept. Grants on other resources and via groups are untouched. Idempotent; prefer this over unassign-then-assign loops.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberReplaceResourceRolesParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberReplaceResourceRolesResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.replaceResourceRoles('membershipId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  resource_type: {
-    id: 'x',
-  },
-  external_id: 'x',
-  roles: [],
-});
-```
-
-##### Unassign resource role from member
-
-Removes a member resource role assignment.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberUnassignResourceRoleParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberUnassignResourceRoleResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.unassignResourceRole('assignmentId', {
-  tenant_id: 'tenantId',
-  membership_id: 'membershipId',
-});
-```
-
-##### List a member's resource role assignments
-
-Lists the resource role assignments held by one member, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberListResourceRoleAssignmentsParams`](./src/resources/iam/tenants/members.ts) |
-| Response | [`MemberListResourceRoleAssignmentsResponse`](./src/resources/iam/tenants/members.ts) |
-
-```ts
-const member = await client.iam.tenants.members.listResourceRoleAssignments('membershipId', {
-  tenant_id: 'tenantId',
-  limit: 50,
-});
-```
-
-#### `Iam Tenants Groups`
-
-##### Create tenant group
-
-Creates an active group with no members in a tenant.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupCreateParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupCreateResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.create('tenantId', {
-  actor_user_id: 'x',
-  name: 'x',
-});
-```
-
-##### List tenant groups
-
-Lists a tenant's groups, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupListParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupListResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.list('tenantId', {
-  limit: 50,
-});
-```
-
-##### Get tenant group
-
-Returns one tenant group by ID.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupGetParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupGetResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.get('groupId', {
-  tenant_id: 'tenantId',
-});
-```
-
-##### Update tenant group
-
-Updates a tenant group's name or description.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupUpdateParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupUpdateResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.update('groupId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-});
-```
-
-##### Delete tenant group
-
-Permanently deletes a tenant group, cascading its memberships and role assignments.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupDeleteParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupDeleteResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.delete('groupId', {
-  tenant_id: 'tenantId',
-});
-```
-
-##### Archive tenant group
-
-Archives a tenant group so it stops granting access.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupArchiveParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupArchiveResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.archive('groupId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-});
-```
-
-##### Unarchive tenant group
-
-Restores an archived tenant group so it grants access again.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupUnarchiveParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupUnarchiveResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.unarchive('groupId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-});
-```
-
-##### Assign tenant role to group
-
-Assigns a tenant-wide role to a group.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupAssignRoleParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupAssignRoleResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.assignRole('groupId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  role: {
-    id: 'x',
-  },
-});
-```
-
-##### Unassign tenant role from group
-
-Removes a tenant-wide role assignment from a group.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupUnassignRoleParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupUnassignRoleResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.unassignRole('assignmentId', {
-  tenant_id: 'tenantId',
-  group_id: 'groupId',
-});
-```
-
-##### List a group's tenant role assignments
-
-Lists the tenant-wide role assignments held by one group, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupListRoleAssignmentsParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupListRoleAssignmentsResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.listRoleAssignments('groupId', {
-  tenant_id: 'tenantId',
-  limit: 50,
-});
-```
-
-##### Assign resource role to group
-
-Assigns a role to a group on one exact resource.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupAssignResourceRoleParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupAssignResourceRoleResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.assignResourceRole('groupId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-  role: {
-    id: 'x',
-  },
-  resource_type: {
-    id: 'x',
-  },
-  external_id: 'x',
-});
-```
-
-##### Unassign resource role from group
-
-Removes a group resource role assignment.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupUnassignResourceRoleParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupUnassignResourceRoleResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.unassignResourceRole('assignmentId', {
-  tenant_id: 'tenantId',
-  group_id: 'groupId',
-});
-```
-
-##### List a group's resource role assignments
-
-Lists the resource role assignments held by one group, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`GroupListResourceRoleAssignmentsParams`](./src/resources/iam/tenants/groups/groups.ts) |
-| Response | [`GroupListResourceRoleAssignmentsResponse`](./src/resources/iam/tenants/groups/groups.ts) |
-
-```ts
-const group = await client.iam.tenants.groups.listResourceRoleAssignments('groupId', {
-  tenant_id: 'tenantId',
-  limit: 50,
-});
-```
-
-##### `Iam Tenants Groups Members`
-
-###### Add tenant group member
-
-Adds a tenant member to a group.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberAddParams`](./src/resources/iam/tenants/groups/members.ts) |
-| Response | [`MemberAddResponse`](./src/resources/iam/tenants/groups/members.ts) |
-
-```ts
-const member = await client.iam.tenants.groups.members.add('membershipId', {
-  tenant_id: 'tenantId',
-  group_id: 'groupId',
-  actor_user_id: 'x',
-});
-```
-
-###### List a group's members
-
-Lists the active members of one tenant group, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberListParams`](./src/resources/iam/tenants/groups/members.ts) |
-| Response | [`MemberListResponse`](./src/resources/iam/tenants/groups/members.ts) |
-
-```ts
-const member = await client.iam.tenants.groups.members.list('groupId', {
-  tenant_id: 'tenantId',
-  limit: 50,
-});
-```
-
-###### Remove tenant group member
-
-Removes a tenant member from a group.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`MemberRemoveParams`](./src/resources/iam/tenants/groups/members.ts) |
-| Response | [`MemberRemoveResponse`](./src/resources/iam/tenants/groups/members.ts) |
-
-```ts
-const member = await client.iam.tenants.groups.members.remove('membershipId', {
-  tenant_id: 'tenantId',
-  group_id: 'groupId',
-});
-```
-
-#### `Iam Tenants Roles`
-
-##### Create role
-
-Creates a tenant-scoped role with a permission set. Shared and app-scoped roles are managed via iam.jsonc, not this API.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`RoleCreateParams`](./src/resources/iam/tenants/roles.ts) |
-| Response | [`RoleCreateResponse`](./src/resources/iam/tenants/roles.ts) |
-
-```ts
-const role = await client.iam.tenants.roles.create('tenantId', {
-  actor_user_id: 'x',
-  key: 'x',
-  name: 'x',
-  permission_keys: [],
-});
-```
-
-##### List tenant roles
-
-Lists the roles visible to a tenant: its tenant-scoped roles plus the deployment's shared and app-scoped roles. Pass a key to fetch one role by its stable key.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`RoleListParams`](./src/resources/iam/tenants/roles.ts) |
-| Response | [`RoleListResponse`](./src/resources/iam/tenants/roles.ts) |
-
-```ts
-const role = await client.iam.tenants.roles.list('tenantId', {
-  limit: 50,
-});
-```
-
-##### Get tenant role
-
-Returns one IAM role by ID, with its full permission set.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`RoleGetParams`](./src/resources/iam/tenants/roles.ts) |
-| Response | [`RoleGetResponse`](./src/resources/iam/tenants/roles.ts) |
-
-```ts
-const role = await client.iam.tenants.roles.get('roleId', {
-  tenant_id: 'tenantId',
-});
-```
-
-##### Update role
-
-Updates a tenant-scoped role's name, description, or permission set. Shared and app-scoped roles are managed via iam.jsonc, not this API.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`RoleUpdateParams`](./src/resources/iam/tenants/roles.ts) |
-| Response | [`RoleUpdateResponse`](./src/resources/iam/tenants/roles.ts) |
-
-```ts
-const role = await client.iam.tenants.roles.update('roleId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-});
-```
-
-##### Delete role
-
-Permanently deletes a tenant-scoped role, cascading its permissions and assignments. Shared and app-scoped roles are managed via iam.jsonc, not this API.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`RoleDeleteParams`](./src/resources/iam/tenants/roles.ts) |
-| Response | [`RoleDeleteResponse`](./src/resources/iam/tenants/roles.ts) |
-
-```ts
-const role = await client.iam.tenants.roles.delete('roleId', {
-  tenant_id: 'tenantId',
-});
-```
-
-#### `Iam Tenants AccessRules`
-
-##### List tenant access rules
-
-Lists email and domain rules that allow or deny entry to a tenant. Active rules are returned by default.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`AccessRuleListParams`](./src/resources/iam/tenants/access-rules.ts) |
-| Response | [`AccessRuleListResponse`](./src/resources/iam/tenants/access-rules.ts) |
-
-```ts
-const accessRule = await client.iam.tenants.accessRules.list('tenantId', {
-  limit: 50,
-});
-```
-
-##### Create tenant access rule
-
-Creates an allow or deny rule for an email address or domain. The rule takes effect immediately for matching users.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`AccessRuleCreateParams`](./src/resources/iam/tenants/access-rules.ts) |
-| Response | [`AccessRuleCreateResponse`](./src/resources/iam/tenants/access-rules.ts) |
-
-```ts
-const accessRule = await client.iam.tenants.accessRules.create('tenantId', {
-  actor_user_id: 'x',
-  effect: 'allow',
-  subject: {
-    type: 'email',
-    value: 'user@example.com',
-  },
-});
-```
-
-##### Archive tenant access rule
-
-Archives an access rule so it no longer affects who can enter the tenant.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`AccessRuleArchiveParams`](./src/resources/iam/tenants/access-rules.ts) |
-| Response | [`AccessRuleArchiveResponse`](./src/resources/iam/tenants/access-rules.ts) |
-
-```ts
-const accessRule = await client.iam.tenants.accessRules.archive('ruleId', {
-  tenant_id: 'tenantId',
-  actor_user_id: 'x',
-});
-```
-
-#### `Iam Tenants AuditEvents`
-
-##### List tenant audit events
-
-Lists IAM audit events for a tenant, newest first.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`AuditEventListParams`](./src/resources/iam/tenants/audit-events.ts) |
-| Response | [`AuditEventListResponse`](./src/resources/iam/tenants/audit-events.ts) |
-
-```ts
-const auditEvent = await client.iam.tenants.auditEvents.list('tenantId', {
-  limit: 50,
-});
-```
-
-#### `Iam Tenants Invitations`
-
-##### List tenant invitations
-
-Lists active, unexpired invitation links in a tenant.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`InvitationListParams`](./src/resources/iam/tenants/invitations.ts) |
-| Response | [`InvitationListResponse`](./src/resources/iam/tenants/invitations.ts) |
-
-```ts
-const invitation = await client.iam.tenants.invitations.list('tenantId', {
-  limit: 50,
-});
-```
-
-##### Revoke invitation
-
-Revokes a pending invitation. Access already granted by an accepted invitation is unaffected.
-
-| Direction | Type |
-| --- | --- |
-| Request | [`InvitationRevokeParams`](./src/resources/iam/tenants/invitations.ts) |
-| Response | [`InvitationRevokeResponse`](./src/resources/iam/tenants/invitations.ts) |
-
-```ts
-const invitation = await client.iam.tenants.invitations.revoke('invitationId', {
-  tenant_id: 'tenantId',
-});
-```
-
 ## `Commerce`
 
 Commerce APIs are currently in beta.
@@ -1115,7 +157,12 @@ Creates a checkout session for a customer to subscribe to a product. Returns a U
 ```ts
 const commerce = await client.commerce.checkout({
   customer_id: 'cus_1234567890',
-  line_items: [],
+  line_items: [
+    {
+      variant_id: 'var_1234567890',
+      quantity: 1,
+    },
+  ],
   success_url: 'https://example.com',
 });
 ```
@@ -1276,7 +323,12 @@ Creates a new subscription product with a recurring price. Common examples inclu
 ```ts
 const product = await client.commerce.products.create({
   name: 'x',
-  variants: [],
+  variants: [
+    {
+      name: 'x',
+      unit_amount: 0,
+    },
+  ],
 });
 ```
 
@@ -1319,7 +371,7 @@ Attaches one or more resources to a product. Customers who purchase this product
 
 ```ts
 const resource = await client.commerce.products.resources.attach('productId', {
-  resource_ids: [],
+  resource_ids: [''],
 });
 ```
 
@@ -1333,7 +385,7 @@ Detaches one or more resources from a product. Customers will lose access to the
 
 ```ts
 await client.commerce.products.resources.detach('productId', {
-  resource_ids: [],
+  resource_ids: [''],
 });
 ```
 
@@ -1580,7 +632,7 @@ call instead, signed server-side.
 
 ### Get Connector Credentials
 
-Returns fresh credentials for an SDK-delivery connector installed for the calling deployment, refreshing the OAuth access token on demand. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. When several connections of the connector cover the deployment, connection_id selects one. Connectors whose provider withholds the credential answer 409 — send requests through the connector request endpoint instead.
+Returns fresh credentials for the named connection of a connector, refreshing the OAuth access token on demand. Requires a deployment-bound API key, and the connection must be installed for the calling deployment. Secrets are keyed by role: access_token, api_key, or a credential field key. Errors carry a code: connector_not_installed (404), connection_not_linked (404), connector_not_connected (409), credentials_unavailable (409, reconnect in the dashboard), connector_brokered (409, use the request endpoint).
 
 | Direction | Type |
 | --- | --- |
@@ -1588,12 +640,14 @@ Returns fresh credentials for an SDK-delivery connector installed for the callin
 | Response | [`ConnectorCredentialsResponse`](./src/resources/connectors.ts) |
 
 ```ts
-const connector = await client.connectors.credentials('slug');
+const connector = await client.connectors.credentials('slug', {
+  connection_id: 'connectionId',
+});
 ```
 
 ### Send Connector Request
 
-Sends an HTTP request to a connector's provider API as one of the app's connected accounts, with credentials injected server-side — the app never handles the token. Requires a deployment-bound API key; the connector must be installed for that deployment's environment. Answers 200 whenever the request reached the provider, with the provider's own status in the body.
+Sends an HTTP request to a connector's provider API as the named connection, with credentials added server-side; the app never handles the token. Requires a deployment-bound API key, and the connection must be installed for the calling deployment. Answers 200 whenever the request reached the provider, with the provider's own status in the body. Errors carry a code: connector_not_installed (404), connection_not_linked (404), connector_not_connected (409), connector_not_brokered (400, use the credentials endpoint), provider_unreachable (502).
 
 | Direction | Type |
 | --- | --- |
@@ -1604,6 +658,7 @@ Sends an HTTP request to a connector's provider API as one of the app's connecte
 const connector = await client.connectors.request('slug', {
   endpoint: 'x',
   method: 'GET',
+  connection_id: 'x',
 });
 ```
 
@@ -2118,7 +1173,7 @@ Checks whether the specified domain names are available for registration and ret
 
 ```ts
 const domain = await client.domains.checkAvailability({
-  domains: [],
+  domains: [''],
 });
 ```
 
@@ -2380,7 +1435,7 @@ Adds up to 100 recipient addresses to the suppression list in one call. Addresse
 
 ```ts
 const suppression = await client.email.suppressions.batchAdd({
-  emails: [],
+  emails: ['user@example.com'],
 });
 ```
 
@@ -2445,7 +1500,7 @@ const pushNotification = await client.pushNotifications.enable();
 
 ### Register Subscription
 
-Registers a push subscription with the provided visitorId. Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint to handle re-subscriptions. Returns a secret for subscription ownership.
+Registers a push subscription with the provided visitorId: a Web Push `subscription` from a browser, or a `nativeDevice` APNs token from the Hercules iOS app. Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
 
 | Direction | Type |
 | --- | --- |
@@ -2455,13 +1510,6 @@ Registers a push subscription with the provided visitorId. Use authenticated use
 ```ts
 const pushNotification = await client.pushNotifications.subscribe({
   visitorId: 'x',
-  subscription: {
-    endpoint: 'https://example.com',
-    keys: {
-      p256dh: 'x',
-      auth: 'x',
-    },
-  },
 });
 ```
 
@@ -2498,7 +1546,7 @@ const pushNotification = await client.pushNotifications.identify({
 
 ### Send Notification
 
-Sends push notifications to specified visitors and/or topics. Specify visitorIds, topics, or both (combined as union). Omit both to broadcast to all subscribers.
+Sends push notifications to specified visitors and/or topics. Specify visitorIds, topics, or both (combined as union). Omit both to broadcast to all subscribers. Recipient lists above 100 are delivered in the background and reported as `queued`. Limited to 120 sends per minute per app, 6 of which may be broadcasts.
 
 | Direction | Type |
 | --- | --- |
@@ -2525,7 +1573,7 @@ Subscribes a visitor to topics. Topics are per-visitor, so all devices for this 
 ```ts
 const topic = await client.pushNotifications.topics.subscribe({
   visitorId: 'x',
-  topics: [],
+  topics: ['x'],
 });
 ```
 
@@ -2541,7 +1589,7 @@ Unsubscribes a visitor from specified topics.
 ```ts
 const topic = await client.pushNotifications.topics.unsubscribe({
   visitorId: 'x',
-  topics: [],
+  topics: ['x'],
 });
 ```
 
