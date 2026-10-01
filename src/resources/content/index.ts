@@ -1,47 +1,47 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  Assets,
-  type Asset,
-  type AssetCreateParams,
-  type AssetUpdateParams,
-  type AssetListParams,
-  type AssetsCursorIDPage,
-} from './assets';
-export {
-  Collections,
-  type Collection,
-  type Field,
-  type CollectionCreateParams,
-  type CollectionUpdateParams,
-  type CollectionListParams,
-  type CollectionsCursorIDPage,
-} from './collections/index';
 export { Content } from './content';
-export {
-  Entries,
-  type Entry,
-  type EntryCreateParams,
-  type EntryUpdateParams,
-  type EntryListParams,
-  type EntryPublishParams,
-  type EntriesCursorIDPage,
+export { Collections } from './collections/collections';
+export type {
+  Collection,
+  Field,
+  CollectionListParams,
+  CollectionsCursorIDPage,
+  CollectionCreateParams,
+  CollectionUpdateParams,
+} from './collections/collections';
+export { Entries } from './entries';
+export type {
+  Entry,
+  EntryListParams,
+  EntriesCursorIDPage,
+  EntryCreateParams,
+  EntryUpdateParams,
+  EntryPublishParams,
 } from './entries';
-export {
-  Locales,
-  type Locale,
-  type LocaleCreateParams,
-  type LocaleUpdateParams,
-  type LocaleListParams,
-  type LocalesCursorIDPage,
+export { Assets } from './assets';
+export type {
+  Asset,
+  AssetListParams,
+  AssetsCursorIDPage,
+  AssetCreateParams,
+  AssetUpdateParams,
+} from './assets';
+export { Locales } from './locales';
+export type {
+  Locale,
+  LocaleListParams,
+  LocalesCursorIDPage,
+  LocaleCreateParams,
+  LocaleUpdateParams,
 } from './locales';
-export {
-  Releases,
-  type Release,
-  type ReleaseItem,
-  type ReleaseCreateParams,
-  type ReleaseUpdateParams,
-  type ReleaseListParams,
-  type ReleaseScheduleParams,
-  type ReleasesCursorIDPage,
-} from './releases/index';
+export { Releases } from './releases/releases';
+export type {
+  Release,
+  ReleaseItem,
+  ReleaseListParams,
+  ReleasesCursorIDPage,
+  ReleaseCreateParams,
+  ReleaseUpdateParams,
+  ReleaseScheduleParams,
+} from './releases/releases';

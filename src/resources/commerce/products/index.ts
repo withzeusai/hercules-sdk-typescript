@@ -1,29 +1,30 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  Products,
-  type Product,
-  type ProductCreateResponse,
-  type ProductCreateParams,
-  type ProductUpdateParams,
-  type ProductListParams,
-  type ProductsCursorIDPage,
+export { Products } from './products';
+export type {
+  Product,
+  ProductListParams,
+  ProductsCursorIDPage,
+  ProductGetParams,
+  ProductCreateParams,
+  ProductCreateResponse,
+  ProductUpdateParams,
 } from './products';
-export {
-  Resources,
-  type ResourceListResponse,
-  type ResourceAttachResponse,
-  type ResourceListParams,
-  type ResourceAttachParams,
-  type ResourceDetachParams,
-  type ResourceListResponsesCursorIDPage,
+export { Resources } from './resources';
+export type {
+  ResourceListParams,
+  ResourceListResponse,
+  CommerceResourcesCursorIDPage,
+  ResourceAttachParams,
+  ResourceAttachResponse,
+  ResourceDetachParams,
 } from './resources';
-export {
-  Variants,
-  type Variant,
-  type VariantCreateParams,
-  type VariantUpdateParams,
-  type VariantListParams,
-  type VariantGetParams,
-  type VariantsCursorIDPage,
+export { Variants } from './variants';
+export type {
+  Variant,
+  VariantListParams,
+  VariantsCursorIDPage,
+  VariantGetParams,
+  VariantCreateParams,
+  VariantUpdateParams,
 } from './variants';

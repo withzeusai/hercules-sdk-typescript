@@ -1,5 +1,47 @@
 # Changelog
 
+## [1.16.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.15.13...v1.16.0) (2026-10-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** 14 breaking changes to the SDK surface.
+    - Operation `iam.tenants.list` is no longer paginated.
+    - Operation `iam.tenants.listRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.listResourceRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.members.list` is no longer paginated.
+    - Operation `iam.tenants.members.listRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.members.listResourceRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.groups.list` is no longer paginated.
+    - Operation `iam.tenants.groups.listRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.groups.listResourceRoleAssignments` is no longer paginated.
+    - Operation `iam.tenants.groups.members.list` is no longer paginated.
+    - Operation `iam.tenants.roles.list` is no longer paginated.
+    - Operation `iam.tenants.accessRules.list` is no longer paginated.
+    - Operation `iam.tenants.auditEvents.list` is no longer paginated.
+    - Operation `iam.tenants.invitations.list` is no longer paginated.
+
+### Features
+
+* **api:** initial SDK generation ([3e9d607](https://github.com/withzeusai/hercules-sdk-typescript/commit/3e9d6078794e7215497975aa8f798af9ef9247b7))
+* **api:** remove pagination of iam.tenants.list (+13 more changes) ([efaf25f](https://github.com/withzeusai/hercules-sdk-typescript/commit/efaf25fafcbe153291822e66087f7fe68a6d3bf2))
+
+
+### Bug Fixes
+
+* **deps:** patch high-severity dependency alerts ([#66](https://github.com/withzeusai/hercules-sdk-typescript/issues/66)) ([e0adea8](https://github.com/withzeusai/hercules-sdk-typescript/commit/e0adea81a185849b0bb7ec73905b458c60a6cefb))
+* **deps:** patch js-yaml merge processing limits ([#70](https://github.com/withzeusai/hercules-sdk-typescript/issues/70)) ([8c6af98](https://github.com/withzeusai/hercules-sdk-typescript/commit/8c6af98528b67ed665cfc696aa3bb9b59729b7a1))
+* **deps:** patch MCP Hono vulnerabilities ([#69](https://github.com/withzeusai/hercules-sdk-typescript/issues/69)) ([d1e7567](https://github.com/withzeusai/hercules-sdk-typescript/commit/d1e75672842088b59b4d3ef19c8ba9eaa9d008dd))
+* **deps:** patch SDK security findings ([976c410](https://github.com/withzeusai/hercules-sdk-typescript/commit/976c410eb7c3ecb77763ca4868671d896b8db048))
+* **sdk:** patch qs and use native CI checks ([#65](https://github.com/withzeusai/hercules-sdk-typescript/issues/65)) ([d95cde7](https://github.com/withzeusai/hercules-sdk-typescript/commit/d95cde72040a0c1ffe0f22f394fce843987d952f))
+
+
+### Chores
+
+* **api:** update generated SDK content ([ab6d223](https://github.com/withzeusai/hercules-sdk-typescript/commit/ab6d22316202815a897248d28c07c3891e7defae))
+* release 1.16.0 ([67b0146](https://github.com/withzeusai/hercules-sdk-typescript/commit/67b01463f85bd6d4afd15d68a6bdf3c0f8f6077b))
+* release 1.16.0 ([5eac226](https://github.com/withzeusai/hercules-sdk-typescript/commit/5eac2260adb2096d06858170876db550731f79ed))
+
 ## 1.15.13 (2026-07-10)
 
 Full Changelog: [v1.15.12...v1.15.13](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.15.12...v1.15.13)

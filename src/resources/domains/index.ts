@@ -1,23 +1,23 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  Domains,
-  type Domain,
-  type DomainAvailability,
-  type DomainCheckAvailabilityResponse,
-  type DomainSearchResponse,
-  type DomainListParams,
-  type DomainCheckAvailabilityParams,
-  type DomainSearchParams,
-  type DomainsCursorIDPage,
+export { Domains } from './domains';
+export type {
+  Domain,
+  DomainAvailability,
+  DomainListParams,
+  DomainsCursorIDPage,
+  DomainCheckAvailabilityParams,
+  DomainCheckAvailabilityResponse,
+  DomainSearchParams,
+  DomainSearchResponse,
 } from './domains';
-export {
-  Purchased,
-  type PurchasedDomain,
-  type PurchasedCreateResponse,
-  type PurchasedConfirmResponse,
-  type PurchasedCreateParams,
-  type PurchasedListParams,
-  type PurchasedConfirmParams,
-  type PurchasedDomainsCursorIDPage,
+export { Purchased } from './purchased';
+export type {
+  PurchasedDomain,
+  PurchasedCreateParams,
+  PurchasedCreateResponse,
+  PurchasedConfirmParams,
+  PurchasedConfirmResponse,
+  PurchasedListParams,
+  PurchasedDomainsCursorIDPage,
 } from './purchased';

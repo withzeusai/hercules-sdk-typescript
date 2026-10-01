@@ -1,12 +1,13 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  Collections,
-  type Collection,
-  type Field,
-  type CollectionCreateParams,
-  type CollectionUpdateParams,
-  type CollectionListParams,
-  type CollectionsCursorIDPage,
+export { Collections } from './collections';
+export type {
+  Collection,
+  Field,
+  CollectionListParams,
+  CollectionsCursorIDPage,
+  CollectionCreateParams,
+  CollectionUpdateParams,
 } from './collections';
-export { Fields, type FieldCreateParams, type FieldUpdateParams, type FieldDeleteParams } from './fields';
+export { Fields } from './fields';
+export type { FieldCreateParams, FieldUpdateParams, FieldDeleteParams } from './fields';
