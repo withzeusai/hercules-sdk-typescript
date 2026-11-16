@@ -13,7 +13,8 @@ import { uuid4 } from './internal/utils/uuid';
 import { validatePositiveInteger, isAbsoluteURL, safeJSON, isEmptyObj } from './internal/utils/values';
 import { sleep } from './internal/utils/sleep';
 import { castToError, isAbortError } from './internal/errors';
-import { getPlatformHeaders } from './internal/detect-platform';
+import { MAX_ERROR_BODY_BYTES, holdDeadline, readBodyText } from './internal/utils/body';
+import { getPlatformHeaders, isRunningInBrowser } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { readEnv } from './internal/utils/env';
@@ -21,6 +22,7 @@ import {
   formatRequestDetails,
   loggerFor,
   parseLogLevel,
+  redactHeaders,
   redactUrl,
   type LogLevel,
   type Logger,
@@ -50,7 +52,6 @@ import {
   type ConnectorCredentialsParams,
   type ConnectorRequestParams,
 } from './resources/connectors';
-import { Content } from './resources/content/content';
 import {
   Domains,
   type Domain,
@@ -101,6 +102,11 @@ export interface ClientOptions {
   apiKey?: string | AuthTokenProvider | null | undefined;
 
   /**
+   * An agent run's live token (live.token from Create Agent Run), sent from the browser as: Bearer <token>. Streams that one run's events (List Agent Run Events with Accept: text/event-stream) and nothing else, until an hour after the run ends or its thread is deleted. A run keeps the one token it was created with. Its stream names Hercules tools only as "tool" and carries no app tool results, unless the run was started with expose_tool_details.
+   */
+  runToken?: string | AuthTokenProvider | undefined;
+
+  /**
    * Value sent as the Hercules-Version header.
    */
   apiVersion?: string | undefined;
@@ -133,6 +139,19 @@ export interface ClientOptions {
    * Specify a custom `fetch` function implementation.
    *
    * If not provided, we expect that `fetch` is defined globally.
+   *
+   * The client passes `redirect: 'manual'` and follows redirects itself, dropping credentials when
+   * a redirect leaves the API's origin. A custom `fetch` must honor that option: one that follows
+   * redirects on its own would re-send API keys and cookies to whatever host a redirect names, and
+   * a response it reports as `redirected` is refused for that reason. Every hop of a redirect goes
+   * through this function, so a wrapper that adds a credential itself must add it only for the
+   * API's own origin. A request whose `fetchOptions` set `redirect: 'manual'` gets its 3xx answer
+   * back unfollowed, so a caller can read a signed URL from `Location`; `'error'` is kept too.
+   *
+   * In a browser or a browser worker, which hide a manual redirect's target, a request whose only
+   * credentials are ones the browser itself keeps on the origin (`Authorization`, cookies) is sent
+   * with `redirect: 'follow'`. A request carrying an API key header is not, so a redirect it meets
+   * fails with an `APIConnectionError` rather than handing that key to another host.
    */
   fetch?: Fetch | undefined;
 
@@ -182,6 +201,7 @@ export type HerculesOptions = ClientOptions;
  */
 export class Hercules {
   apiKey: string | AuthTokenProvider | null;
+  runToken: string | AuthTokenProvider | undefined;
   apiVersion: string;
 
   baseURL: string;
@@ -190,7 +210,11 @@ export class Hercules {
   logger: Logger;
   logLevel: LogLevel | undefined;
   fetchOptions: MergedRequestInit | undefined;
-  private fetch: Fetch;
+  /**
+   * The `fetch` implementation every request is sent through: the `fetch` client option, or the
+   * platform default. A replacement must honor the same contract as that option.
+   */
+  fetch: Fetch;
   #encoder: Opts.RequestEncoder;
   protected idempotencyHeader?: string;
   private _baseURLOverridden: boolean;
@@ -201,6 +225,7 @@ export class Hercules {
    * API Client for interfacing with the Hercules API.
    *
    * @param {string | AuthTokenProvider | null | undefined} [opts.apiKey=process.env["HERCULES_API_KEY"] ?? null]
+   * @param {string | AuthTokenProvider | undefined} [opts.runToken=process.env["HERCULES_RUN_TOKEN"] ?? undefined]
    * @param {string | undefined} [opts.apiVersion=process.env["HERCULES_API_VERSION"] ?? "2025-12-09"]
    * @param {string} [opts.baseURL=process.env["HERCULES_BASE_URL"] ?? https://api.hercules.app] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -213,11 +238,13 @@ export class Hercules {
   constructor({
     baseURL = readEnv('HERCULES_BASE_URL'),
     apiKey = readEnv('HERCULES_API_KEY') ?? null,
+    runToken = readEnv('HERCULES_RUN_TOKEN'),
     apiVersion = readEnv('HERCULES_API_VERSION') ?? '2025-12-09',
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
       apiKey,
+      runToken,
       apiVersion,
       ...opts,
       baseURL: baseURL || 'https://api.hercules.app',
@@ -257,6 +284,7 @@ export class Hercules {
     this.idempotencyHeader = 'Idempotency-Key';
 
     this.apiKey = apiKey;
+    this.runToken = runToken;
     this.apiVersion = apiVersion;
   }
 
@@ -271,6 +299,7 @@ export class Hercules {
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
+      runToken: this.runToken,
       apiVersion: this.apiVersion,
       ...options,
     });
@@ -280,6 +309,25 @@ export class Hercules {
   #baseURLOverridden(): boolean {
     // A named environment selects a default URL; only explicit overrides should bypass per-request defaults.
     return this._baseURLOverridden || this.baseURL !== this._defaultBaseURL;
+  }
+
+  /**
+   * The client as `JSON.stringify` sees it: every credential masked, and the resource accessors,
+   * which point back at the client, left out.
+   */
+  toJSON(): Record<string, unknown> {
+    const view: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(this)) {
+      if (typeof value === 'object' && value !== null && (value as { _client?: unknown })._client === this)
+        continue;
+      view[key] = redactClientField(key, value);
+    }
+    return view;
+  }
+
+  /** What `console.log` and `util.inspect` print for the client: the masked view `toJSON` builds. */
+  [Symbol.for('nodejs.util.inspect.custom')](): Record<string, unknown> {
+    return this.toJSON();
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -429,12 +477,28 @@ export class Hercules {
     }
 
     const controller = new AbortController();
-    const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+    // The deadline stays armed until the body is read, not just until headers arrive, so a server
+    // that answers quickly and then trickles its body is still cut off at `timeout`.
+    const { release: releaseDeadline, unref: unrefDeadline } = this.#armDeadline(
+      req.signal,
+      timeout,
+      controller,
+    );
+    // A subclass's own `fetchWithTimeout` sends the request; the deadline above still covers the body.
+    const viaOverride = this.fetchWithTimeout !== Hercules.prototype.fetchWithTimeout;
+    const response = await (viaOverride
+      ? Promise.resolve().then(() => this.fetchWithTimeout(url, req, timeout, controller))
+      : this.#fetchFollowingRedirects(url, req, controller)
+    ).catch(castToError);
     const headersTime = Date.now();
 
     if (response instanceof globalThis.Error) {
+      releaseDeadline();
+      // A redirect the SDK refused to follow fails the same way on every attempt, so it is not retried.
+      if (isRefusedRedirect(response)) throw response;
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
-      if (options.signal?.aborted) {
+      // The signal the request was sent with, so an aborted `fetchOptions.signal` reads as a cancel too.
+      if (req.signal?.aborted) {
         throw new Errors.APIUserAbortError();
       }
       // detect native connection timeout errors
@@ -457,7 +521,7 @@ export class Hercules {
             message: response.message,
           }),
         );
-        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
+        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID, req.signal);
       }
       loggerFor(this).info(
         `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`,
@@ -487,6 +551,7 @@ export class Hercules {
         const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
 
         // We don't need the body of this response.
+        releaseDeadline();
         await Shims.CancelReadableStream(response.body);
         loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
         loggerFor(this).debug(
@@ -503,6 +568,7 @@ export class Hercules {
           options,
           retriesRemaining,
           retryOfRequestLogID ?? requestLogID,
+          req.signal,
           response.headers,
         );
       }
@@ -511,7 +577,12 @@ export class Hercules {
 
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
-      const errText = await response.text().catch((err: any) => castToError(err).message);
+      // Only the first 64 KiB of an error body is read: enough for any message, and a hostile or
+      // broken server cannot make the client buffer more. The read still runs under the deadline.
+      const errText = await readBodyText(response, MAX_ERROR_BODY_BYTES, 'truncate').catch(
+        (err: any) => castToError(err).message,
+      );
+      releaseDeadline();
       const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
@@ -543,6 +614,16 @@ export class Hercules {
       }),
     );
 
+    // A streamed or binary body is the caller's to read at its own pace, so the deadline ends with
+    // the headers there; a buffered body keeps it until `defaultParseResponse` has read it.
+    if (options.stream || options.__binaryResponse) releaseDeadline();
+    else {
+      // Unreferenced so a response nobody parses (a call never awaited) cannot hold the process
+      // open until the deadline; a body being read keeps it alive through its own socket.
+      unrefDeadline();
+      holdDeadline(controller, releaseDeadline);
+    }
+
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
@@ -571,28 +652,84 @@ export class Hercules {
     return new PagePromise<Page, Item>(this, this.makeRequest(options, null, undefined), Page);
   }
 
+  /**
+   * Sends one request with a deadline on its response headers, following redirects as the client
+   * does.
+   *
+   * Override it in a subclass to wrap every HTTP request this client sends to its API, retries included;
+   * call `super.fetchWithTimeout` to send, which keeps the client's redirect handling. When a redirect
+   * leaves the origin that drops the client's own credential headers, but a header an override adds
+   * goes on to the redirect target, so a secret belongs in a client option rather than added here.
+   * A client that does not override it skips this method and sends directly.
+   *
+   * The SDK's own deadline aborts `controller` and stays armed until a buffered body is read, so it
+   * cuts off an override that sends through `super` or passes `controller.signal` on; a larger `ms`
+   * passed to `super` cannot extend it, so set the `timeout` option instead.
+   */
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
     ms: number,
     controller: AbortController,
   ): Promise<Response> {
-    const { signal, method, ...options } = init || {};
+    const deadline = this.#armDeadline(init?.signal, ms, controller);
+    try {
+      return await this.#fetchFollowingRedirects(url, init, controller);
+    } finally {
+      deadline.release();
+    }
+  }
+
+  /**
+   * Starts the request deadline on `controller` and forwards the caller's abort signal to it.
+   *
+   * `release` disarms the deadline. `unref` stops it alone from keeping a Node process alive, for
+   * the stretch where it waits on a body nobody may ever read.
+   */
+  #armDeadline(
+    signal: RequestInit['signal'],
+    ms: number,
+    controller: AbortController,
+  ): { release: () => void; unref: () => void } {
     const abort = this._makeAbort(controller);
     if (signal?.aborted) abort();
     else if (signal) signal.addEventListener('abort', abort, { once: true });
 
     const timeout = setTimeout(abort, ms);
+    return {
+      release: () => clearTimeout(timeout),
+      unref: () => (timeout as { unref?: () => void } | undefined)?.unref?.(),
+    };
+  }
 
-    const isReadableBody =
-      ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
-      (typeof options.body === 'object' && options.body !== null && Symbol.asyncIterator in options.body);
+  /**
+   * Sends one request, following its redirects here rather than in `fetch`.
+   *
+   * Platform `fetch` strips only `Authorization` when a redirect leaves the origin, so it would hand
+   * a header API key, cookies and a 307 body to whatever host the API names. Following here, where
+   * the client knows which headers carry credentials, keeps them on the API's own origin.
+   */
+  async #fetchFollowingRedirects(
+    url: RequestInfo,
+    init: RequestInit | undefined,
+    controller: AbortController,
+  ): Promise<Response> {
+    const { signal, method, ...options } = init || {};
+    const isReadableBody = isOneShotBody(options.body);
+    const request = typeof url === 'string' || url instanceof URL ? undefined : url;
+    const carriesUnguardedCredential = [...new Headers(options.headers ?? request?.headers).keys()].some(
+      (name) => CREDENTIAL_HEADERS.includes(name) && !BROWSER_GUARDED_HEADERS.includes(name),
+    );
+    const browserFollows = hidesRedirectTargets() && !carriesUnguardedCredential;
+    const callerRedirect =
+      options.redirect === 'error' || options.redirect === 'manual' ? options.redirect : undefined;
 
     const fetchOptions: RequestInit = {
       signal: controller.signal as any,
       ...(isReadableBody ? { duplex: 'half' } : {}),
       method: 'GET',
       ...options,
+      redirect: callerRedirect ?? (browserFollows ? 'follow' : 'manual'),
     };
     if (method) {
       // Custom methods like 'patch' need to be uppercased
@@ -600,11 +737,97 @@ export class Hercules {
       fetchOptions.method = method.toUpperCase();
     }
 
-    try {
-      // use undefined this binding; fetch errors if bound to something else in browsers and edge runtimes / workers
-      return await this.fetch.call(undefined, url, fetchOptions);
-    } finally {
-      clearTimeout(timeout);
+    // use undefined this binding; fetch errors if bound to something else in browsers and edge runtimes / workers
+    let response = await this.fetch.call(undefined, url, fetchOptions);
+    let current = request ? request.url : String(url);
+    let hop: RequestInit = {
+      ...fetchOptions,
+      headers: new Headers(fetchOptions.headers ?? request?.headers),
+    };
+    // Once a hop leaves the origin, credentials stay dropped for the rest of the chain, even if a
+    // later hop comes back: the foreign host chose where that hop goes.
+    let leftOrigin = false;
+    for (let redirects = 0; ; redirects++) {
+      if (callerRedirect) return response;
+      if (hop.redirect === 'manual' && response.redirected) {
+        throw refuseRedirect(
+          "The fetch implementation followed a redirect itself although the client asked it not to, so its response was not used. A custom fetch must honor redirect: 'manual'.",
+        );
+      }
+      if (response.type === 'opaqueredirect') {
+        // Browsers answer a manual redirect with an opaque response that hides its target, so there
+        // is nothing safe to follow; it is refused rather than mistaken for the API's answer.
+        throw refuseRedirect(
+          carriesUnguardedCredential
+            ? 'The server answered with a redirect, which this request does not follow: the platform hides the target from the SDK, and the request carries an API key header that could reach another host. Call the redirect target directly, or send the request from a server.'
+            : 'The server answered with a redirect whose target this platform hides from the SDK, so it was not followed. Call the redirect target directly, or send the request from a server.',
+        );
+      }
+      const location = REDIRECT_STATUSES.includes(response.status)
+        ? response.headers.get('location')?.trim()
+        : undefined;
+      if (!location) return response;
+      await Shims.CancelReadableStream(response.body);
+      if (redirects >= MAX_REDIRECTS) throw refuseRedirect(`Maximum redirects exceeded (${MAX_REDIRECTS}).`);
+
+      const from = new URL(current);
+      let target: URL;
+      try {
+        target = new URL(location, from);
+      } catch {
+        throw refuseRedirect('The server redirected to a URL that cannot be parsed.');
+      }
+      if (target.protocol !== 'https:' && target.protocol !== 'http:') {
+        throw refuseRedirect(`Refusing to follow a redirect to a ${target.protocol} URL.`);
+      }
+      if (from.protocol === 'https:' && target.protocol === 'http:') {
+        throw refuseRedirect('Refusing to follow a redirect from https to http.');
+      }
+
+      const headers = new Headers(hop.headers);
+      let nextMethod = hop.method ?? 'GET';
+      let body = hop.body ?? request?.body ?? undefined;
+      // A 303 (but for HEAD), and a 301 or 302 answering a POST, re-ask with a bodiless GET, as
+      // browsers do. Every other redirect repeats the request, so its body has to be sent again.
+      if (
+        (response.status === 303 && nextMethod !== 'HEAD') ||
+        ((response.status === 301 || response.status === 302) && nextMethod === 'POST')
+      ) {
+        nextMethod = 'GET';
+        body = undefined;
+        for (const name of [...headers.keys()]) if (name.startsWith('content-')) headers.delete(name);
+      } else if (body != null && isOneShotBody(body)) {
+        throw refuseRedirect(
+          `Refusing to follow a ${response.status} redirect: the request body was a stream, which cannot be sent again.`,
+        );
+      }
+
+      if (target.origin !== from.origin) leftOrigin = true;
+      if (leftOrigin) {
+        for (const name of CREDENTIAL_HEADERS) headers.delete(name);
+      } else {
+        // A `Location` the server spelled does not repeat our query credentials, so a same-origin
+        // hop carries them over; appended rather than set so the target's own query keeps its bytes.
+        for (const name of CREDENTIAL_QUERY) {
+          const value = from.searchParams.get(name);
+          if (value === null || target.searchParams.has(name)) continue;
+          target.search =
+            (target.search ? target.search + '&' : '?') +
+            encodeURIComponent(name) +
+            '=' +
+            encodeURIComponent(value);
+        }
+      }
+
+      hop = { ...hop, method: nextMethod, headers };
+      if (body == null) {
+        delete hop.body;
+        delete (hop as { duplex?: unknown }).duplex;
+      } else {
+        hop.body = body;
+      }
+      current = target.href;
+      response = await this.fetch.call(undefined, current, hop);
     }
   }
 
@@ -635,6 +858,7 @@ export class Hercules {
     options: FinalRequestOptions,
     retriesRemaining: number,
     requestLogID: string,
+    signal: RequestInit['signal'],
     responseHeaders?: Headers | undefined,
   ): Promise<APIResponseProps> {
     let timeoutMillis: number | undefined;
@@ -674,7 +898,11 @@ export class Hercules {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
-    await sleep(timeoutMillis);
+    // Cancelling during the backoff ends the call now, rather than after the delay and one more request.
+    await sleep(timeoutMillis, signal);
+    if (signal?.aborted) {
+      throw new Errors.APIUserAbortError();
+    }
 
     return this.makeRequest(options, retriesRemaining - 1, requestLogID);
   }
@@ -719,13 +947,14 @@ export class Hercules {
     const req: FinalizedRequestInit = {
       method,
       headers: reqHeaders,
-      ...(options.signal && { signal: options.signal }),
       ...((globalThis as any).ReadableStream &&
         body instanceof (globalThis as any).ReadableStream && { duplex: 'half' }),
       // `buildBody` already collapses no-body into `undefined`; here we only need to drop that
       // sentinel. A truthiness spread would also strip an intentional empty-string body.
       ...(body !== undefined && { body }),
       ...((this.fetchOptions as any) ?? {}),
+      // The call's own signal beats the client's `fetchOptions.signal`; the call's `fetchOptions` beats both.
+      ...(options.signal && { signal: options.signal }),
       ...((options.fetchOptions as any) ?? {}),
     };
     return { req, url, timeout: options.timeout };
@@ -768,12 +997,24 @@ export class Hercules {
     appendAuthCookies(headers.values, await this.authCookiesAsync());
 
     this.validateAuth(url, headers.values, options);
+    // Last, so a subclass sees the headers as they leave here, after the SDK has checked the auth.
+    await this.validateHeaders(headers);
 
     return headers.values;
   }
 
+  /**
+   * Runs once for every HTTP request built from the client's headers, at the end of header building,
+   * with the headers it will be sent with: `values` holds them and `nulls` the names the call removed
+   * with a `null`.
+   * Throwing, or rejecting from an `async` override, which is awaited, rejects the request before it
+   * is sent. Does nothing unless a subclass overrides it.
+   * `fetchOptions.headers` and `prepareRequest` are applied afterwards, so the hook does not see them.
+   */
+  protected validateHeaders({ values, nulls }: NullableHeaders): void {}
+
   private _makeAbort(controller: AbortController) {
-    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    // note: we can't just inline this method inside `#armDeadline()` because then the closure
     //       would capture all request options, and cause a memory leak.
     return () => controller.abort();
   }
@@ -838,7 +1079,7 @@ export class Hercules {
     throw new Errors.AuthenticationError(
       401,
       undefined,
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+      'Could not resolve authentication method. Expected either apiKey or runToken to be set. Or for the "Authorization" headers to be explicitly omitted',
       headers,
     );
   }
@@ -847,6 +1088,8 @@ export class Hercules {
     const headers: Record<string, string> = {};
     const apiKey = this.resolveAuthOptionSync('apiKey', this.apiKey);
     if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+    const runToken = this.resolveAuthOptionSync('runToken', this.runToken);
+    if (runToken) headers['Authorization'] = `Bearer ${runToken}`;
     return headers;
   }
 
@@ -857,11 +1100,23 @@ export class Hercules {
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    return buildHeaders([await this.bearerAuth(opts), await this.runTokenAuth(opts)]);
+  }
+
+  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     const apiKey = await this.resolveAuthOption('apiKey', this.apiKey);
     if (apiKey == null) {
       return undefined;
     }
     return buildHeaders([{ Authorization: `Bearer ${apiKey}` }]);
+  }
+
+  protected async runTokenAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    const runToken = await this.resolveAuthOption('runToken', this.runToken);
+    if (runToken == null) {
+      return undefined;
+    }
+    return buildHeaders([{ Authorization: `Bearer ${runToken}` }]);
   }
 
   private async authQueryAsync(): Promise<Record<string, string>> {
@@ -916,7 +1171,6 @@ export class Hercules {
 
   commerce: Commerce = new Commerce(this);
   connectors: Connectors = new Connectors(this);
-  content: Content = new Content(this);
   domains: Domains = new Domains(this);
   email: EmailResource = new EmailResource(this);
   files: Files = new Files(this);
@@ -925,7 +1179,6 @@ export class Hercules {
 
 Hercules.Commerce = Commerce;
 Hercules.Connectors = Connectors;
-Hercules.Content = Content;
 Hercules.Domains = Domains;
 Hercules.EmailResource = EmailResource;
 Hercules.Files = Files;
@@ -955,8 +1208,6 @@ export declare namespace Hercules {
     type ConnectorCredentialsParams as ConnectorCredentialsParams,
     type ConnectorRequestParams as ConnectorRequestParams,
   };
-
-  export { Content as Content };
 
   export {
     Domains as Domains,
@@ -1023,3 +1274,97 @@ const cookieHeaderHas = (value: string | null, name: string): boolean => {
   const target = encodeURIComponent(name) + '=';
   return value.split(';').some((cookie) => cookie.trim().startsWith(target));
 };
+
+/** Client fields holding a secret, masked whenever the client is printed or serialized. */
+const SECRET_CLIENT_FIELDS: readonly string[] = ['apiKey', 'runToken'];
+
+/**
+ * One field of the client (or of its stored options) as a printed client shows it. Credentials are
+ * masked outright; header bags go through the log redaction, which knows every header this SDK
+ * authenticates with; a base URL loses any userinfo or query credential it carries.
+ */
+const redactClientField = (key: string, value: unknown): unknown => {
+  if (value === null || value === undefined) return value;
+  if (SECRET_CLIENT_FIELDS.includes(key)) return '***';
+  if (key === 'baseURL' && typeof value === 'string') return redactUrl(value);
+  if (key === 'defaultHeaders') {
+    if (value instanceof Headers) return redactHeaders(value);
+    if (typeof value !== 'object' || Array.isArray(value)) return '***';
+    const redactValue = (name: string, field: unknown): unknown => {
+      if (typeof field === 'string') return redactHeaders({ [name]: field })[name];
+      if (Array.isArray(field)) return field.map((entry) => redactValue(name, entry));
+      return field === null || field === undefined ? field : '***';
+    };
+    return Object.fromEntries(Object.entries(value).map(([name, field]) => [name, redactValue(name, field)]));
+  }
+  if (typeof value !== 'object') return value;
+  if (key === 'fetchOptions') {
+    const { headers: _headers, ...rest } = value as Record<string, unknown>;
+    return _headers === undefined ? rest : { ...rest, headers: '***' };
+  }
+  if (key === '_options') {
+    return Object.fromEntries(
+      Object.entries(value).map(([name, field]) => [name, redactClientField(name, field)]),
+    );
+  }
+  return value;
+};
+
+/** Statuses the client follows when they carry a `Location`; any other 3xx is the server's answer. */
+const REDIRECT_STATUSES: readonly number[] = [301, 302, 303, 307, 308];
+
+/** The most redirects one request follows, the same cap the platform `fetch` uses. */
+const MAX_REDIRECTS = 20;
+
+/**
+ * Headers that carry a credential: the platform's own and every header this API's security schemes
+ * place. A redirect that leaves the origin drops each of them, wherever it was set.
+ */
+const CREDENTIAL_HEADERS: readonly string[] = ['authorization', 'cookie', 'proxy-authorization'];
+
+/** Query parameters this API's security schemes place, carried only to a same-origin redirect target. */
+const CREDENTIAL_QUERY: readonly string[] = [];
+
+/**
+ * Credential headers a browser keeps on the origin itself: it drops `Authorization` from a
+ * cross-origin redirect and never lets script set the other two.
+ */
+const BROWSER_GUARDED_HEADERS: readonly string[] = ['authorization', 'cookie', 'proxy-authorization'];
+
+/**
+ * Whether this runtime's fetch answers a manual redirect opaquely, hiding its target: a browser
+ * page, or a dedicated, shared or service worker in one. A worker scope alone is not enough,
+ * since edge runtimes model theirs on it while returning the real 3xx; a browser user agent is.
+ */
+const hidesRedirectTargets = (): boolean => {
+  if (isRunningInBrowser()) return true;
+  if (typeof (globalThis as { WorkerGlobalScope?: unknown }).WorkerGlobalScope === 'undefined') return false;
+  const agent: unknown = (globalThis as any).navigator?.userAgent;
+  return typeof agent === 'string' && agent.startsWith('Mozilla/');
+};
+
+/** Marks the error for a redirect the client refused to follow, which `makeRequest` does not retry. */
+const REFUSED_REDIRECT = Symbol('refusedRedirect');
+
+/** Marks `error` as a redirect refusal, which no retry layer repeats. */
+const markRefusedRedirect = (error: Errors.APIConnectionError): Errors.APIConnectionError => {
+  (error as { [REFUSED_REDIRECT]?: true })[REFUSED_REDIRECT] = true;
+  return error;
+};
+
+/** A connection error for a redirect the client will not follow. */
+const refuseRedirect = (message: string): Errors.APIConnectionError =>
+  markRefusedRedirect(new Errors.APIConnectionError({ message }));
+
+/** Whether `error` is a redirect refusal from {@link refuseRedirect}. */
+const isRefusedRedirect = (error: unknown): boolean =>
+  typeof error === 'object' &&
+  error !== null &&
+  (error as { [REFUSED_REDIRECT]?: true })[REFUSED_REDIRECT] === true;
+
+/** Whether a request body can be read only once, so a redirect that repeats the request cannot resend it. */
+const isOneShotBody = (body: unknown): boolean =>
+  !!(
+    ((globalThis as any).ReadableStream && body instanceof (globalThis as any).ReadableStream) ||
+    (typeof body === 'object' && body !== null && Symbol.asyncIterator in body)
+  );

@@ -303,6 +303,51 @@ export interface CommerceCheckoutParams {
    */
   promotion_code?: string;
   /**
+   * Language of the hosted checkout page. Defaults to 'auto', which uses the customer's browser language. Ignored when updating an existing subscription.
+   */
+  locale?:
+    | 'auto'
+    | 'bg'
+    | 'cs'
+    | 'da'
+    | 'de'
+    | 'el'
+    | 'en'
+    | 'en-GB'
+    | 'es'
+    | 'es-419'
+    | 'et'
+    | 'fi'
+    | 'fil'
+    | 'fr'
+    | 'fr-CA'
+    | 'hr'
+    | 'hu'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'ko'
+    | 'lt'
+    | 'lv'
+    | 'ms'
+    | 'mt'
+    | 'nb'
+    | 'nl'
+    | 'pl'
+    | 'pt'
+    | 'pt-BR'
+    | 'ro'
+    | 'ru'
+    | 'sk'
+    | 'sl'
+    | 'sv'
+    | 'th'
+    | 'tr'
+    | 'vi'
+    | 'zh'
+    | 'zh-HK'
+    | 'zh-TW';
+  /**
    * Override the free trial period for new subscriptions, in days (0-365). If not provided, uses the subscription group's configured trial period. Set to 0 to disable the group's trial for this checkout. Ignored when updating an existing subscription.
    * @minimum 0
    * @maximum 365
@@ -433,7 +478,7 @@ export interface CommerceCancelResponse {
   /**
    * When the subscription was canceled
    * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z))$
    */
   canceled_at?: string | null;
 }

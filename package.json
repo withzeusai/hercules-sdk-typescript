@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/withzeusai/hercules-sdk-typescript.git"
   },
+  "bugs": {
+    "url": "https://github.com/withzeusai/hercules-sdk-typescript/issues"
+  },
   "homepage": "https://docs-cloud.hercules.app/",
   "type": "module",
   "sideEffects": false,
@@ -47,11 +50,13 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json && node scripts/finalize-build.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.cjs.json --noEmit",
+    "test": "vitest run",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.0",
+    "vitest": "^4.1.7"
   },
   "license": "Apache-2.0"
 }
