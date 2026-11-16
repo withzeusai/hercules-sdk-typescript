@@ -28,7 +28,7 @@ export class Identities extends APIResource {
   }
 
   /**
-   * Retrieves a paginated list of sender identities (email addresses and domains) configured for this website.
+   * Retrieves a paginated list of sender identities (email addresses and domains) configured for this website. Pending email addresses are rechecked against AWS SES, so one reads verified shortly after its verification link is clicked.
    *
    * @param {IdentityListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -47,7 +47,7 @@ export class Identities extends APIResource {
   }
 
   /**
-   * Retrieves a sender identity by ID. Returns the identity with its current verification status and any required DNS records.
+   * Retrieves a sender identity by ID, with its verification status and any required DNS records. A pending email address is rechecked against AWS SES, so it reads verified shortly after its verification link is clicked. Use Verify Identity to recheck a domain.
    *
    * @param {string} identityID - The unique identifier of the identity
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -132,7 +132,7 @@ export interface Identity {
   /**
    * Timestamp when the identity was created
    * @format date-time
-   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z))$
    */
   created_at: string;
   /**
@@ -227,9 +227,9 @@ export namespace Identity {
 
   export interface Warning {
     /**
-     * Machine-readable identifier for the kind of warning. 'dmarc_unaligned' is resolved by verifying the domain; 'dmarc_public_domain' cannot be, because the domain belongs to a shared mailbox provider.
+     * Machine-readable identifier for the kind of warning. 'dmarc_unaligned' is resolved by verifying the domain; 'dmarc_public_domain' cannot be, because the domain belongs to a shared mailbox provider. 'dmarc_missing' means the domain publishes no DMARC record, and is resolved by adding a TXT record at '_dmarc.<domain>' with the value 'v=DMARC1; p=none;'.
      */
-    code: 'dmarc_unaligned' | 'dmarc_public_domain';
+    code: 'dmarc_unaligned' | 'dmarc_public_domain' | 'dmarc_missing';
     /**
      * The sender domain the warning concerns
      */
@@ -252,7 +252,7 @@ export declare namespace IdentityCreateParams {
     /**
      * The email address to verify
      * @format email
-     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     * @pattern ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
      */
     value: string;
   }

@@ -26,6 +26,7 @@ const client = new Hercules({
 Provide credentials using the options below. Environment variables are read automatically when the target runtime supports them:
 
 - `apiKey` (env: `HERCULES_API_KEY`) — Credential for the bearerAuth scheme.
+- `runToken` (env: `HERCULES_RUN_TOKEN`) — An agent run's live token (live.token from Create Agent Run), sent from the browser as: Bearer <token>. Streams that one run's events (List Agent Run Events with Accept: text/event-stream) and nothing else, until an hour after the run ends or its thread is deleted. A run keeps the one token it was created with. Its stream names Hercules tools only as "tool" and carries no app tool results, unless the run was started with expose_tool_details.
 
 ## Calling operations
 

@@ -17,7 +17,6 @@ export type {
   ConnectorRequestParams,
   ConnectorRequestResponse,
 } from './connectors';
-export { Content } from './content/content';
 export { Domains } from './domains/domains';
 export type {
   Domain,

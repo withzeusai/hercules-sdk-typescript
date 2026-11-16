@@ -1,8 +1,8 @@
-# hercules
+# Hercules
 
-This library provides convenient access to the hercules REST API from TypeScript or JavaScript.
+This library provides convenient access to the Hercules REST API from TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](./api.md).
+The REST API documentation can be found on [docs-cloud.hercules.app](https://docs-cloud.hercules.app/). The full API of this library can be found in [api.md](./api.md).
 
 <br />
 
@@ -57,11 +57,13 @@ Pass credentials to the generated client constructor. Environment variables are 
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `apiKey` | `string \| provider` | - | Credential for the bearerAuth scheme. Defaults to HERCULES_API_KEY. |
+| `apiKey` | `string \| AuthTokenProvider \| null` | - | Credential for the bearerAuth scheme. Defaults to HERCULES_API_KEY. |
+| `runToken` | `string \| AuthTokenProvider` | - | An agent run's live token (live.token from Create Agent Run), sent from the browser as: Bearer \<token>. Streams that one run's events (List Agent Run Events with Accept: text/event-stream) and nothing else, until an hour after the run ends or its thread is deleted. A run keeps the one token it was created with. Its stream names Hercules tools only as "tool" and carries no app tool results, unless the run was started with expose_tool_details. Defaults to HERCULES_RUN_TOKEN. |
 
 Declared schemes:
 
 - `bearerAuth` bearer token
+- `runToken` bearer token
 
 <br />
 
@@ -82,7 +84,7 @@ try {
 }
 ```
 
-Documented error statuses: `400`, `402`, `403`, `404`, `409`, `422`.
+Documented error statuses: `400`, `402`, `403`, `404`, `409`, `422`, `503`.
 
 <br />
 
@@ -102,7 +104,8 @@ const client = new Hercules({
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `apiKey` | `string \| AuthTokenProvider` | `process.env["HERCULES_API_KEY"]` | Credential for the bearerAuth scheme. |
+| `apiKey` | `string \| AuthTokenProvider \| null` | `process.env["HERCULES_API_KEY"]` | Credential for the bearerAuth scheme. |
+| `runToken` | `string \| AuthTokenProvider` | `process.env["HERCULES_RUN_TOKEN"]` | An agent run's live token (live.token from Create Agent Run), sent from the browser as: Bearer \<token>. Streams that one run's events (List Agent Run Events with Accept: text/event-stream) and nothing else, until an hour after the run ends or its thread is deleted. A run keeps the one token it was created with. Its stream names Hercules tools only as "tool" and carries no app tool results, unless the run was started with expose_tool_details. |
 | `baseURL` | `string \| null` | `process.env["HERCULES_BASE_URL"]` | Override the default API base URL. Pass `null` when selecting a configured environment. |
 | `timeout` | `number` | `60000` | Maximum time in milliseconds to wait for a response before aborting a request. |
 | `maxRetries` | `number` | `2` | Number of retries for temporary failures. |
@@ -145,6 +148,24 @@ const page = await client.commerce.customers.list({
   starting_after: 'id_123',
   limit: 100,
 });
+```
+
+### Manual pagination
+
+Iterating a page with `for await` walks every item across every page. To control paging yourself, check `hasNextPage()` and fetch the following page with `getNextPage()`:
+
+```ts
+let page = await client.commerce.customers.list({
+  starting_after: 'id_123',
+  limit: 100,
+});
+while (true) {
+  for (const item of page.data) {
+    console.log(item);
+  }
+  if (!page.hasNextPage()) break;
+  page = await page.getNextPage();
+}
 ```
 
 <br />
