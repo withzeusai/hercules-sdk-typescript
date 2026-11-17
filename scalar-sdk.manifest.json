@@ -1,7 +1,7 @@
 {
   "name": "Hercules",
   "slug": "hercules",
-  "generatorVersion": "0.42.1",
+  "generatorVersion": "0.43.1",
   "servers": [
     "https://api.hercules.app"
   ],
