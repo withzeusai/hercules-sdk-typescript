@@ -34,7 +34,7 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Registers a push subscription with the provided visitorId: a Web Push `subscription` from a browser, or a `nativeDevice` APNs token from the Hercules iOS app. Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
+   * Registers a push subscription with the provided visitorId: a Web Push `subscription` from a browser, or a `nativeDevice` token from the Hercules iOS app (APNs) or Android app (FCM). Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
    *
    * @param {PushNotificationSubscribeParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -140,9 +140,9 @@ export interface PushNotificationSubscribeParams {
    */
   subscription?: PushNotificationSubscribeParams.Subscription;
   /**
-   * Native device registration from the Hercules iOS app. Notifications reach it through Apple Push Notification service using the APNs key uploaded in the app's App Store settings.
+   * Native device registration from the Hercules iOS or Android app, as reported by the Capacitor PushNotifications `registration` event.
    */
-  nativeDevice?: PushNotificationSubscribeParams.NativeDevice;
+  nativeDevice?: PushNotificationSubscribeParams.NativeDevice | PushNotificationSubscribeParams.NativeDevice2;
 }
 
 export namespace PushNotificationSubscribeParams {
@@ -155,7 +155,7 @@ export namespace PushNotificationSubscribeParams {
     /**
      * @format email
      * @maxLength 255
-     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     * @pattern ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
      */
     email?: string;
   }
@@ -198,6 +198,18 @@ export namespace PushNotificationSubscribeParams {
     /**
      * APNs device token as hex, from the Capacitor PushNotifications `registration` event
      * @pattern ^[0-9a-fA-F]{64,200}$
+     */
+    token: string;
+  }
+
+  export interface NativeDevice2 {
+    /**
+     * Native platform the device token was issued for
+     */
+    platform: 'android';
+    /**
+     * FCM registration token, from the Capacitor PushNotifications `registration` event. Case-sensitive; send it unchanged.
+     * @pattern ^[\w:-]{64,512}$
      */
     token: string;
   }
@@ -253,7 +265,7 @@ export namespace PushNotificationIdentifyParams {
     /**
      * @format email
      * @maxLength 255
-     * @pattern ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+     * @pattern ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
      */
     email?: string;
   }

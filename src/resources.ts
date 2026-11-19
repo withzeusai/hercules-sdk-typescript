@@ -1,14 +1,6 @@
 // File generated from our OpenAPI spec by Scalar. See README.md for details.
 
-export {
-  Commerce,
-  Connectors,
-  Content,
-  Domains,
-  EmailResource,
-  Files,
-  PushNotifications,
-} from './resources/index';
+export { Commerce, Connectors, Domains, EmailResource, Files, PushNotifications } from './resources/index';
 export type {
   Currency,
   CommerceCheckoutParams,

@@ -1,0 +1,62 @@
+name: Publish JSR
+
+on:
+  # Release Please creates the tag and GitHub Release with GITHUB_TOKEN, and events from that token
+  # (release, tag push) never start other workflows. Its completed run does, so this follows it and
+  # publishes only when that run's commit carries a release tag. Checking for the tag instead of the
+  # run's conclusion keeps a failed back-sync to scalar-next from holding back the JSR publish.
+  workflow_run:
+    workflows: [Release Please]
+    types: [completed]
+    branches: [main]
+  # Manual publish of an existing release tag, e.g. to re-run a failed publish or to backfill a
+  # release cut before JSR publishing was set up.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, e.g. v1.17.0
+        required: true
+
+permissions:
+  contents: read
+  # GitHub Actions OIDC: JSR accepts it because the package is linked to this repository.
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # The publish script and jsr.json come from the default branch, so a tag cut before they
+      # existed can still be published; the package itself comes from the release commit below.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: tooling
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.event.workflow_run.head_sha }}
+          path: package
+          fetch-depth: 0
+      - name: Find release tag
+        id: tag
+        working-directory: package
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            tag="$INPUT_TAG"
+          else
+            tag="$(git tag --points-at HEAD 'v*' | head -n 1)"
+          fi
+          if [ -z "$tag" ]; then
+            echo "No release tag on $(git rev-parse --short HEAD); nothing to publish."
+          else
+            echo "Publishing $tag."
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: ${{ steps.tag.outputs.tag != '' }}
+        with:
+          node-version: "24"
+      - name: Publish to JSR
+        if: ${{ steps.tag.outputs.tag != '' }}
+        run: node tooling/scripts/publish-jsr.mjs --root package
