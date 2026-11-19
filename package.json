@@ -1,6 +1,6 @@
 {
   "name": "@usehercules/sdk",
-  "version": "1.18.0",
+  "version": "1.18.1-next",
   "description": "API for the Hercules platform",
   "author": "Hercules <hello@hercules.app>",
   "repository": {
