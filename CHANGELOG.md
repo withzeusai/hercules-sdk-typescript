@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1-next](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.18.0...v1.18.1-next) (2026-11-19)
+
+
+### Chores
+
+* **api:** update generated SDK content ([a322828](https://github.com/withzeusai/hercules-sdk-typescript/commit/a322828aaadd922a8a2aa04e8624356169b06797))
+
 ## [1.18.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.17.0...v1.18.0) (2026-11-19)
 
 
