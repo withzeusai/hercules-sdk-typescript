@@ -34,7 +34,7 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Registers a push subscription with the provided visitorId: a Web Push `subscription` from a browser, or a `nativeDevice` token from the Hercules iOS app (APNs) or Android app (FCM). Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
+   * Registers a push subscription with the provided visitor_id: a Web Push `subscription` from a browser, or a `native_device` token from the Hercules iOS app (APNs) or Android app (FCM). Use the authenticated user's id or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
    *
    * @param {PushNotificationSubscribeParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -42,9 +42,7 @@ export class PushNotifications extends APIResource {
    *
    * @example
    * ```ts
-   * const pushNotification = await client.pushNotifications.subscribe({
-   *   visitorId: 'x',
-   * });
+   * const pushNotification = await client.pushNotifications.subscribe({});
    * ```
    */
   subscribe(
@@ -76,7 +74,7 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Updates a subscription's visitorId to the provided userId. Call after sign-in to link the subscription to the authenticated user's account.
+   * Updates a subscription's visitor_id to the provided user_id. Call after sign-in to link the subscription to the authenticated user's account.
    *
    * @param {PushNotificationIdentifyParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -86,7 +84,6 @@ export class PushNotifications extends APIResource {
    * ```ts
    * const pushNotification = await client.pushNotifications.identify({
    *   secret: 'x',
-   *   userId: 'x',
    * });
    * ```
    */
@@ -98,7 +95,7 @@ export class PushNotifications extends APIResource {
   }
 
   /**
-   * Sends push notifications to specified visitors and/or topics. Specify visitorIds, topics, or both (combined as union). Omit both to broadcast to all subscribers. Recipient lists above 100 are delivered in the background and reported as `queued`. Limited to 120 sends per minute per app, 6 of which may be broadcasts.
+   * Sends push notifications to specified visitors and/or topics. Specify visitor_ids, topics, or both (combined as union). Omit both to broadcast to all subscribers. Recipient lists above 100 are delivered in the background and reported as `queued`. Limited to 120 sends per minute per app, 6 of which may be broadcasts.
    *
    * @param {PushNotificationSendParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -118,19 +115,21 @@ export class PushNotifications extends APIResource {
 
 export interface PushNotificationEnableResponse {
   /**
-   * VAPID public key for push subscription (base64url encoded)
+   * Deprecated: use vapid_public_key.
    * @pattern ^[\w-]+$
+   * @deprecated
    */
   vapidPublicKey: string;
 }
 
 export interface PushNotificationSubscribeParams {
   /**
-   * Visitor identifier. Use authenticated userId or generate a UUID for anonymous users.
+   * Deprecated: use visitor_id.
    * @minLength 1
    * @maxLength 255
+   * @deprecated
    */
-  visitorId: string;
+  visitorId?: string;
   /**
    * Optional end-user identity snapshot supplied by the app. Hercules stores it only with this app's push subscription.
    */
@@ -140,7 +139,8 @@ export interface PushNotificationSubscribeParams {
    */
   subscription?: PushNotificationSubscribeParams.Subscription;
   /**
-   * Native device registration from the Hercules iOS or Android app, as reported by the Capacitor PushNotifications `registration` event.
+   * Deprecated: use native_device.
+   * @deprecated
    */
   nativeDevice?: PushNotificationSubscribeParams.NativeDevice | PushNotificationSubscribeParams.NativeDevice2;
 }
@@ -148,11 +148,14 @@ export interface PushNotificationSubscribeParams {
 export namespace PushNotificationSubscribeParams {
   export interface Subscriber {
     /**
+     * Deprecated: use display_name.
      * @minLength 1
      * @maxLength 255
+     * @deprecated
      */
     displayName?: string;
     /**
+     * The end user's email address
      * @format email
      * @maxLength 255
      * @pattern ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
@@ -166,6 +169,9 @@ export namespace PushNotificationSubscribeParams {
      * @format uri
      */
     endpoint: string;
+    /**
+     * The subscription's encryption keys, from PushSubscription.toJSON()
+     */
     keys: Subscription.Keys;
     /**
      * Subscription expiration timestamp
@@ -244,11 +250,12 @@ export interface PushNotificationIdentifyParams {
    */
   secret: string;
   /**
-   * Authenticated user ID to link the subscription to
+   * Deprecated: use user_id.
    * @minLength 1
    * @maxLength 255
+   * @deprecated
    */
-  userId: string;
+  userId?: string;
   /**
    * Optional end-user identity snapshot supplied by the app. Hercules stores it only with this app's push subscription.
    */
@@ -258,11 +265,14 @@ export interface PushNotificationIdentifyParams {
 export namespace PushNotificationIdentifyParams {
   export interface Subscriber {
     /**
+     * Deprecated: use display_name.
      * @minLength 1
      * @maxLength 255
+     * @deprecated
      */
     displayName?: string;
     /**
+     * The end user's email address
      * @format email
      * @maxLength 255
      * @pattern ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
@@ -277,7 +287,8 @@ export interface PushNotificationIdentifyResponse {
    */
   success: boolean;
   /**
-   * True if the subscription was already identified (not anonymous)
+   * Deprecated: never sent.
+   * @deprecated
    */
   alreadyIdentified?: boolean;
 }
@@ -290,11 +301,12 @@ export interface PushNotificationSendParams {
    */
   title: string;
   /**
-   * Visitor IDs to send to. Combined with topics as a union.
+   * Deprecated: use visitor_ids.
+   * @deprecated
    */
   visitorIds?: Array<string>;
   /**
-   * Topics to send to. All visitors subscribed to any of these topics will receive the notification. Combined with visitorIds as a union.
+   * Topics to send to. All visitors subscribed to any of these topics will receive the notification. Combined with visitor_ids as a union.
    */
   topics?: Array<string>;
   /**

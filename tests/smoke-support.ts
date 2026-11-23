@@ -28,7 +28,7 @@ import Hercules from '@usehercules/sdk';
  * only for generator tooling). The runner refuses a list whose digest differs, so a list left by
  * an earlier generation is never trusted.
  */
-export const SMOKE_CASE_LIST_DIGEST = '85cde5833f22c641';
+export const SMOKE_CASE_LIST_DIGEST = 'ed226aae586d70d6';
 
 const baseURL = process.env['TEST_API_BASE_URL'] || undefined;
 

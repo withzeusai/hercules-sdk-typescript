@@ -83,6 +83,7 @@ export interface ConnectorCredentialsResponse {
   secrets: Record<string, string>;
   /**
    * ISO timestamp when the access token expires; null when it does not expire. Cache the secrets until shortly before this time, then fetch again.
+   * @format date-time
    */
   expires_at: string | null;
 }

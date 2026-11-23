@@ -19,9 +19,7 @@ describe.concurrent('resource pushNotifications', () => {
     { operation: 'subscribe', path: '/v1/push-notifications/subscribe' },
     'subscribe: only required params',
     async () => {
-      const pushNotification = await client.pushNotifications.subscribe({
-        visitorId: 'x',
-      });
+      const pushNotification = await client.pushNotifications.subscribe({});
     },
   );
   smokeCase(
@@ -63,7 +61,6 @@ describe.concurrent('resource pushNotifications', () => {
     async () => {
       const pushNotification = await client.pushNotifications.identify({
         secret: 'x',
-        userId: 'x',
       });
     },
   );
