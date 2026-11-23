@@ -62,7 +62,7 @@ export class Suppressions extends APIResource {
   }
 
   /**
-   * Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
+   * Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery: if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
    *
    * @param {string} suppression - The suppression's ID, or the suppressed email address
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -99,7 +99,7 @@ export class Suppressions extends APIResource {
   }
 
   /**
-   * Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
+   * Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery: if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
    *
    * @param {SuppressionBatchRemoveParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -123,7 +123,7 @@ export class Suppressions extends APIResource {
  */
 export interface Suppression {
   /**
-   * Identifier for the suppression — the suppressed email address
+   * Identifier for the suppression: the suppressed email address
    */
   id: string;
   /**
@@ -131,7 +131,7 @@ export interface Suppression {
    */
   email: string;
   /**
-   * How the address reached the list: 'bounce' for a permanent delivery failure, 'complaint' for a spam report, 'manual' for an address you added yourself. List results never report 'manual' — a manually added address is listed as 'bounce'. Retrieve a single suppression to recover its true origin.
+   * How the address reached the list: 'bounce' for a permanent delivery failure, 'complaint' for a spam report, 'manual' for an address you added yourself. List results never report 'manual': a manually added address is listed as 'bounce'. Retrieve a single suppression to recover its true origin.
    */
   origin: 'bounce' | 'complaint' | 'manual';
   /**
@@ -164,7 +164,7 @@ export interface SuppressionListParams {
    */
   limit?: number;
   /**
-   * Opaque forward-pagination cursor. Pass the `next_cursor` from the previous page. Forward only — there is no backward pagination.
+   * Opaque forward-pagination cursor. Pass the `next_cursor` from the previous page. Forward only: there is no backward pagination.
    */
   cursor?: string;
   /**

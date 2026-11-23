@@ -84,7 +84,7 @@ try {
 }
 ```
 
-Documented error statuses: `400`, `402`, `403`, `404`, `409`, `422`, `503`.
+Documented error statuses: `400`, `401`, `402`, `403`, `404`, `409`, `422`, `503`.
 
 <br />
 

@@ -1,7 +1,7 @@
 {
   "name": "Hercules",
   "slug": "hercules",
-  "generatorVersion": "0.44.0",
+  "generatorVersion": "0.45.0",
   "servers": [
     "https://api.hercules.app"
   ],
@@ -7303,17 +7303,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -7400,17 +7412,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -7491,17 +7515,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -7577,24 +7613,43 @@
         "successStatus": "200",
         "errorStatuses": [
           "400",
+          "401",
           "404"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
         },
         {
           "status": "404",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -7704,17 +7759,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -7793,17 +7860,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -7903,24 +7982,43 @@
         "successStatus": "201",
         "errorStatuses": [
           "400",
+          "401",
           "409"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
         },
         {
           "status": "409",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -8021,17 +8119,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8117,17 +8227,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8224,17 +8346,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8324,17 +8458,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8452,24 +8598,43 @@
         "successStatus": "201",
         "errorStatuses": [
           "400",
+          "401",
           "409"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
         },
         {
           "status": "409",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -8588,17 +8753,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8710,17 +8887,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8817,17 +9006,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -8898,17 +9099,29 @@
       "result": {
         "successStatus": "204",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9016,17 +9229,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9124,17 +9349,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9263,24 +9500,43 @@
         "successStatus": "201",
         "errorStatuses": [
           "400",
+          "401",
           "409"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
         },
         {
           "status": "409",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -9395,17 +9651,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9490,17 +9758,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9579,17 +9859,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9719,24 +10011,43 @@
         "successStatus": "201",
         "errorStatuses": [
           "400",
+          "401",
           "409"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
         },
         {
           "status": "409",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -9825,17 +10136,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -9920,17 +10243,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10009,17 +10344,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10112,17 +10459,29 @@
       "result": {
         "successStatus": "201",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10226,17 +10585,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10345,17 +10716,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10445,17 +10828,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10548,17 +10943,29 @@
       "result": {
         "successStatus": "201",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10661,17 +11068,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10746,17 +11165,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10872,17 +11303,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -10963,17 +11406,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11063,17 +11518,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11154,17 +11621,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11270,24 +11749,43 @@
         "successStatus": "200",
         "errorStatuses": [
           "400",
+          "401",
           "402"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
         },
         {
           "status": "402",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -11383,17 +11881,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11482,17 +11992,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11571,17 +12093,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11723,6 +12257,7 @@
         "successStatus": "200",
         "errorStatuses": [
           "400",
+          "401",
           "403",
           "404",
           "422",
@@ -11732,23 +12267,69 @@
       "errorResponses": [
         {
           "status": "400",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         },
         {
           "status": "403",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         },
         {
           "status": "404",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         },
         {
           "status": "422",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         },
         {
           "status": "503",
-          "contents": []
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
         }
       ],
       "responseLinks": [],
@@ -11890,17 +12471,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -11979,17 +12572,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12064,17 +12669,29 @@
       "result": {
         "successStatus": "201",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12155,17 +12772,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12244,17 +12873,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12340,17 +12981,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12399,17 +13052,29 @@
       "result": {
         "successStatus": "204",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12484,17 +13149,29 @@
       "result": {
         "successStatus": "201",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12575,17 +13252,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12649,17 +13338,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12723,17 +13424,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12808,17 +13521,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -12899,17 +13624,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13022,17 +13759,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13111,17 +13860,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13164,7 +13925,25 @@
           }
         ]
       },
-      "errorResponses": [],
+      "result": {
+        "successStatus": "200",
+        "errorStatuses": [
+          "401"
+        ]
+      },
+      "errorResponses": [
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        }
+      ],
       "responseLinks": [],
       "transport": "http"
     },
@@ -13248,17 +14027,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13329,17 +14120,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13422,17 +14225,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13557,17 +14372,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13644,17 +14471,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13731,17 +14570,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]
@@ -13830,17 +14681,29 @@
       "result": {
         "successStatus": "200",
         "errorStatuses": [
-          "400"
+          "400",
+          "401"
         ]
       },
       "errorResponses": [
         {
           "status": "400",
-          "contentType": "application/json",
+          "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
             {
-              "contentType": "application/json",
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
               "encoding": "json"
             }
           ]

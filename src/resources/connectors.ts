@@ -128,7 +128,7 @@ export interface ConnectorRequestResponse {
    */
   connection_id: string;
   /**
-   * The provider's HTTP status code. A 4xx or 5xx here is a completed call the provider rejected, not a Hercules error — this endpoint answers 200 whenever the request reached the provider.
+   * The provider's HTTP status code. A 4xx or 5xx here is a completed call the provider rejected, not a Hercules error: this endpoint answers 200 whenever the request reached the provider.
    */
   status: number;
   /**

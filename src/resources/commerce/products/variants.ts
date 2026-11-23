@@ -77,7 +77,7 @@ export class Variants extends APIResource {
   }
 
   /**
-   * Updates an existing variant. Use this to modify the name, description, or active status. Pricing cannot be changed after creation—create a new variant instead.
+   * Updates an existing variant. Use this to modify the name, description, or active status. Pricing cannot be changed after creation: create a new variant instead.
    *
    * @param {string} variantID - The unique identifier of the variant
    * @param {VariantUpdateParams} params - The parameters to send with the request.

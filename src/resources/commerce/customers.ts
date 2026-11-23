@@ -8,7 +8,7 @@ import { path as __scalarPath } from '../../internal/utils/path';
 
 export class Customers extends APIResource {
   /**
-   * Retrieves a paginated list of all customers. Customers are the billable entities in your app—typically users, organizations, or projects.
+   * Retrieves a paginated list of all customers. Customers are the billable entities in your app, typically users, organizations, or projects.
    *
    * @param {CustomerListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -43,7 +43,7 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Creates a new billable customer. A customer represents the entity in your app that will be charged—typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
+   * Creates a new billable customer. A customer represents the entity in your app that will be charged, typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
    *
    * @param {CustomerCreateParams} body - The request body to send.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
@@ -101,7 +101,7 @@ export class Customers extends APIResource {
 }
 
 /**
- * A billable customer. Represents the entity in your app that will be charged—typically a user, organization, or project.
+ * A billable customer. Represents the entity in your app that will be charged, typically a user, organization, or project.
  */
 export interface Customer {
   /**

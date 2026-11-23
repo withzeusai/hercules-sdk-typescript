@@ -159,6 +159,8 @@ const commerce = await client.commerce.check({
 
 ### `Commerce CheckoutSessions`
 
+Checkout, subscriptions, refunds, entitlement checks, and the app's test mode environment.
+
 #### Get Checkout Session
 
 Retrieve current payment and session status for a customer of this app. Call from your backend before fulfilling an order; do not trust the success redirect. A complete session can still be unpaid, including delayed payment methods. Test-mode payments must not fulfill live orders.
@@ -176,9 +178,11 @@ const checkoutSession = await client.commerce.checkoutSessions.get('checkoutSess
 
 ### `Commerce Customers`
 
+An app's paying customers and their balances.
+
 #### List Customers
 
-Retrieves a paginated list of all customers. Customers are the billable entities in your app—typically users, organizations, or projects.
+Retrieves a paginated list of all customers. Customers are the billable entities in your app, typically users, organizations, or projects.
 
 | Direction | Type |
 | --- | --- |
@@ -203,7 +207,7 @@ const customer = await client.commerce.customers.get('cus_1234567890');
 
 #### Create Customer
 
-Creates a new billable customer. A customer represents the entity in your app that will be charged—typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
+Creates a new billable customer. A customer represents the entity in your app that will be charged, typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
 
 | Direction | Type |
 | --- | --- |
@@ -241,6 +245,8 @@ const customer = await client.commerce.customers.billingPortal('cus_1234567890',
 ```
 
 ### `Commerce Products`
+
+What an app sells.
 
 #### List Products
 
@@ -291,7 +297,7 @@ const product = await client.commerce.products.create({
 
 #### Update Product
 
-Updates an existing product. Use this to modify the product name, description, or active status. Pricing cannot be changed after creation—create a new product instead.
+Updates an existing product. Use this to modify the product name, description, or active status. Pricing cannot be changed after creation: create a new product instead.
 
 | Direction | Type |
 | --- | --- |
@@ -303,6 +309,8 @@ const product = await client.commerce.products.update('productId', {});
 ```
 
 #### `Commerce Products Resources`
+
+The features and other resources a product grants.
 
 ##### List Product Resources
 
@@ -347,6 +355,8 @@ await client.commerce.products.resources.detach('productId', {
 ```
 
 #### `Commerce Products Variants`
+
+The prices and billing options of a product.
 
 ##### List Product Variants
 
@@ -394,7 +404,7 @@ const variant = await client.commerce.products.variants.create('productId', {
 
 ##### Update Product Variant
 
-Updates an existing variant. Use this to modify the name, description, or active status. Pricing cannot be changed after creation—create a new variant instead.
+Updates an existing variant. Use this to modify the name, description, or active status. Pricing cannot be changed after creation: create a new variant instead.
 
 | Direction | Type |
 | --- | --- |
@@ -408,6 +418,8 @@ const variant = await client.commerce.products.variants.update('variantId', {
 ```
 
 ### `Commerce Coupons`
+
+Discounts customers can apply at checkout.
 
 #### List Coupons
 
@@ -465,6 +477,8 @@ const coupon = await client.commerce.coupons.update('coupon_1234567890', {});
 
 ### `Commerce Features`
 
+Capabilities that products and entitlements grant.
+
 #### List Features
 
 Retrieves a paginated list of features. Features are reusable entitlements that can be attached to multiple products.
@@ -520,6 +534,8 @@ const feature = await client.commerce.features.update('featureId', {});
 ```
 
 ### `Commerce Entitlements`
+
+Grants of a feature to a customer, outside of a purchase.
 
 #### List Entitlement Grants
 
@@ -669,6 +685,8 @@ const domain = await client.domains.search({
 
 ### `Domains Purchased`
 
+Domain search, purchase, and the domains an app owns.
+
 #### Purchase Domain
 
 Initiates a domain purchase. Verifies availability, creates a payment invoice, and begins the registration process. If the payment requires 3D Secure authentication, the response includes a client_secret for confirmation.
@@ -779,6 +797,8 @@ const email = await client.email.get('emailId');
 
 ### `Email Identities`
 
+Addresses and domains an app sends from, and their verification.
+
 #### Create Identity
 
 Creates a new sender identity for email verification. For email identities, a verification email is sent. For domain identities, DNS records are returned that must be configured to verify ownership.
@@ -845,6 +865,8 @@ await client.email.identities.delete('identityId');
 
 ### `Email Suppressions`
 
+Addresses that email is never sent to, such as after a bounce.
+
 #### Create Suppression
 
 Adds a recipient address to the suppression list. SES drops later sends to it at send time, protecting your sending reputation. Adding an address that is already suppressed succeeds. The suppression list belongs to the organization and applies to every app and sender identity it owns.
@@ -889,7 +911,7 @@ const suppression = await client.email.suppressions.get('suppression');
 
 #### Remove Suppression
 
-Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
+Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery: if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
 
 | Direction | Type |
 | --- | --- |
@@ -916,7 +938,7 @@ const suppression = await client.email.suppressions.batchAdd({
 
 #### Remove Batch Suppressions
 
-Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
+Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery: if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
 
 | Direction | Type |
 | --- | --- |
@@ -960,6 +982,8 @@ const file = await client.files.get('fileId');
 ```
 
 ## `PushNotifications`
+
+Web push subscriptions, topics, and sends.
 
 ### Enable Notifications
 
@@ -1035,6 +1059,8 @@ const pushNotification = await client.pushNotifications.send({
 ```
 
 ### `PushNotifications Topics`
+
+Web push subscriptions, topics, and sends.
 
 #### Subscribe to Topics
 
