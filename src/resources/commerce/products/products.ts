@@ -97,7 +97,7 @@ export class Products extends APIResource {
   }
 
   /**
-   * Updates an existing product. Use this to modify the product name, description, or active status. Pricing cannot be changed after creation—create a new product instead.
+   * Updates an existing product. Use this to modify the product name, description, or active status. Pricing cannot be changed after creation: create a new product instead.
    *
    * @param {string} productID - The unique identifier of the product
    * @param {ProductUpdateParams} body - The request body to send.
