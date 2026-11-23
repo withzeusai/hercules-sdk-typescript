@@ -16,7 +16,6 @@ export class Topics extends APIResource {
    * @example
    * ```ts
    * const topic = await client.pushNotifications.topics.subscribe({
-   *   visitorId: 'x',
    *   topics: ['x'],
    * });
    * ```
@@ -35,7 +34,6 @@ export class Topics extends APIResource {
    * @example
    * ```ts
    * const topic = await client.pushNotifications.topics.unsubscribe({
-   *   visitorId: 'x',
    *   topics: ['x'],
    * });
    * ```
@@ -47,19 +45,17 @@ export class Topics extends APIResource {
   /**
    * Lists topics a visitor is subscribed to.
    *
-   * @param {TopicListParams} query - The parameters to send with the request.
+   * @param {TopicListParams} [query] - The parameters to send with the request.
    * @param {RequestOptions} [options] - Options to apply to the request, such as headers and an abort signal.
    * @returns {PagePromise<PushNotificationTopicsCursorIDPage, TopicListResponse>} Paginated list of topics the visitor is subscribed to
    *
    * @example
    * ```ts
-   * const page = await client.pushNotifications.topics.list({
-   *   visitorId: 'visitorId',
-   * });
+   * const page = await client.pushNotifications.topics.list();
    * ```
    */
   list(
-    query: TopicListParams,
+    query: TopicListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<PushNotificationTopicsCursorIDPage, TopicListResponse> {
     return this._client.getAPIList('/v1/push-notifications/topics', CursorIDPage<TopicListResponse>, {
@@ -71,17 +67,18 @@ export class Topics extends APIResource {
 
 export interface TopicSubscribeParams {
   /**
-   * Visitor ID to subscribe to topics
-   * @minLength 1
-   * @maxLength 255
-   */
-  visitorId: string;
-  /**
    * Topic names to subscribe to (e.g., 'announcements', 'channel:general')
    * @minItems 1
    * @maxItems 50
    */
   topics: Array<string>;
+  /**
+   * Deprecated: use visitor_id.
+   * @minLength 1
+   * @maxLength 255
+   * @deprecated
+   */
+  visitorId?: string;
 }
 
 export interface TopicSubscribeResponse {
@@ -93,17 +90,18 @@ export interface TopicSubscribeResponse {
 
 export interface TopicUnsubscribeParams {
   /**
-   * Visitor ID to unsubscribe from topics
-   * @minLength 1
-   * @maxLength 255
-   */
-  visitorId: string;
-  /**
    * Topic names to unsubscribe from
    * @minItems 1
    * @maxItems 50
    */
   topics: Array<string>;
+  /**
+   * Deprecated: use visitor_id.
+   * @minLength 1
+   * @maxLength 255
+   * @deprecated
+   */
+  visitorId?: string;
 }
 
 export interface TopicUnsubscribeResponse {
@@ -115,11 +113,17 @@ export interface TopicUnsubscribeResponse {
 
 export interface TopicListParams extends CursorIDPageParams {
   /**
-   * Visitor ID to list topics for
+   * Visitor ID to list topics for, required
    * @minLength 1
    * @maxLength 255
    */
-  visitorId: string;
+  visitor_id?: string;
+  /**
+   * Deprecated: use visitor_id.
+   * @minLength 1
+   * @maxLength 255
+   */
+  visitorId?: string;
 }
 
 export interface TopicListResponse {

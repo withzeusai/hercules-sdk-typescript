@@ -38,6 +38,9 @@ export class CheckoutSessions extends APIResource {
  * Current Stripe checkout state. A complete session is not necessarily paid. Verify payment_status server-side and match the stored session, customer, amount, currency, and environment before fulfilling an order. A success redirect alone is not payment verification.
  */
 export interface CheckoutSession {
+  /**
+   * The checkout session's id
+   */
   id: string;
   /**
    * Custom ID for the customer. Must start with "cus_" followed by letters (A-Z, a-z), numbers, underscores, and hyphens.
@@ -46,24 +49,38 @@ export interface CheckoutSession {
    * @pattern ^cus_[\w-]+$
    */
   customer_id: string;
+  /**
+   * open while the customer can still pay, complete once checkout finished, expired once it timed out. Null when Stripe reports none
+   */
   status: 'open' | 'complete' | 'expired' | null;
+  /**
+   * Whether the order is paid. Fulfill only on paid, or no_payment_required for a free order or a setup session
+   */
   payment_status: 'paid' | 'unpaid' | 'no_payment_required';
+  /**
+   * payment for a one-time purchase, subscription for a recurring one, setup to save a payment method
+   */
   mode: 'payment' | 'subscription' | 'setup';
   /**
+   * The total, in the currency's smallest unit (cents for USD), after discounts and taxes. Null when Stripe reports none
    * @minimum -9007199254740991
    * @maximum 9007199254740991
    */
   amount_total: number | null;
   /**
-   * Three-letter ISO currency code.
-   *
-   * Supported currencies: USD, AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD, BDT, BIF, BMD, BND, BOB, BRL, BSD, BWP, BYN, BZD, CAD, CDF, CHF, CLP, CNY, COP, CRC, CVE, CZK, DJF, DKK, DOP, DZD, EGP, ETB, EUR, FJD, FKP, GBP, GEL, GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HTG, HUF, IDR, ILS, INR, ISK, JMD, JPY, KES, KGS, KHR, KMF, KRW, KYD, KZT, LAK, LBP, LKR, LRD, LSL, MAD, MDL, MGA, MKD, MMK, MNT, MOP, MUR, MVR, MWK, MXN, MYR, MZN, NAD, NGN, NIO, NOK, NPR, NZD, PAB, PEN, PGK, PHP, PKR, PLN, PYG, QAR, RON, RSD, RUB, RWF, SAR, SBD, SCR, SEK, SGD, SHP, SLE, SOS, SRD, STD, SZL, THB, TJS, TOP, TRY, TTD, TWD, TZS, UAH, UGX, UYU, UZS, VND, VUV, WST, XAF, XCD, XCG, XOF, XPF, YER, ZAR, ZMW.
+   * The currency of amount_total, or null when Stripe reports none
    */
   currency: CommerceAPI.Currency | null;
   /**
    * Environment this response was served from. Sandbox data and live data never mix; the environment comes from the credential and the surface, not from the request.
    */
   environment: 'sandbox' | 'live';
+  /**
+   * When the checkout session was created
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z))$
+   */
+  created_at: string;
 }
 
 export interface CheckoutSessionGetParams {

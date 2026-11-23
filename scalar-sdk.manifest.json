@@ -646,6 +646,20 @@
               "kind": "ref",
               "name": "commerce_environment"
             }
+          },
+          {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
           }
         ],
         "additionalProperties": false
@@ -1462,10 +1476,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -1847,10 +1875,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -2095,10 +2137,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -2332,10 +2388,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -2502,10 +2572,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -2740,10 +2824,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -2832,10 +2930,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -3080,10 +3192,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -3242,10 +3368,24 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -4164,7 +4304,8 @@
               "variants": [
                 {
                   "kind": "primitive",
-                  "type": "string"
+                  "type": "string",
+                  "format": "date-time"
                 },
                 {
                   "kind": "null"
@@ -4416,8 +4557,36 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
+            "required": true,
+            "deprecated": true,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
+            "name": "updated_at",
+            "publicName": "updated_at",
             "required": true,
             "deprecated": false,
             "type": {
@@ -4433,7 +4602,7 @@
             "name": "updated",
             "publicName": "updated",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -4859,8 +5028,36 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
+            "required": true,
+            "deprecated": true,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
+            "name": "updated_at",
+            "publicName": "updated_at",
             "required": true,
             "deprecated": false,
             "type": {
@@ -4876,7 +5073,7 @@
             "name": "updated",
             "publicName": "updated",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -6953,8 +7150,36 @@
             }
           },
           {
+            "name": "created_at",
+            "publicName": "created_at",
+            "required": true,
+            "deprecated": false,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
             "name": "created",
             "publicName": "created",
+            "required": true,
+            "deprecated": true,
+            "type": {
+              "kind": "primitive",
+              "type": "string",
+              "format": "date-time",
+              "validation": {
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            }
+          },
+          {
+            "name": "updated_at",
+            "publicName": "updated_at",
             "required": true,
             "deprecated": false,
             "type": {
@@ -6970,7 +7195,7 @@
             "name": "updated",
             "publicName": "updated",
             "required": true,
-            "deprecated": false,
+            "deprecated": true,
             "type": {
               "kind": "primitive",
               "type": "string",
@@ -13976,7 +14201,7 @@
       "bodyParamDetails": [
         {
           "name": "visitorId",
-          "required": true
+          "required": false
         },
         {
           "name": "subscriber",
@@ -14182,7 +14407,7 @@
         },
         {
           "name": "userId",
-          "required": true
+          "required": false
         },
         {
           "name": "subscriber",
@@ -14428,7 +14653,7 @@
       "bodyParamDetails": [
         {
           "name": "visitorId",
-          "required": true
+          "required": false
         },
         {
           "name": "topics",
@@ -14527,7 +14752,7 @@
       "bodyParamDetails": [
         {
           "name": "visitorId",
-          "required": true
+          "required": false
         },
         {
           "name": "topics",
@@ -14612,12 +14837,14 @@
       "pathParams": [],
       "publicPathParams": [],
       "queryParams": [
+        "visitor_id",
         "visitorId",
         "limit",
         "starting_after",
         "ending_before"
       ],
       "publicQueryParams": [
+        "visitor_id",
         "visitorId",
         "limit",
         "starting_after",
@@ -14631,8 +14858,14 @@
       "pathParamDetails": [],
       "queryParamDetails": [
         {
+          "name": "visitor_id",
+          "required": false,
+          "style": "form",
+          "explode": true
+        },
+        {
           "name": "visitorId",
-          "required": true,
+          "required": false,
           "style": "form",
           "explode": true
         },
