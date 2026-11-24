@@ -136,6 +136,12 @@ export interface Identity {
    */
   created_at: string;
   /**
+   * Timestamp when the identity last changed
+   * @format date-time
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z))$
+   */
+  updated_at: string;
+  /**
    * The subdomain prefix used for the custom MAIL FROM domain (e.g. 'mail' for mail.yourdomain.com). Null when the identity uses the SES default MAIL FROM.
    */
   mail_from_subdomain?: string | null;
