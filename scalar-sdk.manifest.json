@@ -11989,7 +11989,8 @@
         "errorStatuses": [
           "400",
           "401",
-          "402"
+          "402",
+          "403"
         ]
       },
       "errorResponses": [
@@ -12017,6 +12018,17 @@
         },
         {
           "status": "402",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "403",
           "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [
@@ -12121,7 +12133,8 @@
         "successStatus": "200",
         "errorStatuses": [
           "400",
-          "401"
+          "401",
+          "403"
         ]
       },
       "errorResponses": [
@@ -12138,6 +12151,17 @@
         },
         {
           "status": "401",
+          "contentType": "application/problem+json",
+          "encoding": "json",
+          "contents": [
+            {
+              "contentType": "application/problem+json",
+              "encoding": "json"
+            }
+          ]
+        },
+        {
+          "status": "403",
           "contentType": "application/problem+json",
           "encoding": "json",
           "contents": [

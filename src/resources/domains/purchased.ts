@@ -193,7 +193,7 @@ export interface PurchasedCreateParams {
    */
   domain_name: string;
   /**
-   * The website to associate the domain with. Falls back to the website associated with the API key.
+   * The website to associate the domain with. Falls back to the website associated with the API key. An API key can name only its own website.
    * @minLength 1
    */
   website_id?: string;
