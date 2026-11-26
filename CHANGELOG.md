@@ -1,5 +1,120 @@
 # Changelog
 
+## [2.0.0-next](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.18.0...v2.0.0-next) (2026-11-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** Property `commerce_checkout_response.subscription` shape changed (`object | null`).
+* **api:** Added required property `identity.updated_at`.
+* **api:** 17 breaking changes to the SDK surface.
+    - Added required property `checkout_session.created_at`.
+    - Added required property `coupon.created_at`.
+    - Added required property `customer.created_at`.
+    - Added required property `commerce_customer_details.created_at`.
+    - Added required property `entitlement_grant.created_at`.
+    - Added required property `feature.created_at`.
+    - Added required property `commerce_resource.created_at`.
+    - Added required property `product.created_at`.
+    - Added required property `variant.created_at`.
+    - Added required property `create_commerce_product_response.created_at`.
+    - Property `connector_credentials_response.expires_at` type changed from `string | null` to `string<date-time> | null`.
+    - Added required property `domain.created_at`.
+    - Added required property `domain.updated_at`.
+    - Added required property `purchased_domain.created_at`.
+    - Added required property `purchased_domain.updated_at`.
+    - Added required property `file.created_at`.
+    - Added required property `file.updated_at`.
+* **api:** 74 breaking changes to the SDK surface.
+    - `400` error response of `commerce.checkout` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.cancel` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.check` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.checkoutSessions.get` changed from `application/json` to `application/problem+json`.
+    - `404` error response of `commerce.checkoutSessions.get` changed from `none` to `application/problem+json`.
+    - `400` error response of `commerce.customers.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.customers.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.customers.create` changed from `application/json` to `application/problem+json`.
+    - `409` error response of `commerce.customers.create` changed from `none` to `application/problem+json`.
+    - `400` error response of `commerce.customers.update` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.customers.billingPortal` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.create` changed from `application/json` to `application/problem+json`.
+    - `409` error response of `commerce.products.create` changed from `none` to `application/problem+json`.
+    - `400` error response of `commerce.products.update` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.resources.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.resources.attach` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.resources.detach` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.variants.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.variants.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.products.variants.create` changed from `application/json` to `application/problem+json`.
+    - `409` error response of `commerce.products.variants.create` changed from `none` to `application/problem+json`.
+    - `400` error response of `commerce.products.variants.update` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.coupons.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.coupons.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.coupons.create` changed from `application/json` to `application/problem+json`.
+    - `409` error response of `commerce.coupons.create` changed from `none` to `application/problem+json`.
+    - `400` error response of `commerce.coupons.update` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.features.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.features.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.features.create` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.features.update` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.entitlements.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.entitlements.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.entitlements.create` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `commerce.entitlements.update` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `connectors.credentials` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `connectors.request` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `domains.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `domains.checkAvailability` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `domains.search` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `domains.purchased.create` changed from `application/json` to `application/problem+json`.
+    - `402` error response of `domains.purchased.create` changed from `none` to `application/problem+json`.
+    - `400` error response of `domains.purchased.confirm` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `domains.purchased.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `domains.purchased.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.send` changed from `none` to `application/problem+json`.
+    - `403` error response of `email.send` changed from `none` to `application/problem+json`.
+    - `404` error response of `email.send` changed from `none` to `application/problem+json`.
+    - `422` error response of `email.send` changed from `none` to `application/problem+json`.
+    - `503` error response of `email.send` changed from `none` to `application/problem+json`.
+    - `400` error response of `email.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.identities.create` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.identities.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.identities.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.identities.verify` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.identities.delete` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.suppressions.create` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.suppressions.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.suppressions.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.suppressions.delete` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.suppressions.batchAdd` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `email.suppressions.batchRemove` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `files.list` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `files.get` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.subscribe` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.unsubscribe` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.identify` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.send` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.topics.subscribe` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.topics.unsubscribe` changed from `application/json` to `application/problem+json`.
+    - `400` error response of `pushNotifications.topics.list` changed from `application/json` to `application/problem+json`.
+
+### Features
+
+* **api:** add property checkout_session.created_at (+17 more changes) ([fc5b017](https://github.com/withzeusai/hercules-sdk-typescript/commit/fc5b0176d35b2753a9f55435d8604a3486a3a6d6))
+* **api:** add property identity.updated_at ([8c88d34](https://github.com/withzeusai/hercules-sdk-typescript/commit/8c88d340b7e4b4ba7e37acc1157ffc1152671cc9))
+* **api:** update SDK surface (140 changes) ([843f043](https://github.com/withzeusai/hercules-sdk-typescript/commit/843f043ae801a18ce3d1ef9a35cdc82bf81a577b))
+* **api:** update SDK surface (2 changes) ([ce8fc02](https://github.com/withzeusai/hercules-sdk-typescript/commit/ce8fc02d77abcbf37e19e604700b5ce5beaa49dd))
+* **api:** update SDK surface (2 changes) ([6665a2e](https://github.com/withzeusai/hercules-sdk-typescript/commit/6665a2ede62fe2ed21f8d9785e8ee7c8f739de62))
+
+
+### Chores
+
+* **api:** regenerate SDK ([1312d4f](https://github.com/withzeusai/hercules-sdk-typescript/commit/1312d4f4ef68b798e7fcd81ccc7b9903179a80c1))
+* **api:** update generated SDK content ([a322828](https://github.com/withzeusai/hercules-sdk-typescript/commit/a322828aaadd922a8a2aa04e8624356169b06797))
+
 ## [1.18.0](https://github.com/withzeusai/hercules-sdk-typescript/compare/v1.17.0...v1.18.0) (2026-11-19)
 
 
