@@ -9,7 +9,10 @@ import { maybeObj } from '../internal/utils/values';
 export type PageRequestOptions = Pick<FinalRequestOptions, 'query' | 'headers' | 'body' | 'path' | 'method'>;
 
 export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
-  protected readonly client: Hercules;
+  // A private field, not a property: it stays out of `JSON.stringify(page)`, `{ ...page }` and Node's
+  // `console.log(page)`, which would otherwise carry the client's configuration (default headers,
+  // `fetchOptions`, the logger) along with the page. Browser devtools still list private fields.
+  #client: Hercules;
   // Writable so a subclass can rewrite what it parsed or the options the next page is built from;
   // a subclass that only reads them is unaffected.
   protected options: FinalRequestOptions;
@@ -17,7 +20,7 @@ export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
   protected body: unknown;
 
   constructor(client: Hercules, response: Response, body: unknown, options: FinalRequestOptions) {
-    this.client = client;
+    this.#client = client;
     this.response = response;
     this.body = body;
     // An idempotency key belongs to the one request it was sent with. A page only ever uses these
@@ -42,7 +45,7 @@ export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
       throw new HerculesError(
         'No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.',
       );
-    return await this.client.requestAPIList(this.constructor as PageConstructor<this, Item>, nextOptions);
+    return await this.#client.requestAPIList(this.constructor as PageConstructor<this, Item>, nextOptions);
   }
 
   async *iterPages(): AsyncGenerator<this> {
