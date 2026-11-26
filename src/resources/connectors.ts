@@ -83,6 +83,7 @@ export interface ConnectorCredentialsResponse {
   secrets: Record<string, string>;
   /**
    * ISO timestamp when the access token expires; null when it does not expire. Cache the secrets until shortly before this time, then fetch again.
+   * @format date-time
    */
   expires_at: string | null;
 }
@@ -128,7 +129,7 @@ export interface ConnectorRequestResponse {
    */
   connection_id: string;
   /**
-   * The provider's HTTP status code. A 4xx or 5xx here is a completed call the provider rejected, not a Hercules error — this endpoint answers 200 whenever the request reached the provider.
+   * The provider's HTTP status code. A 4xx or 5xx here is a completed call the provider rejected, not a Hercules error: this endpoint answers 200 whenever the request reached the provider.
    */
   status: number;
   /**

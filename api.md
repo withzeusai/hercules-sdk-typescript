@@ -23,7 +23,7 @@ Complete reference of every operation, grouped by resource. See [the README](./R
     - [Update Product](#update-product)
     - [`Commerce Products Resources`](#commerce-products-resources)
       - [List Product Resources](#list-product-resources)
-      - [Attach Resources to Product](#attach-resources-to-product)
+      - [Create Product Resources](#create-product-resources)
       - [Detach Resources from Product](#detach-resources-from-product)
     - [`Commerce Products Variants`](#commerce-products-variants)
       - [List Product Variants](#list-product-variants)
@@ -47,7 +47,7 @@ Complete reference of every operation, grouped by resource. See [the README](./R
     - [Update Entitlement Grant](#update-entitlement-grant)
 - [`Connectors`](#connectors)
   - [Get Connector Credentials](#get-connector-credentials)
-  - [Send Connector Request](#send-connector-request)
+  - [Create Connector Request](#create-connector-request)
 - [`Domains`](#domains)
   - [List Domains](#list-domains)
   - [Check Domain Availability](#check-domain-availability)
@@ -58,7 +58,7 @@ Complete reference of every operation, grouped by resource. See [the README](./R
     - [List Purchased Domains](#list-purchased-domains)
     - [Get Purchased Domain](#get-purchased-domain)
 - [`Email`](#email)
-  - [Send Email](#send-email)
+  - [Create Email](#create-email)
   - [List Emails](#list-emails)
   - [Get Email](#get-email)
   - [`Email Identities`](#email-identities)
@@ -71,7 +71,7 @@ Complete reference of every operation, grouped by resource. See [the README](./R
     - [Create Suppression](#create-suppression)
     - [List Suppressions](#list-suppressions)
     - [Get Suppression](#get-suppression)
-    - [Remove Suppression](#remove-suppression)
+    - [Delete Suppression](#delete-suppression)
     - [Add Batch Suppressions](#add-batch-suppressions)
     - [Remove Batch Suppressions](#remove-batch-suppressions)
 - [`Files`](#files)
@@ -159,6 +159,8 @@ const commerce = await client.commerce.check({
 
 ### `Commerce CheckoutSessions`
 
+Checkout, subscriptions, refunds, entitlement checks, and the app's test mode environment.
+
 #### Get Checkout Session
 
 Retrieve current payment and session status for a customer of this app. Call from your backend before fulfilling an order; do not trust the success redirect. A complete session can still be unpaid, including delayed payment methods. Test-mode payments must not fulfill live orders.
@@ -176,9 +178,11 @@ const checkoutSession = await client.commerce.checkoutSessions.get('checkoutSess
 
 ### `Commerce Customers`
 
+An app's paying customers and their balances.
+
 #### List Customers
 
-Retrieves a paginated list of all customers. Customers are the billable entities in your app—typically users, organizations, or projects.
+Retrieves a paginated list of all customers. Customers are the billable entities in your app, typically users, organizations, or projects.
 
 | Direction | Type |
 | --- | --- |
@@ -203,7 +207,7 @@ const customer = await client.commerce.customers.get('cus_1234567890');
 
 #### Create Customer
 
-Creates a new billable customer. A customer represents the entity in your app that will be charged—typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
+Creates a new billable customer. A customer represents the entity in your app that will be charged, typically a user, organization, or project. Hercules recommends creating a customer immediately after creating the corresponding entity in your app.
 
 | Direction | Type |
 | --- | --- |
@@ -241,6 +245,8 @@ const customer = await client.commerce.customers.billingPortal('cus_1234567890',
 ```
 
 ### `Commerce Products`
+
+What an app sells.
 
 #### List Products
 
@@ -291,7 +297,7 @@ const product = await client.commerce.products.create({
 
 #### Update Product
 
-Updates an existing product. Use this to modify the product name, description, or active status. Pricing cannot be changed after creation—create a new product instead.
+Updates an existing product. Use this to modify the product name, description, or active status. Pricing cannot be changed after creation: create a new product instead.
 
 | Direction | Type |
 | --- | --- |
@@ -303,6 +309,8 @@ const product = await client.commerce.products.update('productId', {});
 ```
 
 #### `Commerce Products Resources`
+
+The features and other resources a product grants.
 
 ##### List Product Resources
 
@@ -317,7 +325,7 @@ Retrieves all resources attached to a product. Resources define the entitlements
 const page = await client.commerce.products.resources.list('productId');
 ```
 
-##### Attach Resources to Product
+##### Create Product Resources
 
 Attaches one or more resources to a product. Customers who purchase this product will gain access to the attached resources. Resource type is inferred from the ID prefix (e.g., 'feat_' for features).
 
@@ -347,6 +355,8 @@ await client.commerce.products.resources.detach('productId', {
 ```
 
 #### `Commerce Products Variants`
+
+The prices and billing options of a product.
 
 ##### List Product Variants
 
@@ -394,7 +404,7 @@ const variant = await client.commerce.products.variants.create('productId', {
 
 ##### Update Product Variant
 
-Updates an existing variant. Use this to modify the name, description, or active status. Pricing cannot be changed after creation—create a new variant instead.
+Updates an existing variant. Use this to modify the name, description, or active status. Pricing cannot be changed after creation: create a new variant instead.
 
 | Direction | Type |
 | --- | --- |
@@ -408,6 +418,8 @@ const variant = await client.commerce.products.variants.update('variantId', {
 ```
 
 ### `Commerce Coupons`
+
+Discounts customers can apply at checkout.
 
 #### List Coupons
 
@@ -465,6 +477,8 @@ const coupon = await client.commerce.coupons.update('coupon_1234567890', {});
 
 ### `Commerce Features`
 
+Capabilities that products and entitlements grant.
+
 #### List Features
 
 Retrieves a paginated list of features. Features are reusable entitlements that can be attached to multiple products.
@@ -520,6 +534,8 @@ const feature = await client.commerce.features.update('featureId', {});
 ```
 
 ### `Commerce Entitlements`
+
+Grants of a feature to a customer, outside of a purchase.
 
 #### List Entitlement Grants
 
@@ -602,7 +618,7 @@ const connector = await client.connectors.credentials('slug', {
 });
 ```
 
-### Send Connector Request
+### Create Connector Request
 
 Sends an HTTP request to a connector's provider API as the named connection, with credentials added server-side; the app never handles the token. Requires a deployment-bound API key, and the connection must be installed for the calling deployment. Answers 200 whenever the request reached the provider, with the provider's own status in the body. Errors carry a code: connector_not_installed (404), connection_not_linked (404), connector_not_connected (409), connector_not_brokered (400, use the credentials endpoint), provider_unreachable (502).
 
@@ -668,6 +684,8 @@ const domain = await client.domains.search({
 ```
 
 ### `Domains Purchased`
+
+Domain search, purchase, and the domains an app owns.
 
 #### Purchase Domain
 
@@ -735,7 +753,7 @@ const purchasedDomain = await client.domains.purchased.get('domainId');
 Send transactional emails, send batch emails, and retrieve sent email
 history with delivery status tracking.
 
-### Send Email
+### Create Email
 
 Sends a single email. The sender address must be a verified identity for this website. Optionally pass reply_to_email_id to thread a reply to a received email in this app and organization. Sender, recipients, subject, body, and attachments remain explicit; nothing is copied from the source. In-Reply-To and References are generated and cannot be supplied as custom headers (case-insensitive). References retains at most 20 valid, unique IDs and 870 characters, including the source Message-ID; malformed ancestors are omitted and oldest ancestry is trimmed. Without References, a single valid stored In-Reply-To is used as ancestry.
 
@@ -778,6 +796,8 @@ const email = await client.email.get('emailId');
 ```
 
 ### `Email Identities`
+
+Addresses and domains an app sends from, and their verification.
 
 #### Create Identity
 
@@ -845,6 +865,8 @@ await client.email.identities.delete('identityId');
 
 ### `Email Suppressions`
 
+Addresses that email is never sent to, such as after a bounce.
+
 #### Create Suppression
 
 Adds a recipient address to the suppression list. SES drops later sends to it at send time, protecting your sending reputation. Adding an address that is already suppressed succeeds. The suppression list belongs to the organization and applies to every app and sender identity it owns.
@@ -887,9 +909,9 @@ Retrieves a single suppression by its ID or by the suppressed email address. The
 const suppression = await client.email.suppressions.get('suppression');
 ```
 
-#### Remove Suppression
+#### Delete Suppression
 
-Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
+Removes an address from the suppression list, identified by its suppression ID or by the address itself, so sends to it are allowed again. Removing an address does not guarantee delivery: if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
 
 | Direction | Type |
 | --- | --- |
@@ -916,7 +938,7 @@ const suppression = await client.email.suppressions.batchAdd({
 
 #### Remove Batch Suppressions
 
-Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery — if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
+Removes up to 100 addresses from the suppression list in one call, identified by either `emails` or `ids` (exactly one of the two). Addresses that were not on the list are omitted from the response instead of failing the request. Removing an address does not guarantee delivery: if it bounces or is reported as spam again, it is suppressed again. The suppression list belongs to the organization and applies to every app and sender identity it owns.
 
 | Direction | Type |
 | --- | --- |
@@ -961,6 +983,8 @@ const file = await client.files.get('fileId');
 
 ## `PushNotifications`
 
+Web push subscriptions, topics, and sends.
+
 ### Enable Notifications
 
 Enables push notifications for the app by generating VAPID keys. Idempotent - returns existing keys if already enabled. Hercules recommends calling this during app initialization.
@@ -975,7 +999,7 @@ const pushNotification = await client.pushNotifications.enable();
 
 ### Register Subscription
 
-Registers a push subscription with the provided visitorId: a Web Push `subscription` from a browser, or a `nativeDevice` token from the Hercules iOS app (APNs) or Android app (FCM). Use authenticated userId or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
+Registers a push subscription with the provided visitor_id: a Web Push `subscription` from a browser, or a `native_device` token from the Hercules iOS app (APNs) or Android app (FCM). Use the authenticated user's id or generate a UUID for anonymous users. Upserts by endpoint (or device token) to handle re-subscriptions. Returns a secret for subscription ownership.
 
 | Direction | Type |
 | --- | --- |
@@ -983,9 +1007,7 @@ Registers a push subscription with the provided visitorId: a Web Push `subscript
 | Response | [`PushNotificationSubscribeResponse`](./src/resources/push-notifications/push-notifications.ts) |
 
 ```ts
-const pushNotification = await client.pushNotifications.subscribe({
-  visitorId: 'x',
-});
+const pushNotification = await client.pushNotifications.subscribe({});
 ```
 
 ### Remove Subscription
@@ -1005,7 +1027,7 @@ const pushNotification = await client.pushNotifications.unsubscribe({
 
 ### Identify Subscription
 
-Updates a subscription's visitorId to the provided userId. Call after sign-in to link the subscription to the authenticated user's account.
+Updates a subscription's visitor_id to the provided user_id. Call after sign-in to link the subscription to the authenticated user's account.
 
 | Direction | Type |
 | --- | --- |
@@ -1015,13 +1037,12 @@ Updates a subscription's visitorId to the provided userId. Call after sign-in to
 ```ts
 const pushNotification = await client.pushNotifications.identify({
   secret: 'x',
-  userId: 'x',
 });
 ```
 
 ### Send Notification
 
-Sends push notifications to specified visitors and/or topics. Specify visitorIds, topics, or both (combined as union). Omit both to broadcast to all subscribers. Recipient lists above 100 are delivered in the background and reported as `queued`. Limited to 120 sends per minute per app, 6 of which may be broadcasts.
+Sends push notifications to specified visitors and/or topics. Specify visitor_ids, topics, or both (combined as union). Omit both to broadcast to all subscribers. Recipient lists above 100 are delivered in the background and reported as `queued`. Limited to 120 sends per minute per app, 6 of which may be broadcasts.
 
 | Direction | Type |
 | --- | --- |
@@ -1036,6 +1057,8 @@ const pushNotification = await client.pushNotifications.send({
 
 ### `PushNotifications Topics`
 
+Web push subscriptions, topics, and sends.
+
 #### Subscribe to Topics
 
 Subscribes a visitor to topics. Topics are per-visitor, so all devices for this visitor will receive notifications sent to these topics.
@@ -1047,7 +1070,6 @@ Subscribes a visitor to topics. Topics are per-visitor, so all devices for this 
 
 ```ts
 const topic = await client.pushNotifications.topics.subscribe({
-  visitorId: 'x',
   topics: ['x'],
 });
 ```
@@ -1063,7 +1085,6 @@ Unsubscribes a visitor from specified topics.
 
 ```ts
 const topic = await client.pushNotifications.topics.unsubscribe({
-  visitorId: 'x',
   topics: ['x'],
 });
 ```
@@ -1078,7 +1099,5 @@ Lists topics a visitor is subscribed to.
 | Response | [`TopicListResponse`](./src/resources/push-notifications/topics.ts) |
 
 ```ts
-const page = await client.pushNotifications.topics.list({
-  visitorId: 'visitorId',
-});
+const page = await client.pushNotifications.topics.list();
 ```

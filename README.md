@@ -84,7 +84,7 @@ try {
 }
 ```
 
-Documented error statuses: `400`, `402`, `403`, `404`, `409`, `422`, `503`.
+Documented error statuses: `400`, `401`, `402`, `403`, `404`, `409`, `422`, `503`.
 
 <br />
 
@@ -113,8 +113,8 @@ const client = new Hercules({
 | `defaultQuery` | `Record<string, string \| undefined>` | - | Query parameters sent with every request. |
 | `fetchOptions` | `RequestInit` | - | Additional fetch options sent with every request. |
 | `fetch` | `Fetch` | - | Custom fetch implementation. |
-| `logLevel` | `"off" \| "error" \| "warn" \| "info" \| "debug" \| null` | `process.env["HERCULES_LOG"]` | Controls request and retry debug logging. |
-| `logger` | `Logger \| null` | `console` | Custom logger implementation. |
+| `logLevel` | `"off" \| "error" \| "warn" \| "info" \| "debug"` | `process.env["HERCULES_LOG"] ?? "warn"` | Controls request and retry debug logging. `"off"` turns logging off. |
+| `logger` | `Logger` | `console` | Custom logger implementation. |
 
 <br />
 
@@ -181,12 +181,13 @@ while (true) {
 
 - Set `logLevel: "debug"` to log request URLs, options, response status, response headers, and retry attempts.
 - Pass a custom `logger` to route logs into your own observability pipeline.
-- Set `logLevel: null` to disable environment-driven logging.
+- Set `logLevel: "off"` to turn logging off, whatever `HERCULES_LOG` says. Without `logLevel`, the client reads that environment variable, then defaults to `"warn"`.
 
 <br />
 
 ## Requirements
 
 - Node.js 20+, a modern browser, or any runtime with `fetch` support
+- TypeScript 5.8+ for type checking, with `moduleResolution` set to `node16` or `nodenext` (from CommonJS or ES modules) or `bundler`
 
 Powered by Scalar.
